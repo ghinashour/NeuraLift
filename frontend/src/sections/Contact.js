@@ -100,7 +100,7 @@ function Contact() {
             <div>
               <h4>Phone Support</h4>
               <p>Speak directly with our team</p>
-              <span className="highlight purple">+1 (555) 123-4567</span>
+              <span className="highlight purple">+961 11111111</span>
             </div>
           </div>
         </div>

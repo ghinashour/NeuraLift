@@ -28,7 +28,7 @@
   height: 2px;
   background: linear-gradient(to right, transparent, #3498db, transparent);
   width: 100px;
-  margin: 0 auto 50px;
+  margin: 0 auto 20px;
 }
 
 .stories-grid {
@@ -97,7 +97,7 @@
 
 .divider-small {
   height: 1px;
-  background: linear-gradient(to right, transparent, #e0e0e0, transparent);
+  background: linear-gradient(to right, #e0e0e0, #98A1B3, #e0e0e0);
   width: 80%;
   margin: 0 auto 20px;
 
@@ -105,7 +105,7 @@
 
 .user-info {
   text-align: center;
-  padding-top: 15px;
+  padding-top: 10px;
 }
 
 .user-info h3 {
@@ -115,11 +115,27 @@
   font-weight: 600;
 }
 
+.user-header {
+  display: flex;
+  justify-content: space-between; /* pushes info left, stats right */
+  align-items: center;            /* keeps them aligned vertically */
+}
 .user-stats {
   margin: 0 0 5px 0;
-  color: #3498db;
+  background: linear-gradient(to right, #1A994F, #1BBB5E);
+  color: #FFFFFF;
   font-size: 1rem;
   font-weight: 600;
+  border-radius: 99px;
+  width: 172.77px;
+  height: 28px;
+  padding: 7px 10px;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  display: inline-block;
+  margin-bottom: 30px;
+
 }
 
 .user-title {

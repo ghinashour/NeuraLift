@@ -24,11 +24,13 @@ const SuccessStories = () => {
           </div>
           {/*the space between the text as a line*/}
           <div className="divider-small"></div>
+        
           <div className="user-info">
+            <div className="user-stats">Reduced stress by 70%</div>
             <h3>Jessica M.</h3>
-            <p className="user-stats">Reduced stress by 70%</p>
             <p className="user-title">Marketing Professional</p>
           </div>
+       
         </div>
 
         {/* David L. */}
@@ -42,8 +44,8 @@ const SuccessStories = () => {
           </div>
           <div className="divider-small"></div>
           <div className="user-info">
-            <h3>David L.</h3>
             <p className="user-stats">Improved mood by 65%</p>
+            <h3>David L.</h3>
             <p className="user-title">College Student</p>
           </div>
         </div>
@@ -59,8 +61,8 @@ const SuccessStories = () => {
           </div>
           <div className="divider-small"></div>
           <div className="user-info">
+         <p className="user-stats">Sleep quality improved by 80%</p>
             <h3>Maria S.</h3>
-            <p className="user-stats">Sleep quality improved by 80%</p>
             <p className="user-title">Small Business Owner</p>
           </div>
         </div>
@@ -76,8 +78,8 @@ const SuccessStories = () => {
           </div>
           <div className="divider-small"></div>
           <div className="user-info">
-            <h3>Robert K.</h3>
             <p className="user-stats">Anxiety decreased by 75%</p>
+            <h3>Robert K.</h3>
             <p className="user-title">Healthcare Worker</p>
           </div>
         </div>
@@ -93,8 +95,8 @@ const SuccessStories = () => {
           </div>
           <div className="divider-small"></div>
           <div className="user-info">
-            <h3>Aisha T.</h3>
             <p className="user-stats">Productivity increased by 60%</p>
+            <h3>Aisha T.</h3>
             <p className="user-title">New Parent</p>
           </div>
         </div>
@@ -110,8 +112,8 @@ const SuccessStories = () => {
           </div>
           <div className="divider-small"></div>
           <div className="user-info">
+           <p className="user-stats">Found new social connections</p>
             <h3>Chris W.</h3>
-            <p className="user-stats">Found new social connections</p>
             <p className="user-title">Retired Teacher</p>
           </div>
         </div>

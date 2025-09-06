@@ -37,12 +37,15 @@
   align-items: center;
   gap: 8px;
   font-size: 14px;
+ 
 }
 
 .heart-icon {
   width: 16px;
   height: 16px;
   color: white;
+  text-align: center;
+   vertical-align:text-bottom;
 }
 
 /* Second and Third Columns */
