@@ -22,6 +22,7 @@ const SuccessStories = () => {
           <div className="testimonial-text">
             "NeuraLift helped me overcome anxiety and boost my productivity. The combination of task management and mindfulness tools changed my entire approach to work-life balance."
           </div>
+          {/*the space between the text as a line*/}
           <div className="divider-small"></div>
           <div className="user-info">
             <h3>Jessica M.</h3>
