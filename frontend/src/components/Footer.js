@@ -33,8 +33,7 @@ function Footer() {
             our community of individuals committed to personal growth
           </p>
           <div className="footer-heart">
-            <FaHeart className="heart-icon" />
-            <span>Made with love for your wellbeing</span>
+            <span>Made with  <FaHeart className="heart-icon" /> for your wellbeing</span>
           </div>
         </div>
 
@@ -69,7 +68,7 @@ function Footer() {
           </div>
           <div className="contact-item">
             <FaMapMarkerAlt className="contact-icon" />
-            <span>Available worldwide</span>
+            <span>Available LebaneseWide</span>
           </div>
         </div>
       </div>
