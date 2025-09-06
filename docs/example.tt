@@ -1,1 +1,5 @@
-here we add imp docs
+import { FaHeart, FaEnvelope, FaMapMarkerAlt, FaArrowCircleUp } from "react-icons/fa";
+
+import { FaEnvelope, FaComments, FaPhone, FaPaperPlane } from "react-icons/fa";
+
+you should install icons library: npm install react-icons
