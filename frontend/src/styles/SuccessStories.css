@@ -56,8 +56,20 @@
   box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
 }
 
+.quote-icon{
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  width: 40px;
+  height: 40px;
+}
+
+.quote-icon img{
+    width: 100%;
+    height: auto;
+}
 .rating-stars {
-  color: #FFD700;
+  color: #FACC15;
   font-size: 1.2rem;
   margin-bottom: 20px;
   text-align: center;
