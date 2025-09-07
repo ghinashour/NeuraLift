@@ -1,7 +1,7 @@
 import React from "react";
-import "./FoundersPage.css";
+import "./AboutSection.css";
 
-const FoundersPage = () => {
+const AboutSection = () => {
   const founders = [
     {
       name: "Sarah Johnson",
@@ -90,4 +90,4 @@ const FoundersPage = () => {
   );
 };
 
-export default FoundersPage;
+export default AboutSection;
