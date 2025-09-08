@@ -1,5 +1,6 @@
 import React from "react";
-import "./AboutSection.css";
+import "../styles/AboutSection.css";
+
 
 const AboutSection = () => {
   const founders = [
@@ -7,35 +8,35 @@ const AboutSection = () => {
       name: "Sarah Johnson",
       role: "Lead Developer & Co-Founder",
       description: "Full-stack developer with 8+ years experience in wellness tech. Passionate about creating user-centric applications that make a real difference in people's lives.",
-      image: require("./images/Sarah Johnson - Lead Developer & Co-Founder.png"),
+      image: require("../assets/sarah.png"),
       roleClass: "role-badge-blue"
     },
     {
       name: "Dr. Michael Chen",
       role: "Wellness Expert & Advisor",
       description: "Licensed psychologist specializing in digital therapeutics. Michael ensures our app follows evidence-based practices for mental health and wellbeing.",
-      image: require("./images/Dr. Michael Chen - Wellness Expert & Advisor.png"),
+      image: require("../assets/michael.png"),
       roleClass: "role-badge-green"
     },
     {
       name: "Emily Rodriguez",
       role: "UX/UI Designer",
       description: "Award-winning designer focused on creating intuitive, accessible interfaces. Emily's designs help millions of users navigate their wellness journey effortlessly.",
-      image: require("./images/UI Designer.png"),
+      image: require("../assets/Emily.png"),
       roleClass: "role-badge-purple"
     },
     {
       name: "Alex Thompson",
       role: "Backend Developer",
       description: "Infrastructure specialist ensuring NeuraLift scales seamlessly. Alex builds robust systems that keep our community connected and data secure.",
-      image: require("./images/Alex Thompson - Backend Developer.png"),
+      image: require("../assets/alex.png"),
       roleClass: "role-badge-blue"
     },
     {
       name: "Maya Patel",
       role: "Community Manager",
       description: "Community builder and wellness advocate. Maya fosters our supportive user community and ensures everyone feels heard and valued on their journey.",
-      image: require("./images/Maya Patel - Community Manager.png"),
+      image: require("../assets/maya.png"),
       roleClass: "role-badge-green"
     }
   ];
