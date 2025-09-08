@@ -4,13 +4,14 @@
 
 .container {
   margin-top: 130px;
+  width: 100%;
 }
 
 .box-container {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  gap: 70px;
+  gap: 20px;
   padding: 10px;
   margin-top: 35px;
 }
@@ -18,29 +19,42 @@
 .box {
   color: #98a1b3;
   background-color: #e5e7eb80;
-  width: 270px;
-  height: 270px;
+  width: 252px;
+  height: 354px;
   margin: 5px;
-  border-radius: 7px;
+  border-radius: 16px;
+  flex-shrink: 0;
 }
 
 #box1 {
-  margin-left: 90px;
+  margin-left: 0px;
 }
 .tasks-title {
   color: black;
+}
+@media (max-width: 1200px) {
+  .box-container {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .box {
+    width: calc(50% - 30px); /* Adjust for gap and margins */
+    max-width: 300px;
+  }
 }
 @media (max-width: 800px) {
   .container {
     justify-content: center;
   }
   .box {
-    width: calc(50% - 10px);
+    width: calc(50% - 20px);
   }
 }
 
 @media (max-width: 600px) {
   .box {
     width: 100%;
+    max-width: 350px;
   }
 }
