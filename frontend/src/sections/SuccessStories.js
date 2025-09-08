@@ -61,7 +61,7 @@ const SuccessStories = () => {
           </div>
           <div className="divider-small"></div>
           <div className="user-info">
-         <p className="user-stats">Sleep quality improved by 80%</p>
+         <p className="user-stats">Sleep enhanced</p>
             <h3>Maria S.</h3>
             <p className="user-title">Small Business Owner</p>
           </div>
@@ -78,7 +78,7 @@ const SuccessStories = () => {
           </div>
           <div className="divider-small"></div>
           <div className="user-info">
-            <p className="user-stats">Anxiety decreased by 75%</p>
+            <p className="user-stats">75% less Anxiety</p>
             <h3>Robert K.</h3>
             <p className="user-title">Healthcare Worker</p>
           </div>
@@ -95,7 +95,7 @@ const SuccessStories = () => {
           </div>
           <div className="divider-small"></div>
           <div className="user-info">
-            <p className="user-stats">Productivity increased by 60%</p>
+            <p className="user-stats">Productivity increased </p>
             <h3>Aisha T.</h3>
             <p className="user-title">New Parent</p>
           </div>
@@ -112,7 +112,7 @@ const SuccessStories = () => {
           </div>
           <div className="divider-small"></div>
           <div className="user-info">
-           <p className="user-stats">Found new social connections</p>
+           <p className="user-stats">New social connections</p>
             <h3>Chris W.</h3>
             <p className="user-title">Retired Teacher</p>
           </div>
