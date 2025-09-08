@@ -4,15 +4,26 @@ const Features = () => {
   return (
     <div className="container">
       <h1 style={{ textAlign: "center" }}>Everything You Need for Growth</h1>
-      <p style={{ color: "#98A1B3", textAlign: "center" }}>
-        NeuraLift combines powerful productivity tools with wellness features to
-        help you achieve your goals while maintaining your mental health.
-      </p>
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
+        <div style={{ width: "520px" }}>
+          <p style={{ color: "#98A1B3", textAlign: "center" }}>
+            NeuraLift combines powerful productivity tools with wellness
+            features to help you achieve your goals while maintaining your
+            mental health.
+          </p>
+        </div>
+      </div>
       <div className="box-container">
         <div className="box" id="box1">
           <svg
             style={{
-              marginLeft: "10px",
+              marginLeft: "5px",
               marginTop: "40px",
               marginBottom: "20px",
             }}
@@ -60,7 +71,7 @@ const Features = () => {
           </svg>
           <br></br>
           <b className="tasks-title">Task Management</b>
-          <p>
+          <p style={{ marginLeft: "20px" }}>
             Stay organized and motivated with our intelligent task management
             system that adapts to your workflow.
           </p>
@@ -68,7 +79,7 @@ const Features = () => {
         <div className="box">
           <svg
             style={{
-              marginLeft: "10px",
+              marginLeft: "5px",
               marginTop: "40px",
               marginBottom: "20px",
             }}
@@ -109,7 +120,7 @@ const Features = () => {
           </svg>
           <br></br>
           <b className="tasks-title">Daily Motivation</b>
-          <p>
+          <p style={{ marginLeft: "20px" }}>
             Get inspired every day with personalized quotes and connect with
             others on similar journeys.
           </p>
@@ -117,7 +128,7 @@ const Features = () => {
         <div className="box">
           <svg
             style={{
-              marginLeft: "10px",
+              marginLeft: "5px",
               marginTop: "40px",
               marginBottom: "20px",
             }}
@@ -191,7 +202,7 @@ const Features = () => {
           <br></br>
 
           <b className="tasks-title">Creative Canvas</b>
-          <p>
+          <p style={{ marginLeft: "20px" }}>
             Express yourself and release stress through our digital drawing
             platform designed for mindfulness.
           </p>
@@ -199,7 +210,7 @@ const Features = () => {
         <div className="box">
           <svg
             style={{
-              marginLeft: "10px",
+              marginLeft: "5px",
               marginTop: "40px",
               marginBottom: "20px",
             }}
@@ -240,7 +251,7 @@ const Features = () => {
           </svg>
           <br></br>
           <b className="tasks-title">Health Tracking</b>
-          <p>
+          <p style={{ marginLeft: "20px" }}>
             Monitor your mental and physical wellbeing with comprehensive health
             tracking tools.
           </p>
