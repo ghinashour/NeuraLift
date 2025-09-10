@@ -4,7 +4,7 @@ import { FaEnvelope, FaComments, FaPhone, FaPaperPlane } from "react-icons/fa";
 
 function Contact() {
   return (
-    <section id="contact" className="contact-section">
+    <section id="Contact" className="contact-section">
       {/* Title */}
       <h2 className="contact-title">Get in Touch</h2>
       <p className="contact-subtitle">

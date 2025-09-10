@@ -4,6 +4,7 @@ import quoteIcon from '../assets/quote.png';
 
 const SuccessStories = () => {
   return (
+    <section id='SuccessStories'>
     <div className="success-stories">
       <h1>Success Stories</h1>
       <p className="section-description">
@@ -141,6 +142,7 @@ const SuccessStories = () => {
         </div>
       </div>
     </div>
+    </section>
   );
 };
 

@@ -42,6 +42,7 @@ const AboutSection = () => {
   ];
 
   return (
+    <section id="About">
     <div className="founders-page">
       <div className="container">
         <div className="header-section">
@@ -88,6 +89,7 @@ const AboutSection = () => {
         </div>
       </div>
     </div>
+    </section>
   );
 };
 

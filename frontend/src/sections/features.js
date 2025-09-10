@@ -2,6 +2,7 @@ import "../styles/features.css";
 
 const Features = () => {
   return (
+      <section id="Features" className="h-screen flex items-center justify-center bg-green-100">
     <div className="container">
       <h1 style={{ textAlign: "center" }}>Everything You Need for Growth</h1>
       <p style={{ color: "#98A1B3", textAlign: "center" }}>
@@ -247,6 +248,7 @@ const Features = () => {
         </div>
       </div>
     </div>
+    </section>
   );
 };
 

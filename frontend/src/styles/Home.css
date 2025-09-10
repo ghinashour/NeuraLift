@@ -1,5 +1,18 @@
 /* Home.css - Matching Figma Design */
-
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: #f8f9fa;
+            line-height: 1.6;
+            padding: 20px;
+            min-height: 100vh;
+        }
+        
 .home-section {
   min-height: 100vh;
   background-color: #f8f9fa;
