@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import './App.css';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
@@ -9,9 +9,9 @@ import Features from "./sections/features";
 import Contact from './sections/Contact'; // import Contact section
 import AboutSection from './sections/AboutSection'; // import About section
 import Home from './sections/Home';
-import Sidebar from './layout/Sidebar';
+import Sidebar from './layouts/Sidebar';
 import TaskManagerPage from './pages/TaskManager/TaskManager';
-import { TaskProvider } from './contexts/TaskContext';
+import { TaskProvider } from './context/TaskContext';
 
 
 

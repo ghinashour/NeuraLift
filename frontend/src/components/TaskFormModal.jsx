@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import TagSelector from './TagSelector';
-import { useTaskContext } from '../contexts/TaskContext';
+import { useTaskContext } from '../context/TaskContext';
 import { useTags } from '../hooks/useTags';
 import '../styles/TaskFormModal.css';
 

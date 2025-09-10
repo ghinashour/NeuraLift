@@ -6,7 +6,7 @@ import ProgressSummary from '../../components/ProgressSummary';
 import TaskList from '../../components/TaskList';
 import ProgressChart from '../../components/ProgressChart';
 import TaskFormModal from '../../components/TaskFormModal';
-import { useTaskContext } from '../../contexts/TaskContext';
+import { useTaskContext } from '../../context/TaskContext';
 import IcAI from '../../assets/Ellipse.svg';
 
 const TaskManagerPage = () => {
