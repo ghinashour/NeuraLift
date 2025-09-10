@@ -1,0 +1,30 @@
+.section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 24px 0 16px 0;
+}
+
+.section-titles {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.section-title {
+    margin: 0;
+    font-size: 20px;
+    font-weight: 700;
+    color: #2b2f3b;
+}
+
+.section-subtitle {
+    margin: 0;
+    font-size: 13px;
+    color: #626a84;
+}
+
+.section-action {
+    display: flex;
+    align-items: center;
+}

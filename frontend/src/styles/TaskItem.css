@@ -1,0 +1,278 @@
+.task-item {
+  background: white;
+  border-radius: 12px;
+  border: 1px solid #e2e4e9;
+  padding: 20px;
+  display: flex;
+  gap: 16px;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 10px rgba(60, 131, 246, 0.08);
+  cursor: pointer;
+}
+
+.task-item:hover {
+  box-shadow: 0 4px 20px rgba(60, 131, 246, 0.15);
+  transform: translateY(-1px);
+  border-color: #cbd5e1;
+}
+
+.task-item.completed {
+  opacity: 0.75;
+  background: #f8fafc;
+}
+
+.task-checkbox {
+  cursor: pointer;
+  display: flex;
+  align-items: flex-start;
+  padding-top: 2px;
+}
+
+.checkbox {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  background: white;
+  border: 2px solid #3c83f6;
+}
+
+.checkbox:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 0 4px rgba(60, 131, 246, 0.1);
+}
+
+.checkbox.checked {
+  background: #3c83f6;
+  border-color: #3c83f6;
+}
+
+.check-icon {
+  color: white;
+}
+
+.circle-icon {
+  color: #3c83f6;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.checkbox:hover .circle-icon {
+  opacity: 1;
+}
+
+.task-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.task-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 8px;
+  gap: 16px;
+}
+
+.task-title-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: 1;
+  min-width: 0;
+  flex-wrap: wrap;
+}
+
+.task-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: #2b2f3b;
+  margin: 0;
+  line-height: 1.4;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.task-title.completed-title {
+  text-decoration: line-through;
+  color: #626a84;
+}
+
+.task-actions {
+  display: flex;
+  gap: 8px;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  flex-shrink: 0;
+}
+
+.task-actions.visible {
+  opacity: 1;
+}
+
+.action-btn {
+  background: #f8fafc;
+  border: 1px solid #e2e4e9;
+  color: #626a84;
+  cursor: pointer;
+  padding: 6px;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.action-btn:hover {
+  transform: scale(1.05);
+}
+
+.edit-btn:hover {
+  background: #dbeafe;
+  border-color: #3c83f6;
+  color: #3c83f6;
+}
+
+.delete-btn:hover {
+  background: #fee2e2;
+  border-color: #ef4444;
+  color: #ef4444;
+}
+
+.task-description {
+  color: #626a84;
+  font-size: 13px;
+  margin: 0 0 12px 0;
+  line-height: 1.5;
+  transition: color 0.2s ease;
+}
+
+.task-description.completed-text {
+  color: #9ca3af;
+}
+
+.task-meta {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 12px;
+}
+
+.task-date {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: #626a84;
+}
+
+.task-date svg {
+  opacity: 0.7;
+}
+
+.task-tags {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.task-tag {
+  font-size: 11px;
+  font-weight: 500;
+  color: white;
+  padding: 3px 8px;
+  border-radius: 12px;
+  text-transform: capitalize;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease;
+}
+
+.task-tag:hover {
+  transform: scale(1.05);
+}
+
+/* Tablet styles */
+@media (max-width: 1024px) {
+  .task-item {
+    padding: 18px;
+  }
+
+  .task-actions {
+    opacity: 1;
+  }
+}
+
+/* Mobile styles */
+@media (max-width: 768px) {
+  .task-item {
+    padding: 16px;
+    gap: 12px;
+  }
+
+  .task-header {
+    flex-direction: column;
+    gap: 12px;
+    align-items: flex-start;
+  }
+
+  .task-title-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .task-actions {
+    opacity: 1;
+    align-self: flex-end;
+  }
+
+  .task-meta {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .task-tags {
+    margin-top: 4px;
+  }
+
+  .task-title {
+    font-size: 16px;
+  }
+
+  .task-description {
+    font-size: 14px;
+  }
+}
+
+/* Small mobile styles */
+@media (max-width: 480px) {
+  .task-item {
+    padding: 12px;
+    gap: 10px;
+  }
+
+  .task-header {
+    gap: 8px;
+  }
+
+  .task-title {
+    font-size: 15px;
+  }
+
+  .task-description {
+    font-size: 13px;
+  }
+
+  .action-btn {
+    padding: 8px;
+  }
+
+  .task-tag {
+    font-size: 10px;
+    padding: 2px 6px;
+  }
+}
