@@ -11,21 +11,32 @@
             line-height: 1.6;
             padding: 20px;
             min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
         }
         
 .home-section {
-  min-height: 100vh;
   background-color: #f8f9fa;
-  display: flex;
+  width: 100vw;
+  position: relative;
+  left: 50%;
+  right: 50%;
+  margin-left: -50vw;
+  margin-right: -40vw;
+  padding: 80px 20px;
+  color: white;
+  text-align: center;
   align-items: center;
-  justify-content: center;
-  padding: 60px 20px;
 }
 
 .home-container {
-  max-width: 900px;
   text-align: center;
-  padding: 0 20px;
+  padding: 20px 20px;
+  width: 1152px;
+  height: 612px;
+ margin-left: 100px;
 }
 
 /* Headline */
@@ -36,6 +47,7 @@
   margin-bottom: 24px;
   line-height: 1.2;
   letter-spacing: -0.02em;
+  margin-top: 70px;
 }
 
 .home-title .highlight {
@@ -62,7 +74,7 @@
   gap: 16px;
   justify-content: center;
   align-items: center;
-  margin-bottom: 80px;
+  margin-bottom: 30px;
   flex-wrap: wrap;
 }
 
@@ -112,6 +124,8 @@
   gap: 60px;
   max-width: 800px;
   margin: 0 auto;
+  margin-bottom: 80px;
+
 }
 
 .stat {
@@ -119,19 +133,19 @@
 }
 
 .stat h2 {
-  font-size: 2.25rem;
+  font-size: 30px;
   font-weight: 700;
   color: #2d3748;
   margin-bottom: 8px;
   line-height: 1;
+
 }
 
 .stat p {
-  font-size: 0.875rem;
+  font-size: 16px;
   color: #a0aec0;
-  font-weight: 400;
+  font-weight: 300;
   margin: 0;
-  text-transform: uppercase;
   letter-spacing: 0.05em;
 }
 

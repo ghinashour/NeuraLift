@@ -8,6 +8,7 @@ import ProgressChart from '../../components/ProgressChart';
 import TaskFormModal from '../../components/TaskFormModal';
 import { useTaskContext } from '../../context/TaskContext';
 import IcAI from '../../assets/Ellipse.svg';
+import Sidebar from '../../layouts/Sidebar';
 
 const TaskManagerPage = () => {
     const navigate = useNavigate();
@@ -44,6 +45,8 @@ const TaskManagerPage = () => {
     };
 
     return (
+        <>
+      
         <div className="tm-container">
             <div className="tm-header">
                 <div className="tm-title-row">
@@ -104,6 +107,7 @@ const TaskManagerPage = () => {
                 task={editingTask}
             />
         </div>
+        </>
     );
 };
 

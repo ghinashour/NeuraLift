@@ -41,7 +41,7 @@ const Home = () => {
           </div>
           <div className="stat">
             <h2>24/7</h2>
-            <p>Community & Support</p>
+            <p>Community Support</p>
           </div>
         </div>
       </div>

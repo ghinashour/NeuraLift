@@ -2,9 +2,9 @@ import "../styles/features.css";
 
 const Features = () => {
   return (
-      <section id="Features" className="h-screen flex items-center justify-center bg-green-100">
+      <section id="Features" className="h-screen flex items-center justify-center bg-green-100 " style={{color:"#ffffff"}}>
     <div className="container">
-      <h1 style={{ textAlign: "center" }}>Everything You Need for Growth</h1>
+      <h1 style={{ textAlign: "center",color:"#2A303C" }}>Everything You Need for Growth</h1>
       <p style={{ color: "#98A1B3", textAlign: "center" }}>
         NeuraLift combines powerful productivity tools with wellness features to
         help you achieve your goals while maintaining your mental health.
@@ -61,7 +61,7 @@ const Features = () => {
           </svg>
           <br></br>
           <b className="tasks-title">Task Management</b>
-          <p>
+          <p className="expression">
             Stay organized and motivated with our intelligent task management
             system that adapts to your workflow.
           </p>
@@ -110,7 +110,7 @@ const Features = () => {
           </svg>
           <br></br>
           <b className="tasks-title">Daily Motivation</b>
-          <p>
+          <p class className="expression">
             Get inspired every day with personalized quotes and connect with
             others on similar journeys.
           </p>
@@ -192,7 +192,7 @@ const Features = () => {
           <br></br>
 
           <b className="tasks-title">Creative Canvas</b>
-          <p>
+          <p className="expression">
             Express yourself and release stress through our digital drawing
             platform designed for mindfulness.
           </p>
@@ -203,6 +203,7 @@ const Features = () => {
               marginLeft: "10px",
               marginTop: "40px",
               marginBottom: "20px",
+             
             }}
             width="65"
             height="65"
@@ -241,7 +242,7 @@ const Features = () => {
           </svg>
           <br></br>
           <b className="tasks-title">Health Tracking</b>
-          <p>
+          <p className="expression">
             Monitor your mental and physical wellbeing with comprehensive health
             tracking tools.
           </p>
