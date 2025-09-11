@@ -42,8 +42,9 @@ const AboutSection = () => {
   ];
 
   return (
+    <section id="About" className="about-section">
     <div className="founders-page">
-      <div className="container">
+      <div className="container2">
         <div className="header-section">
           <h1 className="main-title">
             Meet Our Founders
@@ -88,6 +89,7 @@ const AboutSection = () => {
         </div>
       </div>
     </div>
+    </section>
   );
 };
 

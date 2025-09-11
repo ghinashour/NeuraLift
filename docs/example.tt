@@ -3,3 +3,6 @@ import { FaHeart, FaEnvelope, FaMapMarkerAlt, FaArrowCircleUp } from "react-icon
 import { FaEnvelope, FaComments, FaPhone, FaPaperPlane } from "react-icons/fa";
 
 you should install icons library: npm install react-icons
+
+
+install react-scroll: we used it for the scroll to be smooth on the landing page: npm i react-scroll
