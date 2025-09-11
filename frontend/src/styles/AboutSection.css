@@ -1,3 +1,15 @@
+.about-section {
+  width: 100vw;
+  position: relative;
+  left: 50%;
+  right: 50%;
+  margin-left: -50vw;
+  margin-right: -50vw;
+  padding: 80px 20px;
+  background: linear-gradient(180deg, #f9fafb, #e5e7eb);
+  color: white;
+  text-align: center;
+}
 
 /* Main container styles */
 .founders-page {
@@ -5,13 +17,14 @@
   background: linear-gradient(180deg, #f9fafb, #e5e7eb);
 }
 
-.container {
+.container2 {
   max-width: 1200px;
   margin: 0 auto;
   padding: 48px 16px;
   display: flex;
   flex-direction: column;
   align-items: center;
+  background: linear-gradient(180deg, #f9fafb, #e5e7eb);
 }
 
 /* Header section styles */
