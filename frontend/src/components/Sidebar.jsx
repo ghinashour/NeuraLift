@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import '../styles/AppShell.css';
+import '../styles/Sidebar.css';
 import logo from '../assets/logo.svg';
 
 const getNavIcon = (key, isActive) => {

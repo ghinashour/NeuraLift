@@ -11,6 +11,7 @@ import Features from "./sections/features";
 import Contact from './sections/Contact'; // import Contact section
 import AboutSection from './sections/AboutSection'; // import About section
 import Home from './sections/Home';
+import Layout from './layouts/Layout';
 
 
 
@@ -28,9 +29,11 @@ function App() {
       
       <TaskProvider>
             <Router>
-                    <Routes>
-                        <Route path="/taskmanager" element={<TaskManagerPage />} />
-                    </Routes>
+              <Layout>
+                  <Routes>
+                      <Route path="/taskmanager" element={<TaskManagerPage />} />
+                  </Routes>
+              </Layout>
             </Router>
         </TaskProvider>
     </>
