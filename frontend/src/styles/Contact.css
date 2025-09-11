@@ -1,9 +1,16 @@
 .contact-section {
   background: linear-gradient(180deg, #E5E7EB, #F9F9FA);
+  width: 100vw;
+  position: relative;
+  left: 50%;
+  right: 50%;
+  margin-left: -50vw;
+  margin-right: -50vw;
   padding: 80px 20px;
+  color: white;
   text-align: center;
-  font-family: Inter, sans-serif;
 }
+
 
 .contact-title {
   font-size: 48px;
