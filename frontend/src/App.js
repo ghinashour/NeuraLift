@@ -29,7 +29,7 @@ function App() {
       <TaskProvider>
             <Router>
                     <Routes>
-                        <Route path="/taskmanager" element={<TaskManagerPage />} />
+                        <Route path="/TaskManager" element={<TaskManagerPage />} />
                     </Routes>
             </Router>
         </TaskProvider>
