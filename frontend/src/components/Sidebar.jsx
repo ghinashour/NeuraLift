@@ -95,30 +95,42 @@ const getNavIcon = (key, isActive) => {
 };
 
 const navItems = [
-    { key: 'dashboard', label: 'Dashboard', path: '/Dashboard' },
-    { key: 'timer', label: 'Focus Timer', path: '/FocusTimer' },
-    { key: 'tasks', label: 'Tasks', path: '/TaskManager' },
-    { key: 'mood', label: 'Mood Tracker', path: '/MoodTracker' },
-    { key: 'stress', label: 'Stress Relief', path: '/StressRelief' },
-    { key: 'success', label: 'Success Stories', path: '/SuccessStories' },
-    { key: 'challenges', label: 'Challenges', path: '/Challenges' },
-    { key: 'collab', label: 'Collaborate', path: '/Collaborate' },
-    { key: 'schedule', label: 'Schedule', path: '/Schedule' },
-    { key: 'medicine', label: 'Medicine & Health', path: '/MedicineHealth' },
-    { key: 'assistant', label: 'AI Assistant', path: '/AIAssistant' }
+    { key: 'dashboard', label: 'Dashboard', path: '/dashboard' },
+    { key: 'timer', label: 'Focus Timer', path: '/focus-timer' },
+    { key: 'tasks', label: 'Tasks', path: '/' },
+    { key: 'mood', label: 'Mood Tracker', path: '/mood-tracker' },
+    { key: 'stress', label: 'Stress Relief', path: '/stress-relief' },
+    { key: 'success', label: 'Success Stories', path: '/success-stories' },
+    { key: 'challenges', label: 'Challenges', path: '/challenges' },
+    { key: 'collab', label: 'Collaborate', path: '/collaborate' },
+    { key: 'schedule', label: 'Schedule', path: '/schedule' },
+    { key: 'medicine', label: 'Medicine & Health', path: '/medicine-health' },
+    { key: 'assistant', label: 'AI Assistant', path: '/ai-assistant' }
 ];
 
-const Sidebar = () => {
+const Sidebar = ({ children }) => {
     const navigate = useNavigate();
     const location = useLocation();
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
     const handleNavClick = (path) => {
-         navigate(path);   // allow all paths
-         setIsMobileMenuOpen(false);
+        // Only navigate to paths that are implemented
+        if (path === '/' || path.startsWith('/task')) {
+            navigate(path);
+            setIsMobileMenuOpen(false); // Close mobile menu after navigation
+        } else {
+            // For other routes, just close the mobile menu
+            // These will be implemented by teammates
+            setIsMobileMenuOpen(false);
+        }
     };
 
-     const isActive = (path) => location.pathname === path;
+    const isActive = (path) => {
+        if (path === '/') {
+            return location.pathname === '/' || location.pathname.startsWith('/task');
+        }
+        return location.pathname.startsWith(path);
+    };
 
     return (
         <div className="app-shell">
@@ -171,7 +183,7 @@ const Sidebar = () => {
                 </nav>
             </aside>
 
-          
+            <main className="content">{children}</main>
         </div>
     );
 };
