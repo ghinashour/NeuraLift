@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import '../styles/Sidebar.css';
 import logo from '../assets/logo.svg';
-
 const getNavIcon = (key, isActive) => {
     const strokeColor = isActive ? '#F1F5F9' : '#626A84';
 

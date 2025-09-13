@@ -1,5 +1,5 @@
 import { useState } from "react";
-import "./StressReliefSpace.css";
+import "./StressReliefSpace";
 import Whiteboard from "./WhiteBoard";
 
 const StressRelief = () => {
