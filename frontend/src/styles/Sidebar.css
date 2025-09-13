@@ -1,0 +1,217 @@
+/* src/styles/Sidebar.css */
+
+/* Layout variables: changed by .app-layout.sidebar-collapsed */
+.app-layout {
+  --sidebar-width: 240px;
+  --sidebar-collapsed-width: 90px;
+}
+
+/* when collapsed */
+.app-layout.sidebar-collapsed {
+  --sidebar-width: var(--sidebar-collapsed-width);
+}
+
+/* basic page layout */
+.app-layout {
+  display: flex;
+  min-height: 100vh;
+  background: #f4f7fb; /* page background */
+}
+
+/* fixed sidebar */
+.sidebar {
+  position: fixed;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: var(--sidebar-width);
+  background: #ffffff;
+  border-right: 1px solid rgba(34, 46, 80, 0.04);
+  padding: 20px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  transition: width 220ms ease, transform 220ms ease;
+  z-index: 1000;
+  box-shadow: 0 1px 20px rgba(65, 80, 120, 0.03);
+}
+
+/* small left accent stripe similar to screenshot */
+.sidebar::before {
+  content: "";
+  position: absolute;
+  left: -6px;
+  top: 40px;
+  bottom: 40px;
+  width: 4px;
+  background: linear-gradient(180deg,#2f80ed,#60a5fa);
+  border-radius: 8px;
+  box-shadow: 0 6px 18px rgba(47,128,237,0.08);
+}
+
+/* brand area */
+.brand-container{
+    display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start; /* Changed from center to flex-start */
+  gap: 2px;
+  margin-top: 0; /* Ensure no top margin */
+  padding-top: 0; /* Ensure no top padding */
+  margin-bottom: 10px; /* Reduced from previous value */
+}
+.brand-icon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 10px; /* Space between logo and text */
+}
+
+.brand-icon img {
+  width: 56px;
+  height: 56px;
+  object-fit: contain;
+  background: linear-gradient(180deg, #3C83F6, #6DA2F8);
+  padding: 10px;
+  border-radius: 12px;
+}
+
+.brand-name {
+   text-align: center;
+  font-weight: 600;
+  font-size: 22px;
+  color: #3C83F6;
+}
+.brand-sub {
+    text-align: center;
+  font-size: 13.23px;
+  color: #626A84;
+  margin-top: 4px;
+}
+
+/* nav */
+.nav {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 6px;
+  flex: 1;
+  overflow: auto;
+  padding-right: 4px;
+}
+
+/* nav item */
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px;
+  border-radius: 10px;
+  cursor: pointer;
+  color: #6b7280;
+  font-size: 14px;
+  user-select: none;
+  transition: background 160ms ease, color 160ms ease, transform 120ms ease;
+}
+
+.nav-item svg { flex-shrink: 0; }
+
+/* hover */
+.nav-item:hover {
+  background: rgba(47,128,237,0.06);
+  color: #1f2a44;
+}
+
+/* active item */
+.nav-item.active {
+  background: linear-gradient(90deg, rgba(47,128,237,0.95), rgba(49,98,255,0.95));
+  color: white;
+}
+.nav-item.active svg path, .nav-item.active svg circle, .nav-item.active svg rect {
+  stroke: #fff !important;
+  fill: none !important;
+}
+
+/* label */
+.nav-label {
+  white-space: nowrap;
+  transition: opacity 200ms ease, transform 200ms ease;
+}
+
+/* footer (collapse button) */
+.sidebar-footer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px 0;
+}
+
+.collapse-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px;
+  border-radius: 8px;
+  background: transparent;
+  border: 1px solid rgba(34,46,80,0.04);
+  cursor: pointer;
+  transition: background 140ms ease, transform 120ms ease;
+  color: #374151;
+  font-size: 13px;
+}
+.collapse-btn:hover {
+  background: rgba(34,46,80,0.04);
+}
+
+/* rotate arrow when collapsed */
+.collapse-icon {
+  transition: transform 200ms ease;
+}
+.collapse-icon.rotated {
+  transform: rotate(180deg);
+}
+
+/* main content area should leave space for the sidebar */
+.layout-main {
+  flex: 1;
+  margin-left: var(--sidebar-width);
+  padding: 28px;
+  transition: margin-left 220ms ease;
+  background: #f4f7fb;
+  min-height: 100vh;
+}
+
+/* collapsed styles: hide labels and shrink sidebar */
+.app-layout.sidebar-collapsed .sidebar {
+  width: var(--sidebar-collapsed-width);
+}
+.app-layout.sidebar-collapsed .nav-label {
+  opacity: 0;
+  transform: translateX(-6px);
+  width: 0;
+  pointer-events: none;
+}
+.app-layout.sidebar-collapsed .brand-name,
+.app-layout.sidebar-collapsed .brand-sub,
+.app-layout.sidebar-collapsed .collapse-btn span {
+  display: none;
+}
+
+/* nicer touch for icons when collapsed: center them */
+.app-layout.sidebar-collapsed .nav-item {
+  justify-content: center;
+}
+
+/* mobile behaviour */
+@media (max-width: 900px) {
+.app-layout {
+  --sidebar-width: 300px;
+  --sidebar-collapsed-width: 90px;
+}
+
+/* when collapsed */
+.app-layout.sidebar-collapsed {
+  --sidebar-width: var(--sidebar-collapsed-width);
+}
+
+}

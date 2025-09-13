@@ -1,0 +1,40 @@
+#stresscontainers {
+  width: auto;
+  height: 670px;
+  background-color: #f4f7fb;
+  margin-right: 47px;
+}
+#cont2boxes {
+  display: flex;
+  justify-content: center;
+  gap: 70px;
+  margin-top: 30px;
+}
+#boardcont {
+  margin-left: 20px;
+  background-color: white;
+  width: 500px;
+  height: 550px;
+}
+#thoughtscont {
+  background-color: white;
+  width: 500px;
+  height: 550px;
+  margin-right: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+#stressinput {
+  width: 440px;
+  height: 150px;
+}
+#stress-btn {
+  background-color: #3c83f6;
+  color: white;
+  width: 440px;
+  height: 60px;
+  border-radius: 10px;
+  border: none;
+  margin-top: 20px;
+}

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "../styles/Navbar.css";
 import logo from "../assets/NeuraLift.png";
+import { Link } from "react-scroll";
 
 function Navbar() {
   const [scrolled, setScrolled] = useState(false);
@@ -25,11 +26,11 @@ function Navbar() {
           <img src={logo} alt="NeuraLift Logo" />
         </div>
         <ul className="nav-links">
-          <li><a href="#home">Home</a></li>
-          <li><a href="#features">Features</a></li>
-          <li><a href="#about">About</a></li>
-          <li><a href="#success">Success Stories</a></li>
-          <li><a href="#contact">Contact</a></li>
+          <a href="#Home" smooth={true} duration={600}>Home</a>
+          <a href="#Features"smooth={true} duration={600}>Features</a>
+          <a href="#About"smooth={true} duration={600}>About</a>
+          <a href="#SuccessStories"smooth={true} duration={600}>Success Stories</a>
+          <a href="#Contact"smooth={true} duration={600}>Contact</a>
         </ul>
         <button className="get-started">Get Started</button>
       </div>
