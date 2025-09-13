@@ -95,34 +95,26 @@ const getNavIcon = (key, isActive) => {
 };
 
 const navItems = [
-    { key: 'dashboard', label: 'Dashboard', path: '/dashboard' },
-    { key: 'timer', label: 'Focus Timer', path: '/focus-timer' },
-    { key: 'tasks', label: 'Tasks', path: '/' },
-    { key: 'mood', label: 'Mood Tracker', path: '/mood-tracker' },
-    { key: 'stress', label: 'Stress Relief', path: '/stress-relief' },
-    { key: 'success', label: 'Success Stories', path: '/success-stories' },
-    { key: 'challenges', label: 'Challenges', path: '/challenges' },
-    { key: 'collab', label: 'Collaborate', path: '/collaborate' },
-    { key: 'schedule', label: 'Schedule', path: '/schedule' },
-    { key: 'medicine', label: 'Medicine & Health', path: '/medicine-health' },
+    { key: 'dashboard', label: 'Dashboard', path: '/Dashboard' },
+    { key: 'timer', label: 'Focus Timer', path: '/focusTimer' },
+    { key: 'tasks', label: 'Tasks', path: '/taskManager' },
+    { key: 'mood', label: 'Mood Tracker', path: '/moodTracker' },
+    { key: 'stress', label: 'Stress Relief', path: '/stressRelief' },
+    { key: 'success', label: 'Success Stories', path: '/successStories' },
+    { key: 'challenges', label: 'Challenges', path: '/Challenges' },
+    { key: 'collab', label: 'Collaborate', path: '/Collaborate' },
+    { key: 'schedule', label: 'Schedule', path: '/Schedule' },
+    { key: 'medicine', label: 'Medicine & Health', path: '/medicineHealth' },
     { key: 'assistant', label: 'AI Assistant', path: '/ai-assistant' }
 ];
 
-const Sidebar = ({ children }) => {
+const Sidebar = ({ isCollapsed, setIsCollapsed }) => {
     const navigate = useNavigate();
     const location = useLocation();
-    const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
     const handleNavClick = (path) => {
-        // Only navigate to paths that are implemented
-        if (path === '/' || path.startsWith('/task')) {
-            navigate(path);
-            setIsMobileMenuOpen(false); // Close mobile menu after navigation
-        } else {
-            // For other routes, just close the mobile menu
-            // These will be implemented by teammates
-            setIsMobileMenuOpen(false);
-        }
+        // Navigation for all items
+    navigate(path);
     };
 
     const isActive = (path) => {
@@ -133,61 +125,51 @@ const Sidebar = ({ children }) => {
     };
 
     return (
-        <div className="app-shell">
-            {/* Mobile Header */}
-            <header className="mobile-header">
-                <div className="mobile-brand">
-                    <div className="mobile-brand-icon">
-                        <img src={logo} alt="NeuraLift" />
-                    </div>
-                    <div className="mobile-brand-text">
-                        <div className="mobile-brand-name">NeuraLift</div>
-                    </div>
-                </div>
-                <button
-                    className="mobile-menu-btn"
-                    onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                    aria-label="Toggle menu"
-                >
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                        <path d="M3 12H21" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                        <path d="M3 6H21" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                        <path d="M3 18H21" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                    </svg>
-                </button>
-            </header>
-
-            {/* Mobile Menu Overlay */}
-            {isMobileMenuOpen && <div className="mobile-overlay" onClick={() => setIsMobileMenuOpen(false)} />}
-
-            <aside className={`sidebar ${isMobileMenuOpen ? 'sidebar-open' : ''}`}>
-                <div className="brand">
-                    <div className="brand-icon">
-                        <img src={logo} alt="NeuraLift" />
-                    </div>
-                    <div className="brand-name">NeuraLift</div>
-                    <div className="brand-sub">Your wellness companion</div>
-                </div>
-
-                <nav className="nav">
-                    {navItems.map(item => (
-                        <div
-                            key={item.key}
-                            className={`nav-item ${isActive(item.path) ? 'active' : ''}`}
-                            onClick={() => handleNavClick(item.path)}
-                        >
-                            {getNavIcon(item.key, isActive(item.path))}
-                            <span>{item.label}</span>
-                        </div>
-                    ))}
-                </nav>
-            </aside>
-
-            <main className="content">{children}</main>
+        <>
+      <aside className={`sidebar ${isCollapsed ? "collapsed" : ""}`}>
+        <div className="brand">
+          <div className="brand-icon">
+            <img src={logo} alt="NeuraLift" />
+          </div>
+          {!isCollapsed && (
+            <>
+              <div className="brand-name">NeuraLift</div>
+              <div className="brand-sub">Your wellness companion</div>
+            </>
+          )}
         </div>
-    );
+
+        <nav className="nav">
+          {navItems.map((item) => (
+            <div
+              key={item.key}
+              className={`nav-item ${isActive(item.path) ? "active" : ""}`}
+              onClick={() => handleNavClick(item.path)}
+              title={isCollapsed ? item.label : undefined} // tooltip when collapsed
+            >
+              {getNavIcon(item.key, isActive(item.path))}
+              <span className="nav-label">{item.label}</span>
+            </div>
+          ))}
+        </nav>
+
+        <div className="sidebar-footer">
+          <button
+            className="collapse-btn"
+            onClick={() => setIsCollapsed(!isCollapsed)}
+            aria-label={isCollapsed ? "Expand sidebar" : "Collapse sidebar"}
+          >
+            <svg className={`collapse-icon ${isCollapsed ? "rotated" : ""}`} width="18" height="18" viewBox="0 0 24 24" fill="none">
+              <path d="M9 6L15 12L9 18" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
+            {!isCollapsed && <span>Collapse</span>}
+          </button>
+        </div>
+      </aside>
+    </>
+  );
 };
 
 export default Sidebar;
 
-
+           
