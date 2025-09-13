@@ -3,7 +3,7 @@
 /* Layout variables: changed by .app-layout.sidebar-collapsed */
 .app-layout {
   --sidebar-width: 240px;
-  --sidebar-collapsed-width: 72px;
+  --sidebar-collapsed-width: 90px;
 }
 
 /* when collapsed */
@@ -204,5 +204,14 @@
 
 /* mobile behaviour */
 @media (max-width: 900px) {
-    
+.app-layout {
+  --sidebar-width: 300px;
+  --sidebar-collapsed-width: 90px;
+}
+
+/* when collapsed */
+.app-layout.sidebar-collapsed {
+  --sidebar-width: var(--sidebar-collapsed-width);
+}
+
 }
