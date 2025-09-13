@@ -17,7 +17,6 @@ function App() {
   return (
     <Router>
       <TaskProvider>
-        <Navbar />
         <Routes>
           {/* Landing page */}
           <Route
@@ -37,7 +36,7 @@ function App() {
 
           {/* Other pages inside Layout */}
           <Route>
-            <Route path="taskmanager" element={<TaskManagerPage />} />
+            <Route path="taskManager" element={<TaskManagerPage />} />
             <Route path="stressRelief" element={<StressRelief />} />
           </Route>
         </Routes>
