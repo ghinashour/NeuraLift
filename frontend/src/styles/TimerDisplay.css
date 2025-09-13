@@ -1,0 +1,65 @@
+.timer-display {
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.timer-display__header {
+  margin-bottom: 1rem;
+}
+
+.timer-display__title {
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+.timer-display__status {
+  display: inline-block;
+  padding: 0.2rem 0.6rem;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  margin-top: 0.4rem;
+}
+
+.timer-display__circle-container {
+  position: relative;
+  width: 200px;
+  height: 200px;
+  margin: 0 auto;
+}
+
+.timer-display__circle {
+  transform: rotate(-90deg);
+}
+
+.timer-display__background {
+  fill: none;
+  stroke: #e5e7eb;
+  stroke-width: 10;
+}
+
+.timer-display__progress {
+  fill: none;
+  stroke: #3b82f6;
+  stroke-width: 10;
+  stroke-linecap: round;
+  transition: stroke-dashoffset 0.3s ease;
+}
+
+.timer-display__content {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.timer-display__time {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #111827;
+}
+
+.timer-display__mode-label {
+  font-size: 0.9rem;
+  color: #6b7280;
+  margin-top: 0.3rem;
+}

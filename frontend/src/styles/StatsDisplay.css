@@ -1,0 +1,31 @@
+.stats-display {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 1.5rem;
+}
+
+.stats-display__item {
+  text-align: center;
+}
+
+.stats-display__number {
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.stats-display__number--blue {
+  color: #3b82f6;
+}
+
+.stats-display__number--green {
+  color: #10b981;
+}
+
+.stats-display__number--purple {
+  color: #8b5cf6;
+}
+
+.stats-display__label {
+  font-size: 0.85rem;
+  color: #6b7280;
+}
