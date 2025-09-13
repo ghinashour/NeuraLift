@@ -35,7 +35,7 @@ function App() {
           />
 
           {/* Other pages inside Layout */}
-          <Route>
+          <Route element={<Layout/>}>
             <Route path="taskManager" element={<TaskManagerPage />} />
             <Route path="stressRelief" element={<StressRelief />} />
           </Route>
