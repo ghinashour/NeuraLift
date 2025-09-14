@@ -1,0 +1,280 @@
+/* App.css */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: #f5f7fa;
+  color: #333;
+  line-height: 1.6;
+}
+
+.App {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.header h1 {
+  font-size: 2.5rem;
+  color: #2c3e50;
+  margin-bottom: 10px;
+}
+
+.header p {
+  font-size: 1.1rem;
+  color: #7f8c8d;
+}
+
+.main-content {
+  background: white;
+  border-radius: 12px;
+  padding: 25px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+h2, h3, h4 {
+  color: #2c3e50;
+  margin-bottom: 15px;
+}
+
+h2 {
+  font-size: 1.8rem;
+}
+
+h3 {
+  font-size: 1.5rem;
+}
+
+h4 {
+  font-size: 1.2rem;
+  margin-top: 20px;
+}
+
+.weekly-insights ul {
+  list-style-type: none;
+  padding-left: 0;
+}
+
+.weekly-insights li {
+  background: #f8f9fa;
+  padding: 10px 15px;
+  margin-bottom: 10px;
+  border-radius: 8px;
+  border-left: 4px solid #3498db;
+}
+
+.mood-selector {
+  margin: 20px 0;
+}
+
+.mood-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+}
+
+.mood-option {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 15px;
+  border: 2px solid #e0e0e0;
+  border-radius: 10px;
+  background: white;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-width: 90px;
+}
+
+.mood-option:hover {
+  border-color: #3498db;
+  transform: translateY(-2px);
+}
+
+.mood-option.selected {
+  border-color: #3498db;
+  background-color: #ebf5fb;
+}
+
+.mood-emoji {
+  font-size: 2rem;
+  margin-bottom: 5px;
+}
+
+.mood-label {
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.stress-selector {
+  margin: 15px 0;
+}
+
+.stress-options {
+  display: flex;
+  gap: 15px;
+}
+
+.stress-option {
+  display: flex;
+  align-items: center;
+  padding: 10px 15px;
+  border: 2px solid #e0e0e0;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.stress-option.selected {
+  border-color: #3498db;
+  background-color: #ebf5fb;
+}
+
+.stress-option input {
+  margin-right: 8px;
+}
+
+.note-input {
+  margin: 20px 0;
+}
+
+.note-input textarea {
+  width: 100%;
+  padding: 12px;
+  border: 2px solid #e0e0e0;
+  border-radius: 8px;
+  font-family: inherit;
+  font-size: 1rem;
+  resize: vertical;
+  transition: border-color 0.2s ease;
+}
+
+.note-input textarea:focus {
+  outline: none;
+  border-color: #3498db;
+}
+
+.char-count {
+  text-align: right;
+  font-size: 0.8rem;
+  color: #7f8c8d;
+  margin-top: 5px;
+}
+
+.submit-button {
+  background-color: #3498db;
+  color: white;
+  border: none;
+  padding: 12px 25px;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  width: 100%;
+}
+
+.submit-button:hover:not(:disabled) {
+  background-color: #2980b9;
+}
+
+.submit-button:disabled {
+  background-color: #bdc3c7;
+  cursor: not-allowed;
+}
+
+.submit-button.submitting {
+  background-color: #16a085;
+}
+
+.recent-entries {
+  margin-top: 20px;
+}
+
+.mood-entry-item {
+  background: #f8f9fa;
+  padding: 15px;
+  border-radius: 8px;
+  margin-bottom: 15px;
+  border-left: 4px solid #3498db;
+}
+
+.entry-header {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 8px;
+  font-weight: 500;
+}
+
+.entry-date {
+  color: #7f8c8d;
+}
+
+.entry-mood {
+  color: #2c3e50;
+}
+
+.entry-stress {
+  color: #e74c3c;
+}
+
+.entry-note {
+  font-style: italic;
+  color: #34495e;
+  margin-top: 5px;
+}
+
+.divider {
+  border: none;
+  height: 1px;
+  background-color: #e0e0e0;
+  margin: 25px 0;
+}
+
+.footer {
+  text-align: center;
+  margin-top: 30px;
+  color: #7f8c8d;
+  font-size: 0.9rem;
+}
+
+/* Responsive design */
+@media (max-width: 600px) {
+  .App {
+    padding: 15px;
+  }
+  
+  .mood-options {
+    justify-content: space-between;
+  }
+  
+  .mood-option {
+    flex: 1;
+    min-width: 70px;
+    padding: 10px;
+  }
+  
+  .mood-emoji {
+    font-size: 1.5rem;
+  }
+  
+  .entry-header {
+    flex-direction: column;
+    gap: 5px;
+  }
+}

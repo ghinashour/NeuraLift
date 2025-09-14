@@ -12,6 +12,7 @@ import AboutSection from "./sections/AboutSection";
 import Home from "./sections/Home";
 import Layout from "./layouts/Layout";
 import StressRelief from "./pages/StressReliefSpace/StressReliefSpace";
+import MoodTracker from "./pages/MoodTracker/MoodTracker";
 
 function App() {
   return (
@@ -36,8 +37,9 @@ function App() {
 
           {/* Other pages inside Layout */}
           <Route element={<Layout/>}>
-            <Route path="taskManager" element={<TaskManagerPage />} />
-            <Route path="stressRelief" element={<StressRelief />} />
+            <Route path="taskManager" element={<TaskManagerPage/>} />
+            <Route path="stressRelief" element={<StressRelief/>} />
+            <Route path="MoodTracker" element={<MoodTracker/>} />
           </Route>
         </Routes>
       </TaskProvider>
