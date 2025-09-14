@@ -86,8 +86,8 @@ const Whiteboard = () => {
       </div>
       <canvas
         ref={canvasRef}
-        width={500} // Set width to 500px
-        height={500} // Set height to 500px
+        width={470} // Set width to 500px
+        height={446} // Set height to 500px
         onMouseDown={startDrawing}
         onMouseMove={draw}
         onMouseUp={stopDrawing}

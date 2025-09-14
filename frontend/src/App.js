@@ -12,6 +12,7 @@ import AboutSection from "./sections/AboutSection";
 import Home from "./sections/Home";
 import Layout from "./layouts/Layout";
 import StressRelief from "./pages/StressReliefSpace/StressReliefSpace";
+import FocusTimer from "./pages/FocusTimer/FocusTimer";
 import MoodTracker from "./pages/MoodTracker/MoodTracker";
 
 function App() {
@@ -40,6 +41,7 @@ function App() {
             <Route path="taskManager" element={<TaskManagerPage/>} />
             <Route path="stressRelief" element={<StressRelief/>} />
             <Route path="MoodTracker" element={<MoodTracker/>} />
+             <Route path ="focustimer" element={<FocusTimer />} />
           </Route>
         </Routes>
       </TaskProvider>

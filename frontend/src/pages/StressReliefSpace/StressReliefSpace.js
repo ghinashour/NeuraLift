@@ -1,5 +1,5 @@
 import { useState } from "react";
-import "./StressReliefSpace";
+import "./StressReliefSpace.css";
 import Whiteboard from "./WhiteBoard";
 
 const StressRelief = () => {
@@ -184,7 +184,7 @@ const StressRelief = () => {
           <div
             style={{
               color: "black",
-              width: "640px",
+              width: "440px",
               height: "225px",
             }}
           >
