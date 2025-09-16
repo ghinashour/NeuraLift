@@ -1,6 +1,5 @@
 .story-card {
     width: 100%;
-    max-width: 896px;
     min-height: 227px;
     background: white;
     border: 1px solid #E2E4E9;
@@ -257,7 +256,6 @@
 /* Responsive Design */
 @media (max-width: 1024px) {
     .story-card {
-        max-width: 100%;
         padding: 22px;
     }
 }
@@ -316,7 +314,6 @@
 @media (max-width: 480px) {
     .story-card {
         padding: 16px;
-        margin: 0 8px;
     }
 
     .story-header {

@@ -1,19 +1,24 @@
 #stresscontainers {
-  width: auto;
+  width: 100%;
   height: auto;
-  background-color: #e5e7eb80;
+  background-color: transparent;
   margin-bottom: 50px;
+  padding: 0;
+  box-sizing: border-box;
 }
+
 #cont2boxes {
   display: flex;
   justify-content: center;
   gap: 70px;
   margin-top: 40px;
 }
+
 #boardcont {
   margin-left: 10px;
   background-color: white;
 }
+
 #thoughtscont {
   background-color: white;
   width: 700px;
@@ -23,10 +28,12 @@
   flex-direction: column;
   align-items: center;
 }
+
 #stressinput {
   width: 640px;
   height: 150px;
 }
+
 #stress-btn {
   background-color: #3c83f6;
   color: white;
@@ -35,4 +42,50 @@
   border-radius: 10px;
   border: none;
   margin-top: 20px;
+}
+
+/* Responsive design */
+@media (max-width: 1200px) {
+  #cont2boxes {
+    flex-direction: column;
+    align-items: center;
+    gap: 40px;
+  }
+
+  #thoughtscont {
+    width: 100%;
+    max-width: 700px;
+    margin-right: 0;
+  }
+
+  #stressinput {
+    width: 100%;
+    max-width: 640px;
+  }
+
+  #stress-btn {
+    width: 100%;
+    max-width: 640px;
+  }
+}
+
+@media (max-width: 768px) {
+  #cont2boxes {
+    gap: 30px;
+    margin-top: 20px;
+  }
+
+  #thoughtscont {
+    width: 100%;
+    padding: 0 20px;
+  }
+
+  #stressinput {
+    width: 100%;
+    height: 120px;
+  }
+
+  #stress-btn {
+    width: 100%;
+  }
 }

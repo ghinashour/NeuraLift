@@ -3,38 +3,31 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import "./App.css";
 import TaskManagerPage from "./pages/TaskManager/TaskManager";
 import { TaskProvider } from "./context/TaskContext";
-import Navbar from "./components/Navbar";
-import Footer from "./components/Footer";
-import SuccessStories from "./sections/SuccessStories";
 import MyStory from './pages/SuccessStories/MyStory';
-import Features from "./sections/features";
-import Contact from "./sections/Contact"; // import Contact section
-import AboutSection from "./sections/AboutSection"; // import About section
-import Home from "./sections/Home";
+import SuccessStories from './pages/SuccessStories/SuccessStories';
 import Layout from "./layouts/Layout";
 import StressRelief from "./pages/StressReliefSpace/StressReliefSpace";
 
 function App() {
   return (
     <>
-      {/*landing page*/}
+      {/* landing page
       <Navbar />
       <Home />
       <Features />
       <AboutSection />
       <SuccessStories />
       <Contact />
-      <Footer />
+      <Footer /> */}
 
       <TaskProvider>
         <Router>
           <Layout>
             <Routes>
               <Route path="/stressRelief" element={<StressRelief />} />
-              <Route path="/taskmanager" element={<TaskManagerPage />} /> 
+              <Route path="/taskmanager" element={<TaskManagerPage />} />
               <Route path="/success-stories" element={<SuccessStories />} />
               <Route path="/success-stories/my-story" element={<MyStory />} />
-
             </Routes>
           </Layout>
         </Router>
