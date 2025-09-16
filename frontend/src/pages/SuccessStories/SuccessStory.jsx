@@ -4,7 +4,7 @@ import StatsCard from '../../components/SuccessStories/StatsCard';
 import StoryCard from '../../components/SuccessStories/StoryCard';
 import '../../styles/SuccessStories/SuccessStories.css';
 
-const SuccessStories = () => {
+const SuccessStory = () => {
     const [stories, setStories] = useState([]);
     const [stats, setStats] = useState({
         totalStories: 0,
@@ -198,4 +198,4 @@ const SuccessStories = () => {
     );
 };
 
-export default SuccessStories;
+export default SuccessStory;
