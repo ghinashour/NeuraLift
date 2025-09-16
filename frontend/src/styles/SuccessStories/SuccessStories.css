@@ -1,4 +1,4 @@
-.tm-container {
+.success-stories {
     max-width: 960px;
     margin: 0 auto;
     padding: 24px;
@@ -6,248 +6,179 @@
     box-sizing: border-box;
 }
 
-.tm-header {
+.success-stories-header {
     text-align: center;
     margin-bottom: 32px;
 }
 
-.tm-title-row {
+.header-content {
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 12px;
 }
 
-.tm-header-icon {
+.header-icon {
     width: 24px;
     height: 24px;
     margin-top: 4.5px;
 }
 
-.tm-title {
+.header-text h1 {
     font-size: 28px;
     font-weight: 700;
     color: #2B2F3B;
     margin: 0;
 }
 
-.tm-subtitle {
+.header-text p {
     font-size: 16px;
     color: #626A84;
     margin: 0;
 }
 
-.tm-top {
+
+.share-button-container {
     display: flex;
-    gap: 40px;
-    align-items: center;
     justify-content: center;
     margin-bottom: 32px;
-    flex-wrap: wrap;
 }
 
-.tm-add-btn {
+.share-story-btn {
     display: flex;
-    align-items: center;
+    width: 251.09px;
+    padding: 14px 31.8px 14px 32px;
     justify-content: center;
+    align-items: flex-start;
     gap: 8px;
     background: linear-gradient(101deg, #3C83F6 0%, #6DA2F8 100%);
     color: #FAFAFA;
     border: none;
-    border-radius: 8px;
-    padding: 12px 20px;
+    border-radius: 10px;
     font-size: 14px;
-    font-weight: 500;
+    font-weight: 400;
+    line-height: 20px;
     cursor: pointer;
     margin: 0 auto 32px auto;
     transition: all 0.2s ease;
     box-shadow: 0 2px 4px rgba(79, 125, 243, 0.2);
+    text-decoration: none;
 }
 
-.tm-add-btn:hover {
+.share-story-btn:hover {
     background: linear-gradient(101deg, #3C83F6 50%, #6DA2F8 150%);
     transform: translateY(-1px);
     box-shadow: 0 4px 8px rgba(79, 125, 243, 0.3);
 }
 
-.tm-add-icon {
+.share-story-icon {
     font-size: 18px;
     font-weight: 400;
 }
 
-
-@media (max-width: 768px) {
-    .tm-top {
-        flex-direction: column;
-    }
-}
-
-.floating-logo {
-    position: fixed;
-    bottom: 24px;
-    right: 24px;
-    width: 60px;
-    height: 60px;
-    border-radius: 92px;
+.stories-list {
     display: flex;
-    align-items: center;
-    box-shadow: 0 8px 16px rgba(60, 131, 246, 0.3);
-    justify-content: center;
-    transition: all 0.3s ease;
-    z-index: 1000;
-    background: none;
-    border: none;
-    cursor: pointer;
-    padding: 0;
-}
-
-.floating-logo:hover {
-    transform: scale(1.1);
-}
-
-.floating-logo-icon {
-    width: 56px;
-    height: 56px;
+    flex-direction: column;
+    gap: 24px;
 }
 
 /* Tablet styles */
 @media (max-width: 1024px) {
-    .tm-container {
+    .success-stories {
         padding: 20px;
     }
 
-    .tm-header {
+    .success-stories-header {
         margin-bottom: 28px;
     }
 
-    .tm-header-icon {
+    .header-icon {
         width: 22px;
         height: 22px;
     }
 
-    .tm-title {
+    .header-text h1 {
         font-size: 26px;
     }
 
-    .tm-subtitle {
+    .header-text p {
         font-size: 15px;
     }
 
-    .tm-add-btn {
+    .share-story-btn {
         padding: 12px 18px;
         font-size: 14px;
-    }
-
-    .floating-logo {
-        width: 55px;
-        height: 55px;
-        bottom: 20px;
-        right: 20px;
-    }
-
-    .floating-logo-icon {
-        width: 50px;
-        height: 50px;
     }
 }
 
 /* Mobile styles */
 @media (max-width: 768px) {
-    .tm-container {
+    .success-stories {
         padding: 16px;
     }
 
-    .tm-header {
+    .success-stories-header {
         margin-bottom: 24px;
     }
 
-    .tm-title-row {
+    .header-content {
         gap: 8px;
     }
 
-    .tm-header-icon {
+    .header-icon {
         width: 20px;
         height: 20px;
         margin-top: 2px;
     }
 
-    .tm-title {
+    .header-text h1 {
         font-size: 24px;
     }
 
-    .tm-subtitle {
+    .header-text p {
         font-size: 14px;
         margin-top: 4px;
     }
 
-    .tm-top {
-        margin-bottom: 24px;
-        gap: 24px;
-    }
 
-    .tm-add-btn {
+    .share-story-btn {
         width: 100%;
         margin-bottom: 20px;
         padding: 14px 20px;
         font-size: 15px;
         justify-content: center;
     }
-
-
-    .floating-logo {
-        width: 50px;
-        height: 50px;
-        bottom: 16px;
-        right: 16px;
-    }
-
-    .floating-logo-icon {
-        width: 45px;
-        height: 45px;
-    }
 }
 
 /* Small mobile styles */
 @media (max-width: 480px) {
-    .tm-container {
+    .success-stories {
         padding: 12px;
     }
 
-    .tm-header {
+    .success-stories-header {
         margin-bottom: 20px;
     }
 
-    .tm-title-row {
+    .header-content {
         gap: 6px;
     }
 
-    .tm-header-icon {
+    .header-icon {
         width: 18px;
         height: 18px;
     }
 
-    .tm-title {
+    .header-text h1 {
         font-size: 20px;
     }
 
-    .tm-subtitle {
+    .header-text p {
         font-size: 13px;
     }
 
-    .tm-add-btn {
+    .share-story-btn {
         padding: 12px 16px;
         font-size: 14px;
-    }
-
-    .floating-logo {
-        width: 45px;
-        height: 45px;
-        bottom: 12px;
-        right: 12px;
-    }
-
-    .floating-logo-icon {
-        width: 40px;
-        height: 40px;
     }
 }

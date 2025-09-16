@@ -6,6 +6,7 @@ import { TaskProvider } from "./context/TaskContext";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import SuccessStories from "./sections/SuccessStories";
+import MyStory from './pages/SuccessStories/MyStory';
 import Features from "./sections/features";
 import Contact from "./sections/Contact"; // import Contact section
 import AboutSection from "./sections/AboutSection"; // import About section
@@ -29,8 +30,11 @@ function App() {
         <Router>
           <Layout>
             <Routes>
-              <Route path="/taskmanager" element={<TaskManagerPage />} />
               <Route path="/stressRelief" element={<StressRelief />} />
+              <Route path="/taskmanager" element={<TaskManagerPage />} /> 
+              <Route path="/success-stories" element={<SuccessStories />} />
+              <Route path="/success-stories/my-story" element={<MyStory />} />
+
             </Routes>
           </Layout>
         </Router>

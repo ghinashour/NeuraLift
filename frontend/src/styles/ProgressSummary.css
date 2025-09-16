@@ -19,10 +19,13 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  cursor: pointer;
   transition: all 0.2s ease;
   padding: 8px;
   border-radius: 12px;
+}
+
+.progress-item.percentage {
+  cursor: pointer;
 }
 
 .progress-item:hover {

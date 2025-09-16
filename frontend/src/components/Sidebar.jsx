@@ -96,17 +96,17 @@ const getNavIcon = (key, isActive) => {
 };
 
 const navItems = [
-    { key: 'dashboard', label: 'Dashboard', path: '/dashboard' },
-    { key: 'timer', label: 'Focus Timer', path: '/focus-timer' },
-    { key: 'tasks', label: 'Tasks', path: '/' },
-    { key: 'mood', label: 'Mood Tracker', path: '/mood-tracker' },
-    { key: 'stress', label: 'Stress Relief', path: '/stress-relief' },
-    { key: 'success', label: 'Success Stories', path: '/success-stories' },
-    { key: 'challenges', label: 'Challenges', path: '/challenges' },
-    { key: 'collab', label: 'Collaborate', path: '/collaborate' },
-    { key: 'schedule', label: 'Schedule', path: '/schedule' },
-    { key: 'medicine', label: 'Medicine & Health', path: '/medicine-health' },
-    { key: 'assistant', label: 'AI Assistant', path: '/ai-assistant' }
+    { key: 'dashboard', label: 'Dashboard', path: '/dashboard', implemented: false },
+    { key: 'timer', label: 'Focus Timer', path: '/focus-timer', implemented: false },
+    { key: 'tasks', label: 'Tasks', path: '/taskmanagement', implemented: true },
+    { key: 'mood', label: 'Mood Tracker', path: '/mood-tracker', implemented: false },
+    { key: 'stress', label: 'Stress Relief', path: '/stress-relief', implemented: false },
+    { key: 'success', label: 'Success Stories', path: '/success-stories', implemented: true },
+    { key: 'challenges', label: 'Challenges', path: '/challenges', implemented: false },
+    { key: 'collab', label: 'Collaborate', path: '/collaborate', implemented: false },
+    { key: 'schedule', label: 'Schedule', path: '/schedule', implemented: false },
+    { key: 'medicine', label: 'Medicine & Health', path: '/medicine-health', implemented: false },
+    { key: 'assistant', label: 'AI Assistant', path: '/ai-assistant', implemented: false }
 ];
 
 const Sidebar = ({ children }) => {
@@ -115,12 +115,22 @@ const Sidebar = ({ children }) => {
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
     const handleNavClick = (path) => {
-        // Only navigate to paths that are implemented
-        if (path === '/' || path.startsWith('/task')) {
+        // Find the nav item to check if it's implemented
+        const navItem = navItems.find(item => item.path === path);
+
+        // Special case for home/dashboard
+        if (path === '/' || path === '/dashboard') {
+            navigate('/');
+            setIsMobileMenuOpen(false);
+            return;
+        }
+
+        // Navigate if the route is implemented
+        if (navItem && navItem.implemented) {
             navigate(path);
             setIsMobileMenuOpen(false); // Close mobile menu after navigation
         } else {
-            // For other routes, just close the mobile menu
+            // For unimplemented routes, just close the mobile menu
             // These will be implemented by teammates
             setIsMobileMenuOpen(false);
         }
