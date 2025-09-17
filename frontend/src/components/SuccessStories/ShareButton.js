@@ -77,9 +77,59 @@ const ShareButton = ({ storyId, shareCount, onShare }) => {
                 });
                 break;
             case 'landing':
-                // Add to landing page (placeholder for teammate's task)
-                console.log(`Story ${storyId} added to landing page`);
-                alert('Story added to landing page! (This will be implemented by your teammate)');
+                // Add to landing page
+                try {
+                    // Get the current story data from the page
+                    const storyElement = document.querySelector(`[data-story-id="${storyId}"]`);
+                    if (storyElement) {
+                        const title = storyElement.querySelector('.story-title')?.textContent || 'Success Story';
+                        const author = storyElement.querySelector('.story-author')?.textContent?.replace('by ', '') || 'Anonymous';
+                        const content = storyElement.querySelector('.story-description')?.textContent || '';
+                        const category = storyElement.querySelector('.category-tag')?.textContent?.trim() || 'General';
+                        const date = storyElement.querySelector('.story-date span')?.textContent || new Date().toLocaleDateString();
+
+                        // Create story object for landing page
+                        const landingPageStory = {
+                            id: `landing-${storyId}-${Date.now()}`,
+                            author: author,
+                            category: category,
+                            description: content,
+                            achievement: `Shared from Success Stories`,
+                            likeCount: 0,
+                            date: date,
+                            originalStoryId: storyId,
+                            sharedToLanding: true
+                        };
+
+                        // Get existing landing page stories
+                        const existingStories = JSON.parse(localStorage.getItem('landingPageStories') || '[]');
+
+                        // Check if this story is already shared to landing page
+                        const alreadyShared = existingStories.some(story => story.originalStoryId === storyId);
+
+                        if (alreadyShared) {
+                            alert('This story has already been added to the landing page!');
+                        } else {
+                            // Add to landing page stories
+                            const updatedStories = [...existingStories, landingPageStory];
+                            localStorage.setItem('landingPageStories', JSON.stringify(updatedStories));
+
+                            // Dispatch custom event to notify other components
+                            const event = new CustomEvent('landingPageStoriesUpdated', {
+                                detail: { stories: updatedStories, newStory: landingPageStory }
+                            });
+                            window.dispatchEvent(event);
+
+                            console.log(`Story ${storyId} added to landing page`);
+                            alert('Story successfully added to the landing page! It will appear in the Success Stories section.');
+                        }
+                    } else {
+                        alert('Unable to find story data. Please try again.');
+                    }
+                } catch (error) {
+                    console.error('Error adding story to landing page:', error);
+                    alert('Failed to add story to landing page. Please try again.');
+                }
                 break;
             case 'twitter':
                 // Share on Twitter
