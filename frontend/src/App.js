@@ -7,12 +7,13 @@ import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import SuccessStories from "./sections/SuccessStories";
 import Features from "./sections/features";
-import Contact from "./sections/Contact"; 
-import AboutSection from "./sections/AboutSection"; 
+import Contact from "./sections/Contact";
+import AboutSection from "./sections/AboutSection";
 import Home from "./sections/Home";
 import Layout from "./layouts/Layout";
 import StressRelief from "./pages/StressReliefSpace/StressReliefSpace";
 import FocusTimer from "./pages/FocusTimer/FocusTimer";
+import MedicineHealth from "./components/MedicineHealth/Medicine";
 
 function App() {
   return (
@@ -24,7 +25,7 @@ function App() {
             path="/"
             element={
               <>
-               <Navbar/>
+                <Navbar />
                 <Home />
                 <Features />
                 <AboutSection />
@@ -36,10 +37,11 @@ function App() {
           />
 
           {/* Other pages inside Layout */}
-          <Route element={<Layout/>}>
+          <Route element={<Layout />}>
             <Route path="taskManager" element={<TaskManagerPage />} />
             <Route path="stressRelief" element={<StressRelief />} />
-            <Route path ="focustimer" element={<FocusTimer />} />
+            <Route path="focustimer" element={<FocusTimer />} />
+            <Route path="medicineHealth" element={<MedicineHealth />} />
           </Route>
         </Routes>
       </TaskProvider>
