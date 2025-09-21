@@ -14,36 +14,39 @@ import Layout from "./layouts/Layout";
 import StressRelief from "./pages/StressReliefSpace/StressReliefSpace";
 import FocusTimer from "./pages/FocusTimer/FocusTimer";
 import MedicineHealth from "./components/MedicineHealth/Medicine";
+import { MedicineProvider } from "./context/MedicineContext";
 
 function App() {
   return (
     <Router>
       <TaskProvider>
-        <Routes>
-          {/* Landing page */}
-          <Route
-            path="/"
-            element={
-              <>
-                <Navbar />
-                <Home />
-                <Features />
-                <AboutSection />
-                <SuccessStories />
-                <Contact />
-                <Footer />
-              </>
-            }
-          />
+        <MedicineProvider>
+          <Routes>
+            {/* Landing page */}
+            <Route
+              path="/"
+              element={
+                <>
+                  <Navbar />
+                  <Home />
+                  <Features />
+                  <AboutSection />
+                  <SuccessStories />
+                  <Contact />
+                  <Footer />
+                </>
+              }
+            />
 
-          {/* Other pages inside Layout */}
-          <Route element={<Layout />}>
-            <Route path="taskManager" element={<TaskManagerPage />} />
-            <Route path="stressRelief" element={<StressRelief />} />
-            <Route path="focustimer" element={<FocusTimer />} />
-            <Route path="medicineHealth" element={<MedicineHealth />} />
-          </Route>
-        </Routes>
+            {/* Other pages inside Layout */}
+            <Route element={<Layout />}>
+              <Route path="taskManager" element={<TaskManagerPage />} />
+              <Route path="stressRelief" element={<StressRelief />} />
+              <Route path="focustimer" element={<FocusTimer />} />
+              <Route path="medicineHealth" element={<MedicineHealth />} />
+            </Route>
+          </Routes>
+        </MedicineProvider>
       </TaskProvider>
     </Router>
   );
