@@ -16,6 +16,8 @@ import FocusTimer from "./pages/FocusTimer/FocusTimer";
 import MoodTracker from "./pages/MoodTracker/MoodTracker";
 import MedicineHealth from "./components/MedicineHealth/Medicine";
 import { MedicineProvider } from "./context/MedicineContext";
+import Login from "./pages/Auth/Login";
+import Signup from "./pages/Auth/Signup";
 
 function App() {
   return (
@@ -38,6 +40,8 @@ function App() {
                 </>
               }
             />
+ <Route path="/login" element={<Login />} />
+              <Route path="/signup" element={<Signup />} />
 
             {/* Other pages inside Layout */}
             <Route element={<Layout />}>
@@ -45,6 +49,7 @@ function App() {
               <Route path="stressRelief" element={<StressRelief />} />
               <Route path="focustimer" element={<FocusTimer />} />
               <Route path="medicineHealth" element={<MedicineHealth />} />
+             
             </Route>
           </Routes>
         </MedicineProvider>

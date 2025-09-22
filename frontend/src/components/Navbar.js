@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "../styles/Navbar.css";
 import logo from "../assets/NeuraLift.png";
-import { Link } from "react-scroll";
+import { Link } from "react-router-dom";
 
 function Navbar() {
   const [scrolled, setScrolled] = useState(false);
@@ -32,7 +32,9 @@ function Navbar() {
           <a href="#SuccessStories"smooth={true} duration={600}>Success Stories</a>
           <a href="#Contact"smooth={true} duration={600}>Contact</a>
         </ul>
-        <button className="get-started">Get Started</button>
+         <Link to="/signup" className="get-started">
+          Get Started
+        </Link>
       </div>
     </nav>
   );
