@@ -1,0 +1,216 @@
+#Medicinecontainer {
+  width: 1200px;
+  height: 800px;
+  background-color: #f4f7fb;
+  color: black;
+}
+.medicinebox {
+  width: 300px;
+  height: 200px;
+  border-radius: 20px;
+  background-color: white;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+#upcomingMed {
+  width: 1100px;
+  height: 360px;
+  margin-top: 15px;
+  margin-left: 50px;
+}
+#addMedBtn {
+  background-color: #3c83f6;
+  margin-top: 30px;
+  margin-right: 50px;
+  width: 141px;
+  height: 30px;
+  color: white;
+  border-radius: 8px;
+  border: none;
+  font-size: 15px;
+}
+#addMedBtn:hover {
+  background-color: #276fe3;
+}
+/* css of the section that leads to add medicine */
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.4);
+  z-index: 1000;
+}
+
+.medicine-form {
+  background-color: white;
+  padding: 25px;
+  border-radius: 10px;
+  width: 90%;
+  max-width: 700px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  position: relative;
+  margin-left: 200px;
+}
+
+.close-btn {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  font-size: 24px;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.form-group {
+  margin-bottom: 20px;
+  margin-top: 20px;
+  display: flex;
+  flex-direction: row;
+  gap: 50px;
+}
+.medOpt {
+  background-color: #3c83f6;
+  color: white;
+  width: 130px;
+  height: 35px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: 500;
+}
+
+.form-group input {
+  width: 100%;
+  max-width: 450px;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.repeat-section {
+  margin: 25px 0;
+  display: flex;
+  align-items: center;
+  gap: 50px;
+}
+
+.repeat-options {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.repeat-options input {
+  width: 80px;
+}
+
+.add-reminder-btn {
+  background-color: #3c83f6;
+  color: white;
+  border: none;
+  padding: 12px 20px;
+  width: 100%;
+  border-radius: 4px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+/* Add to your CSS file */
+.repeat-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 15px 0;
+}
+
+.repeat-container input[type="number"] {
+  width: 60px;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.repeat-container select {
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background: white;
+}
+
+/* MainMedPage.css */
+.mainmed-container {
+  padding: 20px;
+}
+
+.medicine-card {
+  background: white;
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  padding: 15px;
+  margin-bottom: 15px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.medicine-icon {
+  width: 50px;
+  height: 50px;
+  background-color: #e0f7fa;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-right: 20px;
+  font-size: 24px;
+}
+
+.medicine-details {
+  flex: 1;
+}
+
+.medicine-details h3 {
+  margin: 0;
+  font-size: 18px;
+  color: #333;
+}
+
+.medicine-details p {
+  margin: 5px 0;
+  color: #666;
+  font-size: 14px;
+}
+
+.time-detail {
+  display: flex;
+  align-items: center;
+  margin-top: 5px;
+}
+
+.time {
+  background-color: #e8f5e9;
+  color: #4caf50;
+  border-radius: 10px;
+  padding: 2px 10px;
+  font-size: 14px;
+  margin-right: 10px;
+}
+
+.repeat {
+  color: #666;
+  font-size: 14px;
+}
