@@ -4,11 +4,14 @@ const User = require("../models/User");
 
 // Signup controller
 exports.signup = async (req, res) => {
+  //getting the username , email and password from the request body
   const { username, email, password } = req.body;
   try {
+    // Check if user already exists by email
     const existingUser = await User.findOne({ email });
     if (existingUser) return res.status(400).json({ msg: "Email already registered" });
 
+    // Hash password with salting for security
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
 

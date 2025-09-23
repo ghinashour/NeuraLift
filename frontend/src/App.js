@@ -18,6 +18,7 @@ import MedicineHealth from "./components/MedicineHealth/Medicine";
 import { MedicineProvider } from "./context/MedicineContext";
 import Login from "./pages/Auth/Login";
 import Signup from "./pages/Auth/Signup";
+import Profile from "./pages/Auth/Profile";
 
 function App() {
   return (
@@ -49,7 +50,8 @@ function App() {
               <Route path="stressRelief" element={<StressRelief />} />
               <Route path="focustimer" element={<FocusTimer />} />
               <Route path="medicineHealth" element={<MedicineHealth />} />
-             
+              <Route path="/profile" element={<Profile />} />
+
             </Route>
           </Routes>
         </MedicineProvider>
