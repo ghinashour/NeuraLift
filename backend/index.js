@@ -3,6 +3,8 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 const profileRoutes = require("./routes/profile.js");
 require("dotenv").config();
+const express = require("express");
+const path = require("path");
 
 const authRoutes = require("./routes/authRoute");
 
@@ -13,6 +15,7 @@ app.use(cors());
 app.use(express.json());
 
 // Routes
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 app.use("/api/auth", authRoutes);
 app.use("/api/profile", profileRoutes);
 

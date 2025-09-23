@@ -5,29 +5,37 @@
   justify-content: center;
   align-items: flex-start;
   min-height: 100vh;
-  background-color: #f5f6fa;
+  background: linear-gradient(135deg, #f5f6fa, #eef2f9);
   padding-top: 50px;
-  font-family: Arial, sans-serif;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 }
 
 .profile-card {
   background-color: #fff;
-  padding: 30px 40px;
-  border-radius: 15px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-  width: 400px;
+  padding: 35px 45px;
+  border-radius: 20px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+  width: 420px;
+  transition: transform 0.2s ease-in-out;
+}
+
+.profile-card:hover {
+  transform: translateY(-4px);
 }
 
 .profile-card h2 {
   text-align: center;
-  margin-bottom: 20px;
-  color: #333;
+  margin-bottom: 25px;
+  color: #2c3e50;
+  font-weight: 600;
+  font-size: 24px;
 }
 
 .profile-card form {
   display: flex;
   flex-direction: column;
   gap: 15px;
+  margin-bottom: 20px;
 }
 
 .profile-card input[type="text"],
@@ -35,59 +43,125 @@
 .profile-card input[type="password"],
 .profile-card input[type="file"] {
   padding: 12px 15px;
-  border: 1px solid #ccc;
-  border-radius: 8px;
+  border: 1px solid #dcdfe6;
+  border-radius: 10px;
   font-size: 14px;
+  transition: border 0.3s;
+}
+
+.profile-card input:focus {
+  border-color: #4e9af1;
+  outline: none;
+  box-shadow: 0 0 4px rgba(78, 154, 241, 0.4);
 }
 
 .profile-card button {
   padding: 12px;
-  background-color: #4e9af1;
-  color: white;
-  font-weight: bold;
+  font-weight: 600;
   border: none;
-  border-radius: 8px;
+  border-radius: 10px;
   cursor: pointer;
-  transition: 0.3s;
+  transition: 0.3s ease;
 }
 
-.profile-card button:hover {
+.update-btn {
+  background-color: #4e9af1;
+  color: white;
+}
+.update-btn:hover {
   background-color: #3b7ad9;
+}
+
+.password-btn {
+  background-color: #6c5ce7;
+  color: white;
+}
+.password-btn:hover {
+  background-color: #5943c6;
+}
+
+.logout-btn {
+  margin-top: 15px;
+  background-color: #f14e4e;
+  color: white;
+}
+.logout-btn:hover {
+  background-color: #d93b3b;
 }
 
 .profile-card img {
   display: block;
   margin: 10px auto;
   border-radius: 50%;
-  border: 2px solid #4e9af1;
+  border: 3px solid #4e9af1;
+  width: 90px;
+  height: 90px;
+  object-fit: cover;
 }
 
 .profile-card p {
   text-align: center;
-  color: red;
+  margin-bottom: 10px;
   font-weight: bold;
 }
 
-.logout-btn {
-  margin-top: 20px;
-  background-color: #f14e4e;
+.profile-card p.success {
+  color: green;
 }
 
-.logout-btn:hover {
-  background-color: #d93b3b;
+.profile-card p.error {
+  color: red;
 }
-
-.bottom-text {
-  text-align: center;
-  margin-top: 15px;
-  font-size: 14px;
+@media (max-width: 500px) {
+  .profile-card {
+    width: 90%;
+    padding: 25px 20px;
+  }
 }
-
-.bottom-text a {
-  color: #4e9af1;
-  text-decoration: none;
+@media (max-width: 350px) {
+  .profile-card h2 {
+    font-size: 20px;
+  }
+  .profile-card input[type="text"],
+  .profile-card input[type="email"],
+  .profile-card input[type="password"],
+  .profile-card input[type="file"] {
+    font-size: 12px;
+    padding: 10px 12px;
+  }
+  .profile-card button {
+    padding: 10px;
+    font-size: 14px;
+  }
 }
-
-.bottom-text a:hover {
-  text-decoration: underline;
+@media (max-width: 300px) {
+  .profile-card {
+    padding: 20px 15px;
+  }
+  .profile-card input[type="text"],
+  .profile-card input[type="email"],
+  .profile-card input[type="password"],
+  .profile-card input[type="file"] {
+    padding: 8px 10px;
+  }
+  .profile-card button {
+    padding: 8px;
+    font-size: 12px;
+  }
+}
+@media (max-width: 250px) {
+  .profile-card h2 {
+    font-size: 18px;
+  }
+  .profile-card input[type="text"],
+  .profile-card input[type="email"],
+  .profile-card input[type="password"],
+  .profile-card input[type="file"] {
+    font-size: 10px;
+    padding: 6px 8px;
+  }
+  .profile-card button {
+    padding: 6px;
+    font-size: 10px;
+  }
 }

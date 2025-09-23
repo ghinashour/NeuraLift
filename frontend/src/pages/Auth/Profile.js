@@ -67,21 +67,22 @@ function Profile() {
       <h2>Profile</h2>
       {message && <p>{message}</p>}
 
-      <form onSubmit={handleProfileUpdate}>
-        <input type="text" value={form.name} onChange={e => setForm({ ...form, name: e.target.value })} placeholder="Name" />
-        <input type="email" value={form.email} onChange={e => setForm({ ...form, email: e.target.value })} placeholder="Email" />
-        <input type="file" onChange={e => setPhoto(e.target.files[0])} />
-        {user.photo && <img src={`http://localhost:4000/uploads/${user.photo}`} alt="profile" width="100" />}
-        <button type="submit">Update Profile</button>
-      </form>
+     <form onSubmit={handleProfileUpdate}>
+      <input type="text" value={form.name} onChange={e => setForm({ ...form, name: e.target.value })} placeholder="Name" />
+      <input type="email" value={form.email} onChange={e => setForm({ ...form, email: e.target.value })} placeholder="Email" />
+      <input type="file" onChange={e => setPhoto(e.target.files[0])} />
+      {user.profilePhoto && <img src={`http://localhost:4000/uploads/${user.profilephoto}`} alt="profile" width="100" />}
+      <button type="submit" className="update-btn">Update Profile</button>
+    </form>
 
-      <form onSubmit={handlePasswordChange}>
-        <input type="password" placeholder="Current Password" value={passwords.currentPassword} onChange={e => setPasswords({ ...passwords, currentPassword: e.target.value })} />
-        <input type="password" placeholder="New Password" value={passwords.newPassword} onChange={e => setPasswords({ ...passwords, newPassword: e.target.value })} />
-        <button type="submit">Change Password</button>
-      </form>
+    <form onSubmit={handlePasswordChange}>
+      <input type="password" placeholder="Current Password" value={passwords.currentPassword} onChange={e => setPasswords({ ...passwords, currentPassword: e.target.value })} />
+      <input type="password" placeholder="New Password" value={passwords.newPassword} onChange={e => setPasswords({ ...passwords, newPassword: e.target.value })} />
+      <button type="submit" className="password-btn">Change Password</button>
+    </form>
 
-      <button onClick={handleLogout}>Logout</button>
+    <button onClick={handleLogout} className="logout-btn">Logout</button>
+
     </div>
     </div>
   );
