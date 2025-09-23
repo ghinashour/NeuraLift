@@ -1,34 +1,88 @@
-import React, { useEffect, useState } from "react";
-import API from "../../api/axios";
-import { useNavigate } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import "../../styles/Profile.css";
 
 function Profile() {
-  const [userData, setUserData] = useState(null);
-  const navigate = useNavigate();
+  const [user, setUser] = useState({});
+  const [photo, setPhoto] = useState(null);
+  const [form, setForm] = useState({ name: "", email: "" });
+  const [passwords, setPasswords] = useState({ currentPassword: "", newPassword: "" });
+  const [message, setMessage] = useState("");
 
+  const token = localStorage.getItem("token");
+
+  // Fetch user profile
   useEffect(() => {
-    const fetchProfile = async () => {
-      try {
-        const res = await API.get("/auth/protected"); // protected route
-        setUserData(res.data);
-      } catch (err) {
-        console.log(err);
-        navigate("/login"); // redirect if token invalid
-      }
-    };
-    fetchProfile();
-  }, [navigate]);
+    axios.get("http://localhost:4000/api/profile", { headers: { Authorization: `Bearer ${token}` } })
+      .then(res => {
+        setUser(res.data);
+        setForm({ name: res.data.name, email: res.data.email });
+      })
+      .catch(err => console.error(err));
+  }, [token]);
+
+  // Update profile info
+  const handleProfileUpdate = async (e) => {
+    e.preventDefault();
+    const data = new FormData();
+    data.append("name", form.name);
+    data.append("email", form.email);
+    if (photo) data.append("photo", photo);
+
+    try {
+      const res = await axios.put("http://localhost:4000/api/profile", data, {
+        headers: { Authorization: `Bearer ${token}`, "Content-Type": "multipart/form-data" }
+      });
+      setUser(res.data);
+      setMessage("Profile updated ✅");
+    } catch (err) {
+      setMessage(err.response?.data?.message || "Update failed");
+    }
+  };
+
+  // Change password
+  const handlePasswordChange = async (e) => {
+    e.preventDefault();
+    try {
+      await axios.put("http://localhost:4000/api/profile/password", passwords, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      setMessage("Password updated ✅");
+      setPasswords({ currentPassword: "", newPassword: "" });
+    } catch (err) {
+      setMessage(err.response?.data?.message || "Password update failed");
+    }
+  };
+
+  // Logout
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+    window.location.href = "/login";
+  };
 
   return (
-    <div style={{ textAlign: "center", marginTop: "50px" }}>
-      {userData ? (
-        <>
-          <h2>Welcome, {userData.message.split(" ")[1]}</h2>
-          <p>{JSON.stringify(userData)}</p>
-        </>
-      ) : (
-        <p>Loading...</p>
-      )}
+    <div className="profile-wrapper">
+      <div className="profile-card">
+      <h2>Profile</h2>
+      {message && <p>{message}</p>}
+
+      <form onSubmit={handleProfileUpdate}>
+        <input type="text" value={form.name} onChange={e => setForm({ ...form, name: e.target.value })} placeholder="Name" />
+        <input type="email" value={form.email} onChange={e => setForm({ ...form, email: e.target.value })} placeholder="Email" />
+        <input type="file" onChange={e => setPhoto(e.target.files[0])} />
+        {user.photo && <img src={`http://localhost:4000/uploads/${user.photo}`} alt="profile" width="100" />}
+        <button type="submit">Update Profile</button>
+      </form>
+
+      <form onSubmit={handlePasswordChange}>
+        <input type="password" placeholder="Current Password" value={passwords.currentPassword} onChange={e => setPasswords({ ...passwords, currentPassword: e.target.value })} />
+        <input type="password" placeholder="New Password" value={passwords.newPassword} onChange={e => setPasswords({ ...passwords, newPassword: e.target.value })} />
+        <button type="submit">Change Password</button>
+      </form>
+
+      <button onClick={handleLogout}>Logout</button>
+    </div>
     </div>
   );
 }

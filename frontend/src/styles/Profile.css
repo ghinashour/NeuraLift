@@ -1,0 +1,93 @@
+/* Profile.css */
+
+.profile-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  min-height: 100vh;
+  background-color: #f5f6fa;
+  padding-top: 50px;
+  font-family: Arial, sans-serif;
+}
+
+.profile-card {
+  background-color: #fff;
+  padding: 30px 40px;
+  border-radius: 15px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  width: 400px;
+}
+
+.profile-card h2 {
+  text-align: center;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.profile-card form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.profile-card input[type="text"],
+.profile-card input[type="email"],
+.profile-card input[type="password"],
+.profile-card input[type="file"] {
+  padding: 12px 15px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 14px;
+}
+
+.profile-card button {
+  padding: 12px;
+  background-color: #4e9af1;
+  color: white;
+  font-weight: bold;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.profile-card button:hover {
+  background-color: #3b7ad9;
+}
+
+.profile-card img {
+  display: block;
+  margin: 10px auto;
+  border-radius: 50%;
+  border: 2px solid #4e9af1;
+}
+
+.profile-card p {
+  text-align: center;
+  color: red;
+  font-weight: bold;
+}
+
+.logout-btn {
+  margin-top: 20px;
+  background-color: #f14e4e;
+}
+
+.logout-btn:hover {
+  background-color: #d93b3b;
+}
+
+.bottom-text {
+  text-align: center;
+  margin-top: 15px;
+  font-size: 14px;
+}
+
+.bottom-text a {
+  color: #4e9af1;
+  text-decoration: none;
+}
+
+.bottom-text a:hover {
+  text-decoration: underline;
+}

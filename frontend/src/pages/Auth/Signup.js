@@ -18,7 +18,7 @@ function Signup() {
       return;
     }
     try {
-      await axios.post("http://localhost:5000/api/auth/signup", form);
+      await axios.post("http://localhost:4000/api/auth/signup", form);
       alert("Signup successful ✅ Please login now");
       navigate("/login");
     } catch (err) {

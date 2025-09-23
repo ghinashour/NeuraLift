@@ -8,18 +8,30 @@ function Login() {
   const [error, setError] = useState(null);
   const navigate = useNavigate();
 
+  // Update form values
   const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
 
+  // Handle login
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError(null);
     try {
-      const res = await axios.post("http://localhost:5000/api/auth/login", form);
+      const res = await axios.post("http://localhost:4000/api/auth/login", form);
+
+      // Store JWT token
       localStorage.setItem("token", res.data.token);
+
+      // Optional: store user info
+      localStorage.setItem("user", JSON.stringify(res.data.user));
+
+      // Notify user
       alert("Login successful ✅");
-      navigate("/"); // redirect to homepage or dashboard
+
+      // Redirect to dashboard
+      navigate("/dashboard");
     } catch (err) {
-      setError(err.response?.data?.msg || "Login failed");
+      // Show backend error message if exists
+      setError(err.response?.data?.message || "Login failed");
     }
   };
 
