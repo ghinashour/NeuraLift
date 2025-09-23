@@ -1,7 +1,7 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
-import profileRoutes from "./routes/profile.js";
+const profileRoutes = require("./routes/profile.js");
 require("dotenv").config();
 
 const authRoutes = require("./routes/authRoute");

@@ -1,9 +1,9 @@
 // routes/profile.js
-import express from "express";
-import bcrypt from "bcryptjs";
-import User from "../models/User.js";
-import { authMiddleware } from "../middleware/auth.js";
-import { upload } from "../middleware/upload.js";
+const express = require("express");
+const bcrypt = require("bcryptjs");
+const User = require("../models/User.js");
+const authMiddleware = require("../middleware/auth.js");
+const upload = require("../middleware/upload.js");
 
 const router = express.Router();
 
@@ -16,10 +16,18 @@ router.get("/", authMiddleware, async (req, res) => {
 router.put("/", authMiddleware, upload.single("photo"), async (req, res) => {
   try {
     const { name, email } = req.body;
-    const updateData = { name, email };
+    const updateData = {};
+
+    if (name) updateData.name = name;
+    if (email) updateData.email = email;
     if (req.file) updateData.photo = req.file.filename; // save photo filename
 
-    const updatedUser = await User.findByIdAndUpdate(req.user._id, updateData, { new: true }).select("-password");
+    const updatedUser = await User.findByIdAndUpdate(
+      req.user._id,
+      updateData,
+      { new: true }
+    ).select("-password");
+
     res.json(updatedUser);
   } catch (err) {
     res.status(500).json({ message: err.message });
@@ -31,12 +39,12 @@ router.put("/password", authMiddleware, async (req, res) => {
   try {
     const { currentPassword, newPassword } = req.body;
 
-    const isMatch = await bcrypt.compare(currentPassword, req.user.password);
+    const user = await User.findById(req.user._id).select("+password");
+    const isMatch = await bcrypt.compare(currentPassword, user.password);
     if (!isMatch) return res.status(400).json({ message: "Current password is incorrect" });
 
-    const hashedPassword = await bcrypt.hash(newPassword, 10);
-    req.user.password = hashedPassword;
-    await req.user.save();
+    user.password = await bcrypt.hash(newPassword, 10);
+    await user.save();
 
     res.json({ message: "Password updated successfully" });
   } catch (err) {
@@ -44,4 +52,4 @@ router.put("/password", authMiddleware, async (req, res) => {
   }
 });
 
-export default router;
+module.exports = router;

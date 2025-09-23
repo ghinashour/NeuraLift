@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate , Link, useLocation} from 'react-router-dom';
 import '../styles/Sidebar.css';
 import logo from '../assets/logo.svg';
+import avatarPlaceholder from "../assets/avatar.png"; 
 const getNavIcon = (key, isActive) => {
     const strokeColor = isActive ? '#F1F5F9' : '#626A84';
 
@@ -108,7 +109,7 @@ const navItems = [
     { key: 'assistant', label: 'AI Assistant', path: '/ai-assistant' }
 ];
 
-const Sidebar = ({ isCollapsed, setIsCollapsed }) => {
+const Sidebar = ({ isCollapsed, setIsCollapsed, user }) => {
     const navigate = useNavigate();
     const location = useLocation();
 
@@ -138,6 +139,7 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }) => {
             </>
           )}
         </div>
+        
 
         <nav className="nav">
           {navItems.map((item) => (
@@ -151,6 +153,12 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }) => {
               <span className="nav-label">{item.label}</span>
             </div>
           ))}
+           <div className="profile">
+        <img src={user?.photo ? `http://localhost:4000/uploads/${user.photo}` : avatarPlaceholder} 
+             alt="Avatar" 
+             className="sidebar-avatar" />
+        <Link to="/profile" className="sidebar-username">{user?.name || "User"}</Link>
+      </div>
         </nav>
 
         <div className="sidebar-footer">
