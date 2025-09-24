@@ -1,0 +1,88 @@
+/* Wrapper centers the card */
+.auth-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 80vh;
+  background: #f5f7fa;
+  padding: 20px;
+}
+
+/* Card style */
+.auth-card {
+  background: #ffffff;
+  padding: 40px 30px;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+  width: 100%;
+  max-width: 400px;
+  text-align: center;
+}
+
+.auth-card h2 {
+  margin-bottom: 24px;
+  font-weight: 600;
+  color: #333;
+}
+
+/* Input fields */
+.auth-card input {
+  width: 100%;
+  padding: 12px 14px;
+  margin-bottom: 16px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  outline: none;
+  font-size: 14px;
+  transition: border 0.2s ease;
+}
+
+.auth-card input:focus {
+  border-color: #3C8AF6;
+}
+
+/* Gradient button */
+.btn-primary {
+  width: 100%;           /* ✅ make it span full form width */
+  padding: 12px;
+  border: none;
+  border-radius: 10px;
+  background: linear-gradient(90deg, #3C8AF6, #76ABF4);
+  color: #fff;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  display: block;        /* ✅ ensures proper alignment */
+  margin-top: 8px;       /* space above button */
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.btn-primary:hover {
+  opacity: 0.9;
+  transform: scale(1.05);
+}
+
+
+/* Error message */
+.error {
+  color: #b00020;
+  margin-bottom: 16px;
+  font-size: 14px;
+}
+
+/* Bottom text */
+.bottom-text {
+  margin-top: 16px;
+  font-size: 14px;
+  color: #555;
+}
+
+.bottom-text a {
+  color: #3C8AF6;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.bottom-text a:hover {
+  text-decoration: underline;
+}

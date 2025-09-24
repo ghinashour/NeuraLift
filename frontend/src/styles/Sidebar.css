@@ -181,6 +181,61 @@
   min-height: 100vh;
 }
 
+/* Sidebar Profile Section */
+.sidebar .profile {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 10px;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: background 160ms ease, transform 120ms ease;
+  margin-bottom: 20px; /* spacing below profile */
+}
+
+.sidebar .profile:hover {
+  background: #3741510D; /* light gray background on hover */
+  transform: translateX(2px);
+}
+
+/* Avatar image */
+.sidebar .profile img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #3C83F6; /* optional border around avatar */
+  transition: transform 200ms ease, box-shadow 200ms ease;
+}
+
+.sidebar .profile img:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 12px rgba(47,128,237,0.3);
+}
+
+/* User name link */
+.sidebar .profile a {
+  font-size: 14px;
+  font-weight: 500;
+  color: #374151;
+  text-decoration: none;
+  transition: color 160ms ease;
+}
+
+.sidebar .profile a:hover {
+  color: #3C83F6;
+}
+
+/* handle collapsed sidebar */
+.app-layout.sidebar-collapsed .sidebar .profile {
+  justify-content: center;
+}
+
+.app-layout.sidebar-collapsed .sidebar .profile span {
+  display: none;
+}
+
+
 /* collapsed styles: hide labels and shrink sidebar */
 .app-layout.sidebar-collapsed .sidebar {
   width: var(--sidebar-collapsed-width);

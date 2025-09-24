@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate , Link, useLocation} from 'react-router-dom';
 import '../styles/Sidebar.css';
 import logo from '../assets/logo.svg';
+import avatarPlaceholder from "../assets/avatar.png"; 
 const getNavIcon = (key, isActive) => {
     const strokeColor = isActive ? '#F1F5F9' : '#626A84';
 
@@ -108,7 +109,7 @@ const navItems = [
     { key: 'assistant', label: 'AI Assistant', path: '/ai-assistant' }
 ];
 
-const Sidebar = ({ isCollapsed, setIsCollapsed }) => {
+const Sidebar = ({ isCollapsed, setIsCollapsed, user }) => {
     const navigate = useNavigate();
     const location = useLocation();
 
@@ -119,7 +120,7 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }) => {
 
     const isActive = (path) => {
         if (path === '/') {
-            return location.pathname === '/' || location.pathname.startsWith('/task');
+            return location.pathname === '/';
         }
         return location.pathname.startsWith(path);
     };
@@ -138,6 +139,7 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }) => {
             </>
           )}
         </div>
+        
 
         <nav className="nav">
           {navItems.map((item) => (
@@ -151,6 +153,27 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }) => {
               <span className="nav-label">{item.label}</span>
             </div>
           ))}
+        <div className="profile">
+  <Link to="/profile" className="profile-link">
+    <img
+      src={
+        user?.profilePhoto
+          ? `http://localhost:4000/uploads/${user.profilePhoto}`
+          : avatarPlaceholder
+      }
+      alt={user?.name || "User"}
+      className="sidebar-avatar"
+      onError={(e) => {
+        // fallback to placeholder if image fails to load
+        e.target.src = avatarPlaceholder;
+      }}
+    />
+    {!isCollapsed && (
+      <span className="sidebar-username">{user?.name || "User"}</span>
+    )}
+  </Link>
+</div>
+
         </nav>
 
         <div className="sidebar-footer">
