@@ -1,221 +1,268 @@
  * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Inter', 'Arial', sans-serif;
-        }
-        
-        body {
-            background-color: #f9fafb;
-            color: #E5E7EB;
-            padding: 20px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-        }
-        
-        .success-stories {
-            padding: 60px 20px;
-            max-width: 1200px;
-            margin: 0 auto;
-            background-color: white;
-            width: 100%;
-        }
+     margin: 0;
+     padding: 0;
+     box-sizing: border-box;
+     font-family: 'Inter', 'Arial', sans-serif;
+ }
 
-        .success-stories h1 {
-            text-align: center;
-            font-size: 2.5rem;
-            margin-bottom: 20px;
-            color: #2c3e50;
-            font-weight: 700;
-        }
+ body {
+     background-color: #f9fafb;
+     color: #E5E7EB;
+     padding: 20px;
+     display: flex;
+     justify-content: center;
+     align-items: center;
+     min-height: 100vh;
+ }
 
-        .section-description {
-            text-align: center;
-            font-size: 1.1rem;
-            color: #7f8c8d;
-            max-width: 800px;
-            margin: 0 auto 40px;
-            line-height: 1.6;
-        }
+ .success-stories {
+     padding: 60px 20px;
+     max-width: 1200px;
+     margin: 0 auto;
+     background-color: white;
+     width: 100%;
+ }
 
-        .divider {
-            height: 2px;
-            background: linear-gradient(to right, transparent, #3498db, transparent);
-            width: 100px;
-            margin: 0 auto 20px;
-        }
+ .success-stories h1 {
+     text-align: center;
+     font-size: 2.5rem;
+     margin-bottom: 20px;
+     color: #2c3e50;
+     font-weight: 700;
+ }
 
-        .stories-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: 30px;
-            margin-bottom: 60px;
-            justify-items: center;
-        }
+ .section-description {
+     text-align: center;
+     font-size: 1.1rem;
+     color: #7f8c8d;
+     max-width: 800px;
+     margin: 0 auto 40px;
+     line-height: 1.6;
+ }
 
-        .story-card {
-            background: #f9f9fa;
-            border-radius: 16px;
-            padding: 30px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            display: flex;
-            flex-direction: column;
-            width: 346.66px;
-            position: relative;
-        }
+ .divider {
+     height: 2px;
+     background: linear-gradient(to right, transparent, #3498db, transparent);
+     width: 100px;
+     margin: 0 auto 20px;
+ }
 
-        .story-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
-        }
+ .stories-grid {
+     display: grid;
+     grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+     gap: 30px;
+     margin-bottom: 60px;
+     justify-items: center;
+ }
 
-        .quote-icon {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            width: 40px;
-            height: 40px;
-            opacity: 1;
-            visibility: visible;
-        }
+ .story-card {
+     background: #f9f9fa;
+     border-radius: 16px;
+     padding: 30px;
+     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+     transition: transform 0.3s ease, box-shadow 0.3s ease;
+     display: flex;
+     flex-direction: column;
+     width: 346.66px;
+     position: relative;
+ }
 
-        .quote-icon img {
-            width: 100%;
-            height: 40px;
-            fill: #E5E7EB;
-        }
+ .story-card:hover {
+     transform: translateY(-5px);
+     box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+ }
 
-        .rating-stars {
-            color: #FACC15;
-            font-size: 1.2rem;
-            margin-bottom: 20px;
-        }
+ .quote-icon {
+     position: absolute;
+     top: 20px;
+     right: 20px;
+     width: 40px;
+     height: 40px;
+     opacity: 1;
+     visibility: visible;
+ }
 
-        .testimonial-text {
-            color: #98a1b3;
-            line-height: 1.6;
-            margin-bottom: 20px;
-            font-size: 1.05rem;
-            font-style: italic;
-            position: relative;
-            padding: 0 5px;
-        }
+ .quote-icon img {
+     width: 100%;
+     height: 40px;
+     fill: #E5E7EB;
+ }
 
-        .divider-small {
-            height: 1px;
-            width: 100%;
-            background-color: #E5E7EB;
-            margin: 16px 0;
-        }
+ .rating-stars {
+     color: #FACC15;
+     font-size: 1.2rem;
+     margin-bottom: 20px;
+ }
 
-        .user-info {
-            display: flex;
-            flex-direction: column;
-        }
+ .testimonial-text {
+     color: #98a1b3;
+     line-height: 1.6;
+     margin-bottom: 20px;
+     font-size: 1.05rem;
+     font-style: italic;
+     position: relative;
+     padding: 0 5px;
+ }
 
-        .user-info h3 {
-            color: #2A303C;
-            font-size: 16px;
-            font-weight: 600;
-            margin-bottom: 5px;
-        }
+ .divider-small {
+     height: 1px;
+     width: 100%;
+     background-color: #E5E7EB;
+     margin: 16px 0;
+ }
 
-        .user-stats {
-            background: linear-gradient(to right, #16A34A, #22C55E);
-            color: #FFFFFF;
-            font-size: 14px;
-            border-radius: 9999px;
-            padding: 6px 12px;
-            width: fit-content;
-            margin-bottom: 8px;
-            font-weight: 500;
-        }
+ .user-info {
+     display: flex;
+     flex-direction: column;
+ }
 
-        .user-title {
-            color: #6B7280;
-            font-size: 14px;
-            font-weight: 400;
-        }
+ .user-info h3 {
+     color: #2A303C;
+     font-size: 16px;
+     font-weight: 600;
+     margin-bottom: 5px;
+ }
 
-        .stats-section {
-            background: white;
-            border-radius: 12px;
-            padding: 40px;
-            text-align: center;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
-        }
+ .user-stats {
+     background: linear-gradient(to right, #16A34A, #22C55E);
+     color: #FFFFFF;
+     font-size: 14px;
+     border-radius: 9999px;
+     padding: 6px 12px;
+     width: fit-content;
+     margin-bottom: 8px;
+     font-weight: 500;
+ }
 
-        .stats-section h2 {
-            color: #2c3e50;
-            margin-bottom: 30px;
-            font-size: 1.8rem;
-            font-weight: 600;
-        }
+ .user-title {
+     color: #6B7280;
+     font-size: 14px;
+     font-weight: 400;
+ }
 
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 30px;
-        }
+ /* Shared Story Styling */
+ .shared-story {
+     border: 2px solid #3b82f6;
+     position: relative;
+     animation: fadeInUp 0.6s ease-out;
+ }
 
-        .stat-item {
-            padding: 15px;
-        }
+ .shared-story::before {
+     content: "Shared from Community";
+     position: absolute;
+     top: -10px;
+     right: 20px;
+     background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+     color: white;
+     padding: 4px 12px;
+     border-radius: 12px;
+     font-size: 11px;
+     font-weight: 600;
+     z-index: 1;
+     animation: slideInFromRight 0.8s ease-out 0.2s both;
+ }
 
-        .stat-number {
-            font-size: 2.5rem;
-            font-weight: bold;
-            color: #3498db;
-            margin-bottom: 10px;
-        }
+ /* Animation for new stories */
+ @keyframes fadeInUp {
+     from {
+         opacity: 0;
+         transform: translateY(30px);
+     }
 
-        .stat-label {
-            color: #7f8c8d;
-            font-size: 0.9rem;
-            font-weight: 500;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
+     to {
+         opacity: 1;
+         transform: translateY(0);
+     }
+ }
 
-        /* Responsive adjustments */
-        @media (max-width: 768px) {
-            .success-stories {
-                padding: 40px 15px;
-            }
-            
-            .success-stories h1 {
-                font-size: 2rem;
-            }
-            
-            .stories-grid {
-                grid-template-columns: 1fr;
-                gap: 20px;
-            }
-            
-            .stats-grid {
-                grid-template-columns: repeat(2, 1fr);
-                gap: 20px;
-            }
-            
-            .stat-number {
-                font-size: 2rem;
-            }
-            
-            .stats-section {
-                padding: 25px;
-            }
-        }
+ @keyframes slideInFromRight {
+     from {
+         opacity: 0;
+         transform: translateX(20px);
+     }
 
-        @media (max-width: 480px) {
-            .stats-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .story-card {
-                padding: 20px;
-                width: 100%;
-            }
-        }
+     to {
+         opacity: 1;
+         transform: translateX(0);
+     }
+ }
+
+ .stats-section {
+     background: white;
+     border-radius: 12px;
+     padding: 40px;
+     text-align: center;
+     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+ }
+
+ .stats-section h2 {
+     color: #2c3e50;
+     margin-bottom: 30px;
+     font-size: 1.8rem;
+     font-weight: 600;
+ }
+
+ .stats-grid {
+     display: grid;
+     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+     gap: 30px;
+ }
+
+ .stat-item {
+     padding: 15px;
+ }
+
+ .stat-number {
+     font-size: 2.5rem;
+     font-weight: bold;
+     color: #3498db;
+     margin-bottom: 10px;
+ }
+
+ .stat-label {
+     color: #7f8c8d;
+     font-size: 0.9rem;
+     font-weight: 500;
+     text-transform: uppercase;
+     letter-spacing: 0.5px;
+ }
+
+ /* Responsive adjustments */
+ @media (max-width: 768px) {
+     .success-stories {
+         padding: 40px 15px;
+     }
+
+     .success-stories h1 {
+         font-size: 2rem;
+     }
+
+     .stories-grid {
+         grid-template-columns: 1fr;
+         gap: 20px;
+     }
+
+     .stats-grid {
+         grid-template-columns: repeat(2, 1fr);
+         gap: 20px;
+     }
+
+     .stat-number {
+         font-size: 2rem;
+     }
+
+     .stats-section {
+         padding: 25px;
+     }
+ }
+
+ @media (max-width: 480px) {
+     .stats-grid {
+         grid-template-columns: 1fr;
+     }
+
+     .story-card {
+         padding: 20px;
+         width: 100%;
+     }
+ }

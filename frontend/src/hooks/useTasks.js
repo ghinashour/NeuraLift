@@ -25,7 +25,17 @@ export const useTasks = (initialTasks = []) => {
     };
 
     const deleteTask = (id) => setTasks(prev => prev.filter(t => t.id !== id));
-    const toggleTask = (id) => setTasks(prev => prev.map(t => (t.id === id ? { ...t, completed: !t.completed } : t)));
+    const toggleTask = (id) => setTasks(prev => prev.map(t => {
+        if (t.id === id) {
+            const newCompleted = !t.completed;
+            return {
+                ...t,
+                completed: newCompleted,
+                completedDate: newCompleted ? new Date().toISOString() : null
+            };
+        }
+        return t;
+    }));
 
     const filterTasks = (predicate) => tasks.filter(predicate);
 
