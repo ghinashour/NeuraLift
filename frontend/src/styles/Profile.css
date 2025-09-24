@@ -63,6 +63,16 @@
   cursor: pointer;
   transition: 0.3s ease;
 }
+.profile-avatar {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%; /* makes it round */
+  object-fit: cover;  /* crops nicely */
+  margin: 10px auto;
+  display: block;
+  border: 3px solid #f1f1f1;
+}
+
 
 .update-btn {
   background-color: #4e9af1;

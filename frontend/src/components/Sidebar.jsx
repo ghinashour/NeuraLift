@@ -120,7 +120,7 @@ const Sidebar = ({ isCollapsed, setIsCollapsed, user }) => {
 
     const isActive = (path) => {
         if (path === '/') {
-            return location.pathname === '/' || location.pathname.startsWith('/task');
+            return location.pathname === '/';
         }
         return location.pathname.startsWith(path);
     };
@@ -153,12 +153,27 @@ const Sidebar = ({ isCollapsed, setIsCollapsed, user }) => {
               <span className="nav-label">{item.label}</span>
             </div>
           ))}
-           <div className="profile">
-        <img src={user?.photo ? `http://localhost:4000/uploads/${user.photo}` : avatarPlaceholder} 
-             alt="Avatar" 
-             className="sidebar-avatar" />
-        <Link to="/profile" className="sidebar-username">{user?.name || "User"}</Link>
-      </div>
+        <div className="profile">
+  <Link to="/profile" className="profile-link">
+    <img
+      src={
+        user?.profilePhoto
+          ? `http://localhost:4000/uploads/${user.profilePhoto}`
+          : avatarPlaceholder
+      }
+      alt={user?.name || "User"}
+      className="sidebar-avatar"
+      onError={(e) => {
+        // fallback to placeholder if image fails to load
+        e.target.src = avatarPlaceholder;
+      }}
+    />
+    {!isCollapsed && (
+      <span className="sidebar-username">{user?.name || "User"}</span>
+    )}
+  </Link>
+</div>
+
         </nav>
 
         <div className="sidebar-footer">

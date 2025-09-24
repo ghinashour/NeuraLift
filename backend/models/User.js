@@ -19,6 +19,13 @@ const userSchema = new mongoose.Schema({
   profilePhoto: {
     type: String,
     default: "avatar.jpg"
+  },
+  isVerified:{
+    type: Boolean,
+    default: false
+  },
+  verificationToken:{
+    type: String,
   }
 }, { timestamps: true });
 

@@ -13,12 +13,15 @@ function Profile() {
 
   // Fetch user profile
   useEffect(() => {
-    axios.get("http://localhost:4000/api/profile", { headers: { Authorization: `Bearer ${token}` } })
-      .then(res => {
+    axios
+      .get("http://localhost:4000/api/profile", {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+      .then((res) => {
         setUser(res.data);
         setForm({ name: res.data.name, email: res.data.email });
       })
-      .catch(err => console.error(err));
+      .catch((err) => console.error(err));
   }, [token]);
 
   // Update profile info
@@ -31,9 +34,11 @@ function Profile() {
 
     try {
       const res = await axios.put("http://localhost:4000/api/profile", data, {
-        headers: { Authorization: `Bearer ${token}`, "Content-Type": "multipart/form-data" }
+        headers: { Authorization: `Bearer ${token}`, "Content-Type": "multipart/form-data" },
       });
+
       setUser(res.data);
+      localStorage.setItem("user", JSON.stringify(res.data)); // ✅ keep sidebar in sync
       setMessage("Profile updated ✅");
     } catch (err) {
       setMessage(err.response?.data?.message || "Update failed");
@@ -45,7 +50,7 @@ function Profile() {
     e.preventDefault();
     try {
       await axios.put("http://localhost:4000/api/profile/password", passwords, {
-        headers: { Authorization: `Bearer ${token}` }
+        headers: { Authorization: `Bearer ${token}` },
       });
       setMessage("Password updated ✅");
       setPasswords({ currentPassword: "", newPassword: "" });
@@ -64,26 +69,62 @@ function Profile() {
   return (
     <div className="profile-wrapper">
       <div className="profile-card">
-      <h2>Profile</h2>
-      {message && <p>{message}</p>}
+        <h2>Profile</h2>
 
-     <form onSubmit={handleProfileUpdate}>
-      <input type="text" value={form.name} onChange={e => setForm({ ...form, name: e.target.value })} placeholder="Name" />
-      <input type="email" value={form.email} onChange={e => setForm({ ...form, email: e.target.value })} placeholder="Email" />
-      <input type="file" onChange={e => setPhoto(e.target.files[0])} />
-      {user.profilePhoto && <img src={`http://localhost:4000/uploads/${user.profilephoto}`} alt="profile" width="100" />}
-      <button type="submit" className="update-btn">Update Profile</button>
-    </form>
+        {/* ✅ Rounded profile photo at top */}
+        {user.profilePhoto && (
+          <img
+            src={`http://localhost:4000/uploads/${user.profilePhoto}`}
+            alt="profile"
+            className="profile-avatar"
+          />
+        )}
 
-    <form onSubmit={handlePasswordChange}>
-      <input type="password" placeholder="Current Password" value={passwords.currentPassword} onChange={e => setPasswords({ ...passwords, currentPassword: e.target.value })} />
-      <input type="password" placeholder="New Password" value={passwords.newPassword} onChange={e => setPasswords({ ...passwords, newPassword: e.target.value })} />
-      <button type="submit" className="password-btn">Change Password</button>
-    </form>
+        {message && <p>{message}</p>}
 
-    <button onClick={handleLogout} className="logout-btn">Logout</button>
+        {/* Update Profile Form */}
+        <form onSubmit={handleProfileUpdate}>
+          <input
+            type="text"
+            value={form.name}
+            onChange={(e) => setForm({ ...form, name: e.target.value })}
+            placeholder="Name"
+          />
+          <input
+            type="email"
+            value={form.email}
+            onChange={(e) => setForm({ ...form, email: e.target.value })}
+            placeholder="Email"
+          />
+          <input type="file" onChange={(e) => setPhoto(e.target.files[0])} />
+          <button type="submit" className="update-btn">
+            Update Profile
+          </button>
+        </form>
 
-    </div>
+        {/* Change Password Form */}
+        <form onSubmit={handlePasswordChange}>
+          <input
+            type="password"
+            placeholder="Current Password"
+            value={passwords.currentPassword}
+            onChange={(e) => setPasswords({ ...passwords, currentPassword: e.target.value })}
+          />
+          <input
+            type="password"
+            placeholder="New Password"
+            value={passwords.newPassword}
+            onChange={(e) => setPasswords({ ...passwords, newPassword: e.target.value })}
+          />
+          <button type="submit" className="password-btn">
+            Change Password
+          </button>
+        </form>
+
+        <button onClick={handleLogout} className="logout-btn">
+          Logout
+        </button>
+      </div>
     </div>
   );
 }

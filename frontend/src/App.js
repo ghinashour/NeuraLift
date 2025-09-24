@@ -19,6 +19,7 @@ import { MedicineProvider } from "./context/MedicineContext";
 import Login from "./pages/Auth/Login";
 import Signup from "./pages/Auth/Signup";
 import Profile from "./pages/Auth/Profile";
+import VerifyEmail from "./pages/Auth/VerifyEmail";
 
 function App() {
   return (
@@ -43,6 +44,7 @@ function App() {
             />
               <Route path="/login" element={<Login />} />
               <Route path="/signup" element={<Signup />} />
+               <Route path="/verify/:token" element={<VerifyEmail />} />
 
             {/* Other pages inside Layout */}
             <Route element={<Layout />}>

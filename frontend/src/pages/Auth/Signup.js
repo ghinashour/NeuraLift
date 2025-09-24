@@ -19,7 +19,7 @@ function Signup() {
     }
     try {
       await axios.post("http://localhost:4000/api/auth/signup", form);
-      alert("Signup successful ✅ Please login now");
+      alert("Signup successful! Please verify your email.");
       navigate("/login");
     } catch (err) {
       setError(err.response?.data?.msg || "Signup failed");
