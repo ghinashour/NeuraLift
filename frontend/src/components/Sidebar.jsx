@@ -101,7 +101,7 @@ const navItems = [
     { key: 'tasks', label: 'Tasks', path: '/taskManager' },
     { key: 'mood', label: 'Mood Tracker', path: '/moodTracker' },
     { key: 'stress', label: 'Stress Relief', path: '/stressRelief' },
-    { key: 'success', label: 'Success Stories', path: '/successStories' },
+    { key: 'success', label: 'Success Stories', path: '/success-stories' },
     { key: 'challenges', label: 'Challenges', path: '/Challenges' },
     { key: 'collab', label: 'Collaborate', path: '/Collaborate' },
     { key: 'schedule', label: 'Schedule', path: '/Schedule' },

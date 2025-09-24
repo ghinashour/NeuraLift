@@ -3,13 +3,15 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import "./App.css";
 import TaskManagerPage from "./pages/TaskManager/TaskManager";
 import { TaskProvider } from "./context/TaskContext";
-import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import SuccessStories from "./sections/SuccessStories";
 import Features from "./sections/features";
 import Contact from "./sections/Contact";
 import AboutSection from "./sections/AboutSection";
+import Navbar from "./components/Navbar";
 import Home from "./sections/Home";
+import MyStory from './pages/SuccessStories/MyStory';
+import SuccessStory from './pages/SuccessStories/SuccessStory';
 import Layout from "./layouts/Layout";
 import StressRelief from "./pages/StressReliefSpace/StressReliefSpace";
 import FocusTimer from "./pages/FocusTimer/FocusTimer";
@@ -53,7 +55,8 @@ function App() {
               <Route path="focustimer" element={<FocusTimer />} />
               <Route path="medicineHealth" element={<MedicineHealth />} />
               <Route path="/profile" element={<Profile />} />
-
+              <Route path="/success-stories" element={<SuccessStory />} />
+              <Route path="/success-stories/my-story" element={<MyStory />} />
             </Route>
           </Routes>
         </MedicineProvider>
