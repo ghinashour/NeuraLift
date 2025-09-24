@@ -22,6 +22,7 @@ import Login from "./pages/Auth/Login";
 import Signup from "./pages/Auth/Signup";
 import Profile from "./pages/Auth/Profile";
 import VerifyEmail from "./pages/Auth/VerifyEmail";
+import Challenges from "./pages/Challenges/Challenges";
 
 function App() {
   return (
@@ -57,6 +58,8 @@ function App() {
               <Route path="/profile" element={<Profile />} />
               <Route path="/success-stories" element={<SuccessStory />} />
               <Route path="/success-stories/my-story" element={<MyStory />} />
+               <Route path="/Challenges" element={<Challenges />} />
+
             </Route>
           </Routes>
         </MedicineProvider>
