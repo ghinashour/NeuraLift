@@ -4,6 +4,7 @@ const cors = require("cors");
 const profileRoutes = require("./routes/profile.js");
 const path = require("path");
 const verifyEmailRoute = require("./routes/verifyEmail.js");
+const questionRoutes = require("./routes/questions.js");
 require("dotenv").config();
 
 const authRoutes = require("./routes/authRoute");
@@ -20,6 +21,8 @@ app.use("/api/auth", authRoutes);
 app.use("/api/profile", profileRoutes);
 app.use("/api/auth", verifyEmailRoute);
 
+//fetching the challenges
+app.use("/api/questions", questionRoutes);
 //server uploaded files
 app.use('/uploads', express.static('uploads'));
 
