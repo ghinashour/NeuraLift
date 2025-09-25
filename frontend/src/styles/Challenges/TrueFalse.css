@@ -1,0 +1,134 @@
+.true-false-game {
+  max-width: 600px;
+  margin: 2rem auto;
+  text-align: center;
+}
+
+.question-card {
+  padding: 2rem;
+  border-radius: 12px;
+  background: #f9f9f9;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  margin-bottom: 1.5rem;
+  transition: background 0.3s;
+}
+
+.question-card.answered {
+  background: #e6f7ff;
+}
+
+.answer-buttons button {
+  margin: 0 10px;
+  padding: 0.8rem 1.5rem;
+  border: none;
+  border-radius: 8px;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.answer-buttons button:hover {
+  transform: scale(1.05);
+}
+.true-false-game {
+  max-width: 600px;
+  margin: 3rem auto;
+  text-align: center;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.title {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+}
+
+.score {
+  font-size: 1.2rem;
+  margin-bottom: 2rem;
+}
+
+.question-card {
+  background: white;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+  margin-bottom: 2rem;
+  transition: transform 0.3s, background 0.3s;
+}
+
+/* Feedback colors */
+.question-card.correct {
+  border: 3px solid #4caf50;
+}
+
+.question-card.wrong {
+  border: 3px solid #f44336;
+}
+
+.answer-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.answer-buttons button {
+  padding: 0.8rem 2rem;
+  font-size: 1.1rem;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  color: white;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.answer-buttons button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+
+.btn-true {
+  background-color: #4caf50; /* green */
+}
+
+.btn-false {
+  background-color: #f44336; /* red */
+}
+
+.loading {
+  text-align: center;
+  font-size: 1.2rem;
+  margin-top: 3rem;
+}
+
+.restart-button {
+  background-color: #3c83f6;
+  color: white;
+  padding: 0.8rem 2rem;
+  font-size: 1.1rem;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  margin-top: 2rem;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.restart-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+.congrats-popup {
+  background-color: #4caf50;
+  color: white;
+  font-size: 1.5rem;
+  font-weight: bold;
+  padding: 1rem 2rem;
+  border-radius: 12px;
+  margin: 2rem auto;
+  max-width: 500px;
+  animation: popup 0.5s ease forwards;
+}
+
+@keyframes popup {
+  0% { transform: scale(0.5); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}

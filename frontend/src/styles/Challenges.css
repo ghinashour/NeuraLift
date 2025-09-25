@@ -1,18 +1,17 @@
-/* src/styles/Challenges.css */
 
 .challenges-container {
   min-height: 100vh;
-  background-color: #f8f9fa;
+  background-color: #f9faff;
   text-align: center;
   padding: 2rem;
 
 }
 .header {
   display: flex;
-  align-items: center;      /* vertically centers SVG + text */
-  justify-content: center;  /* horizontally centers inside container */
-  gap: 10px;                /* space between icon and text */
-  margin-bottom: 1rem;      /* space below header */
+  align-items: center;    
+  justify-content: center; 
+  gap: 10px;                
+  margin-bottom: 1rem;     
 }
 
 
@@ -26,21 +25,22 @@
 .title {
   font-size: 2rem;
   font-weight: bold;
-  color: #333;
+  color: #2B2F3B;
   margin-bottom: 0.5rem;
   padding-left: 10px;
 }
 
 .subtitle {
-  color: #666;
+  color: #626A84;
   margin-bottom: 2rem;
 }
 
 .button-row {
-  display: flex;
-  justify-content: center;
-  gap: 1rem;
-  margin-bottom: 1.5rem;
+ display: flex;
+  align-items: center;    
+  justify-content: center; 
+  gap: 10px;                
+  margin-bottom: 1rem;  
 }
 
 .category-btn {
@@ -64,7 +64,7 @@
 
 .category-btn.yellow {
   background-color: #ffc107;
-  color: #333;
+
 }
 
 .category-btn.red {
