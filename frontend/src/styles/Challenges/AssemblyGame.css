@@ -1,0 +1,130 @@
+.assembly-game-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  font-family: Arial, sans-serif;
+  text-align: center;
+}
+
+h1 {
+  color: #2c3e50;
+  margin-bottom: 30px;
+}
+
+.hint-section {
+  background-color: #f8f9fa;
+  padding: 15px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+}
+
+.hint-section h3 {
+  margin: 0 0 10px 0;
+  color: #495057;
+}
+
+.word-display {
+  font-size: 2.5em;
+  letter-spacing: 10px;
+  margin: 30px 0;
+  font-weight: bold;
+  color: #2c3e50;
+}
+
+.letter {
+  display: inline-block;
+  min-width: 30px;
+}
+
+.programming-languages {
+  margin: 30px 0;
+}
+
+.languages-list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 15px;
+}
+
+.language-tag {
+  background-color: #3498db;
+  color: white;
+  padding: 8px 15px;
+  border-radius: 20px;
+  font-size: 0.9em;
+}
+
+.game-stats {
+  background-color: #ecf0f1;
+  padding: 15px;
+  border-radius: 8px;
+  margin: 20px 0;
+}
+
+.guess-form {
+  margin: 30px 0;
+}
+
+.guess-form input {
+  font-size: 1.2em;
+  padding: 10px;
+  width: 60px;
+  text-align: center;
+  margin-right: 10px;
+  border: 2px solid #bdc3c7;
+  border-radius: 4px;
+  text-transform: uppercase;
+}
+
+.guess-form button, .new-game-btn {
+  background-color: #27ae60;
+  color: white;
+  border: none;
+  padding: 12px 25px;
+  font-size: 1.1em;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.guess-form button:hover, .new-game-btn:hover {
+  background-color: #219a52;
+}
+
+.guess-form button:disabled {
+  background-color: #95a5a6;
+  cursor: not-allowed;
+}
+
+.message {
+  font-size: 1.2em;
+  padding: 15px;
+  border-radius: 8px;
+  margin: 20px 0;
+}
+
+.message.won {
+  background-color: #d4edda;
+  color: #155724;
+  border: 1px solid #c3e6cb;
+}
+
+.message.lost {
+  background-color: #f8d7da;
+  color: #721c24;
+  border: 1px solid #f5c6cb;
+}
+
+@media (max-width: 600px) {
+  .word-display {
+    font-size: 1.8em;
+    letter-spacing: 5px;
+  }
+  
+  .guess-form input {
+    width: 50px;
+    font-size: 1em;
+  }
+}
