@@ -13,7 +13,10 @@ const authRoutes = require("./routes/authRoute");
 const app = express();
 
 // Middleware
-app.use(cors());
+app.use(cors({
+  origin: "http://localhost:3000", // allow frontend
+  methods: ["GET", "POST", "PUT", "DELETE"],
+}));
 app.use(express.json());
 
 // Routes
