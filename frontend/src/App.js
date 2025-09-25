@@ -35,8 +35,7 @@ import AssemblyGame from "./pages/Challenges/AssemblyGame";
 import TrueFalse from "./pages/Challenges/TrueFalse";
 import TenzisGame from "./pages/Challenges/TenzisGame";
 import DevQuestions from "./pages/Challenges/DevQuestions";
-
-
+import AssemblyGameComponent from './pages/Challenges/AssemblyGame';
 
 
 function App() {
@@ -79,6 +78,7 @@ function App() {
                <Route path="/challenges/true-false" element={<TrueFalse />} />
                <Route path="/challenges/tenzis-game" element={<TenzisGame />} />
                <Route path="/challenges/dev-questions" element={<DevQuestions />} />
+               <Route path="/challenges/assembly-game" element={<AssemblyGameComponent />} />
 
             </Route>
           </Routes>

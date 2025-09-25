@@ -3,6 +3,6 @@ const { getDevQuestions } = require("../controllers/devQuestionController");
 const router = express.Router();
 
 // GET /api/devquestions
-router.get("/devquestions", getDevQuestions);
+router.get("/", getDevQuestions);
 
 module.exports = router;
