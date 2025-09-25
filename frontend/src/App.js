@@ -1,8 +1,8 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import "./App.css";
-import TaskManagerPage from "./pages/TaskManager/TaskManager";
-import { TaskProvider } from "./context/TaskContext";
+
+// Importing components and sections of the landing page
 import Footer from "./components/Footer";
 import SuccessStories from "./sections/SuccessStories";
 import Features from "./sections/features";
@@ -13,16 +13,31 @@ import Home from "./sections/Home";
 import MyStory from './pages/SuccessStories/MyStory';
 import SuccessStory from './pages/SuccessStories/SuccessStory';
 import Layout from "./layouts/Layout";
+
+// Importing pages
 import StressRelief from "./pages/StressReliefSpace/StressReliefSpace";
 import FocusTimer from "./pages/FocusTimer/FocusTimer";
 import MoodTracker from "./pages/MoodTracker/MoodTracker";
 import MedicineHealth from "./components/MedicineHealth/Medicine";
 import { MedicineProvider } from "./context/MedicineContext";
+import TaskManagerPage from "./pages/TaskManager/TaskManager";
+import { TaskProvider } from "./context/TaskContext";
+
+// Authentication pages
 import Login from "./pages/Auth/Login";
 import Signup from "./pages/Auth/Signup";
 import Profile from "./pages/Auth/Profile";
 import VerifyEmail from "./pages/Auth/VerifyEmail";
+
+// Challenges and Games pages
 import Challenges from "./pages/Challenges/Challenges";
+import AssemblyGame from "./pages/Challenges/AssemblyGame";
+import TrueFalse from "./pages/Challenges/TrueFalse";
+import TenzisGame from "./pages/Challenges/TenzisGame";
+import DevQuestions from "./pages/Challenges/DevQuestions";
+
+
+
 
 function App() {
   return (
@@ -58,7 +73,12 @@ function App() {
               <Route path="/profile" element={<Profile />} />
               <Route path="/success-stories" element={<SuccessStory />} />
               <Route path="/success-stories/my-story" element={<MyStory />} />
+              {/*challenges page route and it's sub pages*/}
                <Route path="/Challenges" element={<Challenges />} />
+               <Route path="/challenges/assembly-game" element={<AssemblyGame />} />
+               <Route path="/challenges/true-false" element={<TrueFalse />} />
+               <Route path="/challenges/tenzis-game" element={<TenzisGame />} />
+               <Route path="/challenges/dev-questions" element={<DevQuestions />} />
 
             </Route>
           </Routes>

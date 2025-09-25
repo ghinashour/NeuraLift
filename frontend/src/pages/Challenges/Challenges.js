@@ -60,18 +60,22 @@ function Challenges() {
         <ChallengeCard
           title="Assembly Game"
           description="Guess the world is under it. Attempts to keep the programming world safe from Assembly!"
-        />
+          link="/challenges/assembly-game"
+       />
         <ChallengeCard
           title="True/False"
           description="Answer quick programming true or false questions."
+          link="/challenges/true-false"
         />
         <ChallengeCard
           title="Tenzis Game"
           description="Play the dice-based coding challenge game."
+          link="/challenges/tenzis-game"
         />
         <ChallengeCard
           title="Dev Questions"
           description="Challenge yourself with tricky developer questions."
+          link="/challenges/dev-questions"
         />
       </div>
     </div>
