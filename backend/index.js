@@ -7,6 +7,7 @@ const verifyEmailRoute = require("./routes/verifyEmail.js");
 const questionRoutes = require("./routes/questions.js");
 const devQuestionRoutes = require("./routes/DevQuestionRoute.js");
 const assemblyGameRoutes = require('./routes/assemblyGame');
+const tensizesRoutes = require("./routes/tenziesRoutes");
 require("dotenv").config();
 
 const authRoutes = require("./routes/authRoute");
@@ -30,6 +31,7 @@ app.use("/api/auth", verifyEmailRoute);
 app.use("/api/questions", questionRoutes);
 app.use("/api/devquestions", devQuestionRoutes);
 app.use('/api/assembly-game', assemblyGameRoutes);
+app.use("/api/tenzies", tensizesRoutes);
 //server uploaded files
 app.use('/uploads', express.static('uploads'));
 
