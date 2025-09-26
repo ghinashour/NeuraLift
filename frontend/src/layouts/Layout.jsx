@@ -9,11 +9,11 @@ export default function Layout() {
   // we expect landing ("/") to be outside Layout; extra guard:
   const showSidebar = location.pathname !== "/";
   const [isCollapsed, setIsCollapsed] = useState(false);
-
+  const [user, setUser] = useState(JSON.parse(localStorage.getItem("user")) || null);
   return (
     <div className={`app-layout ${isCollapsed ? "sidebar-collapsed" : ""}`}>
       {showSidebar && (
-        <Sidebar isCollapsed={isCollapsed} setIsCollapsed={setIsCollapsed} />
+        <Sidebar isCollapsed={isCollapsed} setIsCollapsed={setIsCollapsed} setUser={setUser}/>
       )}
       <main className="layout-main">
         <Outlet />
