@@ -1,0 +1,57 @@
+.tenzies {
+  text-align: center;
+  background: #fff;
+  padding: 20px;
+  border-radius: 12px;
+  max-width: 500px;
+  margin: auto;
+  color: #333;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.dice-container {
+  display: grid;
+  grid-template-columns: repeat(5, 60px);
+  gap: 10px;
+  justify-content: center;
+  margin: 20px 0;
+}
+
+.die {
+  background: #f1f1f1;
+  padding: 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 20px;
+  font-weight: bold;
+  transition: 0.2s;
+}
+
+.die.held {
+  background: #4caf50;
+  color: #fff;
+}
+
+.roll-btn {
+  padding: 10px 20px;
+  font-size: 16px;
+  background: #2196f3;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.roll-btn:hover {
+  background: #1976d2;
+}
+.hint {
+  font-size: 14px;
+  color: #666;
+  margin-top: 10px;
+}
+.congrats {
+  font-size: 24px;
+  color: #ff5722;
+  margin-top: 20px;
+}

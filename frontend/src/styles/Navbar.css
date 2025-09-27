@@ -62,12 +62,16 @@
   font-weight: 500;
   cursor: pointer;
   transition: transform 0.2s ease, opacity 0.2s ease;
+  text-decoration: none;   /* ✅ remove underline for link */
+  display: flex;           /* ✅ center text properly */
+  align-items: center;
+  justify-content: center;
 }
-
 .get-started:hover {
   opacity: 0.9;
   transform: scale(1.05);
 }
+
 
 /* Scroll effect: glass/blur with smooth fade-in */
 .navbar.scrolled {

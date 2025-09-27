@@ -16,12 +16,24 @@
 
 .pomodoro-timer__title {
   font-size: 1.5rem;
-  font-weight: 600;
+  font-weight: 700;
   color: #111827;
+}
+.pomodoro-timer__title svg {
+  width: 30px;
+  padding-right: 5px;
+  height: fit-content;
+  justify-content: center;
+}
+
+.pomodoro-timer__header-content p{
+  color: #626A84;
+
 }
 
 .pomodoro-timer__tabs {
   margin-bottom: 1.5rem;
+  font-size: 14.88px;
 }
 
 .pomodoro-timer__main {
