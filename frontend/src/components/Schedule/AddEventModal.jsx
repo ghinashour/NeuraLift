@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Button from '../UI/Button/Button';
 import Input from '../UI/Input/Input';
-
+import './AddEventModal.css';
 const AddEventModal = ({ isOpen, onClose, onSave, event }) => {
   const [formData, setFormData] = useState({
     title: '',

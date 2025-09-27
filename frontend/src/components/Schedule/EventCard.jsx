@@ -42,10 +42,10 @@ const EventCard = ({ event, isScheduleView = false, onEdit, onDelete, style = {}
 
         <div className="schedule-event-actions">
           <button type="button" onClick={handleEdit} className="event-action-btn edit-btn" title="Edit">
-            <img src={EditIcon} alt="Edit" />
+            <img src={DelIcon} alt="Edit" />
           </button>
           <button type="button" onClick={handleDelete} className="event-action-btn delete-btn" title="Delete">
-            <img src={DelIcon} alt="Delete" />
+            <img src={EditIcon} alt="Delete" />
           </button>
         </div>
       </div>
