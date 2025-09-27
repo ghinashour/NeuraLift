@@ -13,7 +13,7 @@ import Home from "./sections/Home";
 import Layout from "./layouts/Layout";
 import StressRelief from "./pages/StressReliefSpace/StressReliefSpace";
 import FocusTimer from "./pages/FocusTimer/FocusTimer";
-
+import SchedulePage from "./pages/SchedulePage/SchedulePage";
 function App() {
   return (
     <Router>
@@ -38,8 +38,9 @@ function App() {
           {/* Other pages inside Layout */}
           <Route element={<Layout/>}>
             <Route path="taskManager" element={<TaskManagerPage />} />
-            <Route path="stressRelief" element={<StressRelief />} />
-            <Route path ="focustimer" element={<FocusTimer />} />
+            <Route path="/stressRelief" element={<StressRelief />} />
+            <Route path="/focustimer" element={<FocusTimer />} />
+            <Route path="/schedule" element={<SchedulePage />} />
           </Route>
         </Routes>
       </TaskProvider>
