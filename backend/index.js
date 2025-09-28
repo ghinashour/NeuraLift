@@ -8,6 +8,7 @@ const questionRoutes = require("./routes/questions.js");
 const devQuestionRoutes = require("./routes/DevQuestionRoute.js");
 const assemblyGameRoutes = require('./routes/assemblyGame');
 const tensizesRoutes = require("./routes/tenziesRoutes");
+const eventRoutes = require("./routes/eventRoutes.js")
 require("dotenv").config();
 
 const authRoutes = require("./routes/authRoute");
@@ -17,7 +18,7 @@ const app = express();
 
 // Middleware
 app.use(cors({
-  origin: "http://localhost:3000", // allow frontend
+  origin: "http://localhost:3001", // allow frontend
   methods: ["GET", "POST", "PUT", "DELETE"],
 }));
 app.use(express.json());
@@ -34,6 +35,8 @@ app.use("/api/devquestions", devQuestionRoutes);
 app.use('/api/assembly-game', assemblyGameRoutes);
 app.use("/api/tenzies", tensizesRoutes);
 app.use("/api/success-stories", successStoryRoutes);
+app.use("/api/events", eventRoutes);
+
 //server uploaded files
 app.use('/uploads', express.static('uploads'));
 
