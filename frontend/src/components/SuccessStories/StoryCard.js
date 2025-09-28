@@ -8,11 +8,13 @@ const StoryCard = ({
     date,
     content,
     shareCount,
+    likeCount,
     category,
     storyId,
-    onLikeChange
+    onLikeChange,
+    onShare
 }) => {
-    // Load like state from localStorage
+    // Load user's like state from localStorage (for UI persistence)
     const getStoredLikeState = () => {
         try {
             const stored = localStorage.getItem(`story-${storyId}-liked`);
@@ -23,21 +25,11 @@ const StoryCard = ({
         }
     };
 
-    // Load like count from localStorage
-    const getStoredLikeCount = () => {
-        try {
-            const stored = localStorage.getItem(`story-${storyId}-count`);
-            return stored ? parseInt(stored) : shareCount;
-        } catch (error) {
-            console.error('Error loading like count:', error);
-            return shareCount;
-        }
-    };
-
     const [isLiked, setIsLiked] = useState(getStoredLikeState);
-    const [likeCount, setLikeCount] = useState(getStoredLikeCount);
+    const [currentLikeCount, setCurrentLikeCount] = useState(likeCount || 0);
+    const [isProcessing, setIsProcessing] = useState(false);
 
-    // Save like state to localStorage whenever it changes
+    // Save user's like state to localStorage (for UI persistence across sessions)
     useEffect(() => {
         try {
             localStorage.setItem(`story-${storyId}-liked`, JSON.stringify(isLiked));
@@ -46,32 +38,53 @@ const StoryCard = ({
         }
     }, [isLiked, storyId]);
 
-    // Save like count to localStorage whenever it changes
+    // Update like count when likeCount prop changes (from database)
     useEffect(() => {
-        try {
-            localStorage.setItem(`story-${storyId}-count`, likeCount.toString());
-        } catch (error) {
-            console.error('Error saving like count:', error);
-        }
-    }, [likeCount, storyId]);
+        setCurrentLikeCount(likeCount || 0);
+    }, [likeCount]);
 
     const getInitials = (name) => {
         return name.split(' ').map(n => n[0]).join('').toUpperCase();
     };
 
     const handleLike = () => {
+        // Prevent double-click glitches
+        if (isProcessing) {
+            return;
+        }
+
+        setIsProcessing(true);
+        const previousLikeState = isLiked;
+
+        // INSTANT UI update - no async/await here
         if (isLiked) {
             // Unlike
             setIsLiked(false);
-            const newCount = likeCount - 1;
-            setLikeCount(newCount);
-            onLikeChange && onLikeChange(storyId, newCount, false);
+            const newCount = Math.max(0, currentLikeCount - 1);
+            setCurrentLikeCount(newCount);
         } else {
             // Like
             setIsLiked(true);
-            const newCount = likeCount + 1;
-            setLikeCount(newCount);
-            onLikeChange && onLikeChange(storyId, newCount, true);
+            const newCount = currentLikeCount + 1;
+            setCurrentLikeCount(newCount);
+        }
+
+        // Fire and forget - don't wait for API response
+        if (onLikeChange) {
+            onLikeChange(storyId, previousLikeState)
+                .then(() => {
+                    setIsProcessing(false);
+                })
+                .catch(error => {
+                    // Only revert on error, but don't block the UI
+                    console.error('Error toggling like:', error);
+                    // Revert the optimistic update on error
+                    setIsLiked(previousLikeState);
+                    setCurrentLikeCount(likeCount || 0);
+                    setIsProcessing(false);
+                });
+        } else {
+            setIsProcessing(false);
         }
     };
 
@@ -107,7 +120,11 @@ const StoryCard = ({
                         <path d="M12.6667 2.66699H3.33333C2.59695 2.66699 2 3.26395 2 4.00033V13.3337C2 14.07 2.59695 14.667 3.33333 14.667H12.6667C13.403 14.667 14 14.07 14 13.3337V4.00033C14 3.26395 13.403 2.66699 12.6667 2.66699Z" stroke="#626A84" strokeWidth="1.33333" strokeLinecap="round" strokeLinejoin="round" />
                         <path d="M2 6.66699H14" stroke="#626A84" strokeWidth="1.33333" strokeLinecap="round" strokeLinejoin="round" />
                     </svg>
-                    <span>{date}</span>
+                    <span>{date ? new Date(date).toLocaleDateString('en-US', {
+                        month: 'short',
+                        day: 'numeric',
+                        year: 'numeric'
+                    }) : 'Unknown date'}</span>
                 </div>
                 <div className="story-engagement">
                     <div className="like-container">
@@ -116,6 +133,7 @@ const StoryCard = ({
                                 type="checkbox"
                                 checked={isLiked}
                                 onChange={handleLike}
+                                disabled={isProcessing}
                             />
                             <div className="like">
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -123,14 +141,12 @@ const StoryCard = ({
                                 </svg>
                             </div>
                         </label>
-                        <span className="like-count">{likeCount}</span>
+                        <span className="like-count">{currentLikeCount}</span>
                     </div>
                     <ShareButton
                         storyId={storyId}
                         shareCount={shareCount}
-                        onShare={(storyId, option) => {
-                            console.log(`Story ${storyId} shared via ${option}`);
-                        }}
+                        onShare={onShare}
                     />
                 </div>
             </div>

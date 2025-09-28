@@ -223,6 +223,8 @@
 
 .preview-card .story-category {
     margin-bottom: 16px;
+    position: relative;
+    z-index: 1;
 }
 
 .preview-card .category-tag {
