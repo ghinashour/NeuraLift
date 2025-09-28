@@ -65,6 +65,7 @@
      flex-direction: column;
      width: 346.66px;
      position: relative;
+     min-height: 300px;
  }
 
  .story-card:hover {
@@ -102,6 +103,7 @@
      font-style: italic;
      position: relative;
      padding: 0 5px;
+     flex-grow: 1;
  }
 
  .divider-small {
@@ -114,6 +116,7 @@
  .user-info {
      display: flex;
      flex-direction: column;
+     flex-shrink: 0;
  }
 
  .user-info h3 {

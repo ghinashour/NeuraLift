@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import useSuccessStories from '../../hooks/useSuccessStories';
 import '../../styles/SuccessStories/MyStory.css';
 
 const MyStory = () => {
     const navigate = useNavigate();
+    const { createStory } = useSuccessStories();
     const [formData, setFormData] = useState({
         title: '',
         description: '',
@@ -42,54 +44,34 @@ const MyStory = () => {
         setIsSubmitting(true);
 
         try {
-            // Create story object
-            const newStory = {
-                id: Date.now(), // Simple ID generation
+            // Create story using database
+            const storyData = {
                 title: formData.title,
                 author: formData.author,
                 description: formData.description,
                 category: formData.category,
-                date: new Date().toLocaleDateString('en-US', {
-                    month: 'numeric',
-                    day: 'numeric',
-                    year: 'numeric'
-                }),
-                shareCount: 0
+                isPublic: true
             };
 
-            // In a real app, you would save this to a database
-            // For now, we'll store it in localStorage
-            const existingStories = JSON.parse(localStorage.getItem('successStories') || '[]');
-            existingStories.unshift(newStory); // Add to beginning
-            localStorage.setItem('successStories', JSON.stringify(existingStories));
+            await createStory(storyData);
 
-            // Update stats in localStorage
-            const savedStats = JSON.parse(localStorage.getItem('successStoriesStats') || '{}');
-            const currentStats = {
-                totalStories: (savedStats.totalStories || 0) + 1,
-                totalLikes: savedStats.totalLikes || 0,
-                thisWeek: savedStats.thisWeek || 0
-            };
+            // Show success message
+            alert('Your success story has been shared! Thank you for inspiring others.');
 
-            // Check if the new story is from this week
-            const storyDate = new Date(newStory.date);
-            const weekAgo = new Date();
-            weekAgo.setDate(weekAgo.getDate() - 7);
+            // Reset form
+            setFormData({
+                title: '',
+                description: '',
+                category: '',
+                author: ''
+            });
 
-            if (storyDate >= weekAgo) {
-                currentStats.thisWeek = (currentStats.thisWeek || 0) + 1;
-            }
-
-            localStorage.setItem('successStoriesStats', JSON.stringify(currentStats));
-
-            // Simulate API call delay
-            await new Promise(resolve => setTimeout(resolve, 1000));
-
-            // Redirect back to success stories page
+            // Navigate back to success stories page
             navigate('/success-stories');
         } catch (error) {
             console.error('Error submitting story:', error);
-            alert('Failed to submit story. Please try again.');
+            console.error('Error details:', error.response?.data || error.message);
+            alert(`Failed to submit story: ${error.response?.data?.message || error.message || 'Please check your connection and try again.'}`);
         } finally {
             setIsSubmitting(false);
         }
@@ -172,6 +154,7 @@ const MyStory = () => {
                                 required
                             />
                         </div>
+
 
                         <div className="form-actions">
                             <button
