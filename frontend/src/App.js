@@ -21,6 +21,7 @@ import MedicineHealth from "./components/MedicineHealth/Medicine";
 import { MedicineProvider } from "./context/MedicineContext";
 import TaskManagerPage from "./pages/TaskManager/TaskManager";
 import { TaskProvider } from "./context/TaskContext";
+import Schedule from "./pages/SchedulePage/SchedulePage";
 
 // Authentication pages
 import Login from "./pages/Auth/Login";
@@ -67,6 +68,7 @@ function App() {
               <Route path="stressRelief" element={<StressRelief />} />
               <Route path="focustimer" element={<FocusTimer />} />
               <Route path="medicineHealth" element={<MedicineHealth />} />
+              <Route path="/Schedule" element={<Schedule />} />
               <Route path="/profile" element={<Profile />} />
               <Route path="/success-stories" element={<SuccessStory />} />
               <Route path="/success-stories/my-story" element={<MyStory />} />
