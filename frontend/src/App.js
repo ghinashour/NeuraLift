@@ -17,7 +17,6 @@ import Layout from "./layouts/Layout";
 // Importing pages
 import StressRelief from "./pages/StressReliefSpace/StressReliefSpace";
 import FocusTimer from "./pages/FocusTimer/FocusTimer";
-import MoodTracker from "./pages/MoodTracker/MoodTracker";
 import MedicineHealth from "./components/MedicineHealth/Medicine";
 import { MedicineProvider } from "./context/MedicineContext";
 import TaskManagerPage from "./pages/TaskManager/TaskManager";
@@ -31,7 +30,6 @@ import VerifyEmail from "./pages/Auth/VerifyEmail";
 
 // Challenges and Games pages
 import Challenges from "./pages/Challenges/Challenges";
-import AssemblyGame from "./pages/Challenges/AssemblyGame";
 import TrueFalse from "./pages/Challenges/TrueFalse";
 import TenzisGame from "./pages/Challenges/TenzisGame";
 import DevQuestions from "./pages/Challenges/DevQuestions";
@@ -73,8 +71,7 @@ function App() {
               <Route path="/success-stories" element={<SuccessStory />} />
               <Route path="/success-stories/my-story" element={<MyStory />} />
               {/*challenges page route and it's sub pages*/}
-               <Route path="/Challenges" element={<Challenges />} />
-               <Route path="/challenges/assembly-game" element={<AssemblyGame />} />
+               <Route path="/challenges" element={<Challenges />} />
                <Route path="/challenges/true-false" element={<TrueFalse />} />
                <Route path="/challenges/tenzis-game" element={<TenzisGame />} />
                <Route path="/challenges/dev-questions" element={<DevQuestions />} />

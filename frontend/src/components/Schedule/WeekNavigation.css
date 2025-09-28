@@ -1,0 +1,26 @@
+.week-navigation {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem 2rem;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  margin-bottom: 1.5rem;
+}
+
+.week-navigation__controls {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.week-navigation__date-range {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #111827;
+}
+
+.week-navigation__view-controls {
+  display: flex;
+  gap: 0.5rem;
+}

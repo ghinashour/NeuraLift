@@ -167,18 +167,6 @@
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-.medicine-icon {
-  width: 50px;
-  height: 50px;
-  background-color: #e0f7fa;
-  border-radius: 50%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-right: 20px;
-  font-size: 24px;
-}
-
 .medicine-details {
   flex: 1;
 }
@@ -197,20 +185,26 @@
 
 .time-detail {
   display: flex;
-  align-items: center;
-  margin-top: 5px;
+  flex-direction: column;
 }
 
 .time {
-  background-color: #e8f5e9;
-  color: #4caf50;
+  color: #3c83f6;
   border-radius: 10px;
   padding: 2px 10px;
-  font-size: 14px;
+  font-size: 17px;
   margin-right: 10px;
+  margin-bottom: 4px;
 }
 
 .repeat {
   color: #666;
   font-size: 14px;
+}
+#take {
+  width: 1020px;
+  background-color: #3c83f6;
+  border-radius: 15px;
+  border: none;
+  font-size: 18px;
 }
