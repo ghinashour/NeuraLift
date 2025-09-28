@@ -1,149 +1,19 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
 import StatsCard from '../../components/SuccessStories/StatsCard';
 import StoryCard from '../../components/SuccessStories/StoryCard';
+import useSuccessStories from '../../hooks/useSuccessStories';
 import '../../styles/SuccessStories/SuccessStories.css';
 
 const SuccessStory = () => {
-    const [stories, setStories] = useState([]);
-    const [stats, setStats] = useState({
-        totalStories: 0,
-        totalLikes: 0,
-        thisWeek: 0
-    });
-
-
-    // Load stats from localStorage
-    const loadStatsFromStorage = useCallback(() => {
-        try {
-            const savedStats = localStorage.getItem('successStoriesStats');
-            if (savedStats) {
-                const parsedStats = JSON.parse(savedStats);
-                setStats(parsedStats);
-                return parsedStats;
-            }
-        } catch (error) {
-            console.error('Error loading stats from localStorage:', error);
-        }
-        return null;
-    }, []);
-
-    // Update stats when individual story likes change
-    const updateStatsFromLikeChange = useCallback((storyId, isLiked) => {
-        setStats(prevStats => {
-            // Update total likes based on like/unlike action
-            const likeChange = isLiked ? 1 : -1;
-
-            const newStats = {
-                ...prevStats,
-                totalLikes: Math.max(0, prevStats.totalLikes + likeChange) // Ensure it doesn't go below 0
-            };
-
-            // Save updated stats to localStorage
-            try {
-                localStorage.setItem('successStoriesStats', JSON.stringify(newStats));
-            } catch (error) {
-                console.error('Error saving stats to localStorage:', error);
-            }
-
-            return newStats;
-        });
-    }, []);
-
-    useEffect(() => {
-        // Default stories
-        const defaultStories = [
-            {
-                id: 1,
-                author: "Sarah M.",
-                title: "Completed 30-Day Meditation Challenge",
-                category: "Mindfulness",
-                description: "After struggling with stress and anxiety, I committed to meditating for 10 minutes every day. Today marks 30 days straight! I feel more centered, focused, and calm. My relationships have improved and I'm sleeping better than ever.",
-                date: "9/3/2025",
-                shareCount: 12,
-                likeCount: 12
-            },
-            {
-                id: 2,
-                author: "Mike R.",
-                title: "Finally Established a Morning Routine",
-                category: "Habits",
-                description: "For years I was chaotic in the mornings. Using the focus timer and task manager here, I built a consistent 6 AM routine: exercise, journaling, and planning my day. It's been 3 weeks and I feel incredible!",
-                date: "9/2/2025",
-                shareCount: 8,
-                likeCount: 8
-            },
-            {
-                id: 3,
-                author: "Emma L.",
-                title: "Launched My Side Business",
-                category: "Goals",
-                description: "The task management and focus sessions helped me stay accountable to my business goals. After 6 months of consistent evening work sessions, I finally launched my online store. Already made my first sale!",
-                date: "9/1/2025",
-                shareCount: 15,
-                likeCount: 15
-            }
-        ];
-
-        // Load stories from localStorage and combine with default stories
-        const savedStories = JSON.parse(localStorage.getItem('successStories') || '[]');
-        // Combine saved stories (newest first) with default stories, removing duplicates
-        const allStories = [...savedStories, ...defaultStories.filter(defaultStory =>
-            !savedStories.some(savedStory => savedStory.id === defaultStory.id)
-        )];
-
-        setStories(allStories);
-
-        // Load stats from localStorage, if no saved stats exist, calculate them
-        const savedStats = loadStatsFromStorage();
-        if (!savedStats && allStories.length > 0) {
-            // Calculate initial stats directly without using updateStats
-            const totalStories = allStories.length;
-            const totalLikes = allStories.reduce((sum, story) => sum + (story.likeCount || story.shareCount), 0);
-            const thisWeek = allStories.filter(story => {
-                const storyDate = new Date(story.date);
-                const weekAgo = new Date();
-                weekAgo.setDate(weekAgo.getDate() - 7);
-                return storyDate >= weekAgo;
-            }).length;
-
-            const initialStats = {
-                totalStories,
-                totalLikes,
-                thisWeek
-            };
-
-            setStats(initialStats);
-
-            // Save initial stats to localStorage
-            try {
-                localStorage.setItem('successStoriesStats', JSON.stringify(initialStats));
-            } catch (error) {
-                console.error('Error saving initial stats to localStorage:', error);
-            }
-        } else if (savedStats) {
-            // If we have saved stats, make sure they're up to date with current stories
-            const currentTotalStories = allStories.length;
-            const currentThisWeek = allStories.filter(story => {
-                const storyDate = new Date(story.date);
-                const weekAgo = new Date();
-                weekAgo.setDate(weekAgo.getDate() - 7);
-                return storyDate >= weekAgo;
-            }).length;
-
-            // Update stats if they don't match current story count
-            if (savedStats.totalStories !== currentTotalStories || savedStats.thisWeek !== currentThisWeek) {
-                const updatedStats = {
-                    ...savedStats,
-                    totalStories: currentTotalStories,
-                    thisWeek: currentThisWeek
-                };
-
-                setStats(updatedStats);
-                localStorage.setItem('successStoriesStats', JSON.stringify(updatedStats));
-            }
-        }
-    }, [loadStatsFromStorage]);
+    const {
+        stories,
+        stats,
+        loading,
+        error,
+        toggleLike,
+        trackShare
+    } = useSuccessStories();
 
     return (
         <div className="success-stories">
@@ -169,27 +39,41 @@ const SuccessStory = () => {
                 Share Your Success Story
             </Link>
 
+            {loading && (
+                <div className="loading-message">
+                    <p>Loading success stories...</p>
+                </div>
+            )}
+
+            {error && (
+                <div className="error-message">
+                    <p>Error: {error}</p>
+                </div>
+            )}
+
             <div className="stories-list">
                 {stories.map(story => (
                     <StoryCard
-                        key={story.id}
+                        key={story._id || story.id}
                         title={story.title}
                         author={story.author}
-                        date={story.date}
+                        date={story.createdAt}
                         content={story.description}
-                        shareCount={story.likeCount || story.shareCount}
+                        shareCount={story.shareCount || 0}
+                        likeCount={story.likeCount || 0}
                         category={story.category}
-                        storyId={story.id}
-                        onLikeChange={(storyId, newLikeCount, isLiked) => {
-                            setStories(prevStories =>
-                                prevStories.map(story =>
-                                    story.id === storyId
-                                        ? { ...story, likeCount: newLikeCount }
-                                        : story
-                                )
-                            );
-                            // Update stats when individual story likes change
-                            updateStatsFromLikeChange(storyId, isLiked);
+                        storyId={story._id || story.id}
+                        onLikeChange={(storyId, hasLikedBefore) => {
+                            // Fire and forget - don't await
+                            return toggleLike(storyId, hasLikedBefore).catch(error => {
+                                console.error('Error toggling like:', error);
+                            });
+                        }}
+                        onShare={(storyId, option) => {
+                            // Fire and forget - don't await
+                            return trackShare(storyId).catch(error => {
+                                console.error('Error tracking share:', error);
+                            });
                         }}
                     />
                 ))}

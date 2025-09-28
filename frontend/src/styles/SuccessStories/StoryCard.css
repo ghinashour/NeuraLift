@@ -192,9 +192,11 @@
     transition-delay: 0.3s;
 }
 
+/* Ensure the like button stays red when liked */
 .ui-like input:checked+.like svg {
-    fill: var(--icon-primary-color);
-    stroke: var(--icon-primary-color);
+    fill: var(--icon-primary-color) !important;
+    stroke: var(--icon-primary-color) !important;
+    color: var(--icon-primary-color) !important;
 }
 
 .ui-like input:checked+.like::before {

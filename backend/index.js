@@ -11,6 +11,7 @@ const tensizesRoutes = require("./routes/tenziesRoutes");
 require("dotenv").config();
 
 const authRoutes = require("./routes/authRoute");
+const successStoryRoutes = require("./routes/successStories");
 
 const app = express();
 
@@ -32,6 +33,7 @@ app.use("/api/questions", questionRoutes);
 app.use("/api/devquestions", devQuestionRoutes);
 app.use('/api/assembly-game', assemblyGameRoutes);
 app.use("/api/tenzies", tensizesRoutes);
+app.use("/api/success-stories", successStoryRoutes);
 //server uploaded files
 app.use('/uploads', express.static('uploads'));
 

@@ -1,33 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import '../styles/SuccessStories.css';
 import quoteIcon from '../assets/quote.png';
+import useSuccessStories from '../hooks/useSuccessStories';
 
 const SuccessStories = () => {
-  const [landingPageStories, setLandingPageStories] = useState([]);
-
-  useEffect(() => {
-    // Load stories that were shared to the landing page
-    const loadStories = () => {
-      const savedLandingStories = JSON.parse(localStorage.getItem('landingPageStories') || '[]');
-      setLandingPageStories(savedLandingStories);
-    };
-
-    // Load stories on component mount
-    loadStories();
-
-    // Listen for custom event when stories are updated
-    const handleStoriesUpdate = (event) => {
-      console.log('Landing page stories updated:', event.detail);
-      setLandingPageStories(event.detail.stories);
-    };
-
-    window.addEventListener('landingPageStoriesUpdated', handleStoriesUpdate);
-
-    // Cleanup event listener on component unmount
-    return () => {
-      window.removeEventListener('landingPageStoriesUpdated', handleStoriesUpdate);
-    };
-  }, []);
+  const { featuredStories, loading, error } = useSuccessStories();
 
   return (
     <section id='SuccessStories'>
@@ -40,9 +17,9 @@ const SuccessStories = () => {
         <div className="divider"></div>
 
         <div className="stories-grid">
-          {/* Stories shared from Success Stories page */}
-          {landingPageStories.slice(0, 3).map((story) => (
-            <div key={story.id} className="story-card shared-story">
+          {/* Featured stories from database */}
+          {featuredStories.slice(0, 3).map((story) => (
+            <div key={story._id || story.id} className="story-card shared-story">
               <div className="quote-icon">
                 <img src={quoteIcon} alt="Quote icon" />
               </div>
@@ -52,12 +29,29 @@ const SuccessStories = () => {
               </div>
               <div className="divider-small"></div>
               <div className="user-info">
-                <div className="user-stats">{story.achievement}</div>
+                <div className="user-stats">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none">
+                    <path d="M12 2L13.09 8.26L20 9L13.09 9.74L12 16L10.91 9.74L4 9L10.91 8.26L12 2Z" fill="white" />
+                  </svg>
+                  {story.category}
+                </div>
                 <h3>{story.author}</h3>
-                <p className="user-title">{story.category}</p>
+                <p className="user-title">Community Member</p>
               </div>
             </div>
           ))}
+
+          {loading && (
+            <div className="loading-message">
+              <p>Loading featured stories...</p>
+            </div>
+          )}
+
+          {error && (
+            <div className="error-message">
+              <p>Error loading stories: {error}</p>
+            </div>
+          )}
 
           {/* Jessica M. */}
           <div className="story-card">

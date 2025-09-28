@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
+import { successStoriesAPI } from '../../api/successStories';
 import '../../styles/SuccessStories/ShareButton.css';
 
 const ShareButton = ({ storyId, shareCount, onShare }) => {
@@ -58,13 +59,24 @@ const ShareButton = ({ storyId, shareCount, onShare }) => {
         return platformNames[platform] || 'Platform';
     };
 
-    const handleShareOption = (option) => {
+    const handleShareOption = async (option) => {
         console.log('Share option clicked:', option); // Debug log
         setIsShared(true);
         setSharedPlatform(option);
 
         const storyUrl = `${window.location.origin}/success-stories#story-${storyId}`;
         const shareText = `Check out this inspiring success story!`;
+
+        // Track the share in the backend (except for copy and landing, which don't open external links)
+        if (option !== 'copy' && option !== 'landing') {
+            try {
+                await successStoriesAPI.trackShare(storyId);
+                console.log('Share tracked successfully');
+            } catch (error) {
+                console.error('Error tracking share:', error);
+                // Don't prevent sharing if tracking fails
+            }
+        }
 
         // Handle different share options
         switch (option) {

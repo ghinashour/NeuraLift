@@ -37,7 +37,13 @@ const MedicineHealth = () => {
   };
   return (
     <div id="Medicinecontainer">
-      <div style={{ display: "flex", justifyContent: "center" }}>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          height: "50px",
+        }}
+      >
         <svg
           style={{ marginTop: "11px", marginRight: "10px" }}
           width="40"
@@ -246,14 +252,20 @@ const MedicineHealth = () => {
         <div className="mainmed-container">
           {medicines.map((medicine) => (
             <div key={medicine.id} className="medicine-card">
-              <div className="medicine-icon">💊</div>
               <div className="medicine-details">
-                <h3>{medicine.name}</h3>
-                <p>Capsule: {medicine.capsule || "N/A"}</p>
-                <div className="time-detail">
-                  <span className="time">⏰ {medicine.time}</span>
-                  <span className="repeat">Every {medicine.repeat}</span>
+                <div
+                  style={{ display: "flex", justifyContent: "space-between" }}
+                >
+                  <div>
+                    <h3>{medicine.name}</h3>
+                    <p>Capsule: {medicine.capsule || "N/A"}</p>
+                  </div>
+                  <div className="time-detail">
+                    <span className="time"> {medicine.time}</span>
+                    <span className="repeat">Every {medicine.repeat}</span>
+                  </div>
                 </div>
+                <button id="take">Take Now</button>
               </div>
             </div>
           ))}
