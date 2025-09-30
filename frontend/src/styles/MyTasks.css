@@ -1,0 +1,12 @@
+/* src/styles/MyTasks.css */
+.mytasks-page { min-height:100vh; padding:40px; background:linear-gradient(180deg,#F6F7F8,#EAECF0); font-family:Inter, sans-serif; }
+.mytasks-header { text-align:center; margin-bottom:22px; }
+.mytasks-header h1 { font-size:28px; margin:0; }
+.mytasks-header p { margin-top:8px; color:#6b7280; }
+.mytasks-main { max-width:1000px; margin:0 auto; }
+.task-notification { display:flex; gap:12px; align-items:center; background:#fff; padding:12px; border-radius:10px; box-shadow:0 6px 18px rgba(2,6,23,0.06); margin-bottom:12px; }
+.task-notification .avatar.small { width:48px; height:48px; border-radius:8px; }
+.notif-content { flex:1; }
+.notif-title { font-weight:700; }
+.notif-desc { color:#6b7280; margin-top:6px; }
+.notif-meta { color:#6b7280; font-size:12px; }

@@ -1,0 +1,25 @@
+.quote-section {
+  background: #f9fafb;
+  border-radius: 12px;
+  padding: 1.5rem;
+  text-align: center;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+}
+
+.quote-section__text {
+  font-size: 0.95rem;
+  color: #374151;
+  margin-bottom: 1rem;
+  line-height: 1.5;
+}
+
+.quote-section__author {
+  font-size: 0.85rem;
+  margin-top: 0.5rem;
+  color: #6b7280;
+  font-style: italic;
+}
+
+.quote-section__refresh {
+  margin-top: 1rem;
+}

@@ -1,55 +1,68 @@
-// src/App.js
-import React from 'react';
-import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
+import React from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import "./App.css";
 
-import './App.css';
-import Navbar from './components/Navbar';
-import Footer from './components/Footer';
-import SuccessStories from './sections/SuccessStories';
+// Context
+import { TaskProvider } from "./context/TaskContext";
+
+// Components
+import Navbar from "./components/Navbar";
+import Footer from "./components/Footer";
+
+// Sections
+import Home from "./sections/Home";
 import Features from "./sections/features";
-import Contact from './sections/Contact';
-import AboutSection from './sections/AboutSection';
-import Home from './sections/Home';
-import Dashboard from './pages/Dashboard'; // Dashboard page
+import AboutSection from "./sections/AboutSection";
+import SuccessStories from "./sections/SuccessStories";
+import Contact from "./sections/Contact";
 
-// AppWrapper is rendered inside the Router, so useLocation() works here.
-function AppWrapper() {
-  const location = useLocation();
+// Layout
+import Layout from "./layouts/Layout";
 
-  // Hide nav/footer for /dashboard and any nested routes like /dashboard/*:
-  const hideNavFooter = location.pathname.startsWith("/dashboard");
-
-  return (
-    <div className="App">
-      {/* Show Navbar unless we are on dashboard (or a dashboard sub-route) */}
-      {!hideNavFooter && <Navbar />}
-
-      <Routes>
-        {/* Main sections (landing page composed of multiple sections) */}
-        <Route path="/" element={
-          <>
-            <Home />
-            <Features />
-            <AboutSection />
-            <SuccessStories />
-            <Contact />
-          </>
-        } />
-
-        {/* Dashboard page (and any nested dashboard routes if you add them) */}
-        <Route path="/dashboard/*" element={<Dashboard />} />
-      </Routes>
-
-      {/* Show Footer unless we are on dashboard (or a dashboard sub-route) */}
-      {!hideNavFooter && <Footer />}
-    </div>
-  );
-}
+// Pages
+import TaskManagerPage from "./pages/TaskManager/TaskManager";
+import StressRelief from "./pages/StressReliefSpace/StressReliefSpace";
+import FocusTimer from "./pages/FocusTimer/FocusTimer";
+import Collaborate from "./pages/Collaborate";
+import MyTasks from "./pages/MyTasks";
+import TaskDetails from "./pages/TaskDetails";
+import Dashboard from "./pages/Dashboard";
 
 function App() {
   return (
     <Router>
-      <AppWrapper />
+      <TaskProvider>
+        <Routes>
+          {/* Landing Page (with Navbar + Footer inline) */}
+          <Route
+            path="/"
+            element={
+              <>
+                <Navbar />
+                <Home />
+                <Features />
+                <AboutSection />
+                <SuccessStories />
+                <Contact />
+                <Footer />
+              </>
+            }
+          />
+
+          {/* Dashboard → full screen (no Navbar + Footer) */}
+          <Route path="dashboard" element={<Dashboard />} />
+
+          {/* Other pages → wrapped in Layout (with Navbar + Footer) */}
+          <Route element={<Layout />}>
+            <Route path="taskmanager" element={<TaskManagerPage />} />
+            <Route path="stressrelief" element={<StressRelief />} />
+            <Route path="focustimer" element={<FocusTimer />} />
+            <Route path="collaborate" element={<Collaborate />} />
+            <Route path="mytasks" element={<MyTasks />} />
+            <Route path="task/:id" element={<TaskDetails />} />
+          </Route>
+        </Routes>
+      </TaskProvider>
     </Router>
   );
 }
