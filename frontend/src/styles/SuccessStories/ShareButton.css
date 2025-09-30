@@ -1,0 +1,220 @@
+.share-container {
+    position: relative;
+    display: inline-block;
+}
+
+.share-btn {
+    background: none;
+    border: none;
+    color: #6B7280;
+    font-size: 14px;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+    padding: 8px 12px;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.share-btn:active {
+    transform: scale(0.95);
+}
+
+.share-btn:hover:not(:disabled) {
+    background-color: #F9FAFB;
+    color: #374151;
+}
+
+.share-btn:disabled {
+    cursor: not-allowed;
+    opacity: 0.7;
+}
+
+.share-btn.shared {
+    background-color: #ECFDF5;
+    color: #059669;
+    border: 1px solid #A7F3D0;
+    box-shadow: 0 2px 4px rgba(16, 185, 129, 0.2);
+}
+
+.share-btn.shared:hover {
+    background-color: #D1FAE5;
+}
+
+.share-btn.shared svg {
+    color: #059669;
+}
+
+/* Story darkening effect when modal is open - only affects the specific story card */
+.story-card.share-modal-open {
+    opacity: 0.6;
+    filter: brightness(0.8);
+    transition: all 0.3s ease;
+}
+
+/* Modal Popup Styling */
+.share-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    animation: fadeIn 0.2s ease-out;
+    backdrop-filter: blur(4px);
+}
+
+.share-modal {
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    max-width: 500px;
+    width: 90%;
+    max-height: 80vh;
+    overflow: hidden;
+    animation: slideUp 0.3s ease-out;
+    position: relative;
+    z-index: 10000;
+    margin: 20px;
+}
+
+.share-modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 24px 24px 16px 24px;
+    border-bottom: 1px solid #E5E7EB;
+}
+
+.share-modal-header h3 {
+    margin: 0;
+    font-size: 20px;
+    font-weight: 600;
+    color: #1F2937;
+}
+
+.close-btn {
+    background: none;
+    border: none;
+    color: #6B7280;
+    cursor: pointer;
+    padding: 8px;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.close-btn:hover {
+    background-color: #F3F4F6;
+    color: #374151;
+}
+
+.share-modal-content {
+    padding: 24px;
+}
+
+.share-description {
+    margin: 0 0 24px 0;
+    color: #6B7280;
+    font-size: 16px;
+    line-height: 1.5;
+}
+
+.share-options-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 12px;
+}
+
+.share-option-card {
+    background: white;
+    border: 1px solid #E5E7EB;
+    border-radius: 12px;
+    padding: 16px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    transition: all 0.2s ease;
+    text-align: left;
+}
+
+.share-option-card:hover {
+    background-color: #F9FAFB;
+    border-color: #D1D5DB;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.option-icon {
+    font-size: 24px;
+    width: 32px;
+    text-align: center;
+    flex-shrink: 0;
+}
+
+.option-label {
+    font-weight: 500;
+    color: #374151;
+    font-size: 14px;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px) scale(0.95);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+    .share-modal {
+        width: 95%;
+        margin: 20px;
+    }
+
+    .share-options-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .share-modal-header {
+        padding: 20px 20px 16px 20px;
+    }
+
+    .share-modal-content {
+        padding: 20px;
+    }
+
+    .share-modal-header h3 {
+        font-size: 18px;
+    }
+
+    .share-description {
+        font-size: 14px;
+    }
+}

@@ -30,8 +30,8 @@ const ProgressSummary = ({ completedCount, remainingCount, totalCount, onProgres
 
     return (
         <div className="progress-summary">
-            <div className="progress-item" onClick={onProgressClick}>
-                <button className="progress-icon completed" aria-label="View detailed progress">
+            <div className="progress-item" >
+                <button className="progress-icon completed" >
                     <CompletedIcon />
                 </button>
                 <div className="progress-details">
@@ -40,8 +40,8 @@ const ProgressSummary = ({ completedCount, remainingCount, totalCount, onProgres
                 </div>
             </div>
 
-            <div className="progress-item" onClick={onProgressClick}>
-                <button className="progress-icon remaining" aria-label="View detailed progress">
+            <div className="progress-item" >
+                <button className="progress-icon remaining">
                     <RemainingIcon />
                 </button>
                 <div className="progress-details">
@@ -50,7 +50,7 @@ const ProgressSummary = ({ completedCount, remainingCount, totalCount, onProgres
                 </div>
             </div>
 
-            <div className="progress-item" onClick={onProgressClick}>
+            <div className="progress-item percentage" onClick={onProgressClick}>
                 <button className="progress-icon percentage" aria-label="View detailed progress">
                     <ProgressIcon />
                 </button>

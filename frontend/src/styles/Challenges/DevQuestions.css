@@ -1,0 +1,106 @@
+/* Container */
+.dev-questions-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2rem;
+  background-color: #f9fafb;
+  min-height: 100vh;
+  font-family: 'Inter', sans-serif;
+}
+
+/* Card */
+.dev-question-card {
+  background-color: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+  padding: 2rem;
+  width: 100%;
+  max-width: 700px;
+  margin-bottom: 2rem;
+  transition: transform 0.2s ease-in-out;
+}
+
+.dev-question-card:hover {
+  transform: translateY(-3px);
+}
+
+/* Question Title */
+.dev-question-title {
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: #111827;
+  margin-bottom: 1rem;
+}
+
+/* Code Snippet */
+.dev-code-snippet {
+  background-color: #f3f4f6;
+  border-radius: 8px;
+  padding: 1rem;
+  font-family: 'Fira Code', monospace;
+  font-size: 0.9rem;
+  color: #1f2937;
+  margin-bottom: 1.5rem;
+  white-space: pre-wrap;
+  overflow-x: auto;
+}
+
+/* Choices container */
+.dev-choice {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  margin-bottom: 1rem;
+}
+
+/* Choice Label */
+.dev-choice-label {
+  display: flex;
+  align-items: center;
+  padding: 0.6rem 1rem;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.dev-choice-label:hover {
+  background-color: #f9fafb;
+}
+
+/* Radio input */
+.dev-choice-input {
+  margin-right: 0.6rem;
+  accent-color: #10b981; /* green */
+}
+
+/* Submit Button */
+.dev-btn {
+  background-color: #10b981;
+  color: white;
+  font-weight: 600;
+  padding: 0.6rem 1.2rem;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.dev-btn:disabled {
+  background-color: #9ca3af;
+  cursor: not-allowed;
+}
+
+.dev-btn:hover:not(:disabled) {
+  background-color: #059669;
+}
+
+/* Score text */
+.dev-score {
+  margin-top: 1rem;
+  font-size: 1rem;
+  color: #374151;
+  font-weight: 500;
+  text-align: right;
+}

@@ -8,18 +8,25 @@ const ProgressChart = ({ tasks, stats, isModal = false, onClose }) => {
         const thisWeek = new Date(today.getTime() - 7 * 24 * 60 * 60 * 1000);
         const thisMonth = new Date(today.getFullYear(), today.getMonth(), 1);
 
+        // For completed tasks, use completion date; for pending tasks, use created date
         const todayTasks = tasks.filter(task => {
-            const taskDate = new Date(task.createdDate);
+            const taskDate = task.completed && task.completedDate
+                ? new Date(task.completedDate)
+                : new Date(task.createdDate);
             return taskDate.toDateString() === today.toDateString();
         });
 
         const weekTasks = tasks.filter(task => {
-            const taskDate = new Date(task.createdDate);
+            const taskDate = task.completed && task.completedDate
+                ? new Date(task.completedDate)
+                : new Date(task.createdDate);
             return taskDate >= thisWeek;
         });
 
         const monthTasks = tasks.filter(task => {
-            const taskDate = new Date(task.createdDate);
+            const taskDate = task.completed && task.completedDate
+                ? new Date(task.completedDate)
+                : new Date(task.createdDate);
             return taskDate >= thisMonth;
         });
 
