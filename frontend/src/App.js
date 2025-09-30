@@ -2,6 +2,33 @@ import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import "./App.css";
 
+<<<<<<< HEAD
+// Context
+import { TaskProvider } from "./context/TaskContext";
+
+// Components
+import Navbar from "./components/Navbar";
+import Footer from "./components/Footer";
+
+// Sections
+import Home from "./sections/Home";
+import Features from "./sections/features";
+import AboutSection from "./sections/AboutSection";
+import SuccessStories from "./sections/SuccessStories";
+import Contact from "./sections/Contact";
+
+// Layout
+import Layout from "./layouts/Layout";
+
+// Pages
+import TaskManagerPage from "./pages/TaskManager/TaskManager";
+import StressRelief from "./pages/StressReliefSpace/StressReliefSpace";
+import FocusTimer from "./pages/FocusTimer/FocusTimer";
+import Collaborate from "./pages/Collaborate";
+import MyTasks from "./pages/MyTasks";
+import TaskDetails from "./pages/TaskDetails";
+import Dashboard from "./pages/Dashboard";
+=======
 // Importing components and sections of the landing page
 import Footer from "./components/Footer";
 import SuccessStories from "./sections/SuccessStories";
@@ -37,11 +64,44 @@ import TenzisGame from "./pages/Challenges/TenzisGame";
 import DevQuestions from "./pages/Challenges/DevQuestions";
 import AssemblyGameComponent from './pages/Challenges/AssemblyGame';
 
+>>>>>>> 2d5ec3a7156e32e5c45dd53e48d84f5b53ff5970
 
 function App() {
   return (
     <Router>
       <TaskProvider>
+<<<<<<< HEAD
+        <Routes>
+          {/* Landing Page (with Navbar + Footer inline) */}
+          <Route
+            path="/"
+            element={
+              <>
+                <Navbar />
+                <Home />
+                <Features />
+                <AboutSection />
+                <SuccessStories />
+                <Contact />
+                <Footer />
+              </>
+            }
+          />
+
+          {/* Dashboard → full screen (no Navbar + Footer) */}
+          <Route path="dashboard" element={<Dashboard />} />
+
+          {/* Other pages → wrapped in Layout (with Navbar + Footer) */}
+          <Route element={<Layout />}>
+            <Route path="taskmanager" element={<TaskManagerPage />} />
+            <Route path="stressrelief" element={<StressRelief />} />
+            <Route path="focustimer" element={<FocusTimer />} />
+            <Route path="collaborate" element={<Collaborate />} />
+            <Route path="mytasks" element={<MyTasks />} />
+            <Route path="task/:id" element={<TaskDetails />} />
+          </Route>
+        </Routes>
+=======
         <MedicineProvider>
           <Routes>
             {/* Landing page */}
@@ -84,6 +144,7 @@ function App() {
             </Route>
           </Routes>
         </MedicineProvider>
+>>>>>>> 2d5ec3a7156e32e5c45dd53e48d84f5b53ff5970
       </TaskProvider>
     </Router>
   );
