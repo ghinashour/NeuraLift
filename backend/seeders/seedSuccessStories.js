@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const SuccessStory = require('./models/SuccessStory');
+const SuccessStory = require('../models/SuccessStory');
 require('dotenv').config();
 
 const successStories = [

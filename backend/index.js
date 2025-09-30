@@ -8,11 +8,12 @@ const questionRoutes = require("./routes/questions.js");
 const devQuestionRoutes = require("./routes/DevQuestionRoute.js");
 const assemblyGameRoutes = require('./routes/assemblyGame');
 const tensizesRoutes = require("./routes/tenziesRoutes");
-const eventRoutes = require("./routes/eventRoutes.js")
-require("dotenv").config();
-
-const authRoutes = require("./routes/authRoute");
+const eventRoutes = require("./routes/eventRoutes.js");
+const authRoutes = require('./routes/authRoute');
+const adminRoutes = require('./routes/adminRoutes.js');
 const successStoryRoutes = require("./routes/successStories");
+
+require("dotenv").config();
 
 const app = express();
 
@@ -28,7 +29,7 @@ app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 app.use("/api/auth", authRoutes);
 app.use("/api/profile", profileRoutes);
 app.use("/api/auth", verifyEmailRoute);
-
+app.use('/api/admin', adminRoutes);
 //fetching the challenges
 app.use("/api/questions", questionRoutes);
 app.use("/api/devquestions", devQuestionRoutes);

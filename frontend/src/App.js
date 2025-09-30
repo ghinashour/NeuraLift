@@ -10,11 +10,11 @@ import Contact from "./sections/Contact";
 import AboutSection from "./sections/AboutSection";
 import Navbar from "./components/Navbar";
 import Home from "./sections/Home";
-import MyStory from './pages/SuccessStories/MyStory';
-import SuccessStory from './pages/SuccessStories/SuccessStory';
 import Layout from "./layouts/Layout";
 
 // Importing pages
+import MyStory from './pages/SuccessStories/MyStory';
+import SuccessStory from './pages/SuccessStories/SuccessStory';
 import StressRelief from "./pages/StressReliefSpace/StressReliefSpace";
 import FocusTimer from "./pages/FocusTimer/FocusTimer";
 import MedicineHealth from "./components/MedicineHealth/Medicine";
@@ -22,6 +22,7 @@ import { MedicineProvider } from "./context/MedicineContext";
 import TaskManagerPage from "./pages/TaskManager/TaskManager";
 import { TaskProvider } from "./context/TaskContext";
 import Schedule from "./pages/SchedulePage/SchedulePage";
+import MoodTracker from "./pages/MoodTracker/MoodTracker"
 
 // Authentication pages
 import Login from "./pages/Auth/Login";
@@ -70,6 +71,7 @@ function App() {
               <Route path="medicineHealth" element={<MedicineHealth />} />
               <Route path="/Schedule" element={<Schedule />} />
               <Route path="/profile" element={<Profile />} />
+              <Route path="/moodTracker" element={<MoodTracker/>} />
               <Route path="/success-stories" element={<SuccessStory />} />
               <Route path="/success-stories/my-story" element={<MyStory />} />
               {/*challenges page route and it's sub pages*/}

@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const { ProgrammingLanguage } = require("./models/AssemblyGame");
+const { ProgrammingLanguage } = require("../models/AssemblyGame");
 
 const programmingLanguages = [
   {

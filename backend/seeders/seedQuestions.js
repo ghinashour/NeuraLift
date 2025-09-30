@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const Question = require("./models/Question");
+const Question = require("../models/Question");
 
 const trueFalseQuestions = [
   { question: "JavaScript is a statically typed language.", answer: false },

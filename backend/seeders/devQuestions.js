@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const DevQuestion = require("./models/DevQuestion");
+const DevQuestion = require("../models/DevQuestion");
 
 const devQuestions = [
   {
