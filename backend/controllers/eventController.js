@@ -1,7 +1,7 @@
 const Event = require('../models/Event');
 
 // Create a new event
-exports.createEvent = async (req, res) => {
+ const createEvent = async (req, res) => {
     try {
         const { name, description, color, startDate, endDate } = req.body;
         //checking if all fields are present
@@ -24,7 +24,15 @@ exports.createEvent = async (req, res) => {
     }
 };
 
-
+//get all the events of the user
+const getEvents = async(req,res)=>{
+  try {
+    const events = await Event.find({ user: req.user._id });
+    res.json(events);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+}
 //get a specific user's events by the id 
 const getEventById = async (req, res) => {
   try {
@@ -66,6 +74,7 @@ const deleteEvent = async (req, res) => {
 
 module.exports = {
     createEvent,
+    getEvents,
     getEventById,
     updateEvent,
     deleteEvent

@@ -14,4 +14,11 @@ API.interceptors.request.use((req) => {
   return req;
 });
 
+// ------- Event APIs -------
+export const createEvent = (eventData) => API.post("/events", eventData);
+export const getEvents = () => API.get("/events");
+export const updateEvent = (id, eventData) => API.put(`/events/${id}`, eventData);
+export const deleteEvent = (id) => API.delete(`/events/${id}`);
+
+
 export default API;
