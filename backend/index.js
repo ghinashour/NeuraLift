@@ -10,7 +10,7 @@ const assemblyGameRoutes = require('./routes/assemblyGame');
 const tensizesRoutes = require("./routes/tenziesRoutes");
 const eventRoutes = require("./routes/eventRoutes.js");
 const authRoutes = require('./routes/authRoute');
-const adminRoutes = require('./routes/adminRoutes.js');
+const adminRoutes = require('./routes/admin.js');
 const successStoryRoutes = require("./routes/successStories");
 
 require("dotenv").config();
@@ -29,7 +29,6 @@ app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 app.use("/api/auth", authRoutes);
 app.use("/api/profile", profileRoutes);
 app.use("/api/auth", verifyEmailRoute);
-app.use('/api/admin', adminRoutes);
 //fetching the challenges
 app.use("/api/questions", questionRoutes);
 app.use("/api/devquestions", devQuestionRoutes);
@@ -38,6 +37,8 @@ app.use("/api/tenzies", tensizesRoutes);
 app.use("/api/success-stories", successStoryRoutes);
 app.use("/api/events", eventRoutes);
 
+//protected admin routes
+app.use("/api/admin", adminRoutes)
 //server uploaded files
 app.use('/uploads', express.static('uploads'));
 

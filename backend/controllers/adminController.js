@@ -15,15 +15,7 @@ exports.getDashboard = async (req, res) => {
   }
 };
 
-// Manage users
-exports.getUsers = async (req, res) => {
-  try {
-    const users = await User.find().select('-password');
-    res.json(users);
-  } catch (err) {
-    res.status(500).json({ message: err.message });
-  }
-};
+
 
 // Get challenges
 /*exports.getChallenges = async (req, res) => {

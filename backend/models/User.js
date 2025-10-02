@@ -31,6 +31,16 @@ const userSchema = new mongoose.Schema({
   },
   verificationToken:{
     type: String,
+  },
+  isSuspended:{
+    type: Boolean, 
+    default: false
+  },
+  lastLogin:{
+    type: Date
+  },
+  metadata:{
+    type: mongoose.Schema.Types.Mixed
   }
 }, { timestamps: true });
 

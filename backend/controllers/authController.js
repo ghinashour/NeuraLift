@@ -32,6 +32,7 @@ exports.signup = async (req, res) => {
       password: hashedPassword,
       isVerified: false, 
       verificationToken,
+      isSuspended: false
     });
 
     await newUser.save();
