@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate, Link } from "react-router-dom";
-import "../../styles/Auth.css"; // new CSS file for auth pages
+import "../../styles/Auth.css";
 
 function Signup() {
   const [form, setForm] = useState({ username: "", email: "", password: "" });
@@ -13,14 +13,16 @@ function Signup() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError(null);
+
     if (form.password.length < 6) {
       setError("Password must be at least 6 characters");
       return;
     }
+
     try {
-      await axios.post("http://localhost:4000/api/auth/signup", form);
-      alert("Signup successful! Please verify your email.");
-      navigate("/login");
+      const res = await axios.post("http://localhost:4000/api/auth/signup", form);
+      alert(res.data.msg);
+      navigate("/login"); // redirect after signup
     } catch (err) {
       setError(err.response?.data?.msg || "Signup failed");
     }

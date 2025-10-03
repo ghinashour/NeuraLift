@@ -1,18 +1,18 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import "./App.css";
-//import the sections of the app
-import Home from "./sections/Home"
-import Navbar from "./components/Navbar"
-import Features from "./sections/features"
-import AboutSection from "./sections/AboutSection"
-import SuccessStories from "./sections/SuccessStories"
-import Contact from "./sections/Contact"
-import Footer from  "./components/Footer"
-import Layout from "./layouts/Layout"
 
+// Sections
+import Home from "./sections/Home";
+import Navbar from "./components/Navbar";
+import Features from "./sections/features";
+import AboutSection from "./sections/AboutSection";
+import SuccessStories from "./sections/SuccessStories";
+import Contact from "./sections/Contact";
+import Footer from "./components/Footer";
+import Layout from "./layouts/Layout";
 
-// Importing pages
+// Pages
 import MyStory from './pages/SuccessStories/MyStory';
 import SuccessStory from './pages/SuccessStories/SuccessStory';
 import StressRelief from "./pages/StressReliefSpace/StressReliefSpace";
@@ -28,47 +28,54 @@ import MyTasks from "./pages/MyTasks";
 import TaskDetails from "./pages/TaskDetails";
 import Dashboard from "./pages/Dashboard";
 
-// Authentication pages
+// Auth pages
 import Login from "./pages/Auth/Login";
 import Signup from "./pages/Auth/Signup";
 import Profile from "./pages/Auth/Profile";
 import VerifyEmail from "./pages/Auth/VerifyEmail";
 
-// Challenges and Games pages
+// Challenges
 import Challenges from "./pages/Challenges/Challenges";
 import TrueFalse from "./pages/Challenges/TrueFalse";
 import TenzisGame from "./pages/Challenges/TenzisGame";
 import DevQuestions from "./pages/Challenges/DevQuestions";
 import AssemblyGameComponent from './pages/Challenges/AssemblyGame';
 
+// Admin
+import DashboardAdmin from "./pages/admin/DashboardAdmin";
+import UsersAdmin from "./pages/admin/Users";
+import AdminLayout from "./layouts/AdminLayout";
+import AdminRoute from "./components/admin/AdminRoute";
 
 function App() {
   return (
     <Router>
       <TaskProvider>
         <MedicineProvider>
-        <Routes>
-          {/* Landing Page (with Navbar + Footer inline) */}
-          <Route
-            path="/"
-            element={
-              <>
-                <Navbar />
-                <Home />
-                <Features />
-                <AboutSection />
-                <SuccessStories />
-                <Contact />
-                <Footer />
-              </>
-            }
-          />
-              <Route path="/login" element={<Login />} />
-              <Route path="/signup" element={<Signup />} />
-               <Route path="/verify/:token" element={<VerifyEmail />} />
+          <Routes>
+            {/* Landing page */}
+            <Route
+              path="/"
+              element={
+                <>
+                  <Navbar />
+                  <Home />
+                  <Features />
+                  <AboutSection />
+                  <SuccessStories />
+                  <Contact />
+                  <Footer />
+                </>
+              }
+            />
 
-            {/* Other pages inside Layout */}
-              <Route element={<Layout />}>
+            {/* Auth */}
+            <Route path="/login" element={<Login />} />
+            <Route path="/signup" element={<Signup />} />
+            <Route path="/verify" element={<VerifyEmail />} />
+
+            {/* Main pages inside Layout */}
+            <Route element={<Layout />}>
               <Route path="dashboard" element={<Dashboard />} />
               <Route path="collaborate" element={<Collaborate />} />
               <Route path="mytasks" element={<MyTasks />} />
@@ -77,18 +84,31 @@ function App() {
               <Route path="stressRelief" element={<StressRelief />} />
               <Route path="focustimer" element={<FocusTimer />} />
               <Route path="medicineHealth" element={<MedicineHealth />} />
-              <Route path="/Schedule" element={<Schedule />} />
-              <Route path="/profile" element={<Profile />} />
-              <Route path="/moodTracker" element={<MoodTracker/>} />
-              <Route path="/success-stories" element={<SuccessStory />} />
-              <Route path="/success-stories/my-story" element={<MyStory />} />
-              {/*challenges page route and it's sub pages*/}
-               <Route path="/challenges" element={<Challenges />} />
-               <Route path="/challenges/true-false" element={<TrueFalse />} />
-               <Route path="/challenges/tenzis-game" element={<TenzisGame />} />
-               <Route path="/challenges/dev-questions" element={<DevQuestions />} />
-               <Route path="/challenges/assembly-game" element={<AssemblyGameComponent />} />
+              <Route path="Schedule" element={<Schedule />} />
+              <Route path="profile" element={<Profile />} />
+              <Route path="moodTracker" element={<MoodTracker />} />
+              <Route path="success-stories" element={<SuccessStory />} />
+              <Route path="success-stories/my-story" element={<MyStory />} />
 
+              {/* Challenges */}
+              <Route path="challenges" element={<Challenges />} />
+              <Route path="challenges/true-false" element={<TrueFalse />} />
+              <Route path="challenges/tenzis-game" element={<TenzisGame />} />
+              <Route path="challenges/dev-questions" element={<DevQuestions />} />
+              <Route path="challenges/assembly-game" element={<AssemblyGameComponent />} />
+
+              {/* Admin */}
+              <Route
+                path="/admin"
+                element={
+                  <AdminRoute>
+                    <AdminLayout />
+                  </AdminRoute>
+                }
+              >
+                <Route path="dashboard" element={<DashboardAdmin />} />
+                <Route path="users" element={<UsersAdmin />} />
+              </Route>
             </Route>
           </Routes>
         </MedicineProvider>

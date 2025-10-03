@@ -1,28 +1,35 @@
 import { useEffect, useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
-import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
-function VerifyEmail() {
-  const { token } = useParams();
+export default function VerifyEmail() {
+  const [status, setStatus] = useState("Verifying...");
   const navigate = useNavigate();
-  const [message, setMessage] = useState("Verifying your email...");
 
   useEffect(() => {
-    // Call backend to verify the token
-    axios.get(`http://localhost:4000/api/auth/verify/${token}`)
-      .then(res => {
-        //responce that shows to user after verification
-        setMessage("✅ Email verified successfully! Redirecting to login...");
-        setTimeout(() => {
-          navigate("/login"); // redirect after 3 seconds
-        }, 3000);
+    const params = new URLSearchParams(window.location.search);
+    const token = params.get("token");
+
+    if (!token) {
+      setStatus("Invalid verification link.");
+      return;
+    }
+
+    fetch("http://localhost:4000/api/auth/verify", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ token }),
+    })
+      .then((res) => res.text())
+      .then((msg) => {
+        setStatus(msg);
+        setTimeout(() => navigate("/login"), 3000);
       })
-      .catch(() => {
-        setMessage("❌ Invalid or expired verification link.");
-      });
-  }, [token, navigate]);
+      .catch(() => setStatus("Verification failed. Try again."));
+  }, [navigate]);
 
-  return <h2>{message}</h2>;
+  return (
+    <div style={{ textAlign: "center", marginTop: "50px" }}>
+      <h2>{status}</h2>
+    </div>
+  );
 }
-
-export default VerifyEmail;

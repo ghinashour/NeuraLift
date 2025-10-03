@@ -36,19 +36,9 @@ exports.signup = async (req, res) => {
     });
 
     await newUser.save();
-
-    // Verification link for frontend
-    const verifyURL = `http://localhost:3000/verify/${verificationToken}`;
-
-    console.log("Sending email to:", newUser.email);
-    console.log("Verify URL:", verifyURL);
-
-    // Send email with Ethereal
+// Frontend verification link
+    const verifyURL = `http://localhost:3000/verify?token=${verificationToken}`; 
     await sendVerificationEmail(newUser.email, verifyURL);
-
-    res.status(201).json({
-      msg: "Signup successful. Check your email to verify your account.",
-    });
   } catch (err) {
     console.error("Signup error:", err);
     res.status(500).json({ msg: "Server error" });
@@ -111,11 +101,13 @@ exports.loginAdmin = async (req, res) => {
   }
 };
 
-// Verify Email controller
+// Verify Email controller (frontend)
 exports.verifyEmail = async (req, res) => {
   try {
-    //try to find if the user already exists with the token
-    const user = await User.findOne({ verificationToken: req.params.token });
+    const { token } = req.body;
+    if (!token) return res.status(400).send("Invalid verification request.");
+
+    const user = await User.findOne({ verificationToken: token });
     if (!user) {
       return res.status(400).send("Invalid or expired verification link.");
     }
@@ -130,4 +122,5 @@ exports.verifyEmail = async (req, res) => {
     res.status(500).send("Server error");
   }
 };
+
 //logout controller left to be done
