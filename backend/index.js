@@ -1,8 +1,8 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
-const profileRoutes = require("./routes/profile.js");
 const path = require("path");
+const profileRoutes = require("./routes/profile.js");
 const verifyEmailRoute = require("./routes/verifyEmail.js");
 const questionRoutes = require("./routes/questions.js");
 const devQuestionRoutes = require("./routes/DevQuestionRoute.js");
@@ -12,7 +12,9 @@ const eventRoutes = require("./routes/eventRoutes.js");
 const authRoutes = require('./routes/authRoute');
 const adminRoutes = require('./routes/admin.js');
 const successStoryRoutes = require("./routes/successStories");
-
+const quoteRoutes = require("./routes/quotes.js");
+const passport = require("passport");
+require("./config/passport");
 require("dotenv").config();
 
 const app = express();
@@ -36,12 +38,12 @@ app.use('/api/assembly-game', assemblyGameRoutes);
 app.use("/api/tenzies", tensizesRoutes);
 app.use("/api/success-stories", successStoryRoutes);
 app.use("/api/events", eventRoutes);
-
+app.use("/api/quotes", quoteRoutes);
 //protected admin routes
 app.use("/api/admin", adminRoutes)
 //server uploaded files
 app.use('/uploads', express.static('uploads'));
-
+app.use(passport.initialize());
 // Connect to MongoDB
 mongoose.connect(process.env.MONGO_URI)
   .then(() => console.log("MongoDB connected ✅"))

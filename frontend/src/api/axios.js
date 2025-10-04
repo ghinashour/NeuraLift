@@ -40,7 +40,10 @@ export const toggleFeatureStory = (id) => AdminAPI.put(`/success-stories/feature
 
 // Analytics
 export const getStoryAnalytics = () => AdminAPI.get("/success-stories/analytics/stats");
-
+//get the current user from our database
+export const getCurrentUser = () => API.get("/api/auth/me");
+// Fetch a random quote from backend
+export const getRandomQuote = () => API.get("/api/quotes/random");
 
 export default API;
 export {AdminAPI};

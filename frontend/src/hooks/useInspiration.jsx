@@ -1,37 +1,34 @@
-// ...existing code...
-import { useEffect, useState } from "react";
-import apiClient from "../utils/apiClient";
+// src/hooks/useInspiration.js
+import { useState, useEffect, useCallback } from "react";
+import { getRandomQuote } from "../api/axios"; // import the new API function
 
-export default function useInspiration(intervalTime = 30000) { // 30 seconds default
+export default function useInspiration(intervalTime = 60000) {
   const [quote, setQuote] = useState(null);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
 
-  const fetchQuote = async () => {
+  const fetchQuote = useCallback(async () => {
     setLoading(true);
     try {
-      // Call the default export's fetchQuote method (was imported incorrectly before)
-      const data = await apiClient.fetchQuote();
-      setQuote({ content: data.content, author: data.author });
-    } catch {
+      const res = await getRandomQuote();
+      // res.data contains { _id, text, author }
       setQuote({
-        content: "Keep going — small steps every day.",
-        author: "",
+        text: res.data.text || "Stay motivated!",
+        author: res.data.author || "Unknown",
       });
+    } catch (err) {
+      console.error("Failed to fetch quote:", err);
+      setQuote({ text: "Stay motivated!", author: "Unknown" });
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
+  // Fetch on mount + auto refresh
   useEffect(() => {
-    fetchQuote(); // Fetch immediately
-    
-    // Set up interval for periodic fetching
-    const interval = setInterval(fetchQuote, intervalTime);
-    
-    // Cleanup interval on unmount
-    return () => clearInterval(interval);
-  }, [intervalTime]); // Re-run if intervalTime changes
+    fetchQuote();
+    const intervalId = setInterval(fetchQuote, intervalTime);
+    return () => clearInterval(intervalId);
+  }, [fetchQuote, intervalTime]);
 
   return { quote, loading, fetchQuote };
 }
-// ...existing code...
