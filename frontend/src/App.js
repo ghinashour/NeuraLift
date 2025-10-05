@@ -47,13 +47,16 @@ import UsersAdmin from "./pages/admin/Users";
 import AdminLayout from "./layouts/AdminLayout";
 import AdminRoute from "./components/admin/AdminRoute";
 
+//private route functionality
+import PrivateRoute from "./components/privateRoute";
+
 function App() {
   return (
     <Router>
       <TaskProvider>
         <MedicineProvider>
           <Routes>
-            {/* Landing page */}
+            {/* Landing page(public) */}
             <Route
               path="/"
               element={
@@ -76,13 +79,13 @@ function App() {
 
             {/* Main pages inside Layout */}
             <Route element={<Layout />}>
-              <Route path="dashboard" element={<Dashboard />} />
-              <Route path="collaborate" element={<Collaborate />} />
-              <Route path="mytasks" element={<MyTasks />} />
-              <Route path="task/:id" element={<TaskDetails />} />
-              <Route path="taskManager" element={<TaskManagerPage />} />
-              <Route path="stressRelief" element={<StressRelief />} />
-              <Route path="focustimer" element={<FocusTimer />} />
+              <Route path="dashboard" element={  <PrivateRoute><Dashboard /></PrivateRoute>} />
+              <Route path="collaborate" element={<PrivateRoute><Collaborate /></PrivateRoute>} />
+              <Route path="mytasks" element={<PrivateRoute><MyTasks /></PrivateRoute>} />
+              <Route path="task/:id" element={<PrivateRoute><TaskDetails /></PrivateRoute>} />
+              <Route path="taskManager" element={<PrivateRoute><TaskManagerPage /></PrivateRoute>} />
+              <Route path="stressRelief" element={<PrivateRoute><StressRelief /></PrivateRoute>} />
+              <Route path="focustimer" element={<PrivateRoute><FocusTimer /></PrivateRoute>} />
               <Route path="medicineHealth" element={<MedicineHealth />} />
               <Route path="Schedule" element={<Schedule />} />
               <Route path="profile" element={<Profile />} />

@@ -61,7 +61,6 @@ exports.login = async (req, res) => {
   try {
     const user = await User.findOne({ email });
     if (!user) return res.status(400).json({ msg: "Invalid credentials" });
-
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) return res.status(400).json({ msg: "Invalid credentials" });
 
@@ -130,29 +129,43 @@ exports.loginAdmin = async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 };
-
 // Verify Email
 exports.verifyEmail = async (req, res) => {
   try {
     const { token } = req.body;
-    if (!token) return res.status(400).send("Invalid verification request.");
-
-    const user = await User.findOne({ verificationToken: token, verificationTokenExpiry: { $gt: Date.now() } });
-    if (!user) {
-      return res.status(400).send("Invalid or expired verification link.");
+    if (!token) {
+      return res.status(400).json({ message: "Invalid verification request." });
     }
 
-    user.isVerified = true;
-    user.verificationToken = null;
-    user.verificationTokenExpiry = null;
-    await user.save();
+    // Find user with matching token that hasn't expired
+    const user = await User.findOne({
+      verificationToken: token,
+      verificationTokenExpiry: { $gt: Date.now() }
+    });
 
-    res.send("Email verified successfully! You can now log in.");
+    if (!user) {
+      return res.status(400).json({ message: "Invalid or expired verification link." });
+    }
+
+    // Update user directly (avoids re-validating required fields like password)
+    await User.updateOne(
+      { _id: user._id },
+      {
+        $set: {
+          isVerified: true,
+          verificationToken: null,
+          verificationTokenExpiry: null
+        }
+      }
+    );
+
+    res.json({ message: "Email verified successfully! You can now log in." });
   } catch (err) {
     console.error("Verify error:", err);
-    res.status(500).send("Server error");
+    res.status(500).json({ message: "Server error" });
   }
 };
+
 
 // Forgot Password
 exports.forgotPassword = async (req, res) => {

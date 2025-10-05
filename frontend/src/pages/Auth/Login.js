@@ -1,17 +1,33 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate, Link, useLocation } from "react-router-dom";
 import "../../styles/Auth.css";
 
 function Login() {
   const [form, setForm] = useState({ email: "", password: "" });
   const [error, setError] = useState(null);
   const navigate = useNavigate();
+  const location = useLocation();
+
+  // Handle redirect after Google login
+  useEffect(() => {
+    const query = new URLSearchParams(location.search);
+    const token = query.get("token");
+    const user = query.get("user");
+
+    if (token && user) {
+      localStorage.setItem("token", token);
+      localStorage.setItem("user", user); // already stringified in backend redirect
+      alert("Google login successful ✅");
+      navigate("/dashboard");
+    }
+  }, [location, navigate]);
 
   // Update form values
-  const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
+  const handleChange = (e) =>
+    setForm({ ...form, [e.target.name]: e.target.value });
 
-  // Handle login
+  // Handle login with email/password
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError(null);
@@ -19,20 +35,21 @@ function Login() {
       const res = await axios.post("http://localhost:4000/api/auth/login", form);
 
       // Store JWT token
-      localStorage.setItem("token", res.data.token);
+      localStorage.setItem("token", res.data.accessToken);
 
-      // Optional: store user info
+      // Store user info
       localStorage.setItem("user", JSON.stringify(res.data.user));
 
-      // Notify user
       alert("Login successful ✅");
-
-      // Redirect to dashboard
       navigate("/dashboard");
     } catch (err) {
-      // Show backend error message if exists
-      setError(err.response?.data?.message || "Login failed");
+      setError(err.response?.data?.msg || "Login failed");
     }
+  };
+
+  // Google login redirect
+  const handleGoogleLogin = () => {
+    window.location.href = "http://localhost:4000/api/auth/google";
   };
 
   return (
@@ -57,11 +74,27 @@ function Login() {
             onChange={handleChange}
             required
           />
-          <button type="submit" className="btn-primary">Login</button>
+          <button type="submit" className="btn-primary">
+            Login
+          </button>
         </form>
         <p className="bottom-text">
           Don’t have an account? <Link to="/signup">Sign Up</Link>
         </p>
+        <button
+          onClick={handleGoogleLogin}
+          style={{
+            padding: "10px 20px",
+            backgroundColor: "#4285F4",
+            color: "#fff",
+            border: "none",
+            borderRadius: "5px",
+            cursor: "pointer",
+            marginTop: "10px",
+          }}
+        >
+          Continue with Google
+        </button>
       </div>
     </div>
   );
