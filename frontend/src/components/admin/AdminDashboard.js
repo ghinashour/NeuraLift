@@ -113,7 +113,7 @@ function Dashboard() {
             <h3>📊 Engagement Rate</h3>
             <div className="engagement-metric">
               <span className="metric-value">{stats?.engagementRate || 0}%</span>
-              <span className="metric-label">Daily Active Users / Total Users</span>
+              <span className="metric-label">Active Users / Total Users</span>
             </div>
           </div>
           
@@ -143,28 +143,36 @@ function Dashboard() {
           <div className="insight-card">
             <h3>😊 Mood Distribution</h3>
             <div className="mood-distribution">
-              {stats?.moodDistribution?.map(mood => (
-                <div key={mood.type} className="mood-item">
-                  <span className="mood-emoji">{mood.emoji}</span>
-                  <span className="mood-type">{mood.type}</span>
-                  <span className="mood-count">{mood.count}</span>
-                  <span className="mood-percentage">{mood.percentage}%</span>
-                </div>
-              )) || (
-                <div className="no-data">No mood data available</div>
+              {stats?.moodDistribution && stats.moodDistribution.length > 0 ? (
+                stats.moodDistribution.map(mood => (
+                  <div key={mood.type} className="mood-item">
+                    <span className="mood-emoji">{mood.emoji}</span>
+                    <span className="mood-type">{mood.type}</span>
+                    <span className="mood-count">{mood.count}</span>
+                    <span className="mood-percentage">{mood.percentage}%</span>
+                  </div>
+                ))
+              ) : (
+                <div className="no-data">No mood data available yet</div>
               )}
             </div>
           </div>
           
           <div className="insight-card">
-            <h3>😰 Stress Levels</h3>
-            <div className="stress-levels">
-              <div className="stress-metric">
-                <span className="stress-value">{stats?.avgStressLevel || 'N/A'}/10</span>
-                <span className="stress-trend">
-                  {stats?.stressTrend === 'improving' ? '↓ Improving' : 
-                   stats?.stressTrend === 'worsening' ? '↑ Worsening' : '→ Stable'}
+            <h3>📈 Average Mood Score</h3>
+            <div className="mood-score">
+              <div className="score-metric">
+                <span className="score-value">{stats?.avgMoodScore || '0.0'}/5.0</span>
+                <span className={`score-trend ${
+                  stats?.moodTrend === 'improving' ? 'trend-up' : 
+                  stats?.moodTrend === 'declining' ? 'trend-down' : 'trend-neutral'
+                }`}>
+                  {stats?.moodTrend === 'improving' ? '↑ Improving' : 
+                   stats?.moodTrend === 'declining' ? '↓ Declining' : '→ Stable'}
                 </span>
+              </div>
+              <div className="score-info">
+                <small>Based on {stats?.moodCounts || 0} mood entries</small>
               </div>
             </div>
           </div>
@@ -172,13 +180,15 @@ function Dashboard() {
           <div className="insight-card">
             <h3>🛠️ Top Activities</h3>
             <div className="activities-list">
-              {stats?.topActivities?.map((activity, index) => (
-                <div key={activity.name} className="activity-item">
-                  <span className="activity-rank">#{index + 1}</span>
-                  <span className="activity-name">{activity.name}</span>
-                  <span className="activity-usage">{activity.usageCount} uses</span>
-                </div>
-              )) || (
+              {stats?.topActivities && stats.topActivities.length > 0 ? (
+                stats.topActivities.map((activity, index) => (
+                  <div key={activity.name} className="activity-item">
+                    <span className="activity-rank">#{index + 1}</span>
+                    <span className="activity-name">{activity.name}</span>
+                    <span className="activity-usage">{activity.usageCount} uses</span>
+                  </div>
+                ))
+              ) : (
                 <div className="no-data">No activity data available</div>
               )}
             </div>
@@ -186,35 +196,35 @@ function Dashboard() {
         </div>
       </div>
 
-      {/* Content & System Overview */}
+      {/* Platform Usage Overview */}
       <div className="content-section">
-        <h2>Content & System Overview</h2>
+        <h2>Platform Usage Overview</h2>
         
         <div className="content-grid">
           <div className="content-card">
-            <h3>📝 User Content</h3>
+            <h3>📊 Content Metrics</h3>
             <div className="content-stats">
               <div className="content-metric">
-                <span className="metric-value">{stats?.journalEntries || 0}</span>
-                <span className="metric-label">Journal Entries</span>
+                <span className="metric-value">{stats?.moodEntries || 0}</span>
+                <span className="metric-label">Total Mood Entries</span>
               </div>
               <div className="content-metric">
-                <span className="metric-value">{stats?.meditationSessions || 0}</span>
-                <span className="metric-label">Meditation Sessions</span>
+                <span className="metric-value">{stats?.completedTasksCount || 0}</span>
+                <span className="metric-label">Completed Tasks</span>
               </div>
             </div>
           </div>
           
           <div className="content-card">
-            <h3>🎯 Challenges</h3>
+            <h3>🎯 User Activity</h3>
             <div className="challenge-stats">
               <div className="challenge-metric">
-                <span className="metric-value">{stats?.activeChallenges || 0}</span>
-                <span className="metric-label">Active</span>
+                <span className="metric-value">{stats?.activeUsersCount || 0}</span>
+                <span className="metric-label">Active Users</span>
               </div>
               <div className="challenge-metric">
                 <span className="metric-value">{stats?.challengeCompletions || 0}</span>
-                <span className="metric-label">Completions</span>
+                <span className="metric-label">Challenge Completions</span>
               </div>
             </div>
           </div>
@@ -225,14 +235,17 @@ function Dashboard() {
               <div className="status-item">
                 <span className="status-indicator online"></span>
                 <span>API Server</span>
+                <span className="status-text">Operational</span>
               </div>
               <div className="status-item">
                 <span className="status-indicator online"></span>
                 <span>Database</span>
+                <span className="status-text">Connected</span>
               </div>
               <div className="status-item">
                 <span className="status-indicator online"></span>
                 <span>Authentication</span>
+                <span className="status-text">Active</span>
               </div>
             </div>
           </div>
@@ -243,12 +256,19 @@ function Dashboard() {
       <div className="recent-activity">
         <h2>Recent Activity Feed</h2>
         <div className="activity-feed">
-          {stats?.recentActivities?.map(activity => (
-            <div key={activity.id} className="activity-item">
-              <span className="activity-time">{activity.time}</span>
-              <span className="activity-message">{activity.message}</span>
-            </div>
-          )) || (
+          {stats?.recentActivities && stats.recentActivities.length > 0 ? (
+            stats.recentActivities.map(activity => (
+              <div key={activity.id} className="activity-item">
+                <span className="activity-time">{activity.time}</span>
+                <span className="activity-message">
+                  {activity.message.includes('undefined') 
+                    ? activity.message.replace('undefined', 'New User') 
+                    : activity.message
+                  }
+                </span>
+              </div>
+            ))
+          ) : (
             <div className="no-data">No recent activities</div>
           )}
         </div>
@@ -258,12 +278,28 @@ function Dashboard() {
       <div className="quick-actions-section">
         <h2>Quick Actions</h2>
         <div className="quick-actions">
-          <button className="action-btn">📧 Send Broadcast</button>
+          <button className="action-btn">📧 Send Notification</button>
           <button className="action-btn">👥 Manage Users</button>
-          <button className="action-btn">📊 View Reports</button>
+          <button className="action-btn">📊 View Analytics</button>
           <button className="action-btn">⚙️ System Settings</button>
         </div>
       </div>
+
+      {/* Empty State Guidance */}
+      {stats && (
+        <div className="guidance-section">
+          <div className="guidance-card">
+            <h3>💡 Getting Started</h3>
+            <p>Your platform is set up! Here's what you can do to see more data:</p>
+            <ul>
+              <li>Encourage users to track their moods daily</li>
+              <li>Create tasks and challenges for users to complete</li>
+              <li>Invite users to share their success stories</li>
+              <li>Monitor user engagement through the analytics above</li>
+            </ul>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

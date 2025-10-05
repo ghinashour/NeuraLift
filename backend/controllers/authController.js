@@ -8,7 +8,7 @@ const sendResetPasswordEmail = require("../utils/resetEmail"); // create this ut
 
 // Generate Access Token
 const generateAccessToken = (payload) => {
-  return jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: "15m" }); // short-lived
+  return jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: "3d" }); // short-lived
 };
 
 // Generate Refresh Token

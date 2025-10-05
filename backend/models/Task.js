@@ -12,5 +12,7 @@ const taskSchema = new mongoose.Schema({
   },
   createdAt: { type: Date, default: Date.now },
 });
+taskSchema.index({ createdAt: -1 });
+taskSchema.index({ completed: 1, createdAt: -1 });
 
 module.exports = mongoose.model("Task", taskSchema);

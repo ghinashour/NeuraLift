@@ -15,5 +15,7 @@ const MoodEntrySchema = new mongoose.Schema({
   note: { type: String },
   createdAt: { type: Date, default: Date.now }
 });
+MoodEntrySchema.index({ createdAt: -1 });
+MoodEntrySchema.index({ mood: 1, createdAt: -1 });
 
 module.exports = mongoose.model('MoodEntry', MoodEntrySchema);

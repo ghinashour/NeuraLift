@@ -1,5 +1,5 @@
 
-const MoodEntry = require('../../models/MoodEntry');
+const MoodEntry = require('../../models/Mood');
 const AuditLog = require('../../models/AuditLog');
 
 // GET /api/admin/moods
