@@ -1,5 +1,5 @@
 import React from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import "./App.css";
 
 // Sections
@@ -42,81 +42,90 @@ import DevQuestions from "./pages/Challenges/DevQuestions";
 import AssemblyGameComponent from './pages/Challenges/AssemblyGame';
 
 // Admin
-import DashboardAdmin from "./pages/admin/DashboardAdmin";
-import UsersAdmin from "./pages/admin/Users";
-import AdminLayout from "./layouts/AdminLayout";
-import AdminRoute from "./components/admin/AdminRoute";
-
+import { AdminAuthProvider } from "./context/AdminAuthContext";
+import AdminLogin from "./components/AdminLogin";
+import AdminLayout from "./components/admin/AdminLayout";
+import AdminDashboard from "./components/admin/AdminDashboard";
+import UsersManagement from "./components/admin/UsersManagement";
 //private route functionality
 import PrivateRoute from "./components/privateRoute";
 
 function App() {
   return (
-    <Router>
+    <AdminAuthProvider>
       <TaskProvider>
         <MedicineProvider>
-          <Routes>
-            {/* Landing page(public) */}
-            <Route
-              path="/"
-              element={
-                <>
-                  <Navbar />
-                  <Home />
-                  <Features />
-                  <AboutSection />
-                  <SuccessStories />
-                  <Contact />
-                  <Footer />
-                </>
-              }
-            />
-
-            {/* Auth */}
-            <Route path="/login" element={<Login />} />
-            <Route path="/signup" element={<Signup />} />
-            <Route path="/verify" element={<VerifyEmail />} />
-
-            {/* Main pages inside Layout */}
-            <Route element={<Layout />}>
-              <Route path="dashboard" element={  <PrivateRoute><Dashboard /></PrivateRoute>} />
-              <Route path="collaborate" element={<PrivateRoute><Collaborate /></PrivateRoute>} />
-              <Route path="mytasks" element={<PrivateRoute><MyTasks /></PrivateRoute>} />
-              <Route path="task/:id" element={<PrivateRoute><TaskDetails /></PrivateRoute>} />
-              <Route path="taskManager" element={<PrivateRoute><TaskManagerPage /></PrivateRoute>} />
-              <Route path="stressRelief" element={<PrivateRoute><StressRelief /></PrivateRoute>} />
-              <Route path="focustimer" element={<PrivateRoute><FocusTimer /></PrivateRoute>} />
-              <Route path="medicineHealth" element={<MedicineHealth />} />
-              <Route path="Schedule" element={<Schedule />} />
-              <Route path="profile" element={<Profile />} />
-              <Route path="moodTracker" element={<MoodTracker />} />
-              <Route path="success-stories" element={<SuccessStory />} />
-              <Route path="success-stories/my-story" element={<MyStory />} />
-
-              {/* Challenges */}
-              <Route path="challenges" element={<Challenges />} />
-              <Route path="challenges/true-false" element={<TrueFalse />} />
-              <Route path="challenges/tenzis-game" element={<TenzisGame />} />
-              <Route path="challenges/dev-questions" element={<DevQuestions />} />
-              <Route path="challenges/assembly-game" element={<AssemblyGameComponent />} />
-
-              {/* Admin */}
+          <Router>
+            <Routes>
+              {/* Landing page(public) */}
               <Route
-                path="/admin"
+                path="/"
                 element={
-                  <AdminRoute>
-                    <AdminLayout />
-                  </AdminRoute>
+                  <>
+                    <Navbar />
+                    <Home />
+                    <Features />
+                    <AboutSection />
+                    <SuccessStories />
+                    <Contact />
+                    <Footer />
+                  </>
                 }
-              >
-                <Route path="dashboard" element={<DashboardAdmin />} />
-                <Route path="users" element={<UsersAdmin />} />
+              />
+
+              {/* Auth */}
+              <Route path="/login" element={<Login />} />
+              <Route path="/signup" element={<Signup />} />
+              <Route path="/verify" element={<VerifyEmail />} />
+              <Route path="/admin/login" element={<AdminLogin />} />
+
+              {/* Main pages inside Layout */}
+              <Route element={<Layout />}>
+                <Route path="dashboard" element={<PrivateRoute><Dashboard /></PrivateRoute>} />
+                <Route path="collaborate" element={<PrivateRoute><Collaborate /></PrivateRoute>} />
+                <Route path="mytasks" element={<PrivateRoute><MyTasks /></PrivateRoute>} />
+                <Route path="task/:id" element={<PrivateRoute><TaskDetails /></PrivateRoute>} />
+                <Route path="taskManager" element={<PrivateRoute><TaskManagerPage /></PrivateRoute>} />
+                <Route path="stressRelief" element={<PrivateRoute><StressRelief /></PrivateRoute>} />
+                <Route path="focustimer" element={<PrivateRoute><FocusTimer /></PrivateRoute>} />
+                <Route path="medicineHealth" element={<MedicineHealth />} />
+                <Route path="Schedule" element={<Schedule />} />
+                <Route path="profile" element={<Profile />} />
+                <Route path="moodTracker" element={<MoodTracker />} />
+                <Route path="success-stories" element={<SuccessStory />} />
+                <Route path="success-stories/my-story" element={<MyStory />} />
+
+                {/* Challenges */}
+                <Route path="challenges" element={<Challenges />} />
+                <Route path="challenges/true-false" element={<TrueFalse />} />
+                <Route path="challenges/tenzis-game" element={<TenzisGame />} />
+                <Route path="challenges/dev-questions" element={<DevQuestions />} />
+                <Route path="challenges/assembly-game" element={<AssemblyGameComponent />} />
               </Route>
-            </Route>
-          </Routes>
+
+              {/* Protected admin routes */}
+              <Route path="/admin" element={<AdminLayout />}>
+                <Route index element={<Navigate to="/admin/dashboard" replace />} />
+                <Route path="dashboard" element={<AdminDashboard />} />
+                <Route path="users" element={<UsersManagement />} />
+                {/* Add other admin routes here */}
+                <Route path="moods" element={<div>Moods Management - Coming Soon</div>} />
+                <Route path="schedules" element={<div>Schedules Management - Coming Soon</div>} />
+                <Route path="notes" element={<div>Notes Management - Coming Soon</div>} />
+                <Route path="tasks" element={<div>Tasks Management - Coming Soon</div>} />
+                <Route path="success-stories" element={<div>Success Stories Management - Coming Soon</div>} />
+              </Route>
+              
+              {/* Redirect to admin login for unmatched admin routes */}
+              <Route path="/admin/*" element={<Navigate to="/admin/login" replace />} />
+
+              {/* Fallback route */}
+              <Route path="*" element={<Navigate to="/" replace />} />
+            </Routes>
+          </Router>
         </MedicineProvider>
       </TaskProvider>
-    </Router>
+    </AdminAuthProvider>
   );
 }
 
