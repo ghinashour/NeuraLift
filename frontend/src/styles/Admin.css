@@ -203,3 +203,295 @@
     grid-template-columns: 1fr;
   }
 }
+
+
+
+
+
+
+/* Dashboard Header */
+.dashboard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid #eee;
+}
+
+.refresh-btn {
+  background: #3498db;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background 0.3s ease;
+}
+
+.refresh-btn:hover:not(:disabled) {
+  background: #2980b9;
+}
+
+.refresh-btn:disabled {
+  background: #bdc3c7;
+  cursor: not-allowed;
+}
+
+/* Enhanced Stat Cards */
+.stat-card {
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  text-align: center;
+  transition: transform 0.2s ease;
+}
+
+.stat-card:hover {
+  transform: translateY(-2px);
+}
+
+.stat-icon {
+  font-size: 2em;
+  margin-bottom: 10px;
+}
+
+.stat-number {
+  font-size: 2em;
+  font-weight: bold;
+  color: #2c3e50;
+  margin: 10px 0;
+}
+
+.stat-trend {
+  font-size: 0.8em;
+  margin-top: 5px;
+}
+
+.trend-up { color: #27ae60; }
+.trend-down { color: #e74c3c; }
+
+.stat-subtitle {
+  font-size: 0.8em;
+  color: #7f8c8d;
+  margin-top: 5px;
+}
+
+/* Analytics Section */
+.analytics-section, .mental-health-section, .content-section {
+  margin: 40px 0;
+}
+
+.analytics-section h2, .mental-health-section h2, .content-section h2 {
+  color: #2c3e50;
+  margin-bottom: 20px;
+  border-bottom: 2px solid #3498db;
+  padding-bottom: 10px;
+}
+
+.analytics-grid, .insights-grid, .content-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 20px;
+}
+
+.analytics-card, .insight-card, .content-card {
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.analytics-card h3, .insight-card h3, .content-card h3 {
+  margin-top: 0;
+  color: #34495e;
+}
+
+/* Mental Health Insights */
+.mood-distribution, .activities-list {
+  space-y: 10px;
+}
+
+.mood-item, .activity-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
+  border-bottom: 1px solid #ecf0f1;
+}
+
+.mood-item:last-child, .activity-item:last-child {
+  border-bottom: none;
+}
+
+.mood-emoji, .activity-rank {
+  font-weight: bold;
+  margin-right: 10px;
+}
+
+.mood-type, .activity-name {
+  flex: 1;
+}
+
+.mood-count, .mood-percentage, .activity-usage {
+  font-size: 0.9em;
+  color: #7f8c8d;
+}
+
+/* Stress Levels */
+.stress-metric {
+  text-align: center;
+  padding: 20px 0;
+}
+
+.stress-value {
+  font-size: 2em;
+  font-weight: bold;
+  color: #e74c3c;
+  display: block;
+}
+
+.stress-trend {
+  color: #7f8c8d;
+  font-size: 0.9em;
+}
+
+/* Content Metrics */
+.content-stats, .challenge-stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+}
+
+.content-metric, .challenge-metric {
+  text-align: center;
+  padding: 15px;
+  background: #f8f9fa;
+  border-radius: 6px;
+}
+
+.metric-value {
+  font-size: 1.5em;
+  font-weight: bold;
+  color: #3498db;
+  display: block;
+}
+
+.metric-label {
+  font-size: 0.8em;
+  color: #7f8c8d;
+  display: block;
+  margin-top: 5px;
+}
+
+/* System Status */
+.system-status {
+  space-y: 10px;
+}
+
+.status-item {
+  display: flex;
+  align-items: center;
+  padding: 8px 0;
+}
+
+.status-indicator {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  margin-right: 10px;
+}
+
+.status-indicator.online { background: #27ae60; }
+.status-indicator.warning { background: #f39c12; }
+.status-indicator.offline { background: #e74c3c; }
+
+/* Activity Feed */
+.activity-feed {
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  padding: 20px;
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.activity-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 0;
+  border-bottom: 1px solid #ecf0f1;
+}
+
+.activity-item:last-child {
+  border-bottom: none;
+}
+
+.activity-time {
+  color: #7f8c8d;
+  font-size: 0.8em;
+  min-width: 80px;
+}
+
+.activity-message {
+  flex: 1;
+  margin-left: 15px;
+}
+
+/* Quick Actions */
+.quick-actions-section {
+  margin: 40px 0;
+}
+
+.quick-actions {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 15px;
+}
+
+.action-btn {
+  padding: 12px 15px;
+  background: #3498db;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background 0.3s ease;
+}
+
+.action-btn:hover {
+  background: #2980b9;
+}
+
+/* No Data State */
+.no-data {
+  text-align: center;
+  color: #7f8c8d;
+  font-style: italic;
+  padding: 20px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .dashboard-header {
+    flex-direction: column;
+    gap: 15px;
+    text-align: center;
+  }
+  
+  .stats-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .analytics-grid, .insights-grid, .content-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .quick-actions {
+    grid-template-columns: 1fr;
+  }
+}
