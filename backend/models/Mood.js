@@ -5,14 +5,14 @@ const MoodEntrySchema = new mongoose.Schema({
   userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
   mood: { 
     type: String, 
-    enum: ['Terrible', 'poor', 'Okay', 'Good', 'Excellent'], 
+    enum: ['excellent', 'good', 'Okay', 'poor', 'terrible'], 
     required: true 
   },
   stressed:{
-    type: String,
-    enum:['No', 'Yes']
+    type: Boolean,
+    default:false
   },
-  note: { type: String },
+  note: { type: String, default:'' },
   createdAt: { type: Date, default: Date.now }
 });
 MoodEntrySchema.index({ createdAt: -1 });

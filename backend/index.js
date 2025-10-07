@@ -12,6 +12,7 @@ const authRoutes = require('./routes/authRoute');
 const adminRoutes = require('./routes/admin.js');
 const successStoryRoutes = require("./routes/successStories");
 const quoteRoutes = require("./routes/quotes.js");
+const moodRoutes = require("./routes/moodroutes.js");
 const passport = require("passport");
 require("./config/passport");
 require("dotenv").config();
@@ -37,6 +38,7 @@ app.use("/api/tenzies", tensizesRoutes);
 app.use("/api/success-stories", successStoryRoutes);
 app.use("/api/events", eventRoutes);
 app.use("/api/quotes", quoteRoutes);
+app.use('/api/moods', moodRoutes);
 //protected admin routes
 app.use("/api/admin", adminRoutes)
 //server uploaded files
