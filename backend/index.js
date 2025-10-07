@@ -3,7 +3,6 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 const path = require("path");
 const profileRoutes = require("./routes/profile.js");
-const verifyEmailRoute = require("./routes/verifyEmail.js");
 const questionRoutes = require("./routes/questions.js");
 const devQuestionRoutes = require("./routes/DevQuestionRoute.js");
 const assemblyGameRoutes = require('./routes/assemblyGame');
@@ -30,7 +29,6 @@ app.use(express.json());
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 app.use("/api/auth", authRoutes);
 app.use("/api/profile", profileRoutes);
-app.use("/api/auth", verifyEmailRoute);
 //fetching the challenges
 app.use("/api/questions", questionRoutes);
 app.use("/api/devquestions", devQuestionRoutes);

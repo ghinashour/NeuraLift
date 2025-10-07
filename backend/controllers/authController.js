@@ -44,7 +44,7 @@ exports.signup = async (req, res) => {
 
     await newUser.save();
 
-    const verifyURL = `${process.env.CLIENT_URL}/verify?token=${verificationToken}`;
+    const verifyURL = `${process.env.API_URL}/api/auth/verify/${verificationToken}`;
     await sendVerificationEmail(newUser.email, verifyURL);
 
     res.status(201).json({ msg: "Signup successful, please check your email to verify your account." });
@@ -133,42 +133,48 @@ exports.loginAdmin = async (req, res) => {
   }
 };
 
-// Verify Email
+// ✅ Verify Email Controller
 exports.verifyEmail = async (req, res) => {
   try {
-    const { token } = req.body;
+    const { token } = req.params; // use params for GET links
+
     if (!token) {
-      return res.status(400).json({ message: "Invalid verification request." });
+      return res.status(400).send("<h2>Invalid verification link.</h2>");
     }
 
-    // Find user with matching token that hasn't expired
     const user = await User.findOne({
       verificationToken: token,
-      verificationTokenExpiry: { $gt: Date.now() }
+      verificationTokenExpiry: { $gt: Date.now() },
     });
 
     if (!user) {
-      return res.status(400).json({ message: "Invalid or expired verification link." });
+      return res
+        .status(400)
+        .send("<h2>Invalid or expired verification link.</h2>");
     }
 
-    // Update user directly (avoids re-validating required fields like password)
-    await User.updateOne(
-      { _id: user._id },
-      {
-        $set: {
-          isVerified: true,
-          verificationToken: null,
-          verificationTokenExpiry: null
-        }
-      }
-    );
+    // Mark verified
+    user.isVerified = true;
+    user.verificationToken = null;
+    user.verificationTokenExpiry = null;
+    await user.save();
 
-    res.json({ message: "Email verified successfully! You can now log in." });
+    // ✅ Respond with a simple HTML confirmation
+    res.send(`
+      <html>
+        <head><title>Email Verified</title></head>
+        <body style="font-family: sans-serif; text-align: center; margin-top: 50px;">
+          <h2>Email Verified Successfully 🎉</h2>
+          <p>You can now <a href="http://localhost:3000/login">log in</a> to your account.</p>
+        </body>
+      </html>
+    `);
   } catch (err) {
     console.error("Verify error:", err);
-    res.status(500).json({ message: "Server error" });
+    res.status(500).send("<h2>Server error. Please try again later.</h2>");
   }
 };
+
 
 
 // Forgot Password

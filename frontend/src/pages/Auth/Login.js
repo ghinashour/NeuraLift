@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate, Link, useLocation } from "react-router-dom";
 import "../../styles/Auth.css";
+import { showError, showSuccess } from "../../utils/alerts";
+import Swal from "sweetalert2";
 
 function Login() {
   const [form, setForm] = useState({ email: "", password: "" });
@@ -18,8 +20,14 @@ function Login() {
     if (token && user) {
       localStorage.setItem("token", token);
       localStorage.setItem("user", user); // already stringified in backend redirect
-      alert("Google login successful ✅");
-      navigate("/dashboard");
+      Swal.fire({
+        icon: "success",
+        title: "Google login successful ✅",
+        showConfirmButton: true,
+        timer: 1800,
+      }).then(() => {
+        navigate("/dashboard");
+      });
     }
   }, [location, navigate]);
 
@@ -31,19 +39,27 @@ function Login() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError(null);
+
     try {
       const res = await axios.post("http://localhost:4000/api/auth/login", form);
 
-      // Store JWT token
+      // Store JWT token & user info
       localStorage.setItem("token", res.data.accessToken);
-
-      // Store user info
       localStorage.setItem("user", JSON.stringify(res.data.user));
 
-      alert("Login successful ✅");
+      // ✅ Wait for alert to close before navigation
+      await Swal.fire({
+        icon: "success",
+        title: "Login Successful!",
+        text: "Welcome back!",
+        showConfirmButton: true,
+        timer: 2000,
+      });
+
       navigate("/dashboard");
     } catch (err) {
       setError(err.response?.data?.msg || "Login failed");
+      showError(err.response?.data?.msg || "Login failed");
     }
   };
 

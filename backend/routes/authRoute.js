@@ -9,7 +9,7 @@ const authMiddleware = require ("../middleware/auth");
 // Routes
 router.post("/signup", signup);
 router.post("/login", login);
-router.post("/verify", verifyEmail);
+router.get("/verify/:token", verifyEmail);
 
 // Protected route
 router.get("/me", authMiddleware, getMe);
