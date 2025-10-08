@@ -18,13 +18,13 @@ require("./config/passport");
 require("dotenv").config();
 
 const app = express();
-
+app.use(express.json());
 // Middleware
 app.use(cors({
   origin: "http://localhost:3000", // allow frontend
   methods: ["GET", "POST", "PUT", "DELETE"],
 }));
-app.use(express.json());
+
 
 // Routes
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));

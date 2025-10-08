@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate, Link, useLocation } from "react-router-dom";
 import "../../styles/Auth.css";
-import { showError, showSuccess } from "../../utils/alerts";
+import { showError } from "../../utils/alerts";
 import Swal from "sweetalert2";
 
 function Login() {
@@ -11,31 +11,34 @@ function Login() {
   const navigate = useNavigate();
   const location = useLocation();
 
-  // Handle redirect after Google login
+  // ✅ Handle redirect after Google login
   useEffect(() => {
     const query = new URLSearchParams(location.search);
     const token = query.get("token");
     const user = query.get("user");
 
     if (token && user) {
+      // Store token + user info
       localStorage.setItem("token", token);
-      localStorage.setItem("user", user); // already stringified in backend redirect
+      localStorage.setItem("user", user); // backend sends it already stringified
+
       Swal.fire({
         icon: "success",
         title: "Google login successful ✅",
-        showConfirmButton: true,
         timer: 1800,
+        showConfirmButton: false,
       }).then(() => {
         navigate("/dashboard");
       });
     }
   }, [location, navigate]);
 
-  // Update form values
-  const handleChange = (e) =>
+  // ✅ Update form values
+  const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
+  };
 
-  // Handle login with email/password
+  // ✅ Handle login with email/password
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError(null);
@@ -43,27 +46,34 @@ function Login() {
     try {
       const res = await axios.post("http://localhost:4000/api/auth/login", form);
 
-      // Store JWT token & user info
-      localStorage.setItem("token", res.data.accessToken);
-      localStorage.setItem("user", JSON.stringify(res.data.user));
+      // ✅ Store JWT token and user info
+      if (res.data?.accessToken && res.data?.user) {
+        localStorage.setItem("token", res.data.accessToken);
+        localStorage.setItem("user", JSON.stringify(res.data.user));
+      }
 
-      // ✅ Wait for alert to close before navigation
+      // ✅ Show success message before redirecting
       await Swal.fire({
         icon: "success",
         title: "Login Successful!",
         text: "Welcome back!",
-        showConfirmButton: true,
-        timer: 2000,
+        showConfirmButton: false,
+        timer: 1800,
       });
 
       navigate("/dashboard");
     } catch (err) {
-      setError(err.response?.data?.msg || "Login failed");
-      showError(err.response?.data?.msg || "Login failed");
+      console.error("Login error:", err.response || err);
+      const message =
+        err.response?.data?.message ||
+        err.response?.data?.msg ||
+        "Login failed. Please try again.";
+      setError(message);
+      showError(message);
     }
   };
 
-  // Google login redirect
+  // ✅ Google login redirect
   const handleGoogleLogin = () => {
     window.location.href = "http://localhost:4000/api/auth/google";
   };
@@ -94,9 +104,11 @@ function Login() {
             Login
           </button>
         </form>
+
         <p className="bottom-text">
           Don’t have an account? <Link to="/signup">Sign Up</Link>
         </p>
+
         <button
           onClick={handleGoogleLogin}
           style={{

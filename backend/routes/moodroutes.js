@@ -1,9 +1,9 @@
 const express = require('express');
 const router = express.Router();
 const { getMoods, addMood } = require('../controllers/moodController');
-const protect  = require('../middleware/auth');
+const authMiddleware = require('../middleware/auth');
 
-router.get('/', protect, getMoods);
-router.post('/', protect, addMood);
+router.get('/', authMiddleware, getMoods);
+router.post('/', authMiddleware, addMood);
 
 module.exports = router;

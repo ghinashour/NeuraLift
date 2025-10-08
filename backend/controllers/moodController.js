@@ -1,32 +1,40 @@
+// controllers/moodController.js
 const Mood = require('../models/Mood');
 
-// @desc    Get all moods for logged-in user
-// @route   GET /api/moods
-// @access  Private
 exports.getMoods = async (req, res) => {
+  if (!req.user) return res.status(401).json({ message: "User not authenticated" });
+
   try {
     const moods = await Mood.find({ user: req.user._id }).sort({ date: -1 });
     res.json(moods);
   } catch (error) {
-    res.status(500).json({ message: 'Server error' });
+    console.error("getMoods error:", error);
+    res.status(500).json({ message: "Server error" });
   }
 };
 
-// @desc    Add new mood entry
-// @route   POST /api/moods
-// @access  Private
 exports.addMood = async (req, res) => {
-  const { mood, isStressed, note } = req.body;
+  if (!req.user) return res.status(401).json({ message: "User not authenticated" });
+  if (!req.body || Object.keys(req.body).length === 0) {
+    return res.status(400).json({ message: "Request body is missing" });
+  }
+
+  const { mood, isStressed = false, note = "" } = req.body;
+
+  if (!mood) return res.status(400).json({ message: "Mood is required" });
+
   try {
     const newMood = new Mood({
       user: req.user._id,
       mood,
       isStressed,
-      note
+      note,
     });
+
     const savedMood = await newMood.save();
     res.status(201).json(savedMood);
   } catch (error) {
-    res.status(500).json({ message: 'Server error' });
+    console.error("addMood error:", error);
+    res.status(500).json({ message: "Server error" });
   }
 };
