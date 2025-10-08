@@ -59,7 +59,7 @@ function Tenzies() {
 
   return (
     <div className="tenzies">
-      <h2>Tenzies Game</h2>
+      <h2>🎉 Welcome To The Game 🎉</h2>
       <p>Roll until all dice are the same. Click dice to hold.</p>
       <div className="dice-container">
         {dice.map(d => (
