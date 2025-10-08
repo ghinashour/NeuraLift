@@ -101,7 +101,7 @@ const MyStory = () => {
             <div className="my-story-content">
                 <div className="form-section">
                     <form onSubmit={handleSubmit} className="story-form">
-                        <div className="form-group">
+                        <div className="my-story-form-group">
                             <label htmlFor="author">Your Name *</label>
                             <input
                                 type="text"
@@ -114,7 +114,7 @@ const MyStory = () => {
                             />
                         </div>
 
-                        <div className="form-group">
+                        <div className="my-story-form-group">
                             <label htmlFor="title">Story Title *</label>
                             <input
                                 type="text"
@@ -127,7 +127,7 @@ const MyStory = () => {
                             />
                         </div>
 
-                        <div className="form-group">
+                        <div className="my-story-form-group">
                             <label htmlFor="category">Category</label>
                             <select
                                 id="category"
@@ -142,7 +142,7 @@ const MyStory = () => {
                             </select>
                         </div>
 
-                        <div className="form-group">
+                        <div className="my-story-form-group">
                             <label htmlFor="description">Your Story *</label>
                             <textarea
                                 id="description"
@@ -156,7 +156,7 @@ const MyStory = () => {
                         </div>
 
 
-                        <div className="form-actions">
+                        <div className="my-story-form-actions">
                             <button
                                 type="button"
                                 onClick={() => navigate('/success-stories')}

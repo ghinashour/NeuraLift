@@ -18,6 +18,10 @@
     gap: 12px;
 }
 
+.my-story-header p {
+    color: #626A84 !important;
+}
+
 .header-icon {
     width: 24px;
     height: 24px;
@@ -28,12 +32,14 @@
     font-size: 28px;
     font-weight: 700;
     color: #2B2F3B;
-    margin: 0;
+}
+
+h1 {
+    margin-bottom: 0 !important;
 }
 
 .header-text p {
     font-size: 16px;
-    color: #626A84;
     margin: 0;
 }
 
@@ -72,21 +78,21 @@
     gap: 20px;
 }
 
-.form-group {
+.my-story-form-group {
     display: flex;
     flex-direction: column;
     gap: 8px;
 }
 
-.form-group label {
+.my-story-form-group label {
     font-size: 14px;
     font-weight: 600;
     color: #374151;
 }
 
-.form-group input,
-.form-group select,
-.form-group textarea {
+.my-story-form-group input,
+.my-story-form-group select,
+.my-story-form-group textarea {
     padding: 12px 16px;
     border: 1px solid #D1D5DB;
     border-radius: 8px;
@@ -96,20 +102,20 @@
     transition: border-color 0.2s ease;
 }
 
-.form-group input:focus,
-.form-group select:focus,
-.form-group textarea:focus {
+.my-story-form-group input:focus,
+.my-story-form-group select:focus,
+.my-story-form-group textarea:focus {
     outline: none;
     border-color: #3B82F6;
     box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
 }
 
-.form-group textarea {
+.my-story-form-group textarea {
     resize: vertical;
     min-height: 120px;
 }
 
-.form-actions {
+.my-story-form-actions {
     display: flex;
     gap: 12px;
     justify-content: flex-end;
@@ -365,7 +371,7 @@
         padding: 20px;
     }
 
-    .form-actions {
+    .my-story-form-actions {
         flex-direction: column;
     }
 

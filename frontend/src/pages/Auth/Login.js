@@ -24,6 +24,9 @@ function Login() {
       // Optional: store user info
       localStorage.setItem("user", JSON.stringify(res.data.user));
 
+      // Dispatch custom event to notify other components
+      window.dispatchEvent(new CustomEvent("userUpdated"));
+
       // Notify user
       alert("Login successful ✅");
 

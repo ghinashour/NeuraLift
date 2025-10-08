@@ -134,7 +134,7 @@ const TaskFormModal = ({ isOpen, onClose, task = null }) => {
                 </div>
 
                 <form onSubmit={handleSubmit} className="task-modal-form">
-                    <div className="form-group">
+                    <div className="task-modal-form-group">
                         <label htmlFor="title" className="form-label">
                             Task Title *
                         </label>
@@ -152,7 +152,7 @@ const TaskFormModal = ({ isOpen, onClose, task = null }) => {
                         )}
                     </div>
 
-                    <div className="form-group">
+                    <div className="task-modal-form-group">
                         <label htmlFor="description" className="form-label">
                             Description
                         </label>
@@ -171,7 +171,7 @@ const TaskFormModal = ({ isOpen, onClose, task = null }) => {
                     </div>
 
                     <div className="form-row">
-                        <div className="form-group">
+                        <div className="task-modal-form-group">
                             <label htmlFor="priority" className="form-label">
                                 Priority
                             </label>
@@ -187,7 +187,7 @@ const TaskFormModal = ({ isOpen, onClose, task = null }) => {
                             </select>
                         </div>
 
-                        <div className="form-group">
+                        <div className="task-modal-form-group">
                             <label htmlFor="category" className="form-label">
                                 Category
                             </label>
@@ -202,7 +202,7 @@ const TaskFormModal = ({ isOpen, onClose, task = null }) => {
                         </div>
                     </div>
 
-                    <div className="form-group">
+                    <div className="task-modal-form-group">
                         <label htmlFor="dueDate" className="form-label">
                             Due Date
                         </label>
@@ -216,7 +216,7 @@ const TaskFormModal = ({ isOpen, onClose, task = null }) => {
                         />
                     </div>
 
-                    <div className="form-group">
+                    <div className="task-modal-form-group">
                         <label className="form-label">Tags</label>
                         <TagSelector
                             availableTags={availableTags}
@@ -231,17 +231,17 @@ const TaskFormModal = ({ isOpen, onClose, task = null }) => {
                         </div>
                     )}
 
-                    <div className="form-actions">
+                    <div className="task-modal-form-actions">
                         <button
                             type="button"
-                            className="btn btn-secondary"
+                            className="btn task-modal-btn-secondary"
                             onClick={onClose}
                         >
                             Cancel
                         </button>
                         <button
                             type="submit"
-                            className="btn btn-primary"
+                            className="btn task-modal-btn-primary"
                         >
                             {isEditing ? 'Update Task' : 'Add Task'}
                         </button>
