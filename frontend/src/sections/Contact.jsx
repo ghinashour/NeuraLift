@@ -19,14 +19,14 @@ function Contact() {
 
           <form>
             <div className="form-row">
-              <div className="form-group">
+              <div className="contact-form-group">
                 <label>
                   First Name <span className="required">*</span>
                 </label>
                 <input type="text" placeholder="Your full name" required />
               </div>
 
-              <div className="form-group">
+              <div className="contact-form-group">
                 <label>
                   Email Address <span className="required">*</span>
                 </label>
@@ -38,12 +38,12 @@ function Contact() {
               </div>
             </div>
 
-            <div className="form-group">
+            <div className="contact-form-group">
               <label>Subject</label>
               <input type="text" placeholder="What's this about?" />
             </div>
 
-            <div className="form-group">
+            <div className="contact-form-group">
               <label>
                 Message <span className="required">*</span>
               </label>
