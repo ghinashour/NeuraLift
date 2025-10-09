@@ -12,6 +12,7 @@ const SchedulePage = () => {
   const [showModal, setShowModal] = useState(false);
   const [editingEvent, setEditingEvent] = useState(null);
   const [showCalendar, setShowCalendar] = useState(false);
+  const [currentDate, setCurrentDate] = useState(new Date());
 
   // Fetch events on mount
   useEffect(() => {
@@ -26,11 +27,13 @@ const SchedulePage = () => {
     fetchEvents();
   }, []);
 
+  // Add event button
   const handleAddEvent = () => {
     setEditingEvent(null);
     setShowModal(true);
   };
 
+  // Edit an event
   const handleEditEvent = (evOrId) => {
     const ev = typeof evOrId === 'string' ? events.find(e => e._id === evOrId) : evOrId;
     if (!ev) return;
@@ -38,35 +41,35 @@ const SchedulePage = () => {
     setShowModal(true);
   };
 
-const handleSaveEvent = async (eventData) => {
-  try {
-    // Map frontend eventData fields to backend expected fields
-    const payload = {
-      title: eventData.title,
-      description: eventData.description,
-      color: eventData.color,
-      startDate: eventData.startDate,
-      endDate: eventData.endDate
-    };
+  // Save or update event
+  const handleSaveEvent = async (eventData) => {
+    try {
+      const payload = {
+        title: eventData.title,
+        description: eventData.description,
+        color: eventData.color,
+        startDate: eventData.startDate,
+        endDate: eventData.endDate
+      };
 
-    let res;
-    if (editingEvent) {
-      res = await API.put(`/events/${editingEvent._id}`, payload);
-      setEvents(prev => prev.map(ev => (ev._id === editingEvent._id ? res.data : ev)));
-    } else {
-      res = await API.post('/events', payload);
-      setEvents(prev => [...prev, res.data]);
+      let res;
+      if (editingEvent) {
+        res = await API.put(`/events/${editingEvent._id}`, payload);
+        setEvents(prev => prev.map(ev => (ev._id === editingEvent._id ? res.data : ev)));
+      } else {
+        res = await API.post('/events', payload);
+        setEvents(prev => [...prev, res.data]);
+      }
+
+      setShowModal(false);
+      setEditingEvent(null);
+    } catch (error) {
+      console.error('Error saving event:', error.response?.data || error.message);
+      alert(error.response?.data?.message || 'Error saving event. Try again.');
     }
+  };
 
-    setShowModal(false);
-    setEditingEvent(null);
-  } catch (error) {
-    console.error('Error saving event:', error.response?.data || error.message);
-    alert(error.response?.data?.message || 'Error saving event. Try again.');
-  }
-};
-
-
+  // Delete event
   const handleDeleteEvent = async (idOrEv) => {
     const id = typeof idOrEv === 'string' ? idOrEv : idOrEv?._id;
     if (!id) return;
@@ -89,11 +92,13 @@ const handleSaveEvent = async (eventData) => {
   return (
     <div className="schedule-container">
       <div className="schedule-view">
+        {/* Header */}
         <div className="schedule-header">
           <h1>Schedule</h1>
           <p>Time matters. Plan your day well.</p>
         </div>
 
+        {/* Actions */}
         <div className="schedule-actions">
           <Button className="add-btn" onClick={handleAddEvent}>Add</Button>
           <Button className="view-calendar-btn" onClick={toggleCalendarView}>
@@ -101,7 +106,19 @@ const handleSaveEvent = async (eventData) => {
           </Button>
         </div>
 
-        {!showCalendar ? (
+        {/* Main Content */}
+        {showCalendar ? (
+          <CalendarView
+            currentDate={currentDate}
+            events={events}
+            onEditEvent={handleEditEvent}
+            onDeleteEvent={handleDeleteEvent}
+            onBackToSchedule={() => setShowCalendar(false)}
+            onPreviousWeek={() => setCurrentDate(prev => new Date(prev.setDate(prev.getDate() - 7)))}
+            onNextWeek={() => setCurrentDate(prev => new Date(prev.setDate(prev.getDate() + 7)))}
+            onToday={() => setCurrentDate(new Date())}
+          />
+        ) : (
           <div className="schedule-events">
             {events.length === 0 ? (
               <div className="no-events">
@@ -119,15 +136,9 @@ const handleSaveEvent = async (eventData) => {
               ))
             )}
           </div>
-        ) : (
-          <CalendarView
-            events={events}
-            onEditEvent={handleEditEvent}
-            onDeleteEvent={handleDeleteEvent}
-            onBackToSchedule={() => setShowCalendar(false)}
-          />
         )}
 
+        {/* Modal */}
         {showModal && (
           <AddEventModal
             isOpen={showModal}
