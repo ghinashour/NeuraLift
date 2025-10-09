@@ -6,3 +6,17 @@ you should install icons library: npm install react-icons
 
 
 install react-scroll: we used it for the scroll to be smooth on the landing page: npm i react-scroll
+
+
+for the backend we installed : npm install @sendgrid/mail nodemailer bull ioredis winston dotenv
+
+and npm install bcrypt jsonwebtoken express-validator passport passport-google-oauth20 cookie-parser
+
+
+@sendgrid/mail — primary transactional provider.
+
+nodemailer — fallback SMTP (e.g., Mailgun, SES).
+
+bull + ioredis — job queue for background sending.
+
+winston — logging (optional but recommended).
