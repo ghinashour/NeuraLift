@@ -23,7 +23,7 @@ const successStorySchema = new mongoose.Schema({
         type: String,
         required: true,
         enum: ['Mindfulness', 'Habits', 'Goals', 'Health', 'Career', 'Relationships', 'Learning', 'Fitness'],
-        default: 'Personal Growth'
+        default: 'Habits'
     },
     likeCount: {
         type: Number,
