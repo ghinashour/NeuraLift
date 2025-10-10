@@ -1,0 +1,50 @@
+.admin-notes {
+  padding: 20px;
+}
+
+.subtitle {
+  color: #666;
+  margin-bottom: 15px;
+}
+
+.note-search {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.note-search input {
+  flex: 1;
+  padding: 8px;
+}
+
+.notes-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.notes-table th,
+.notes-table td {
+  border: 1px solid #ddd;
+  padding: 10px;
+}
+
+.btn-delete {
+  background: #e74c3c;
+  color: white;
+  border: none;
+  padding: 6px 10px;
+  cursor: pointer;
+}
+
+.btn-delete:hover {
+  background: #c0392b;
+}
+
+.pagination {
+  margin-top: 15px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}

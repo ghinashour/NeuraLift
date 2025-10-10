@@ -13,6 +13,8 @@ const adminRoutes = require('./routes/admin.js');
 const successStoryRoutes = require("./routes/successStories");
 const quoteRoutes = require("./routes/quotes.js");
 const moodRoutes = require("./routes/moodroutes.js");
+const tasksRouter = require("./routes/tasks.js");
+const adminTaskRouter = require("./routes/admin/taskRoutes.js")
 const passport = require("passport");
 require("./config/passport");
 require("dotenv").config();
@@ -40,7 +42,9 @@ app.use("/api/events", eventRoutes);
 app.use("/api/quotes", quoteRoutes);
 app.use('/api/moods', moodRoutes);
 //protected admin routes
-app.use("/api/admin", adminRoutes)
+app.use("/api/admin", adminRoutes);
+app.use("/api/tasks", tasksRouter); // user task routes
+app.use("/api/admin/tasks", adminTaskRouter); // admin task routes
 //server uploaded files
 app.use('/uploads', express.static('uploads'));
 app.use(passport.initialize());
