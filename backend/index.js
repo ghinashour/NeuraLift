@@ -14,6 +14,7 @@ const successStoryRoutes = require("./routes/successStories");
 const quoteRoutes = require("./routes/quotes.js");
 const moodRoutes = require("./routes/moodroutes.js");
 const tasksRouter = require("./routes/tasks.js");
+const noteRoute = require("./routes/noteUserRoute.js");
 const adminTaskRouter = require("./routes/admin/taskRoutes.js")
 const passport = require("passport");
 require("./config/passport");
@@ -41,6 +42,7 @@ app.use("/api/success-stories", successStoryRoutes);
 app.use("/api/events", eventRoutes);
 app.use("/api/quotes", quoteRoutes);
 app.use('/api/moods', moodRoutes);
+app.use("/api/notes", noteRoute);
 //protected admin routes
 app.use("/api/admin", adminRoutes);
 app.use("/api/tasks", tasksRouter); // user task routes

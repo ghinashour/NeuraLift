@@ -1,41 +1,39 @@
 import React from "react";
+import "../../styles/TaskTable.css"; // import the CSS file
 
 const TaskTable = ({ tasks = [], onDelete, onUpdate }) => {
-  // ✅ Default value for tasks = []
   if (!Array.isArray(tasks) || tasks.length === 0) {
-    return <p>No tasks found.</p>;
+    return <p className="no-tasks">No tasks found.</p>;
   }
 
   return (
-    <table className="min-w-full border border-gray-300 text-sm">
-      <thead className="bg-gray-100">
+    <table className="task-table">
+      <thead>
         <tr>
-          <th className="p-2 border">User</th>
-          <th className="p-2 border">Title</th>
-          <th className="p-2 border">Due Date</th>
-          <th className="p-2 border">Status</th>
-          <th className="p-2 border">Actions</th>
+          <th>User</th>
+          <th>Title</th>
+          <th>Due Date</th>
+          <th>Status</th>
+          <th>Actions</th>
         </tr>
       </thead>
       <tbody>
         {tasks.map((task) => (
-          <tr key={task._id} className="text-center">
-            <td className="border p-2">{task.user?.name || "N/A"}</td>
-            <td className="border p-2">{task.title}</td>
-            <td className="border p-2">
-              {new Date(task.dueDate).toLocaleDateString()}
-            </td>
-            <td className="border p-2 capitalize">{task.status}</td>
-            <td className="border p-2 flex gap-2 justify-center">
+          <tr key={task._id}>
+            <td>{task.user?.name || "N/A"}</td>
+            <td>{task.title}</td>
+            <td>{new Date(task.dueDate).toLocaleDateString()}</td>
+            <td className="status">{task.status}</td>
+            <td className="actions">
               <button
+                className="complete-btn"
                 onClick={() => onUpdate(task._id, { status: "completed" })}
-                className="bg-green-500 text-white px-2 py-1 rounded"
               >
                 Complete
               </button>
               <button
+                className="delete-btn"
                 onClick={() => onDelete(task._id)}
-                className="bg-red-500 text-white px-2 py-1 rounded"
               >
                 Delete
               </button>

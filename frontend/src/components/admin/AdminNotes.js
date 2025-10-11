@@ -7,16 +7,17 @@ function AdminNotes() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [keyword, setKeyword] = useState("");
+  const [from, setFrom] = useState("");
+  const [to, setTo] = useState("");
   const [page, setPage] = useState(1);
   const [total, setTotal] = useState(0);
   const limit = 10;
 
-  // Fetch all notes
   const fetchNotes = async () => {
     setLoading(true);
     try {
       const res = await AdminAPI.get("/notes", {
-        params: { keyword, page, limit },
+        params: { keyword, from, to, page, limit },
       });
       setNotes(res.data.notes);
       setTotal(res.data.total);
@@ -32,14 +33,12 @@ function AdminNotes() {
     fetchNotes();
   }, [page]);
 
-  // Search handler
   const handleSearch = (e) => {
     e.preventDefault();
     setPage(1);
     fetchNotes();
   };
 
-  // Delete note
   const handleDelete = async (id) => {
     if (!window.confirm("Are you sure you want to delete this note?")) return;
     try {
@@ -51,7 +50,6 @@ function AdminNotes() {
     }
   };
 
-  // Pagination
   const totalPages = Math.ceil(total / limit);
 
   if (loading) return <p>Loading notes...</p>;
@@ -60,20 +58,25 @@ function AdminNotes() {
   return (
     <div className="admin-notes">
       <h2>📝 Notes Management</h2>
-      <p className="subtitle">View, search, and delete user notes</p>
+      <p className="subtitle">Search, filter, and manage all user notes</p>
 
-      {/* Search Bar */}
-      <form className="note-search" onSubmit={handleSearch}>
+      {/* Filters */}
+      <form className="note-filters" onSubmit={handleSearch}>
         <input
           type="text"
-          placeholder="Search notes..."
+          placeholder="Search by keyword..."
           value={keyword}
           onChange={(e) => setKeyword(e.target.value)}
         />
-        <button type="submit">Search</button>
+        <input
+          type="date"
+          value={from}
+          onChange={(e) => setFrom(e.target.value)}
+        />
+        <input type="date" value={to} onChange={(e) => setTo(e.target.value)} />
+        <button type="submit">Apply Filters</button>
       </form>
 
-      {/* Notes Table */}
       {notes.length === 0 ? (
         <p>No notes found.</p>
       ) : (
@@ -108,13 +111,9 @@ function AdminNotes() {
         </table>
       )}
 
-      {/* Pagination */}
       {totalPages > 1 && (
         <div className="pagination">
-          <button
-            disabled={page === 1}
-            onClick={() => setPage((p) => p - 1)}
-          >
+          <button disabled={page === 1} onClick={() => setPage((p) => p - 1)}>
             ← Prev
           </button>
           <span>

@@ -3,26 +3,17 @@ const Task = require("../models/Task");
 // Create task (authenticated user)
 exports.createTask = async (req, res) => {
   try {
-    const { title, description, dueDate, priority, category, tags } = req.body;
+    const { user, title, description, dueDate } = req.body;
 
-    if (!title || !dueDate) {
-      return res.status(400).json({ error: "Title and dueDate are required" });
-    }
+    const task = await Task.create({ user, title, description, dueDate });
 
-    const task = await Task.create({
-      user: req.user._id,
-      title,
-      description,
-      dueDate,
-      priority,
-      category,
-      tags,
-    });
+    // Add task to user
+    await User.findByIdAndUpdate(user, { $push: { tasks: task._id } });
 
     res.status(201).json(task);
-  } catch (err) {
-    console.error("createTask error:", err);
-    res.status(500).json({ error: err.message });
+  } catch (error) {
+    console.error("Error creating task:", error);
+    res.status(500).json({ message: "Internal server error" });
   }
 };
 
@@ -82,12 +73,27 @@ exports.updateTask = async (req, res) => {
   }
 };
 
-// Delete task (owner)
+// Delete task (owner or admin)
 exports.deleteTask = async (req, res) => {
   try {
-    const task = await Task.findOneAndDelete({ _id: req.params.id, user: req.user._id });
+    const taskId = req.params.id;
+
+    // Find the task
+    const task = await Task.findById(taskId);
     if (!task) return res.status(404).json({ error: "Task not found" });
-    res.json({ message: "Task deleted" });
+
+    // Check if requester is owner or admin
+    if (!req.user.isAdmin && task.user.toString() !== req.user._id.toString()) {
+      return res.status(403).json({ error: "Not authorized to delete this task" });
+    }
+
+    // Remove task from user's task array (optional if you added tasks array)
+    await User.findByIdAndUpdate(task.user, { $pull: { tasks: taskId } });
+
+    // Delete task from Task collection
+    await Task.findByIdAndDelete(taskId);
+
+    res.json({ message: "Task deleted successfully for both admin and user" });
   } catch (err) {
     console.error("deleteTask error:", err);
     res.status(500).json({ error: err.message });
