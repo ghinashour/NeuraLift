@@ -12,11 +12,13 @@ export const TaskProvider = ({ children }) => {
   });
   const [loading, setLoading] = useState(true);
 
+  // Fetch tasks from API
   const fetchTasks = async () => {
     try {
       const data = await getTasks();
-      setTasks(data);
-      calculateStats(data);
+      const safeData = Array.isArray(data) ? data : [];
+      setTasks(safeData);
+      calculateStats(safeData);
     } catch (error) {
       console.error("Failed to fetch tasks:", error);
     } finally {
@@ -24,51 +26,65 @@ export const TaskProvider = ({ children }) => {
     }
   };
 
-  const calculateStats = (tasks) => {
-    const total = tasks.length;
-    const completed = tasks.filter((t) => t.status === "completed").length;
+  // Calculate task stats
+  const calculateStats = (tasksArray) => {
+    const safeTasks = Array.isArray(tasksArray) ? tasksArray : [];
+    const total = safeTasks.length;
+    const completed = safeTasks.filter((t) => t.completed).length;
     const remaining = total - completed;
     setStats({ totalCount: total, completedCount: completed, remainingCount: remaining });
   };
 
+  // Add a new task
   const handleAddTask = async (task) => {
     try {
       const newTask = await addTask(task);
-      const updatedTasks = [...tasks, newTask];
-      setTasks(updatedTasks);
-      calculateStats(updatedTasks);
+      setTasks((prevTasks) => {
+        const safePrevTasks = Array.isArray(prevTasks) ? prevTasks : [];
+        const updatedTasks = [...safePrevTasks, newTask];
+        calculateStats(updatedTasks);
+        return updatedTasks;
+      });
     } catch (error) {
       console.error("Error adding task:", error);
     }
   };
 
+  // Update an existing task
   const handleUpdateTask = async (id, updates) => {
     try {
       const updated = await updateTask(id, updates);
-      const updatedTasks = tasks.map((t) => (t._id === id ? updated : t));
-      setTasks(updatedTasks);
-      calculateStats(updatedTasks);
+      setTasks((prevTasks) => {
+        const safePrevTasks = Array.isArray(prevTasks) ? prevTasks : [];
+        const updatedTasks = safePrevTasks.map((t) => (t._id === id ? updated : t));
+        calculateStats(updatedTasks);
+        return updatedTasks;
+      });
     } catch (error) {
       console.error("Error updating task:", error);
     }
   };
 
+  // Delete a task
   const handleDeleteTask = async (id) => {
     try {
       await deleteTask(id);
-      const updatedTasks = tasks.filter((t) => t._id !== id);
-      setTasks(updatedTasks);
-      calculateStats(updatedTasks);
+      setTasks((prevTasks) => {
+        const safePrevTasks = Array.isArray(prevTasks) ? prevTasks : [];
+        const updatedTasks = safePrevTasks.filter((t) => t._id !== id);
+        calculateStats(updatedTasks);
+        return updatedTasks;
+      });
     } catch (error) {
       console.error("Error deleting task:", error);
     }
   };
 
+  // Toggle task completion
   const toggleTask = (id) => {
     const task = tasks.find((t) => t._id === id);
     if (task) {
-      const newStatus = task.status === "completed" ? "pending" : "completed";
-      handleUpdateTask(id, { status: newStatus });
+      handleUpdateTask(id, { completed: !task.completed });
     }
   };
 

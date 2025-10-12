@@ -1,101 +1,82 @@
-const Task = require("../models/Task");
+const Task = require('../models/Task');
 
-// Create task (authenticated user)
+// Create Task
 exports.createTask = async (req, res) => {
   try {
-    const { user, title, description, dueDate } = req.body;
+    const { title, description, dueDate, priority, category, tags } = req.body;
+    const user = req.user._id; // from auth middleware
 
-    const task = await Task.create({ user, title, description, dueDate });
+    if (!title) {
+      return res.status(400).json({ error: 'Title is required' });
+    }
 
-    // Add task to user
-    await User.findByIdAndUpdate(user, { $push: { tasks: task._id } });
+    const taskData = {
+      user,
+      title,
+      description,
+      priority,
+      category,
+      tags,
+    };
+
+    // Only add dueDate if provided
+    if (dueDate) {
+      taskData.dueDate = dueDate;
+    }
+
+    const task = await Task.create(taskData);
 
     res.status(201).json(task);
   } catch (error) {
-    console.error("Error creating task:", error);
-    res.status(500).json({ message: "Internal server error" });
+    console.error(error);
+    res.status(500).json({ error: error.message });
   }
 };
 
-// Get all tasks for current user (with pagination/filter optional)
-exports.getUserTasks = async (req, res) => {
+// Get All Tasks for a User
+exports.getTasks = async (req, res) => {
   try {
-    const { status, from, to, page = 1, limit = 20 } = req.query;
-    const query = { user: req.user._id };
-
-    if (status) query.status = status;
-    if (from || to) {
-      query.dueDate = {};
-      if (from) query.dueDate.$gte = new Date(from);
-      if (to) query.dueDate.$lte = new Date(to);
-    }
-
-    const tasks = await Task.find(query)
-      .skip((page - 1) * limit)
-      .limit(parseInt(limit))
-      .sort({ dueDate: 1 });
-
-    const total = await Task.countDocuments(query);
-
-    res.json({ total, page: Number(page), tasks });
-  } catch (err) {
-    console.error("getUserTasks error:", err);
-    res.status(500).json({ error: err.message });
+    const tasks = await Task.find({ user: req.user._id }).sort({ dueDate: 1 });
+    res.status(200).json(tasks);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: error.message });
   }
 };
 
-// Get single task by id (must belong to user)
-exports.getTaskById = async (req, res) => {
-  try {
-    const task = await Task.findOne({ _id: req.params.id, user: req.user._id });
-    if (!task) return res.status(404).json({ error: "Task not found" });
-    res.json(task);
-  } catch (err) {
-    console.error("getTaskById error:", err);
-    res.status(500).json({ error: err.message });
-  }
-};
-
-// Update task (only owner can update)
+// Update Task
 exports.updateTask = async (req, res) => {
   try {
-    const task = await Task.findOne({ _id: req.params.id, user: req.user._id });
-    if (!task) return res.status(404).json({ error: "Task not found" });
-
+    const taskId = req.params.id;
     const updates = req.body;
-    Object.assign(task, updates);
-    const updated = await task.save();
 
-    res.json(updated);
-  } catch (err) {
-    console.error("updateTask error:", err);
-    res.status(500).json({ error: err.message });
+    const task = await Task.findOneAndUpdate(
+      { _id: taskId, user: req.user._id },
+      updates,
+      { new: true, runValidators: true }
+    );
+
+    if (!task) return res.status(404).json({ error: 'Task not found' });
+
+    res.status(200).json(task);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: error.message });
   }
 };
 
-// Delete task (owner or admin)
+// Delete Task
 exports.deleteTask = async (req, res) => {
   try {
     const taskId = req.params.id;
 
-    // Find the task
-    const task = await Task.findById(taskId);
-    if (!task) return res.status(404).json({ error: "Task not found" });
+    const task = await Task.findOneAndDelete({ _id: taskId, user: req.user._id });
 
-    // Check if requester is owner or admin
-    if (!req.user.isAdmin && task.user.toString() !== req.user._id.toString()) {
-      return res.status(403).json({ error: "Not authorized to delete this task" });
-    }
+    if (!task) return res.status(404).json({ error: 'Task not found' });
 
-    // Remove task from user's task array (optional if you added tasks array)
-    await User.findByIdAndUpdate(task.user, { $pull: { tasks: taskId } });
-
-    // Delete task from Task collection
-    await Task.findByIdAndDelete(taskId);
-
-    res.json({ message: "Task deleted successfully for both admin and user" });
-  } catch (err) {
-    console.error("deleteTask error:", err);
-    res.status(500).json({ error: err.message });
+    res.status(200).json({ message: 'Task deleted successfully' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: error.message });
   }
 };

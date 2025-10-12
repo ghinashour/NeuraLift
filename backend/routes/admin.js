@@ -31,7 +31,7 @@ router.use("/moods", protect, moodRoutes );
 router.use("/schedules",protect, scheduleRoutes);
 router.use("/notes", protect,noteRoutes);
 router.use("/tasks", protect,taskRoutes);
-router.use("/success-stories", successStoryRoutes);
+router.use("/stories", successStoryRoutes);
 router.use('/events', protect, adminEventRoutes);
 
 module.exports = router;
