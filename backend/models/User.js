@@ -27,7 +27,4 @@ const userSchema = new mongoose.Schema({
   tasks: [{ type: mongoose.Schema.Types.ObjectId, ref: "Task" }],
 }, { timestamps: true });
 
-userSchema.index({ createdAt: -1 });
-userSchema.index({ lastActive: -1 });
-
 module.exports = mongoose.model("User", userSchema);

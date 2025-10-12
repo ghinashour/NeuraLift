@@ -5,7 +5,7 @@ import EventCard from '../../components/Schedule/EventCard';
 import AddEventModal from '../../components/Schedule/AddEventModal';
 import Button from '../../components/UI/Button/Button';
 import './SchedulePage.css';
-import axios from 'axios';
+import API from '../../api/axios';
 import Swal from 'sweetalert2';
 
 const SchedulePage = () => {
@@ -15,29 +15,26 @@ const SchedulePage = () => {
   const [showCalendar, setShowCalendar] = useState(false);
   const [currentDate, setCurrentDate] = useState(new Date());
 
-  // Example: get token from localStorage (adjust if stored differently)
-  const token = localStorage.getItem('token');
-
   // Fetch events on mount
   useEffect(() => {
     const fetchEvents = async () => {
       try {
-        const res = await axios.get('http://localhost:4000/api/events', {
-          headers: { Authorization: `Bearer ${token}` },
-        });
+        const res = await API.get('/events/');
         setEvents(res.data);
       } catch (error) {
         console.error('Error fetching events:', error);
       }
     };
     fetchEvents();
-  }, [token]);
+  }, []);
 
+  // Add event button
   const handleAddEvent = () => {
     setEditingEvent(null);
     setShowModal(true);
   };
 
+  // Edit an event
   const handleEditEvent = (evOrId) => {
     const ev = typeof evOrId === 'string' ? events.find(e => e._id === evOrId) : evOrId;
     if (!ev) return;
@@ -45,27 +42,30 @@ const SchedulePage = () => {
     setShowModal(true);
   };
 
+  // Save or update event
   const handleSaveEvent = async (eventData) => {
     try {
+      const payload = {
+        title: eventData.title,
+        description: eventData.description,
+        color: eventData.color,
+        startDate: eventData.startDate,
+        endDate: eventData.endDate
+      };
+
+      let res;
       if (editingEvent) {
-        const res = await axios.put(
-          `http://localhost:4000/api/events/${editingEvent._id}`,
-          eventData,
-          { headers: { Authorization: `Bearer ${token}` } }
-        );
-        setEvents(events.map(ev => (ev._id === editingEvent._id ? res.data : ev)));
+        res = await API.put(`/events/${editingEvent._id}`, payload);
+        setEvents(prev => prev.map(ev => (ev._id === editingEvent._id ? res.data : ev)));
       } else {
-        const res = await axios.post(
-          'http://localhost:4000/api/events',
-          eventData,
-          { headers: { Authorization: `Bearer ${token}` } }
-        );
-        setEvents([...events, res.data]);
+        res = await API.post('/events', payload);
+        setEvents(prev => [...prev, res.data]);
       }
+
       setShowModal(false);
       setEditingEvent(null);
     } catch (error) {
-      console.error('Error saving event:', error);
+      console.error('Error saving event:', error.response?.data || error.message);
       Swal.fire({
         icon: 'error',
         title: 'Error',
@@ -75,14 +75,13 @@ const SchedulePage = () => {
     }
   };
 
+  // Delete event
   const handleDeleteEvent = async (idOrEv) => {
     const id = typeof idOrEv === 'string' ? idOrEv : idOrEv?._id;
     if (!id) return;
     try {
-      await axios.delete(`http://localhost:4000/api/events/${id}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      setEvents(events.filter(ev => ev._id !== id));
+      await API.delete(`/events/${id}`);
+      setEvents(prev => prev.filter(ev => ev._id !== id));
     } catch (error) {
       console.error('Error deleting event:', error);
       Swal.fire({
