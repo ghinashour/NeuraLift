@@ -109,7 +109,7 @@ const navItems = [
   { key: 'assistant', label: 'AI Assistant', path: '/ai-assistant' }
 ];
 
-const Sidebar = ({ isCollapsed, setIsCollapsed, user }) => {
+const Sidebar = ({ isCollapsed, setIsCollapsed, user, loading = false }) => {
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -118,16 +118,15 @@ const Sidebar = ({ isCollapsed, setIsCollapsed, user }) => {
     navigate(path);
   };
 
-    const isActive = (path) => {
-        if (path === '/') {
-            return location.pathname === '/';
-        }
-        return location.pathname.startsWith(path);
-    };
-    
+  const isActive = (path) => {
+    if (path === '/') {
+      return location.pathname === '/';
+    }
+    return location.pathname.startsWith(path);
+  };
 
-    return (
-        <>
+  return (
+    <>
       <aside className={`sidebar ${isCollapsed ? "collapsed" : ""}`}>
         <div className="brand">
           <div className="brand-icon">
@@ -159,24 +158,31 @@ const Sidebar = ({ isCollapsed, setIsCollapsed, user }) => {
         <div className="sidebar-bottom">
           <div className="profile-section">
             <div className="profile">
-              <Link to="/profile" className="profile-link" title={isCollapsed ? (user?.name || "User") : undefined}>
-                <img
-                  src={
-                    user?.profilePhoto
-                      ? `http://localhost:4000/uploads/${user.profilePhoto}`
-                      : avatarPlaceholder
-                  }
-                  alt={user?.name || "User"}
-                  className="sidebar-avatar"
-                  onError={(e) => {
-                    // fallback to placeholder if image fails to load
-                    e.target.src = avatarPlaceholder;
-                  }}
-                />
-                {!isCollapsed && (
-                  <span className="sidebar-username">{user?.name || "User"}</span>
-                )}
-              </Link>
+              {loading ? (
+                <div className="profile-loading">
+                  <div className="loading-avatar"></div>
+                  {!isCollapsed && <div className="loading-username"></div>}
+                </div>
+              ) : (
+                <Link to="/profile" className="profile-link" title={isCollapsed ? (user?.username || user?.name || "User") : undefined}>
+                  <img
+                    src={
+                      user?.profilePhoto
+                        ? `http://localhost:4000/uploads/${user.profilePhoto}`
+                        : avatarPlaceholder
+                    }
+                    alt={user?.username || user?.name || "User"}
+                    className="sidebar-avatar"
+                    onError={(e) => {
+                      // fallback to placeholder if image fails to load
+                      e.target.src = avatarPlaceholder;
+                    }}
+                  />
+                  {!isCollapsed && (
+                    <span className="sidebar-username">{user?.username || user?.name || "User"}</span>
+                  )}
+                </Link>
+              )}
             </div>
 
             <button

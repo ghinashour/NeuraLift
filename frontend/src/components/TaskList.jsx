@@ -2,11 +2,14 @@ import React, { useState } from 'react';
 import TaskItem from './TaskItem';
 import '../styles/TaskList.css';
 
-const TaskList = ({ tasks, onTaskUpdate, onTaskDelete, onTaskToggle, onTaskEdit }) => {
+const TaskList = ({ tasks = [], onTaskUpdate, onTaskDelete, onTaskToggle, onTaskEdit }) => {
     const [filter, setFilter] = useState('all');
     const [sortBy, setSortBy] = useState('date');
 
-    const filteredTasks = tasks.filter(task => {
+    // Ensure tasks is always an array
+    const safeTasks = tasks || [];
+
+    const filteredTasks = safeTasks.filter(task => {
         if (filter === 'completed') return task.completed;
         if (filter === 'pending') return !task.completed;
         return true;
@@ -14,7 +17,7 @@ const TaskList = ({ tasks, onTaskUpdate, onTaskDelete, onTaskToggle, onTaskEdit 
 
     const sortedTasks = filteredTasks.sort((a, b) => {
         if (sortBy === 'date') {
-            return new Date(b.createdDate) - new Date(a.createdDate);
+            return new Date(b.createdAt || b.createdDate) - new Date(a.createdAt || a.createdDate);
         }
         if (sortBy === 'title') {
             return a.title.localeCompare(b.title);
@@ -25,7 +28,7 @@ const TaskList = ({ tasks, onTaskUpdate, onTaskDelete, onTaskToggle, onTaskEdit 
         return 0;
     });
 
-    if (tasks.length === 0) {
+    if (safeTasks.length === 0) {
         return (
             <div className="task-list">
                 <div className="empty-state">
@@ -45,19 +48,19 @@ const TaskList = ({ tasks, onTaskUpdate, onTaskDelete, onTaskToggle, onTaskEdit 
                         className={filter === 'all' ? 'filter-btn active' : 'filter-btn'}
                         onClick={() => setFilter('all')}
                     >
-                        All ({tasks.length})
+                        All ({safeTasks.length})
                     </button>
                     <button
                         className={filter === 'pending' ? 'filter-btn active' : 'filter-btn'}
                         onClick={() => setFilter('pending')}
                     >
-                        Pending ({tasks.filter(t => !t.completed).length})
+                        Pending ({safeTasks.filter(t => !t.completed).length})
                     </button>
                     <button
                         className={filter === 'completed' ? 'filter-btn active' : 'filter-btn'}
                         onClick={() => setFilter('completed')}
                     >
-                        Completed ({tasks.filter(t => t.completed).length})
+                        Completed ({safeTasks.filter(t => t.completed).length})
                     </button>
                 </div>
 
@@ -77,7 +80,7 @@ const TaskList = ({ tasks, onTaskUpdate, onTaskDelete, onTaskToggle, onTaskEdit 
             <div className="task-items">
                 {sortedTasks.map(task => (
                     <TaskItem
-                        key={task.id}
+                        key={task._id || task.id}
                         task={task}
                         onToggleComplete={onTaskToggle}
                         onEdit={onTaskEdit}
@@ -86,7 +89,7 @@ const TaskList = ({ tasks, onTaskUpdate, onTaskDelete, onTaskToggle, onTaskEdit 
                 ))}
             </div>
 
-            {sortedTasks.length === 0 && tasks.length > 0 && (
+            {sortedTasks.length === 0 && safeTasks.length > 0 && (
                 <div className="no-results">
                     <p>No tasks match the current filter.</p>
                 </div>

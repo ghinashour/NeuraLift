@@ -16,7 +16,7 @@ function Dashboard() {
       } else {
         setLoading(true);
       }
-      
+
       setError(null);
       const res = await axios.get("http://localhost:4000/api/admin/dashboard", {
         headers: getAuthHeader()
@@ -46,15 +46,15 @@ function Dashboard() {
     <div className="dashboard">
       <div className="dashboard-header">
         <h1>Admin Dashboard</h1>
-        <button 
-          onClick={handleRefresh} 
+        <button
+          onClick={handleRefresh}
           className="refresh-btn"
           disabled={refreshing}
         >
           {refreshing ? "Refreshing..." : "🔄 Refresh"}
         </button>
       </div>
-      
+
       {/* Core Metrics & KPIs */}
       <div className="stats-grid">
         <div className="stat-card">
@@ -65,14 +65,14 @@ function Dashboard() {
             <span className="trend-up">+{stats?.newUsersThisWeek || 0} this week</span>
           </div>
         </div>
-        
+
         <div className="stat-card">
           <div className="stat-icon">📱</div>
           <h3>Active Users</h3>
           <p className="stat-number">{stats?.activeUsers || 0}</p>
           <div className="stat-subtitle">Last 7 days</div>
         </div>
-        
+
         <div className="stat-card">
           <div className="stat-icon">🆕</div>
           <h3>New Users</h3>
@@ -88,14 +88,14 @@ function Dashboard() {
             <span className="trend-up">+{stats?.moodEntriesToday || 0} today</span>
           </div>
         </div>
-        
+
         <div className="stat-card">
           <div className="stat-icon">✅</div>
           <h3>Total Tasks</h3>
           <p className="stat-number">{stats?.tasksCount || 0}</p>
           <div className="stat-subtitle">{stats?.completedTasks || 0} completed</div>
         </div>
-        
+
         <div className="stat-card">
           <div className="stat-icon">🌟</div>
           <h3>Success Stories</h3>
@@ -107,7 +107,7 @@ function Dashboard() {
       {/* User Engagement Analytics */}
       <div className="analytics-section">
         <h2>User Engagement Analytics</h2>
-        
+
         <div className="analytics-grid">
           <div className="analytics-card">
             <h3>📊 Engagement Rate</h3>
@@ -116,7 +116,7 @@ function Dashboard() {
               <span className="metric-label">Active Users / Total Users</span>
             </div>
           </div>
-          
+
           <div className="analytics-card">
             <h3>⏱️ Avg. Session Time</h3>
             <div className="session-metric">
@@ -124,7 +124,7 @@ function Dashboard() {
               <span className="metric-label">Per user session</span>
             </div>
           </div>
-          
+
           <div className="analytics-card">
             <h3>🔔 Notifications</h3>
             <div className="notification-metric">
@@ -138,7 +138,7 @@ function Dashboard() {
       {/* Mental Health Insights */}
       <div className="mental-health-section">
         <h2>Mental Health Insights</h2>
-        
+
         <div className="insights-grid">
           <div className="insight-card">
             <h3>😊 Mood Distribution</h3>
@@ -157,18 +157,17 @@ function Dashboard() {
               )}
             </div>
           </div>
-          
+
           <div className="insight-card">
             <h3>📈 Average Mood Score</h3>
             <div className="mood-score">
               <div className="score-metric">
                 <span className="score-value">{stats?.avgMoodScore || '0.0'}/5.0</span>
-                <span className={`score-trend ${
-                  stats?.moodTrend === 'improving' ? 'trend-up' : 
-                  stats?.moodTrend === 'declining' ? 'trend-down' : 'trend-neutral'
-                }`}>
-                  {stats?.moodTrend === 'improving' ? '↑ Improving' : 
-                   stats?.moodTrend === 'declining' ? '↓ Declining' : '→ Stable'}
+                <span className={`score-trend ${stats?.moodTrend === 'improving' ? 'trend-up' :
+                    stats?.moodTrend === 'declining' ? 'trend-down' : 'trend-neutral'
+                  }`}>
+                  {stats?.moodTrend === 'improving' ? '↑ Improving' :
+                    stats?.moodTrend === 'declining' ? '↓ Declining' : '→ Stable'}
                 </span>
               </div>
               <div className="score-info">
@@ -176,7 +175,7 @@ function Dashboard() {
               </div>
             </div>
           </div>
-          
+
           <div className="insight-card">
             <h3>🛠️ Top Activities</h3>
             <div className="activities-list">
@@ -199,7 +198,7 @@ function Dashboard() {
       {/* Platform Usage Overview */}
       <div className="content-section">
         <h2>Platform Usage Overview</h2>
-        
+
         <div className="content-grid">
           <div className="content-card">
             <h3>📊 Content Metrics</h3>
@@ -214,7 +213,7 @@ function Dashboard() {
               </div>
             </div>
           </div>
-          
+
           <div className="content-card">
             <h3>🎯 User Activity</h3>
             <div className="challenge-stats">
@@ -228,7 +227,7 @@ function Dashboard() {
               </div>
             </div>
           </div>
-          
+
           <div className="content-card">
             <h3>🔧 System Status</h3>
             <div className="system-status">
@@ -261,8 +260,8 @@ function Dashboard() {
               <div key={activity.id} className="activity-item">
                 <span className="activity-time">{activity.time}</span>
                 <span className="activity-message">
-                  {activity.message.includes('undefined') 
-                    ? activity.message.replace('undefined', 'New User') 
+                  {activity.message.includes('undefined')
+                    ? activity.message.replace('undefined', 'New User')
                     : activity.message
                   }
                 </span>

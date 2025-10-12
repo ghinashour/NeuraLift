@@ -16,8 +16,9 @@ function AdminSidebar() {
     { path: "/admin/dashboard", label: "Dashboard", icon: "📊" },
     { path: "/admin/users", label: "Users", icon: "👥" },
     { path: "/admin/moods", label: "Moods", icon: "😊" },
-    { path: "/admin/schedules", label: "Schedules", icon: "📅" },
+    { path: "/admin/events", label: "Events", icon: "🎯" },
     { path: "/admin/notes", label: "Notes", icon: "📝" },
+    { path: "/admin/notes/analytics", label: "Notes Analytics", icon: "📈" },
     { path: "/admin/tasks", label: "Tasks", icon: "✅" },
     { path: "/admin/success-stories", label: "Success Stories", icon: "🌟" },
   ];

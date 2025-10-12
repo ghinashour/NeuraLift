@@ -27,7 +27,7 @@ const TaskItem = ({ task, onToggleComplete, onEdit, onDelete }) => {
     };
 
     const handleToggleComplete = () => {
-        onToggleComplete(task.id);
+        onToggleComplete(task._id || task.id);
     };
 
     const handleEdit = (e) => {
@@ -37,7 +37,7 @@ const TaskItem = ({ task, onToggleComplete, onEdit, onDelete }) => {
 
     const handleDelete = (e) => {
         e.stopPropagation();
-        onDelete(task.id);
+        onDelete(task._id || task.id);
     };
 
     return (
@@ -103,7 +103,7 @@ const TaskItem = ({ task, onToggleComplete, onEdit, onDelete }) => {
                 <div className="task-meta">
                     <div className="task-date">
                         <Calendar size={12} />
-                        <span>Created {formatDate(task.createdDate)}</span>
+                        <span>Created {formatDate(task.createdAt || task.createdDate)}</span>
                     </div>
                 </div>
             </div>

@@ -47,8 +47,13 @@ import AdminLogin from "./components/AdminLogin";
 import AdminLayout from "./components/admin/AdminLayout";
 import AdminDashboard from "./components/admin/AdminDashboard";
 import UsersManagement from "./components/admin/UsersManagement";
+import AdminEvents from "./components/admin/AdminEvents"; 
+import AdminNotes from "./components/admin/AdminNotes";
+import AdminNoteAnalytics from "./components/admin/AdminNoteAnalytics";
 //private route functionality
 import PrivateRoute from "./components/privateRoute";
+import AdminTasksPage from "./components/admin/AdminTasksPage";
+import AdminSuccessStories from "./components/admin/AdminSucessStories";
 
 function App() {
   return (
@@ -110,10 +115,11 @@ function App() {
                 <Route path="users" element={<UsersManagement />} />
                 {/* Add other admin routes here */}
                 <Route path="moods" element={<div>Moods Management - Coming Soon</div>} />
-                <Route path="schedules" element={<div>Schedules Management - Coming Soon</div>} />
-                <Route path="notes" element={<div>Notes Management - Coming Soon</div>} />
-                <Route path="tasks" element={<div>Tasks Management - Coming Soon</div>} />
-                <Route path="success-stories" element={<div>Success Stories Management - Coming Soon</div>} />
+                <Route path="events" element={<AdminEvents/>} />
+                <Route path="notes" element={<AdminNotes/>} />
+                <Route path="notes/analytics" element={<AdminNoteAnalytics/>} />
+                <Route path="tasks" element={<AdminTasksPage/>} />
+                <Route path="success-stories" element={<AdminSuccessStories/>} />
               </Route>
               
               {/* Redirect to admin login for unmatched admin routes */}

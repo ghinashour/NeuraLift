@@ -1,7 +1,6 @@
-// backend/controllers/admin/noteController.js
 const Note = require("../../models/Note");
 
-// Get all notes (admin only)
+// Get all notes (with filters, search, date range, pagination)
 exports.getAllNotes = async (req, res) => {
   try {
     const { userId, keyword, from, to, page = 1, limit = 10 } = req.query;
@@ -29,7 +28,7 @@ exports.getAllNotes = async (req, res) => {
   }
 };
 
-// Delete a note (admin only)
+// Delete a note
 exports.deleteNote = async (req, res) => {
   try {
     await Note.findByIdAndDelete(req.params.id);
@@ -52,7 +51,9 @@ exports.noteAnalytics = async (req, res) => {
       { $sort: { _id: 1 } },
     ]);
 
-    res.json({ trend });
+    const totalNotes = await Note.countDocuments();
+
+    res.json({ totalNotes, trend });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }

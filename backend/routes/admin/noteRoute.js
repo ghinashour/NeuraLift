@@ -1,4 +1,3 @@
-// backend/routes/admin/noteRoutes.js
 const express = require("express");
 const router = express.Router();
 const {
@@ -7,7 +6,7 @@ const {
   noteAnalytics,
 } = require("../../controllers/admin/noteController");
 
-const {protect } = require("../../middleware/admin");
+const { protect } = require("../../middleware/admin");
 
 router.get("/", protect, getAllNotes);
 router.delete("/:id", protect, deleteNote);

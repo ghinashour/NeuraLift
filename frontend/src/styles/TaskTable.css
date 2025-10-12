@@ -1,0 +1,64 @@
+/* Table container */
+.task-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: Arial, sans-serif;
+  font-size: 14px;
+}
+
+/* Table header */
+.task-table thead {
+  background-color: #f0f0f0;
+}
+
+.task-table th,
+.task-table td {
+  border: 1px solid #ccc;
+  padding: 8px;
+  text-align: center;
+}
+
+/* Status column */
+.status {
+  text-transform: capitalize;
+}
+
+/* Actions buttons */
+.actions {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+}
+
+.complete-btn {
+  background-color: #28a745;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.delete-btn {
+  background-color: #dc3545;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.complete-btn:hover {
+  background-color: #218838;
+}
+
+.delete-btn:hover {
+  background-color: #c82333;
+}
+
+/* No tasks message */
+.no-tasks {
+  text-align: center;
+  color: #666;
+  margin: 20px 0;
+}

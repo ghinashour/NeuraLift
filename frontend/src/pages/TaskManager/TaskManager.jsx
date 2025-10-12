@@ -28,15 +28,7 @@ const TaskManagerPage = () => {
     };
 
     const handleProgressClick = () => {
-        // OPTION 1: Show as Modal (current implementation)
         setShowProgressModal(true);
-
-        // OPTION 2: Navigate to a new page (uncomment line below and comment line above)
-        // navigate('/progress');
-
-        // To switch between modal and page:
-        // 1. For modal: Use setShowProgressModal(true) and keep the modal JSX below
-        // 2. For page: Use navigate('/progress') and add the route to index.js
     };
 
     return (

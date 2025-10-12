@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { useNavigate, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import "../../styles/Auth.css";
+import Swal from 'sweetalert2';
 function Signup() {
   const [form, setForm] = useState({ username: "", email: "", password: "" });
   const [error, setError] = useState(null);
-  const navigate = useNavigate();
 
   //sign up to the site with google
   const handleGoogleLogin = () => {
@@ -26,9 +26,19 @@ function Signup() {
 
     try {
       const res = await axios.post("http://localhost:4000/api/auth/signup", form);
-      alert(res.data.msg);
+      Swal.fire({
+        icon: 'success',
+        title: 'Signup Successful',
+        text: res.data.msg,
+        confirmButtonColor: '#3C83F6'
+      });
     } catch (err) {
-      setError(err.response?.data?.msg || "Signup failed");
+      Swal.fire({
+        icon: 'error',
+        title: 'Signup Failed',
+        text: err.response?.data?.msg || 'Signup failed',
+        confirmButtonColor: '#3C83F6'
+      });
     }
   };
 
@@ -67,19 +77,19 @@ function Signup() {
         <p className="bottom-text">
           Already have an account? <Link to="/login">Login</Link>
         </p>
-            <button
-      onClick={handleGoogleLogin}
-      style={{
-        padding: "10px 20px",
-        backgroundColor: "#4285F4",
-        color: "#fff",
-        border: "none",
-        borderRadius: "5px",
-        cursor: "pointer",
-      }}
-    >
-      Continue with Google
-    </button>
+        <button
+          onClick={handleGoogleLogin}
+          style={{
+            padding: "10px 20px",
+            backgroundColor: "#4285F4",
+            color: "#fff",
+            border: "none",
+            borderRadius: "5px",
+            cursor: "pointer",
+          }}
+        >
+          Continue with Google
+        </button>
       </div>
     </div>
   );
