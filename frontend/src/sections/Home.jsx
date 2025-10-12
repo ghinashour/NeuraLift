@@ -3,14 +3,13 @@ import "../styles/Home.css"; // import CSS
 
 const Home = () => {
   return (
-    
     <section id="Home" className="home-section">
       <div className="home-container">
         {/* Headline */}
         <h1 className="home-title">
-          Transform Your Life with <span className="highlight">NeuraLift</span>
+          Transform Your Life with<br></br>
+          <span className="highlight">NeuraLift</span>
         </h1>
-
 
         {/* Tagline */}
         <p className="home-tagline">

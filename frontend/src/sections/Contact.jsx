@@ -19,18 +19,37 @@ function Contact() {
 
           <form>
             <div className="form-row">
-              <div className="form-group">
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  marginBottom: "20px",
+                }}
+              >
                 <label>
                   First Name <span className="required">*</span>
                 </label>
-                <input type="text" placeholder="Your full name" required />
+                <input
+                  className="inputcolor"
+                  type="text"
+                  placeholder="Your full name"
+                  required
+                />
               </div>
 
-              <div className="form-group">
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  marginBottom: "20px",
+                }}
+              >
+                {" "}
                 <label>
                   Email Address <span className="required">*</span>
                 </label>
                 <input
+                  className="inputcolor"
                   type="email"
                   placeholder="your.email@example.com"
                   required
@@ -38,16 +57,35 @@ function Contact() {
               </div>
             </div>
 
-            <div className="form-group">
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                marginBottom: "20px",
+              }}
+            >
+              {" "}
               <label>Subject</label>
-              <input type="text" placeholder="What's this about?" />
+              <input
+                className="inputcolor"
+                type="text"
+                placeholder="What's this about?"
+              />
             </div>
 
-            <div className="form-group">
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                marginBottom: "20px",
+              }}
+            >
               <label>
                 Message <span className="required">*</span>
               </label>
               <textarea
+                style={{ height: "170px", marginBottom: "20px" }}
+                className="inputcolor"
                 placeholder="Tell us more about how we can help you"
                 required
               ></textarea>
