@@ -139,7 +139,7 @@ const createStory = async (req, res) => {
             title,
             author,
             description,
-            category: category || 'Personal Growth',
+            category: category || 'Habits',
             tags: tags || [],
             isPublic: isPublic !== false, // Default to true
             userId: req.user?.id // Will be null for anonymous stories

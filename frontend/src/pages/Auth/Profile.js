@@ -39,6 +39,8 @@ function Profile() {
 
       setUser(res.data);
       localStorage.setItem("user", JSON.stringify(res.data)); // ✅ keep sidebar in sync
+      // Dispatch custom event to notify other components
+      window.dispatchEvent(new CustomEvent("userUpdated"));
       setMessage("Profile updated ✅");
     } catch (err) {
       setMessage(err.response?.data?.message || "Update failed");

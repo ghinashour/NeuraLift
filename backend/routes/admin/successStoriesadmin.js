@@ -1,18 +1,19 @@
 const express = require("express");
 const router = express.Router();
+const {protect} = require("../../middleware/admin"); // check if user is admin
 const {
   getAllStories,
+  updateStory,
   deleteStory,
-  toggleFeature,
-  storyAnalytics
+  toggleFeatureStory
 } = require("../../controllers/admin/successStoriesAdmin");
 
-const {protect } = require("../../middleware/admin");
+// All routes are protected & admin only
+router.use( protect);
 
-// Admin routes
-router.use("/", protect, getAllStories);
-router.use("/:id", protect, deleteStory);
-router.use("/feature/:id", protect, toggleFeature);
-router.use("/analytics/stats", protect, storyAnalytics);
+router.get("/", getAllStories);
+router.put("/:id", updateStory);
+router.delete("/:id", deleteStory);
+router.put("/feature/:id", toggleFeatureStory);
 
 module.exports = router;

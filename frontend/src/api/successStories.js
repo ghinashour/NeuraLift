@@ -1,6 +1,6 @@
 import axios from './axios';
 
-const API_BASE_URL = '/api/success-stories';
+const API_BASE_URL = '/success-stories';
 
 export const successStoriesAPI = {
     // Get all public success stories with pagination and filtering

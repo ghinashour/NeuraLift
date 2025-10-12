@@ -1,0 +1,258 @@
+/* AdminSuccessStories.css
+   Modern admin table styles — responsive, accessible, and clean.
+*/
+
+/* Color palette (easy to tweak) */
+:root{
+  --bg: #f6f8fb;
+  --card: #ffffff;
+  --muted: #6b7280;
+  --text: #0f1724;
+  --accent: #2563eb;     /* blue */
+  --danger: #ef4444;     /* red */
+  --success: #10b981;    /* green */
+  --soft-border: rgba(15,23,36,0.06);
+  --glass: rgba(37,99,235,0.06);
+  --shadow: 0 6px 24px rgba(9,30,66,0.08);
+  --radius: 12px;
+  --gap: 12px;
+  --pad: 18px;
+  --small-pad: 10px;
+  --font-sans: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+}
+
+/* Page background and root wrapper */
+.admin-stories-root {
+  font-family: var(--font-sans);
+  background: var(--bg);
+  padding: 28px;
+  min-height: 100vh;
+  color: var(--text);
+  box-sizing: border-box;
+}
+
+/* Card container */
+.admin-stories-card {
+  background: linear-gradient(180deg, var(--card), var(--card));
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: var(--pad);
+  border: 1px solid var(--soft-border);
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* Header */
+.admin-stories-header {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 18px;
+}
+
+.admin-stories-header h2 {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 600;
+  letter-spacing: -0.2px;
+}
+
+/* Optional controls area (filters, search, add) */
+.admin-controls {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+/* Table wrapper to allow horizontal scroll on small screens */
+.table-wrap {
+  width: 100%;
+  overflow-x: auto;
+  border-radius: 10px;
+  background: linear-gradient(180deg, rgba(255,255,255,0.8), rgba(255,255,255,0.75));
+  padding: 6px;
+  border: 1px solid var(--soft-border);
+}
+
+/* Table styling */
+.admin-stories-table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 800px; /* forces horizontal scroll on narrow screens */
+  font-size: 0.95rem;
+}
+
+.admin-stories-table thead th {
+  text-align: left;
+  font-weight: 600;
+  color: var(--muted);
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--soft-border);
+  background: rgba(250,250,252,0.7);
+  position: sticky;
+  top: 0;
+  z-index: 2;
+}
+
+/* Body rows */
+.admin-stories-table tbody tr {
+  background: transparent;
+  transition: background 120ms ease, transform 120ms ease;
+}
+
+.admin-stories-table tbody tr:hover {
+  background: rgba(37,99,235,0.03);
+  transform: translateY(-1px);
+}
+
+/* Cells */
+.admin-stories-table td {
+  padding: 12px 14px;
+  border-bottom: 1px dashed rgba(15,23,36,0.03);
+  vertical-align: middle;
+  color: var(--text);
+}
+
+/* Title cell — allow wrapping and limit height */
+.story-title {
+  max-width: 360px;
+  white-space: normal;
+  word-break: break-word;
+}
+
+/* Tiny meta text */
+.meta {
+  display: block;
+  color: var(--muted);
+  font-size: 0.85rem;
+  margin-top: 6px;
+}
+
+/* Featured badge */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  font-weight: 600;
+  font-size: 0.78rem;
+  letter-spacing: 0.2px;
+}
+
+.badge.yes {
+  background: var(--glass);
+  color: var(--accent);
+  border: 1px solid rgba(37,99,235,0.12);
+}
+
+.badge.no {
+  background: rgba(15,23,36,0.03);
+  color: var(--muted);
+}
+
+/* Action buttons */
+.actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+/* Primary action (feature/unfeature) */
+.btn {
+  border: none;
+  padding: 8px 12px;
+  font-size: 0.9rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: transform 120ms ease, box-shadow 120ms ease;
+  display: inline-flex;
+  gap: 8px;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn:focus {
+  outline: 3px solid rgba(37,99,235,0.14);
+  outline-offset: 2px;
+}
+
+/* Feature toggle */
+.btn-feature {
+  background: transparent;
+  color: var(--accent);
+  border: 1px solid rgba(37,99,235,0.12);
+  box-shadow: 0 1px 0 rgba(37,99,235,0.02);
+}
+.btn-feature:hover { transform: translateY(-2px); }
+
+/* Delete */
+.btn-delete {
+  background: transparent;
+  color: var(--danger);
+  border: 1px solid rgba(239,68,68,0.08);
+  box-shadow: 0 1px 0 rgba(239,68,68,0.02);
+}
+.btn-delete:hover { transform: translateY(-2px); }
+
+/* Small icon-only button */
+.icon-btn {
+  padding: 8px;
+  min-width: 36px;
+  border-radius: 8px;
+}
+
+/* Empty state */
+.empty {
+  padding: 36px;
+  text-align: center;
+  color: var(--muted);
+}
+
+/* Pagination area (if you add) */
+.pagination {
+  display:flex;
+  gap:8px;
+  justify-content:flex-end;
+  margin-top:14px;
+}
+
+/* Responsive: stack rows on very small screens */
+@media (max-width: 700px) {
+  .admin-stories-card {
+    padding: 14px;
+  }
+
+  .admin-stories-table {
+    min-width: 100%;
+    border-radius: 8px;
+  }
+
+  .admin-stories-table thead {
+    display: none; /* hide header to use stacked layout */
+  }
+
+  .admin-stories-table tbody tr {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 8px;
+    padding: 12px;
+    border-radius: 10px;
+    margin-bottom: 10px;
+    background: var(--card);
+    border: 1px solid var(--soft-border);
+  }
+
+  .admin-stories-table tbody td {
+    border: none;
+    padding: 6px 8px;
+  }
+
+  .actions {
+    justify-self: end;
+    align-self: center;
+  }
+
+  .story-title { max-width: 100%; }
+}

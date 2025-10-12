@@ -26,7 +26,7 @@ const Home = () => {
         {/* Buttons */}
         <div className="home-buttons">
               <button 
-      className="btn-primary" 
+      className="home-btn-primary" 
       onClick={() => navigate("/signup")}
     >
       Get Started Today →
