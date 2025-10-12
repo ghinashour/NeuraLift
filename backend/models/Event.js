@@ -7,7 +7,7 @@ const eventSchema = new mongoose.Schema({
         ref: 'User',
         required: true
     },
-    name:{
+    title:{
         type:String,
         required:true,
         trim:true

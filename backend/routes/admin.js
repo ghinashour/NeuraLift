@@ -13,6 +13,7 @@ const noteRoutes = require("./admin/noteRoute");
 const taskRoutes = require("./admin/taskRoutes");
 const successStoryRoutes = require("./admin/successStoriesadmin");
 const analyticsRoutes = require("./admin/analytics");
+const adminEventRoutes = require('./admin/adminEventRoutes');
 
  //login as admin
 router.post("/login", loginAdmin);
@@ -30,8 +31,7 @@ router.use("/moods", protect, moodRoutes );
 router.use("/schedules",protect, scheduleRoutes);
 router.use("/notes", protect,noteRoutes);
 router.use("/tasks", protect,taskRoutes);
-router.use("/success-stories", successStoryRoutes);
-//router.get('/challenges', protect, getChallenges);
-
+router.use("/stories", successStoryRoutes);
+router.use('/events', protect, adminEventRoutes);
 
 module.exports = router;

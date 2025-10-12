@@ -118,16 +118,15 @@ const Sidebar = ({ isCollapsed, setIsCollapsed, user }) => {
     navigate(path);
   };
 
-    const isActive = (path) => {
-        if (path === '/') {
-            return location.pathname === '/';
-        }
-        return location.pathname.startsWith(path);
-    };
-    
+  const isActive = (path) => {
+    if (path === '/') {
+      return location.pathname === '/';
+    }
+    return location.pathname.startsWith(path);
+  };
 
-    return (
-        <>
+  return (
+    <>
       <aside className={`sidebar ${isCollapsed ? "collapsed" : ""}`}>
         <div className="brand">
           <div className="brand-icon">
