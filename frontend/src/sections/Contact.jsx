@@ -19,13 +19,7 @@ function Contact() {
 
           <form>
             <div className="form-row">
-              <div
-                style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  marginBottom: "20px",
-                }}
-              >
+              <div className="contact-form-group">
                 <label>
                   First Name <span className="required">*</span>
                 </label>
@@ -37,14 +31,7 @@ function Contact() {
                 />
               </div>
 
-              <div
-                style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  marginBottom: "20px",
-                }}
-              >
-                {" "}
+              <div className="contact-form-group">
                 <label>
                   Email Address <span className="required">*</span>
                 </label>

@@ -24,18 +24,19 @@
 
 /* Wrap that holds both the centered text and the right icon column */
 .greeting-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  min-height: 96px;
   position: relative;
-  min-height: 96px; /* enough room for greeting + subtext */
 }
 
 /* Centered block (doesn't shift when icons change) */
 .greeting-center {
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
-  top: 0;
+  position: static;
+  transform: none;
   text-align: center;
-  width: max-content;
+  flex: 1;
 }
 
 /* Greeting text: 32px, bold, blue gradient */
@@ -64,12 +65,10 @@
 
 /* Right-side icons column */
 .greeting-right {
-  position: absolute;
-  right: 0;
-  top: 0;
+  position: static;
   display: flex;
   gap: 14px;
-  align-items: flex-start;
+  align-items: center;
 }
 
 .icon-item {
@@ -116,14 +115,8 @@
 
 .inspiration-box {
   width: 768px;
-  height: 211px;
-  background: #ffffff;
-  border-radius: 12px;
-  box-shadow: 0 6px 20px rgba(16, 24, 40, 0.06);
-  padding: 18px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
+  min-height: 180px;
+  height: auto;
 }
 
 /* Title centered with heart */
@@ -148,12 +141,9 @@
 
 /* Quote area (fixed size 718x77, centered content) */
 .quote-wrapper {
-  width: 718px;
-  height: 77px;
-  margin: 0 auto;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  width: 100%;
+  max-width: 718px;
+  height: auto;
 }
 
 .quote-card {
@@ -220,11 +210,12 @@
 /* ===============================
    Action Cards Grid (4x)
    =============================== */
+/* Action grid: flexible sizing */
 .action-grid {
   width: 100%;
   max-width: 1200px;
   display: grid;
-  grid-template-columns: repeat(4, 270px);
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   gap: 24px;
   justify-content: center;
 }

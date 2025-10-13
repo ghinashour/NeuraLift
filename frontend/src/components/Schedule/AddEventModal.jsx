@@ -2,13 +2,14 @@ import React, { useState, useEffect } from 'react';
 import Button from '../UI/Button/Button';
 import Input from '../UI/Input/Input';
 import './AddEventModal.css';
+
 const AddEventModal = ({ isOpen, onClose, onSave, event }) => {
   const [formData, setFormData] = useState({
     title: '',
     description: '',
+    startDate: '',
+    endDate: '',
     color: '#4A90E2',
-    start: '',
-    end: ''
   });
 
   useEffect(() => {
@@ -17,25 +18,25 @@ const AddEventModal = ({ isOpen, onClose, onSave, event }) => {
         title: event.title,
         description: event.description,
         color: event.color,
-        start: event.start.substring(0, 16),
-        end: event.end.substring(0, 16)
+        startDate: event.startDate.substring(0, 16),
+        endDate: event.endDate.substring(0, 16),
       });
     } else {
       setFormData({
         title: '',
         description: '',
         color: '#4A90E2',
-        start: '',
-        end: ''
+        startDate: '',
+        endDate: '',
       });
     }
   }, [event]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      [name]: value
+      [name]: value,
     }));
   };
 
@@ -43,8 +44,8 @@ const AddEventModal = ({ isOpen, onClose, onSave, event }) => {
     e.preventDefault();
     onSave({
       ...formData,
-      start: new Date(formData.start).toISOString(),
-      end: new Date(formData.end).toISOString()
+      startDate: new Date(formData.startDate).toISOString(),
+      endDate: new Date(formData.endDate).toISOString(),
     });
   };
 
@@ -55,9 +56,11 @@ const AddEventModal = ({ isOpen, onClose, onSave, event }) => {
       <div className="modal">
         <div className="modal-header">
           <h3>{event ? 'Edit Event' : 'Add Event'}</h3>
-          <button onClick={onClose} className="close-btn">×</button>
+          <button onClick={onClose} className="close-btn">
+            ×
+          </button>
         </div>
-        
+
         <form onSubmit={handleSubmit} className="modal-form">
           <Input
             label="Event Name"
@@ -66,7 +69,7 @@ const AddEventModal = ({ isOpen, onClose, onSave, event }) => {
             onChange={handleChange}
             required
           />
-          
+
           <Input
             label="Description"
             name="description"
@@ -74,7 +77,7 @@ const AddEventModal = ({ isOpen, onClose, onSave, event }) => {
             onChange={handleChange}
             type="textarea"
           />
-          
+
           <Input
             label="Color"
             name="color"
@@ -82,25 +85,25 @@ const AddEventModal = ({ isOpen, onClose, onSave, event }) => {
             onChange={handleChange}
             type="color"
           />
-          
+
           <Input
             label="Start Date & Time"
-            name="start"
-            value={formData.start}
+            name="startDate"
+            value={formData.startDate}
             onChange={handleChange}
             type="datetime-local"
             required
           />
-          
+
           <Input
             label="End Date & Time"
-            name="end"
-            value={formData.end}
+            name="endDate"
+            value={formData.endDate}
             onChange={handleChange}
             type="datetime-local"
             required
           />
-          
+
           <div className="modal-actions">
             <Button type="button" onClick={onClose} className="cancel-btn">
               Cancel

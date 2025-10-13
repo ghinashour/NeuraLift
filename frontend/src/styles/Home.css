@@ -83,10 +83,10 @@ body {
   align-items: center;
 }
 
-.btn-primary:hover {
-  background-color: #3182ce;
+.home-btn-primary:hover {
   transform: translateY(-1px);
   box-shadow: 0 4px 12px rgba(74, 158, 255, 0.3);
+  opacity: 0.9;
 }
 
 .btn-secondary {
@@ -99,6 +99,8 @@ body {
   border-radius: 8px;
   cursor: pointer;
   transition: all 0.2s ease;
+  text-decoration: none;
+
 }
 
 .btn-secondary:hover {

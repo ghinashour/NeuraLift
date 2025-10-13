@@ -41,10 +41,10 @@ function Footer() {
         <div className="footer-column">
           <div className="footer-title">Quick Links</div>
           <ul className="footer-links">
-            <li><a href="#features">Features</a></li>
-            <li><a href="#about">About us</a></li>
-            <li><a href="#success">Success Stories</a></li>
-            <li><a href="#contact">Contact</a></li>
+            <li><a href="#Features">Features</a></li>
+            <li><a href="#About">About us</a></li>
+            <li><a href="#SuccessStories">Success Stories</a></li>
+            <li><a href="#Contact">Contact</a></li>
           </ul>
         </div>
 

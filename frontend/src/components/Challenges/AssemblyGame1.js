@@ -13,7 +13,7 @@ const AssemblyGame1 = () => {
     'JavaScript', 'Python', 'Java', 'C++', 'Ruby', 'Go', 'Rust', 'Swift'
   ];
 
-  // API configuration - adjust according to your backend URL
+  // API configuration 
   const API_BASE = process.env.REACT_APP_API_URL || 'http://localhost:4000/api';
 
   useEffect(() => {

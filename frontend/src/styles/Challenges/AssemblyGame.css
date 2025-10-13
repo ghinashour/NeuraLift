@@ -4,23 +4,28 @@
   padding: 20px;
   font-family: Arial, sans-serif;
   text-align: center;
+  color: rgb(48, 45, 45);
+  background-color: #3083d6;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 h1 {
-  color: #2c3e50;
+  color: #fafafa;
   margin-bottom: 30px;
 }
 
 .hint-section {
   background-color: #f8f9fa;
   padding: 15px;
+  color: #0b1118;
   border-radius: 8px;
   margin-bottom: 20px;
 }
 
 .hint-section h3 {
   margin: 0 0 10px 0;
-  color: #495057;
+  color: #252729;
 }
 
 .word-display {
@@ -28,7 +33,7 @@ h1 {
   letter-spacing: 10px;
   margin: 30px 0;
   font-weight: bold;
-  color: #2c3e50;
+  color: #fafafa;
 }
 
 .letter {
@@ -61,6 +66,7 @@ h1 {
   padding: 15px;
   border-radius: 8px;
   margin: 20px 0;
+  color: #2c3e50;
 }
 
 .guess-form {
@@ -70,12 +76,14 @@ h1 {
 .guess-form input {
   font-size: 1.2em;
   padding: 10px;
-  width: 60px;
+  width: 170px;
   text-align: center;
   margin-right: 10px;
   border: 2px solid #bdc3c7;
   border-radius: 4px;
   text-transform: uppercase;
+  transition: border-color 0.3s;
+  
 }
 
 .guess-form button, .new-game-btn {
@@ -94,7 +102,7 @@ h1 {
 }
 
 .guess-form button:disabled {
-  background-color: #95a5a6;
+  background-color: #721c24;
   cursor: not-allowed;
 }
 
@@ -103,6 +111,11 @@ h1 {
   padding: 15px;
   border-radius: 8px;
   margin: 20px 0;
+  font-weight: bold;
+  text-align: center;
+  max-width: 400px;
+  margin-left: auto;
+  color: #fafafa;
 }
 
 .message.won {

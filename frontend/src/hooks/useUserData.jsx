@@ -1,7 +1,3 @@
-/**
- * Fetches the user name from your backend.
- * Adjust the endpoint to your API. Expected response: { name: "Mhmd" }
- */
 import { useEffect, useState } from "react";
 import apiClient from "../utils/apiClient";
 
@@ -11,17 +7,29 @@ export default function useUserData() {
 
   useEffect(() => {
     let mounted = true;
+    const controller = new AbortController();
+
     (async () => {
       try {
-        const data = await apiClient.get("/api/User");
-        if (mounted && data?.name) setName(data.name);
-      } catch {
-        /* keep fallback */
+        const res = await apiClient.get("/api/auth/me", {
+          signal: controller.signal,
+        });
+        if (mounted && res?.username) {
+          setName(res.username);
+        }
+      } catch (err) {
+        if (err.name !== "AbortError") {
+          console.error("Failed to fetch user:", err);
+        }
       } finally {
         if (mounted) setLoading(false);
       }
     })();
-    return () => (mounted = false);
+
+    return () => {
+      mounted = false;
+      controller.abort();
+    };
   }, []);
 
   return { name, loading };

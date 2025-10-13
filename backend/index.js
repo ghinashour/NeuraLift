@@ -1,42 +1,55 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
-const profileRoutes = require("./routes/profile.js");
 const path = require("path");
-const verifyEmailRoute = require("./routes/verifyEmail.js");
+const profileRoutes = require("./routes/profile.js");
 const questionRoutes = require("./routes/questions.js");
 const devQuestionRoutes = require("./routes/DevQuestionRoute.js");
 const assemblyGameRoutes = require('./routes/assemblyGame');
 const tensizesRoutes = require("./routes/tenziesRoutes");
+const eventRoutes = require("./routes/eventRoutes.js");
+const authRoutes = require('./routes/authRoute');
+const adminRoutes = require('./routes/admin.js');
+const successStoryRoutes = require("./routes/successStories");
+const quoteRoutes = require("./routes/quotes.js");
+const moodRoutes = require("./routes/moodroutes.js");
+const tasksRouter = require("./routes/tasks.js");
+const noteRoute = require("./routes/noteUserRoute.js");
+const adminTaskRouter = require("./routes/admin/taskRoutes.js")
+const passport = require("passport");
+require("./config/passport");
 require("dotenv").config();
 
-const authRoutes = require("./routes/authRoute");
-const successStoryRoutes = require("./routes/successStories");
-
 const app = express();
-
+app.use(express.json());
 // Middleware
 app.use(cors({
   origin: "http://localhost:3000", // allow frontend
   methods: ["GET", "POST", "PUT", "DELETE"],
 }));
-app.use(express.json());
+
 
 // Routes
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 app.use("/api/auth", authRoutes);
 app.use("/api/profile", profileRoutes);
-app.use("/api/auth", verifyEmailRoute);
-
 //fetching the challenges
 app.use("/api/questions", questionRoutes);
 app.use("/api/devquestions", devQuestionRoutes);
 app.use('/api/assembly-game', assemblyGameRoutes);
 app.use("/api/tenzies", tensizesRoutes);
 app.use("/api/success-stories", successStoryRoutes);
+app.use("/api/events", eventRoutes);
+app.use("/api/quotes", quoteRoutes);
+app.use('/api/moods', moodRoutes);
+app.use("/api/notes", noteRoute);
+//protected admin routes
+app.use("/api/admin", adminRoutes);
+app.use("/api/tasks", tasksRouter); // user task routes
+app.use("/api/admin/tasks", adminTaskRouter); // admin task routes
 //server uploaded files
 app.use('/uploads', express.static('uploads'));
-
+app.use(passport.initialize());
 // Connect to MongoDB
 mongoose.connect(process.env.MONGO_URI)
   .then(() => console.log("MongoDB connected ✅"))

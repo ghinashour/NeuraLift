@@ -1,13 +1,6 @@
-/**
- * Daily Inspiration section:
- * - Centered title (heart icon + "Daily Inspiration")
- * - Quote box (718x77) from Quotable (motivational tags)
- * - Centered "New quote" button with an icon
- */
 import React from "react";
 import { FaHeart, FaSyncAlt } from "react-icons/fa";
 import useInspiration from "../hooks/useInspiration";
-import QuoteCard from "./QuoteCard";
 import "../styles/Dashboard.css";
 
 export default function InspirationSection() {
@@ -22,7 +15,14 @@ export default function InspirationSection() {
         </div>
 
         <div className="quote-wrapper">
-          <QuoteCard quote={quote} loading={loading} />
+          {loading ? (
+            <p>Loading...</p>
+          ) : (
+            <>
+              <p className="quote-text">{quote.text}</p>
+              <p className="quote-author">— {quote.author}</p>
+            </>
+          )}
         </div>
 
         <div className="quote-actions">

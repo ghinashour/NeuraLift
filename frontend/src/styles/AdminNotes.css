@@ -1,0 +1,108 @@
+.admin-notes,
+.admin-note-analytics {
+  padding: 2rem;
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  margin: 2rem;
+}
+
+.admin-notes h2,
+.admin-note-analytics h2 {
+  color: #333;
+  margin-bottom: 0.3rem;
+}
+
+.subtitle {
+  color: #666;
+  font-size: 0.95rem;
+  margin-bottom: 1.2rem;
+}
+
+.note-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.8rem;
+  margin-bottom: 1.5rem;
+  align-items: center;
+}
+
+.note-filters input,
+.note-filters select {
+  padding: 0.6rem 0.8rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 0.95rem;
+}
+
+.note-filters button {
+  background: #4a90e2;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 0.6rem 1.2rem;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.note-filters button:hover {
+  background: #357ac9;
+}
+
+.notes-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 1.5rem;
+}
+
+.notes-table th,
+.notes-table td {
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid #eee;
+  text-align: left;
+}
+
+.notes-table th {
+  background: #f9fafc;
+  font-weight: 600;
+}
+
+.btn-delete {
+  background: #ff5b5b;
+  color: white;
+  border: none;
+  padding: 0.4rem 0.8rem;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.btn-delete:hover {
+  background: #e04a4a;
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+}
+
+.pagination button {
+  background: #4a90e2;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.pagination button:disabled {
+  background: #b0c8e5;
+  cursor: not-allowed;
+}
+
+.pagination span {
+  font-weight: 500;
+  color: #333;
+}
