@@ -70,26 +70,22 @@ body {
 /* Buttons */
 .home-buttons {
   display: flex;
-  gap: 16px;
+  gap: 20px;
   justify-content: center;
-  align-items: center;
   margin-bottom: 30px;
-  flex-wrap: wrap;
 }
 
-.home-btn-primary {
+.btn-primary {
+  max-width: 200px;
   background-color: #4a9eff;
   color: white;
   font-size: 1rem;
   font-weight: 500;
-  padding: 14px 28px;
   border: none;
   border-radius: 8px;
   cursor: pointer;
   transition: all 0.2s ease;
-  display: flex;
   align-items: center;
-  gap: 8px;
 }
 
 .home-btn-primary:hover {
