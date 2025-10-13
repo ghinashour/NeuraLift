@@ -6,12 +6,10 @@ import "../styles/Sidebar.css"; // sidebar css also contains layout variables
 
 export default function Layout() {
   const location = useLocation();
-  // we expect landing ("/") to be outside Layout; extra guard:
-  const showSidebar = location.pathname !== "/";
+  const showSidebar = location.pathname !== "/"; // only show sidebar outside landing
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [user, setUser] = useState(null);
 
-  // Load user data from localStorage on component mount
   useEffect(() => {
     const userData = localStorage.getItem("user");
     if (userData) {
@@ -24,7 +22,6 @@ export default function Layout() {
     }
   }, []);
 
-  // Listen for storage changes to update user data when profile is updated
   useEffect(() => {
     const handleStorageChange = () => {
       const userData = localStorage.getItem("user");
@@ -40,8 +37,6 @@ export default function Layout() {
     };
 
     window.addEventListener("storage", handleStorageChange);
-
-    // Also listen for custom events (for same-tab updates)
     window.addEventListener("userUpdated", handleStorageChange);
 
     return () => {
@@ -53,9 +48,13 @@ export default function Layout() {
   return (
     <div className={`app-layout ${isCollapsed ? "sidebar-collapsed" : ""}`}>
       {showSidebar && (
-        <Sidebar isCollapsed={isCollapsed} setIsCollapsed={setIsCollapsed} user={user} />
+        <Sidebar
+          isCollapsed={isCollapsed}
+          setIsCollapsed={setIsCollapsed}
+          user={user}
+        />
       )}
-      <main className="layout-main">
+      <main className={`layout-main ${showSidebar ? "" : "no-sidebar"}`}>
         <Outlet />
       </main>
     </div>

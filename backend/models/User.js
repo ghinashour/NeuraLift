@@ -17,6 +17,10 @@ const userSchema = new mongoose.Schema({
       return !this.googleId;
     },
   },
+    streak: {
+    current: { type: Number, default: 0 },
+    lastActiveDate: { type: Date, default: null }
+  },
   profilePhoto: { type: String, default: "avatar.jpg" },
   isVerified: { type: Boolean, default: false },
   isSuspended: { type: Boolean, default: false },

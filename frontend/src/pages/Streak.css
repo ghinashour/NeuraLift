@@ -1,0 +1,63 @@
+.streak-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-family: "Arial", sans-serif;
+}
+
+.streak-circle {
+  position: relative;
+  width: 60px;
+  height: 60px;
+}
+
+.progress-ring {
+  transform: rotate(-90deg);
+}
+
+.progress-ring__background {
+  stroke: #eee;
+}
+
+.progress-ring__circle {
+  stroke: #ff6a00;
+  stroke-linecap: round;
+  transition: stroke-dashoffset 0.5s ease;
+}
+
+.streak-content {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.streak-number {
+  font-weight: bold;
+  margin-left: 3px;
+  color: #ff6a00;
+}
+
+.streak-fire {
+  color: #ff6a00;
+  font-size: 20px;
+  animation: fire-pulse 1s infinite alternate;
+}
+
+@keyframes fire-pulse {
+  0% {
+    transform: scale(1);
+  }
+  100% {
+    transform: scale(1.2);
+  }
+}
+
+.streak-text {
+  font-size: 12px;
+  color: #555;
+  margin-top: 4px;
+}

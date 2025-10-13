@@ -1,5 +1,5 @@
 const Event = require('../models/Event');
-
+const Notification = require("../models/Notification");
 
 const createEvent = async (req, res) => {
   try {
@@ -17,6 +17,14 @@ const createEvent = async (req, res) => {
       color: req.body.color || "#3788d8",
       startDate: req.body.startDate,
       endDate: req.body.endDate
+    });
+
+     await Notification.create({
+      user: event.user,
+      type: "event",
+      title: `New Meeting: ${event.title}`,
+      description: `You scheduled a meeting at ${new Date(event.startDate).toLocaleString()}.`
+
     });
 
     res.status(201).json(event);
