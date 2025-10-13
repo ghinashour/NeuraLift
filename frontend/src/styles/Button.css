@@ -39,3 +39,22 @@
 .btn--quote:hover:not(:disabled) {
   background: #3b82f6;
 }
+
+/* ===============================
+   ✅ Responsive Enhancements Only
+   =============================== */
+@media (max-width: 600px) {
+  .btn {
+    width: 100%;              /* full-width buttons for mobile */
+    font-size: 0.9rem;        /* slightly smaller text */
+    padding: 0.8rem 1rem;     /* larger tap target */
+  }
+}
+
+@media (max-width: 400px) {
+  .btn {
+    font-size: 0.85rem;
+    padding: 0.8rem 0.9rem;
+    border-radius: 8px;       /* compact rounding for small screens */
+  }
+}

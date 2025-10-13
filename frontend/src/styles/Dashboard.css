@@ -114,6 +114,9 @@
   width: 768px;
   min-height: 180px;
   height: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 /* Title centered with heart */
@@ -136,7 +139,7 @@
   margin: 0;
 }
 
-/* Quote area (fixed size 718x77, centered content) */
+/* Quote area */
 .quote-wrapper {
   width: 100%;
   max-width: 718px;
@@ -173,7 +176,7 @@
   font-size: 14px;
   color: #6b7280;
   margin-top: 6px;
-  align-items:self-end;
+  align-self: flex-end;
 }
 
 .quote-loading {
@@ -186,6 +189,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  margin-top: 12px;
 }
 
 .new-quote-btn {
@@ -207,9 +211,8 @@
 .new-quote-ico { font-size: 14px; }
 
 /* ===============================
-   Action Cards Grid (4x)
+   Action Cards Grid
    =============================== */
-/* Action grid: flexible sizing */
 .action-grid {
   width: 70%;
   max-width: 1200px;
@@ -251,18 +254,44 @@
 .action-subtext { font-size: 13px; color: #6B7280; }
 
 /* ===============================
-   Responsive tweaks
+   Responsive Tweaks
    =============================== */
 @media (max-width: 1100px) {
   .action-grid { grid-template-columns: repeat(2, 270px); }
   .inspiration-box { width: 92%; }
   .quote-wrapper { width: 90%; }
+  .dashboard-page { width: 85%; }
+  .dashboard-header { width: 85%; }
 }
 
-@media (max-width: 640px) {
+@media (max-width: 768px) {
   .action-grid { grid-template-columns: 1fr; gap: 16px; }
   .greeting-right { display: none; }
   .inspiration-box { width: 100%; height: auto; padding: 16px; }
-  .quote-wrapper { height: auto; }
+  .quote-wrapper { width: 100%; height: auto; }
   .quote-card { padding: 12px; }
+  .greeting-text { font-size: 26px; }
+  .greeting-subtext { font-size: 13px; }
+  .dashboard-page { width: 95%; padding: 16px; }
+  .dashboard-header { width: 95%; }
+  .inspiration-title { font-size: 20px; }
+  .quote-text { font-size: 14px; }
+  .quote-author { font-size: 12px; }
+  .action-card { width: 100%; max-width: 100%; height: auto; padding: 16px; gap: 8px; }
+  .action-title { font-size: 14px; }
+  .action-subtext { font-size: 12px; }
+}
+
+@media (max-width: 480px) {
+  .greeting-text { font-size: 22px; }
+  .greeting-subtext { font-size: 12px; }
+  .inspiration-title { font-size: 18px; }
+  .quote-text { font-size: 13px; }
+  .quote-author { font-size: 11px; }
+  .new-quote-btn { width: 100px; height: 32px; font-size: 12px; }
+  .action-card { padding: 12px; gap: 6px; }
+  .action-icon { width: 48px; height: 48px; }
+  .action-icon-svg { font-size: 20px; }
+  .action-title { font-size: 13px; }
+  .action-subtext { font-size: 11px; }
 }
