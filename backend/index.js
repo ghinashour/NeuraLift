@@ -15,7 +15,9 @@ const quoteRoutes = require("./routes/quotes.js");
 const moodRoutes = require("./routes/moodroutes.js");
 const tasksRouter = require("./routes/tasks.js");
 const noteRoute = require("./routes/noteUserRoute.js");
-const adminTaskRouter = require("./routes/admin/taskRoutes.js")
+const adminTaskRouter = require("./routes/admin/taskRoutes.js");
+const Notifications = require("./routes/Notification.js")
+const User = require("./models/User.js"); 
 const passport = require("passport");
 require("./config/passport");
 require("dotenv").config();
@@ -27,7 +29,33 @@ app.use(cors({
   origin: "http://localhost:3000", // allow frontend
   methods: ["GET", "POST", "PUT", "DELETE"],
 }));
+//streak logic of the user
+app.post("/api/user/:id/update-streak", async (req, res) => {
+   const { id } = req.params;
 
+  if (!id) {
+    return res.status(400).json({ error: "User ID is required" });
+  }
+  const user = await User.findById(req.params.id);
+  const today = new Date();
+  today.setHours(0,0,0,0);
+
+  let lastActive = user.streak.lastActiveDate ? new Date(user.streak.lastActiveDate) : null;
+  if (lastActive) lastActive.setHours(0,0,0,0);
+
+  if (!lastActive || lastActive < today - 1*24*60*60*1000) {
+    // Missed a day → reset streak
+    user.streak.current = 1;
+  } else if (lastActive.getTime() === today - 1*24*60*60*1000) {
+    // Consecutive day → increment streak
+    user.streak.current += 1;
+  }
+
+  user.streak.lastActiveDate = today;
+  await user.save();
+
+  res.json({ streak: user.streak.current });
+});
 
 // Routes
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
@@ -43,6 +71,7 @@ app.use("/api/events", eventRoutes);
 app.use("/api/quotes", quoteRoutes);
 app.use('/api/moods', moodRoutes);
 app.use("/api/notes", noteRoute);
+app.use("/api/notifications" , Notifications);
 //protected admin routes
 app.use("/api/admin", adminRoutes);
 app.use("/api/tasks", tasksRouter); // user task routes
