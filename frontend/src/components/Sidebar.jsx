@@ -124,6 +124,7 @@ const Sidebar = ({ isCollapsed, setIsCollapsed, user }) => {
         }
         return location.pathname.startsWith(path);
     };
+    
 
     return (
         <>

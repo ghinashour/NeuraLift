@@ -1,12 +1,11 @@
 import React from "react";
 import { FaBell, FaFire } from "react-icons/fa";
 import useTimeOfDay from "../hooks/useTimeOfDay";
-import useUserData from "../hooks/useUserData";
+
 import "../styles/Dashboard.css";
 
-export default function Greeting() {
+export default function Greeting({name}) {
   const { message } = useTimeOfDay();         // "Good morning" | "Good afternoon" | "Good evening"
-  const { name = "User" } = useUserData();    // fetched from backend (fallback "User")
 
   return (
     <div className="greeting-container">

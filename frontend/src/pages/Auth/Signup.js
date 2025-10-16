@@ -1,26 +1,32 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate, Link } from "react-router-dom";
-import "../../styles/Auth.css"; // new CSS file for auth pages
-
+import "../../styles/Auth.css";
 function Signup() {
   const [form, setForm] = useState({ username: "", email: "", password: "" });
   const [error, setError] = useState(null);
   const navigate = useNavigate();
+
+  //sign up to the site with google
+  const handleGoogleLogin = () => {
+    // Redirect user to backend Google auth route
+    window.location.href = "http://localhost:4000/api/auth/google";
+  };
 
   const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError(null);
+
     if (form.password.length < 6) {
       setError("Password must be at least 6 characters");
       return;
     }
+
     try {
-      await axios.post("http://localhost:4000/api/auth/signup", form);
-      alert("Signup successful! Please verify your email.");
-      navigate("/login");
+      const res = await axios.post("http://localhost:4000/api/auth/signup", form);
+      alert(res.data.msg);
     } catch (err) {
       setError(err.response?.data?.msg || "Signup failed");
     }
@@ -61,6 +67,19 @@ function Signup() {
         <p className="bottom-text">
           Already have an account? <Link to="/login">Login</Link>
         </p>
+            <button
+      onClick={handleGoogleLogin}
+      style={{
+        padding: "10px 20px",
+        backgroundColor: "#4285F4",
+        color: "#fff",
+        border: "none",
+        borderRadius: "5px",
+        cursor: "pointer",
+      }}
+    >
+      Continue with Google
+    </button>
       </div>
     </div>
   );

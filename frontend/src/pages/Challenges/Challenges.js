@@ -47,7 +47,7 @@ function Challenges() {
   <span className="title">Challenges</span>
   </div>
 
-      <p className="subtitle">Get Some Free Time! Challenge Your Self Now!!</p>
+      <p className="subtitle"> Challenge Your Self Now!!</p>
 
       {/* Top Buttons */}
       <div className="button-row">

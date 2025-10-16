@@ -1,23 +1,26 @@
 import React from 'react';
-import MessageList from '../MessageList/MessageList';
-import InputArea from '../InputArea/InputArea';
-import TypingIndicator from '../TypingIndicator/TypingIndicator';
-import QuickReplies from '../QuickReplies/QuickReplies';
-import './ChatInterface.css';
+import { useChat } from '../../hooks/useChat';
+import ChatInterface from '../../components/Chatbot/ChatInterface/ChatInterface';
 
-const ChatInterface = ({ messages, onSendMessage, isTyping, suggestions, onQuickReply }) => {
+const ChatbotPage = () => {
+  const { messages, sendMessage, isTyping } = useChat();
+
+  const handleQuickReply = (text) => {
+    sendMessage(text);
+  };
+
+  const lastMessage = messages[messages.length - 1];
+  const suggestions = lastMessage?.suggestions || [];
+
   return (
-    <div className="chat-interface">
-      <div className="messages-container">
-        <MessageList messages={messages} onQuickReply={onQuickReply} />
-        {isTyping && <TypingIndicator isVisible={isTyping} />}
-        {suggestions && suggestions.length > 0 && (
-          <QuickReplies suggestions={suggestions} onSelect={onQuickReply} />
-        )}
-      </div>
-      <InputArea onSendMessage={onSendMessage} disabled={isTyping} />
-    </div>
+    <ChatInterface
+      messages={messages}
+      onSendMessage={sendMessage}
+      isTyping={isTyping}
+      suggestions={suggestions}
+      onQuickReply={handleQuickReply}
+    />
   );
 };
 
-export default ChatInterface;
+export default ChatbotPage;

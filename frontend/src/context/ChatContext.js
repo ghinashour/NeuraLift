@@ -1,21 +1,42 @@
-import React, { createContext, useContext, useState } from 'react';
+import React, { createContext, useContext, useState, useEffect } from 'react';
+import puter from 'puter-js';
 
 const ChatContext = createContext(null);
 
 export const ChatProvider = ({ children }) => {
   const [chatState, setChatState] = useState({
-    isConnected: true,
-    agentStatus: 'online',
+    isConnected: false,
+    agentStatus: 'offline',
     sessionId: `session-${Date.now()}`,
-    userName: null
+    userName: null,
   });
+
+  const [ai, setAi] = useState(null);
+
+  useEffect(() => {
+    const initAI = async () => {
+      try {
+        const chat = await puter.ai.chat();
+        setAi(chat);
+        setChatState(prev => ({
+          ...prev,
+          isConnected: true,
+          agentStatus: 'online',
+        }));
+      } catch (error) {
+        console.error('Error initializing AI:', error);
+      }
+    };
+
+    initAI();
+  }, []);
 
   const updateChatState = (updates) => {
     setChatState(prev => ({ ...prev, ...updates }));
   };
 
   return (
-    <ChatContext.Provider value={{ chatState, updateChatState }}>
+    <ChatContext.Provider value={{ chatState, updateChatState, ai }}>
       {children}
     </ChatContext.Provider>
   );
