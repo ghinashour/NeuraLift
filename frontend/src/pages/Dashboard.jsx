@@ -4,7 +4,7 @@ import "../styles/Dashboard.css";
 import Greeting from "../components/Greetings";
 import InspirationSection from "../components/InspirationSection";
 import ActionButton from "../components/ActionButton";
-import API, { getCurrentUser } from "../api/axios";
+import { getCurrentUser } from "../api/axios";
 
 function Dashboard() {
   const [user, setUser] = useState(null);

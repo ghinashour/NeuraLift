@@ -1,14 +1,13 @@
 import React from 'react';
 import './Header.css';
+import logo from "./image.png";
 
 const Header = ({ title, status, onMinimize }) => {
   return (
     <div className="chat-header">
       <div className="header-content">
         <div className="bot-avatar-small">
-          <svg className="bot-icon-small" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-5-9h2v2H7v-2zm8 0h2v2h-2v-2zm-4 0h2v2h-2v-2z"/>
-          </svg>
+          <img src={logo} alt="logo" />
           <div className="status-dot"></div>
         </div>
         <div className="agent-info">

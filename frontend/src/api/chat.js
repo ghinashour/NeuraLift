@@ -22,7 +22,7 @@ export default async function handler(req, res) {
   }
 
   // Check if OpenAI API key is configured
-  if (!process.env.OPENAI_API_KEY) {
+  if (!process.env.REACT_APP_OPENAI_API_KEY) {
     console.error('OPENAI_API_KEY is not configured');
     return res.status(500).json({ 
       error: 'Server configuration error: OpenAI API key is missing' 

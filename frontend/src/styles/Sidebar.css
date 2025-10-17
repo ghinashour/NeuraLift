@@ -22,7 +22,7 @@ html, body, #root {
   padding: 0;
   gap: 0;
   align-items: flex-start;
-  --sidebar-width: 280px;
+  --sidebar-width: 200px;
   --sidebar-collapsed-width: 90px;
 }
 
@@ -30,26 +30,7 @@ html, body, #root {
   --sidebar-width: var(--sidebar-collapsed-width);
 }
 
-/* ===== SIDEBAR ===== */
-.sidebar {
-  position: fixed;
-  left: 0;
-  top: 0;
-  bottom: 0;
-  width: var(--sidebar-width);
-  background: #ffffff;
-  border-right: 1px solid rgba(34, 46, 80, 0.04);
-  padding: 16px 12px;
-  display: flex;
-  flex-direction: column;
-  gap: 0;
-  margin: 0;
-  transition: width 220ms ease;
-  z-index: 1000;
-  box-shadow: 0 1px 20px rgba(65, 80, 120, 0.03);
-  height: 100vh;
-  overflow-y: auto;
-}
+
 
 /* ===== BRAND SECTION ===== */
 .brand {

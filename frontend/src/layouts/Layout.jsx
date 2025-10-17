@@ -6,7 +6,7 @@ import "../styles/Sidebar.css"; // sidebar css also contains layout variables
 
 export default function Layout() {
   const location = useLocation();
-  const showSidebar = location.pathname !== "/"; // only show sidebar outside landing
+  const showSidebar = location.pathname !== "/" || location.pathname !== "/Collaborate"; // only show sidebar outside landing
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [user, setUser] = useState(null);
 
