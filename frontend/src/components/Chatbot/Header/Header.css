@@ -1,0 +1,75 @@
+.chat-header {
+  background: rgba(37, 99, 235, 0.8);
+  backdrop-filter: blur(8px);
+  color: white;
+  padding: 1rem 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.header-content {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.bot-avatar-small {
+  position: relative;
+  width: 2.5rem;
+  height: 2.5rem;
+  background: #60a5fa;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.bot-icon-small {
+  width: 1.5rem;
+  height: 1.5rem;
+  color: white;
+}
+
+.status-dot {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 0.75rem;
+  height: 0.75rem;
+  background: #4ade80;
+  border-radius: 50%;
+  border: 2px solid #2563eb;
+}
+
+.agent-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.agent-title {
+  font-size: 1.125rem;
+  font-weight: 600;
+  margin: 0;
+}
+
+.agent-status {
+  font-size: 0.75rem;
+  color: #bfdbfe;
+  margin: 0;
+}
+
+.minimize-button {
+  background: transparent;
+  border: none;
+  color: white;
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.minimize-button:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
