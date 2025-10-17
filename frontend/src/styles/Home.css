@@ -1,21 +1,20 @@
 /* Home.css - Matching Figma Design */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-        
-        body {
-            background: #f8f9fa;
-            line-height: 1.6;
-            padding: 20px;
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-        
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    background: #f8f9fa;
+    line-height: 1.6;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
 .home-section {
   background-color: #f8f9fa;
   width: 100vw;
@@ -23,7 +22,7 @@
   left: 50%;
   right: 50%;
   margin-left: -50vw;
-  margin-right: -40vw;
+  margin-right: -50vw;
   padding: 70px 20px;
   color: white;
   text-align: center;
@@ -32,10 +31,11 @@
 
 .home-container {
   text-align: center;
-  padding: 20px 20px;
+  padding: 20px;
   width: 1152px;
+  max-width: 100%;
   height: 612px;
- margin-left: 100px;
+  margin: 0 auto;
 }
 
 /* Headline */
@@ -70,32 +70,28 @@
 /* Buttons */
 .home-buttons {
   display: flex;
-  gap: 16px;
+  gap: 20px;
   justify-content: center;
-  align-items: center;
   margin-bottom: 30px;
-  flex-wrap: wrap;
 }
 
 .btn-primary {
+  max-width: 200px;
   background-color: #4a9eff;
   color: white;
   font-size: 1rem;
   font-weight: 500;
-  padding: 14px 28px;
   border: none;
   border-radius: 8px;
   cursor: pointer;
   transition: all 0.2s ease;
-  display: flex;
   align-items: center;
-  gap: 8px;
 }
 
-.btn-primary:hover {
-  background-color: #3182ce;
+.home-btn-primary:hover {
   transform: translateY(-1px);
   box-shadow: 0 4px 12px rgba(74, 158, 255, 0.3);
+  opacity: 0.9;
 }
 
 .btn-secondary {
@@ -108,6 +104,7 @@
   border-radius: 8px;
   cursor: pointer;
   transition: all 0.2s ease;
+  text-decoration: none;
 }
 
 .btn-secondary:hover {
@@ -122,9 +119,7 @@
   grid-template-columns: repeat(4, 1fr);
   gap: 60px;
   max-width: 800px;
-  margin: 0 auto;
-  margin-bottom: 10px;
-
+  margin: 0 auto 10px auto;
 }
 
 .stat {
@@ -137,7 +132,6 @@
   color: #2d3748;
   margin-bottom: 8px;
   line-height: 1;
-
 }
 
 .stat p {
@@ -148,35 +142,73 @@
   letter-spacing: 0.05em;
 }
 
-/* Responsive Design */
-@media (max-width: 768px) {
+/* ===============================
+   Responsive Design
+   =============================== */
+@media (max-width: 1024px) {
   .home-title {
-    font-size: 2.5rem;
-    margin-bottom: 20px;
+    font-size: 3rem;
   }
-  
+
+  .home-title .highlight {
+    font-size: 3.5rem;
+  }
+
   .home-tagline {
     font-size: 1rem;
-    margin-bottom: 32px;
+    max-width: 500px;
   }
-  
+
   .home-buttons {
-    flex-direction: column;
     gap: 12px;
-    margin-bottom: 60px;
   }
-  
-  .btn-primary,
-  .btn-secondary {
-    width: 100%;
-    max-width: 280px;
-  }
-  
+
   .home-stats {
     grid-template-columns: repeat(2, 1fr);
     gap: 40px;
   }
-  
+
+  .stat h2 {
+    font-size: 2.25rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .home-section {
+    padding: 50px 16px;
+  }
+
+  .home-title {
+    font-size: 2.5rem;
+    margin-top: 50px;
+  }
+
+  .home-title .highlight {
+    font-size: 3rem;
+  }
+
+  .home-tagline {
+    font-size: 0.95rem;
+    margin-bottom: 32px;
+  }
+
+  .home-buttons {
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 40px;
+  }
+
+  .home-btn-primary,
+  .btn-secondary {
+    width: 100%;
+    max-width: 280px;
+  }
+
+  .home-stats {
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+  }
+
   .stat h2 {
     font-size: 1.875rem;
   }
@@ -184,20 +216,54 @@
 
 @media (max-width: 480px) {
   .home-section {
-    padding: 40px 16px;
+    padding: 40px 12px;
   }
-  
+
   .home-title {
     font-size: 2rem;
+    margin-top: 30px;
   }
-  
+
+  .home-title .highlight {
+    font-size: 2.25rem;
+  }
+
   .home-tagline {
     font-size: 0.9rem;
+    max-width: 90%;
   }
-  
+
   .home-stats {
     grid-template-columns: 1fr;
-    gap: 32px;
+    gap: 24px;
+  }
+
+  .stat h2 {
+    font-size: 1.5rem;
+  }
+
+  .stat p {
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 360px) {
+  .home-title {
+    font-size: 1.75rem;
+  }
+
+  .home-title .highlight {
+    font-size: 2rem;
+  }
+
+  .home-tagline {
+    font-size: 0.85rem;
+  }
+
+  .home-btn-primary,
+  .btn-secondary {
+    padding: 12px 20px;
+    font-size: 0.9rem;
   }
 }
 

@@ -62,7 +62,6 @@
   transform: scale(1.05);
 }
 
-
 /* Error message */
 .error {
   color: #b00020;
@@ -85,4 +84,54 @@
 
 .bottom-text a:hover {
   text-decoration: underline;
+}
+
+/* ===============================
+   ✅ Responsive Enhancements
+   =============================== */
+@media (max-width: 600px) {
+  .auth-wrapper {
+    padding: 10px;
+    min-height: 100vh;
+  }
+
+  .auth-card {
+    padding: 28px 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+  }
+
+  .auth-card h2 {
+    font-size: 1.25rem;
+    margin-bottom: 18px;
+  }
+
+  .auth-card input {
+    font-size: 13px;
+    padding: 10px 12px;
+  }
+
+  .btn-primary {
+    font-size: 14px;
+    padding: 10px;
+  }
+
+  .bottom-text {
+    font-size: 13px;
+  }
+}
+
+@media (max-width: 400px) {
+  .auth-card {
+    padding: 24px 16px;
+    max-width: 90%;
+  }
+
+  .auth-card h2 {
+    font-size: 1.1rem;
+  }
+
+  .btn-primary {
+    font-size: 13.5px;
+  }
 }

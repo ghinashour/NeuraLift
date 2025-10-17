@@ -1,87 +1,103 @@
-const SuccessStory = require("../../models/SuccessStory");
-const mongoose = require("mongoose");
+const SuccessStory = require('../../models/SuccessStory');
+const User = require('../../models/User');
 
-// Get all stories (admin only)
-exports.getAllStories = async (req, res) => {
+// Get all success stories (Admin)
+const getAllStories = async (req, res) => {
   try {
-    const {
-      category,
-      isFeatured,
-      isPublic,
-      author,
-      tags,
-      page = 1,
-      limit = 10
-    } = req.query;
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 20;
+    const search = req.query.search || "";
+    const sortBy = req.query.sortBy || "createdAt";
+    const sortOrder = req.query.sortOrder === "asc" ? 1 : -1;
 
-    const query = {};
+    const filter = {};
+    if (search) {
+      filter.$or = [
+        { title: { $regex: search, $options: "i" } },
+        { author: { $regex: search, $options: "i" } },
+        { description: { $regex: search, $options: "i" } }
+      ];
+    }
 
-    if (category) query.category = category;
-    if (isFeatured !== undefined) query.isFeatured = isFeatured === "true";
-    if (isPublic !== undefined) query.isPublic = isPublic === "true";
-    if (author) query.author = { $regex: author, $options: "i" };
-    if (tags) query.tags = { $in: tags.split(",").map(tag => tag.trim()) };
+    const total = await SuccessStory.countDocuments(filter);
 
-    const stories = await SuccessStory.find(query)
-      .populate("userId", "name email")
+    const stories = await SuccessStory.find(filter)
+      .populate("userId", "username email profilePhoto")
+      .sort({ [sortBy]: sortOrder })
       .skip((page - 1) * limit)
-      .limit(parseInt(limit))
-      .sort({ createdAt: -1 });
+      .limit(limit)
+      .lean();
 
-    const total = await SuccessStory.countDocuments(query);
-
-    res.json({ total, page: Number(page), stories });
-  } catch (error) {
-    res.status(500).json({ error: error.message });
+    res.json({
+      success: true,
+      data: {
+        stories,
+        pagination: {
+          totalStories: total,
+          totalPages: Math.ceil(total / limit),
+          currentPage: page,
+          hasNext: page < Math.ceil(total / limit),
+          hasPrev: page > 1
+        }
+      }
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ success: false, message: err.message });
   }
 };
 
-// Delete a story (admin only)
-exports.deleteStory = async (req, res) => {
-  try {
-    await SuccessStory.findByIdAndDelete(req.params.id);
-    res.json({ message: "Story deleted" });
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-};
-
-// Feature/unfeature story
-exports.toggleFeature = async (req, res) => {
+// Update story (Admin)
+const updateStory = async (req, res) => {
   try {
     const story = await SuccessStory.findById(req.params.id);
-    if (!story) return res.status(404).json({ error: "Story not found" });
+    if (!story) return res.status(404).json({ success: false, message: "Story not found" });
+
+    const updates = req.body;
+    Object.assign(story, updates);
+    await story.save();
+
+    await story.populate("userId", "username email profilePhoto");
+
+    res.json({ success: true, message: "Story updated", data: story });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ success: false, message: err.message });
+  }
+};
+
+// Delete story (Admin)
+const deleteStory = async (req, res) => {
+  try {
+    const story = await SuccessStory.findByIdAndDelete(req.params.id);
+    if (!story) return res.status(404).json({ success: false, message: "Story not found" });
+
+    res.json({ success: true, message: "Story deleted" });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ success: false, message: err.message });
+  }
+};
+
+// Feature / unfeature story
+const toggleFeatureStory = async (req, res) => {
+  try {
+    const story = await SuccessStory.findById(req.params.id);
+    if (!story) return res.status(404).json({ success: false, message: "Story not found" });
 
     story.isFeatured = !story.isFeatured;
     await story.save();
 
-    res.json({ message: `Story isFeatured set to ${story.isFeatured}`, story });
-  } catch (error) {
-    res.status(500).json({ error: error.message });
+    res.json({ success: true, message: story.isFeatured ? "Story featured" : "Story unfeatured", data: story });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ success: false, message: err.message });
   }
 };
 
-// Analytics: top stories by engagement, stories per category, most active authors
-exports.storyAnalytics = async (req, res) => {
-  try {
-    const topStories = await SuccessStory.find()
-      .sort({ likeCount: -1, shareCount: -1 })
-      .limit(5)
-      .select("title author likeCount shareCount totalEngagement");
-
-    const storiesPerCategory = await SuccessStory.aggregate([
-      { $group: { _id: "$category", count: { $sum: 1 } } },
-      { $sort: { count: -1 } }
-    ]);
-
-    const activeAuthors = await SuccessStory.aggregate([
-      { $group: { _id: "$author", count: { $sum: 1 } } },
-      { $sort: { count: -1 } },
-      { $limit: 5 }
-    ]);
-
-    res.json({ topStories, storiesPerCategory, activeAuthors });
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
+module.exports = {
+  getAllStories,
+  updateStory,
+  deleteStory,
+  toggleFeatureStory
 };

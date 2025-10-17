@@ -1,0 +1,259 @@
+/* ===============================
+   Admin Notes / Analytics Styles
+   =============================== */
+.admin-notes,
+.admin-note-analytics {
+  padding: 2rem;
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  margin: 2rem;
+}
+
+.admin-notes h2,
+.admin-note-analytics h2 {
+  color: #333;
+  margin-bottom: 0.3rem;
+  font-size: 1.6rem;
+}
+
+.subtitle {
+  color: #666;
+  font-size: 0.95rem;
+  margin-bottom: 1.2rem;
+}
+
+/* ===============================
+   Filters
+   =============================== */
+.note-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.8rem;
+  margin-bottom: 1.5rem;
+  align-items: center;
+}
+
+.note-filters input,
+.note-filters select {
+  padding: 0.6rem 0.8rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  flex: 1;
+  min-width: 180px;
+}
+
+.note-filters button {
+  background: #4a90e2;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 0.6rem 1.2rem;
+  cursor: pointer;
+  transition: background 0.2s ease;
+  font-size: 0.95rem;
+}
+
+.note-filters button:hover {
+  background: #357ac9;
+}
+
+/* ===============================
+   Notes Table
+   =============================== */
+.table-wrapper {
+  overflow-x: auto;
+  border-radius: 10px;
+  -webkit-overflow-scrolling: touch;
+}
+
+.notes-table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 600px; /* Prevents table from breaking on smaller screens */
+  margin-bottom: 1.5rem;
+}
+
+.notes-table th,
+.notes-table td {
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid #eee;
+  text-align: left;
+  font-size: 0.95rem;
+  color: #333;
+}
+
+.notes-table th {
+  background: #f9fafc;
+  font-weight: 600;
+  color: #2c3e50;
+}
+
+/* ===============================
+   Buttons
+   =============================== */
+.btn-delete {
+  background: #ff5b5b;
+  color: white;
+  border: none;
+  padding: 0.4rem 0.8rem;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+  font-size: 0.9rem;
+}
+
+.btn-delete:hover {
+  background: #e04a4a;
+}
+
+/* ===============================
+   Pagination
+   =============================== */
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.pagination button {
+  background: #4a90e2;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+.pagination button:disabled {
+  background: #b0c8e5;
+  cursor: not-allowed;
+}
+
+.pagination span {
+  font-weight: 500;
+  color: #333;
+}
+
+/* ===============================
+   Responsive Adjustments
+   =============================== */
+
+/* Medium Screens (Tablets) */
+@media (max-width: 992px) {
+  .admin-notes,
+  .admin-note-analytics {
+    margin: 1.5rem;
+    padding: 1.5rem;
+  }
+
+  .admin-notes h2,
+  .admin-note-analytics h2 {
+    font-size: 1.4rem;
+  }
+
+  .note-filters {
+    gap: 0.6rem;
+  }
+
+  .note-filters input,
+  .note-filters select,
+  .note-filters button {
+    font-size: 0.9rem;
+  }
+
+  .notes-table th,
+  .notes-table td {
+    padding: 0.6rem 0.8rem;
+  }
+}
+
+/* Small Screens (Phones) */
+@media (max-width: 600px) {
+  .admin-notes,
+  .admin-note-analytics {
+    margin: 1rem;
+    padding: 1rem;
+    border-radius: 12px;
+  }
+
+  .admin-notes h2,
+  .admin-note-analytics h2 {
+    font-size: 1.2rem;
+    text-align: center;
+  }
+
+  .subtitle {
+    text-align: center;
+    font-size: 0.9rem;
+  }
+
+  .note-filters {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .note-filters input,
+  .note-filters select,
+  .note-filters button {
+    width: 100%;
+  }
+
+  .table-wrapper {
+    border-radius: 6px;
+  }
+
+  .notes-table {
+    min-width: 500px;
+  }
+
+  .notes-table th,
+  .notes-table td {
+    font-size: 0.85rem;
+    padding: 0.6rem 0.7rem;
+  }
+
+  .btn-delete {
+    width: 100%;
+    text-align: center;
+    padding: 0.6rem;
+  }
+
+  .pagination {
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+
+  .pagination button {
+    width: 100%;
+  }
+}
+
+/* Very Small Screens */
+@media (max-width: 400px) {
+  .admin-notes,
+  .admin-note-analytics {
+    margin: 0.8rem;
+    padding: 0.8rem;
+  }
+
+  .notes-table th,
+  .notes-table td {
+    font-size: 0.8rem;
+    padding: 0.5rem 0.6rem;
+  }
+
+  .btn-delete {
+    font-size: 0.8rem;
+    padding: 0.5rem;
+  }
+
+  .note-filters button {
+    font-size: 0.85rem;
+    padding: 0.6rem;
+  }
+}

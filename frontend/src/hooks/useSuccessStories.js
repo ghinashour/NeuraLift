@@ -258,7 +258,7 @@ export const useSuccessStories = () => {
         const initializeData = async () => {
             try {
                 // Check for migration first
-                const needsMigration = await checkMigration();
+                await checkMigration();
 
                 // Load data from database
                 await Promise.all([

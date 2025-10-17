@@ -1,0 +1,195 @@
+/* ===============================
+   Admin Success Stories (Minimized)
+   =============================== */
+
+:root {
+  --bg: #f6f7f8;
+  --card: #fff;
+  --muted: #6b7280;
+  --text: #0f1724;
+  --accent: #2563eb;
+  --danger: #ef4444;
+  --soft-border: rgba(15,23,36,0.06);
+  --shadow: 0 4px 12px rgba(0,0,0,0.05);
+  --radius: 10px;
+  --pad: 1.2rem;
+  --font: "Inter", sans-serif;
+}
+
+.admin-stories-root {
+  background: var(--bg);
+  min-height: 100vh;
+  padding: 1.5rem;
+  font-family: var(--font);
+  color: var(--text);
+}
+
+.admin-stories-card {
+  background: var(--card);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: var(--pad);
+  border: 1px solid var(--soft-border);
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.admin-stories-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.admin-stories-header h2 {
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin: 0;
+}
+
+.admin-controls {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.table-wrap {
+  width: 100%;
+  overflow-x: auto;
+  border-radius: 8px;
+  background: rgba(255,255,255,0.8);
+  padding: 0.4rem;
+  border: 1px solid var(--soft-border);
+}
+
+.admin-stories-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+  min-width: 700px;
+}
+
+.admin-stories-table th,
+.admin-stories-table td {
+  padding: 0.6rem 0.8rem;
+  border-bottom: 1px solid #eee;
+  text-align: left;
+}
+
+.admin-stories-table th {
+  background: #f9fafc;
+  color: var(--muted);
+  font-weight: 600;
+}
+
+.admin-stories-table tbody tr:hover {
+  background: rgba(37,99,235,0.03);
+}
+
+.story-title {
+  max-width: 300px;
+  word-break: break-word;
+}
+
+.meta {
+  font-size: 0.8rem;
+  color: var(--muted);
+  margin-top: 0.3rem;
+}
+
+.badge {
+  padding: 0.3rem 0.6rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+.badge.yes {
+  background: rgba(37,99,235,0.08);
+  color: var(--accent);
+}
+
+.badge.no {
+  background: rgba(15,23,36,0.05);
+  color: var(--muted);
+}
+
+.actions {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.btn {
+  border: none;
+  border-radius: 6px;
+  padding: 0.5rem 0.8rem;
+  cursor: pointer;
+  font-size: 0.85rem;
+  transition: 0.2s;
+}
+
+.btn-feature {
+  background: transparent;
+  color: var(--accent);
+  border: 1px solid rgba(37,99,235,0.2);
+}
+
+.btn-feature:hover {
+  background: rgba(37,99,235,0.08);
+}
+
+.btn-delete {
+  background: transparent;
+  color: var(--danger);
+  border: 1px solid rgba(239,68,68,0.2);
+}
+
+.btn-delete:hover {
+  background: rgba(239,68,68,0.08);
+}
+
+.empty {
+  text-align: center;
+  color: var(--muted);
+  padding: 2rem 0;
+}
+
+.pagination {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+.pagination button {
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 0.4rem 0.8rem;
+  cursor: pointer;
+}
+
+.pagination button:disabled {
+  background: #b0c8e5;
+  cursor: not-allowed;
+}
+
+/* Responsive */
+@media (max-width: 700px) {
+  .admin-stories-card { padding: 1rem; }
+  .admin-stories-table thead { display: none; }
+  .admin-stories-table tbody tr {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 0.5rem;
+    padding: 0.8rem;
+    border-radius: 8px;
+    background: var(--card);
+    border: 1px solid var(--soft-border);
+    margin-bottom: 0.6rem;
+  }
+  .admin-stories-table td { border: none; }
+  .actions { justify-self: end; }
+}

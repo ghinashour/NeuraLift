@@ -1,4 +1,3 @@
-// backend/routes/admin/taskRoutes.js
 const express = require("express");
 const router = express.Router();
 const {
@@ -7,13 +6,11 @@ const {
   updateTask,
   taskAnalytics,
 } = require("../../controllers/admin/taskController");
+const { protect } = require("../../middleware/admin");
 
-const {protect} = require("../../middleware/admin");
-
-// Admin routes
-router.use("/", protect, getAllTasks);
-router.use("/:id",protect, deleteTask);
-router.use("/:id", protect, updateTask);
-router.use("/analytics/stats", protect, taskAnalytics);
+router.get("/", protect, getAllTasks);
+router.delete("/:id", protect, deleteTask);
+router.put("/:id", protect, updateTask);
+router.get("/analytics/stats", protect, taskAnalytics);
 
 module.exports = router;

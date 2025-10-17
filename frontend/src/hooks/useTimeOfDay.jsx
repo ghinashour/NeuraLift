@@ -1,6 +1,3 @@
-/**
- * Computes the current part of day and returns a message label.
- */
 import { useEffect, useState } from "react";
 import { MESSAGES } from "../constants/messages";
 
@@ -13,11 +10,18 @@ function getKey() {
 
 export default function useTimeOfDay() {
   const [key, setKey] = useState(getKey());
+  const [message, setMessage] = useState(MESSAGES[key] || "Hello");
 
+  // Update key and message every minute
   useEffect(() => {
-    const id = setInterval(() => setKey(getKey()), 60 * 1000);
+    const id = setInterval(() => {
+      const k = getKey();
+      setKey(k);
+      setMessage(MESSAGES[k] || "Hello");
+    }, 60 * 1000);
+
     return () => clearInterval(id);
   }, []);
 
-  return { key, message: MESSAGES[key] || "Hello" };
+  return { key, message };
 }

@@ -7,14 +7,13 @@ const Home = () => {
   const navigate = useNavigate();
 
   return (
-    
     <section id="Home" className="home-section">
       <div className="home-container">
         {/* Headline */}
         <h1 className="home-title">
-          Transform Your Life with <span className="highlight">NeuraLift</span>
+          Transform Your Life with<br></br>
+          <span className="highlight">NeuraLift</span>
         </h1>
-
 
         {/* Tagline */}
         <p className="home-tagline">
@@ -26,7 +25,7 @@ const Home = () => {
         {/* Buttons */}
         <div className="home-buttons">
               <button 
-      className="btn-primary" 
+      className="home-btn-primary" 
       onClick={() => navigate("/signup")}
     >
       Get Started Today →

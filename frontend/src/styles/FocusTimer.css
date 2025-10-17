@@ -26,9 +26,8 @@
   justify-content: center;
 }
 
-.pomodoro-timer__header-content p{
+.pomodoro-timer__header-content p {
   color: #626A84;
-
 }
 
 .pomodoro-timer__tabs {
@@ -55,4 +54,87 @@
 .pomodoro-timer__footer {
   width: 100%;
   max-width: 540px;
+}
+
+/* ===============================
+   Responsive Styles
+   =============================== */
+@media (max-width: 768px) {
+  .pomodoro-timer {
+    padding: 1.5rem;
+  }
+
+  .pomodoro-timer__title {
+    font-size: 1.3rem;
+  }
+
+  .pomodoro-timer__tabs {
+    font-size: 14px;
+  }
+
+  .pomodoro-timer__main {
+    max-width: 90%;
+  }
+
+  .pomodoro-timer__card {
+    padding: 1.5rem;
+  }
+
+  .pomodoro-timer__footer {
+    max-width: 90%;
+  }
+}
+
+@media (max-width: 480px) {
+  .pomodoro-timer {
+    padding: 1rem;
+  }
+
+  .pomodoro-timer__title {
+    font-size: 1.1rem;
+  }
+
+  .pomodoro-timer__title svg {
+    width: 24px;
+    padding-right: 4px;
+  }
+
+  .pomodoro-timer__tabs {
+    font-size: 13px;
+  }
+
+  .pomodoro-timer__main {
+    max-width: 100%;
+    flex-direction: column;
+    margin-bottom: 1.5rem;
+  }
+
+  .pomodoro-timer__card {
+    padding: 1rem;
+    border-radius: 12px;
+  }
+
+  .pomodoro-timer__footer {
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 360px) {
+  .pomodoro-timer__title {
+    font-size: 1rem;
+  }
+
+  .pomodoro-timer__title svg {
+    width: 20px;
+    padding-right: 3px;
+  }
+
+  .pomodoro-timer__tabs {
+    font-size: 12px;
+  }
+
+  .pomodoro-timer__card {
+    padding: 0.8rem;
+    border-radius: 10px;
+  }
 }

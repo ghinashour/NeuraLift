@@ -1,6 +1,6 @@
 const SuccessStory = require('../models/SuccessStory');
 const User = require('../models/User');
-
+const Notification = require("../models/Notification")
 // Get all public success stories with pagination and filtering
 const getAllStories = async (req, res) => {
     try {
@@ -139,7 +139,7 @@ const createStory = async (req, res) => {
             title,
             author,
             description,
-            category: category || 'Personal Growth',
+            category: category || 'Habits',
             tags: tags || [],
             isPublic: isPublic !== false, // Default to true
             userId: req.user?.id // Will be null for anonymous stories
@@ -263,14 +263,23 @@ const toggleLike = async (req, res) => {
         }
 
         let isLiked;
+
         if (req.user) {
-            // Authenticated user - use the proper like system
+            // Authenticated user - toggle like
             isLiked = story.toggleLike(req.user.id);
             await story.save();
+
+            // Send notification to the story author if exists and not liking own story
+            if (story.userId && story.userId.toString() !== req.user.id) {
+                await Notification.create({
+                    user: story.userId,
+                    type: "like",
+                    title: `Your story got a new like!`,
+                    description: `Someone liked your success story: "${story.title}"`
+                });
+            }
         } else {
-            // Anonymous user - check if user has liked before using localStorage
-            // For anonymous users, we'll use a simple increment/decrement approach
-            // This is a simplified approach that doesn't track individual user likes
+            // Anonymous user - simple like count increment/decrement
             const hasLikedBefore = req.body.hasLikedBefore || false;
 
             if (hasLikedBefore) {
@@ -282,7 +291,9 @@ const toggleLike = async (req, res) => {
                 story.likeCount += 1;
                 isLiked = true;
             }
+
             await story.save();
+            // No notifications for anonymous likes
         }
 
         res.json({

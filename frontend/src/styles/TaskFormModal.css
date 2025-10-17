@@ -68,7 +68,7 @@
 }
 
 /* Form Styles */
-.form-group {
+.task-modal-form-group {
     margin-bottom: 24px;
 }
 
@@ -145,7 +145,7 @@
 }
 
 /* Form Actions */
-.form-actions {
+.task-modal-form-actions {
     display: flex;
     justify-content: flex-end;
     gap: 12px;
@@ -168,32 +168,32 @@
     justify-content: center;
 }
 
-.btn-primary {
+.task-modal-btn-primary {
     background: #4F7DF3;
     color: white;
     box-shadow: 0 2px 4px rgba(79, 125, 243, 0.2);
 }
 
-.btn-primary:hover {
+.task-modal-btn-primary:hover {
     background: #3D6AE6;
     transform: translateY(-1px);
     box-shadow: 0 4px 8px rgba(79, 125, 243, 0.3);
 }
 
-.btn-primary:disabled {
+.task-modal-btn-primary:disabled {
     background: #9CA3AF;
     cursor: not-allowed;
     transform: none;
     box-shadow: none;
 }
 
-.btn-secondary {
+.task-modal-btn-secondary {
     background: #F8FAFC;
     color: #2B2F3B;
     border-color: #E2E4E9;
 }
 
-.btn-secondary:hover {
+.task-modal-btn-secondary:hover {
     background: #F1F5F9;
     border-color: #CBD5E1;
     transform: translateY(-1px);
@@ -226,11 +226,11 @@
         gap: 0;
     }
 
-    .form-group {
+    .task-modal-form-group {
         margin-bottom: 20px;
     }
 
-    .form-actions {
+    .task-modal-form-actions {
         flex-direction: column;
         gap: 8px;
         margin-top: 24px;
