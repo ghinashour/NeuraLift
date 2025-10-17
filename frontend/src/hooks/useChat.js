@@ -1,53 +1,43 @@
-import { useState, useCallback } from 'react';
-import { useAI } from './useAI';
+// hooks/useChat.js
+import { useState, useCallback } from "react";
+import { useAI } from "./useAI";
 
 export const useChat = () => {
+  const { generateResponse, isProcessing } = useAI();
   const [messages, setMessages] = useState([]);
-  const [isTyping, setIsTyping] = useState(false);
-  const { generateResponse, getSuggestions } = useAI();
 
-  const sendMessage = useCallback(
-    async (text) => {
-      if (!text.trim()) return;
+  const sendMessage = useCallback(async (text) => {
+    if (!text.trim()) return;
 
-      const newMessage = {
-        id: `msg-${Date.now()}`,
-        text,
-        sender: 'user',
-        timestamp: new Date().toISOString(),
-        type: 'text',
-      };
+    // Add user message immediately
+    const userMsg = {
+      id: `msg-${Date.now()}`,
+      text: text.trim(),
+      sender: "user",
+      timestamp: new Date(),
+    };
+    
+    setMessages(prev => [...prev, userMsg]);
 
-      setMessages((prev) => [...prev, newMessage]);
-      setIsTyping(true);
+    // Get AI response
+    const aiText = await generateResponse(text);
+    
+    const aiMsg = {
+      id: `msg-${Date.now()}-ai`,
+      text: aiText,
+      sender: "ai",
+      timestamp: new Date(),
+    };
+    
+    setMessages(prev => [...prev, aiMsg]);
+  }, [generateResponse]);
 
-      // Send to AI and wait for reply
-      const aiResponse = await generateResponse(text);
-      const suggestions = getSuggestions(aiResponse);
+  const clearChat = useCallback(() => setMessages([]), []);
 
-      const aiMessage = {
-        id: `msg-${Date.now()}-ai`,
-        text: aiResponse,
-        sender: 'ai',
-        timestamp: new Date().toISOString(),
-        type: 'text',
-        suggestions,
-      };
-
-      setMessages((prev) => [...prev, aiMessage]);
-      setIsTyping(false);
-    },
-    [generateResponse, getSuggestions]
-  );
-
-  const clearChat = useCallback(() => {
-    setMessages([]);
-  }, []);
-
-  return {
-    messages,
-    sendMessage,
-    clearChat,
-    isTyping,
+  return { 
+    messages, 
+    sendMessage, 
+    clearChat, 
+    isTyping: isProcessing 
   };
 };

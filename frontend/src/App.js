@@ -31,6 +31,7 @@ import MyTasks from "./pages/MyTasks";
 import TaskDetails from "./pages/TaskDetails";
 import Schedule from "./pages/SchedulePage/SchedulePage";
 import MoodTracker from "./pages/MoodTracker/MoodTracker";
+import ChatbotPage from "./pages/ChatbotPage/ChatbotPage";
 
 // Auth pages
 import Login from "./pages/Auth/Login";
@@ -58,15 +59,16 @@ import AdminEvents from "./components/admin/AdminEvents";
 import AdminNotes from "./components/admin/AdminNotes";
 import AdminNoteAnalytics from "./components/admin/AdminNoteAnalytics";
 //private route functionality
-import PrivateRoute from "./components/privateRoute";
 import AdminTasksPage from "./components/admin/AdminTasksPage";
 import AdminSuccessStories from "./components/admin/AdminSucessStories";
+import { ChatProvider } from "./context/ChatContext";
 
 function App() {
   return (
     <AdminAuthProvider>
       <TaskProvider>
         <MedicineProvider>
+          <ChatProvider>
           <Router>
             <Routes>
               {/* Landing Page */}
@@ -175,6 +177,14 @@ function App() {
                     </PrivateRoute>
                   }
                 />
+                <Route
+                  path="ai-assistant"
+                  element={
+                    <PrivateRoute>
+                      <ChatbotPage />
+                    </PrivateRoute>
+                  }
+                />
 
                 {/* Success Stories */}
                 <Route path="success-stories" element={<SuccessStory />} />
@@ -206,6 +216,7 @@ function App() {
               <Route path="*" element={<Navigate to="/" replace />} />
             </Routes>
           </Router>
+          </ChatProvider>
         </MedicineProvider>
       </TaskProvider>
     </AdminAuthProvider>
