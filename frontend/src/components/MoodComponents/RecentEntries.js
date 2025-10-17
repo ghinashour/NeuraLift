@@ -1,7 +1,7 @@
 import React from "react";
 import MoodEntryItem from "./MoodEntryItem";
 
-const RecentEntries = ({ entries, loading = false, error = null }) => {
+const RecentEntries = ({ entries = [], loading = false, error = null }) => {
   // 🔹 If still loading
   if (loading) {
     return (
@@ -21,7 +21,7 @@ const RecentEntries = ({ entries, loading = false, error = null }) => {
   }
 
   // 🔹 If no entries found
-  if (!entries?.length) {
+  if (entries.length === 0 || entries.length === null) {
     return (
       <div className="recent-entries">
         <p>No entries yet. Your mood entries will appear here 😊</p>

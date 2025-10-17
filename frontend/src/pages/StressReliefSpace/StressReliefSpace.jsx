@@ -6,6 +6,8 @@ import API from "../../api/axios"; // your Axios instance
 const StressRelief = () => {
   const [input, setInput] = useState("");
   const [thoughts, setThoughts] = useState([]);
+  const [editingId, setEditingId] = useState(null);
+  const [editingText, setEditingText] = useState("");
 
   // Fetch notes from backend
   useEffect(() => {
@@ -20,6 +22,7 @@ const StressRelief = () => {
     fetchNotes();
   }, []);
 
+  // Add new note
   const addTask = async () => {
     if (!input.trim()) return;
 
@@ -29,6 +32,38 @@ const StressRelief = () => {
       setInput("");
     } catch (err) {
       console.error("Error adding note:", err);
+    }
+  };
+
+  // Delete a note
+  const deleteTask = async (id) => {
+    try {
+      await API.delete(`/notes/${id}`);
+      setThoughts((prev) => prev.filter((note) => note._id !== id));
+    } catch (err) {
+      console.error("Error deleting note:", err);
+    }
+  };
+
+  // Start editing a note
+  const startEdit = (note) => {
+    setEditingId(note._id);
+    setEditingText(note.content);
+  };
+
+  // Save edited note
+  const saveEdit = async (id) => {
+    if (!editingText.trim()) return;
+
+    try {
+      const { data } = await API.put(`/notes/${id}`, { content: editingText });
+      setThoughts((prev) =>
+        prev.map((note) => (note._id === id ? data : note))
+      );
+      setEditingId(null);
+      setEditingText("");
+    } catch (err) {
+      console.error("Error editing note:", err);
     }
   };
 
@@ -76,9 +111,86 @@ const StressRelief = () => {
 
           <p style={{ color: "#626A84", marginTop: "20px" }}>Thoughts to release</p>
 
-          <div style={{ color: "black", width: "440px", height: "225px", overflowY: "auto" }}>
+          <div
+            style={{
+              color: "black",
+              width: "440px",
+              maxHeight: "225px",
+              overflowY: "auto",
+              margin: "0 auto",
+            }}
+          >
             {thoughts.map((note) => (
-              <p key={note._id}>- {note.content}</p>
+              <div
+                key={note._id}
+                style={{
+                  background: "#f0f4ff",
+                  padding: "10px",
+                  marginBottom: "8px",
+                  borderRadius: "8px",
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
+                }}
+              >
+                {editingId === note._id ? (
+                  <>
+                    <input
+                      type="text"
+                      value={editingText}
+                      onChange={(e) => setEditingText(e.target.value)}
+                      style={{ flex: 1, marginRight: "10px", padding: "5px" }}
+                    />
+                    <button
+                      onClick={() => saveEdit(note._id)}
+                      style={{
+                        background: "#4CAF50",
+                        color: "white",
+                        border: "none",
+                        borderRadius: "4px",
+                        padding: "5px 10px",
+                        cursor: "pointer",
+                      }}
+                    >
+                      Save
+                    </button>
+                  </>
+                ) : (
+                  <>
+                    <span style={{ flex: 1 }}>- {note.content}</span>
+                    <div>
+                      <button
+                        onClick={() => startEdit(note)}
+                        style={{
+                          marginRight: "5px",
+                          background: "#FFC107",
+                          color: "white",
+                          border: "none",
+                          borderRadius: "4px",
+                          padding: "5px 10px",
+                          cursor: "pointer",
+                        }}
+                      >
+                        Edit
+                      </button>
+                      <button
+                        onClick={() => deleteTask(note._id)}
+                        style={{
+                          background: "#F44336",
+                          color: "white",
+                          border: "none",
+                          borderRadius: "4px",
+                          padding: "5px 10px",
+                          cursor: "pointer",
+                        }}
+                      >
+                        Delete
+                      </button>
+                    </div>
+                  </>
+                )}
+              </div>
             ))}
           </div>
         </div>
