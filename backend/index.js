@@ -16,7 +16,8 @@ const moodRoutes = require("./routes/moodroutes.js");
 const tasksRouter = require("./routes/tasks.js");
 const noteRoute = require("./routes/noteUserRoute.js");
 const adminTaskRouter = require("./routes/admin/taskRoutes.js");
-const Notifications = require("./routes/Notification.js")
+const Notifications = require("./routes/Notification.js");
+const chatRoutes = require("./routes/chatRoutes.js");
 const User = require("./models/User.js"); 
 const passport = require("passport");
 require("./config/passport");
@@ -72,6 +73,7 @@ app.use("/api/quotes", quoteRoutes);
 app.use('/api/moods', moodRoutes);
 app.use("/api/notes", noteRoute);
 app.use("/api/notifications" , Notifications);
+app.use('/api/chat', chatRoutes);
 //protected admin routes
 app.use("/api/admin", adminRoutes);
 app.use("/api/tasks", tasksRouter); // user task routes

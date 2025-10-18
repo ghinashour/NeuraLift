@@ -109,7 +109,7 @@ const navItems = [
   { key: 'assistant', label: 'AI Assistant', path: '/ai-assistant' }
 ];
 
-const Sidebar = ({ isCollapsed, setIsCollapsed, user }) => {
+const Sidebar = ({user }) => {
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -127,12 +127,12 @@ const Sidebar = ({ isCollapsed, setIsCollapsed, user }) => {
 
   return (
     <>
-      <aside className={`sidebar ${isCollapsed ? "collapsed" : ""}`}>
+      <aside className={`sidebar`}>
         <div className="brand">
           <div className="brand-icon">
             <img src={logo} alt="NeuraLift" />
           </div>
-          {!isCollapsed && (
+          {  (
             <>
               <div className="brand-name">NeuraLift</div>
               <div className="brand-sub">Your wellness companion</div>
@@ -147,7 +147,7 @@ const Sidebar = ({ isCollapsed, setIsCollapsed, user }) => {
               key={item.key}
               className={`nav-item ${isActive(item.path) ? "active" : ""}`}
               onClick={() => handleNavClick(item.path)}
-              title={isCollapsed ? item.label : undefined} // tooltip when collapsed
+              title={item.label } // tooltip when collapsed
             >
               {getNavIcon(item.key, isActive(item.path))}
               <span className="nav-label">{item.label}</span>
@@ -158,7 +158,7 @@ const Sidebar = ({ isCollapsed, setIsCollapsed, user }) => {
         <div className="sidebar-bottom">
           <div className="profile-section">
             <div className="profile">
-              <Link to="/profile" className="profile-link" title={isCollapsed ? (user?.name || "User") : undefined}>
+              <Link to="/profile" className="profile-link" title={ user?.name || "User"}>
                 <img
                   src={
                     user?.profilePhoto
@@ -172,25 +172,12 @@ const Sidebar = ({ isCollapsed, setIsCollapsed, user }) => {
                     e.target.src = avatarPlaceholder;
                   }}
                 />
-                {!isCollapsed && (
+                {(
                   <span className="sidebar-username">{user?.name || "User"}</span>
                 )}
               </Link>
             </div>
 
-            <button
-              className={`collapse-btn ${isCollapsed ? "floating" : ""}`}
-              onClick={() => {
-                console.log("Button clicked, isCollapsed:", isCollapsed);
-                setIsCollapsed(!isCollapsed);
-              }}
-              aria-label={isCollapsed ? "Expand sidebar" : "Collapse sidebar"}
-              title={isCollapsed ? "Expand sidebar" : "Collapse sidebar"}
-            >
-              <svg className={`collapse-icon ${isCollapsed ? "rotated" : ""}`} width="16" height="16" viewBox="0 0 24 24" fill="none">
-                <path d="M9 6L15 12L9 18" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
-            </button>
           </div>
         </div>
       </aside>
@@ -199,4 +186,3 @@ const Sidebar = ({ isCollapsed, setIsCollapsed, user }) => {
 };
 
 export default Sidebar;
-

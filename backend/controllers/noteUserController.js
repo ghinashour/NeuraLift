@@ -39,3 +39,23 @@ exports.deleteUserNote = async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 };
+exports.updateUserNote = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { content } = req.body;
+
+    if (!content) return res.status(400).json({ error: "Content is required" });
+
+    const updatedNote = await Note.findByIdAndUpdate(
+      id,
+      { content },
+      { new: true } // return updated note
+    );
+
+    if (!updatedNote) return res.status(404).json({ error: "Note not found" });
+
+    res.json(updatedNote);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};

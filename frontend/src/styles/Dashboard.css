@@ -2,13 +2,16 @@
    Dashboard: full page layout & theme
    =============================== */
 .dashboard-page {
-  width: 70%;
   min-height: 100vh;
   padding: 20px;
   background: #f6f7f8;
   display: flex;
   flex-direction: column;
   align-items: center;
+  width: 1200px;
+  height: 800px;
+  background-color: #f4f7fb;
+  color: black;
   transition: margin-left 0.3s ease;
 }
 
