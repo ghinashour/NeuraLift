@@ -17,7 +17,7 @@ const TaskList = ({ tasks = [], onTaskUpdate, onTaskDelete, onTaskToggle, onTask
 
     const sortedTasks = filteredTasks.sort((a, b) => {
         if (sortBy === 'date') {
-            return new Date(b.createdDate) - new Date(a.createdDate);
+            return new Date(b.createdAt || b.createdDate) - new Date(a.createdAt || a.createdDate);
         }
         if (sortBy === 'title') {
             return a.title.localeCompare(b.title);
@@ -80,7 +80,7 @@ const TaskList = ({ tasks = [], onTaskUpdate, onTaskDelete, onTaskToggle, onTask
             <div className="task-items">
                 {sortedTasks.map(task => (
                     <TaskItem
-                        key={task.id || task._id}
+                        key={task._id || task.id}
                         task={task}
                         onToggleComplete={onTaskToggle}
                         onEdit={onTaskEdit}

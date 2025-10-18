@@ -6,6 +6,7 @@ import AddEventModal from '../../components/Schedule/AddEventModal';
 import Button from '../../components/UI/Button/Button';
 import './SchedulePage.css';
 import API from '../../api/axios';
+import Swal from 'sweetalert2';
 
 const SchedulePage = () => {
   const [events, setEvents] = useState([]);
@@ -65,7 +66,12 @@ const SchedulePage = () => {
       setEditingEvent(null);
     } catch (error) {
       console.error('Error saving event:', error.response?.data || error.message);
-      alert(error.response?.data?.message || 'Error saving event. Try again.');
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'Error saving event. Try again.',
+        confirmButtonColor: '#3C83F6'
+      });
     }
   };
 
@@ -78,7 +84,12 @@ const SchedulePage = () => {
       setEvents(prev => prev.filter(ev => ev._id !== id));
     } catch (error) {
       console.error('Error deleting event:', error);
-      alert('Error deleting event. Try again.');
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'Error deleting event. Try again.',
+        confirmButtonColor: '#3C83F6'
+      });
     }
   };
 

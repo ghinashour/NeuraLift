@@ -42,7 +42,7 @@ const getEvents = async (req, res) => {
 
     const formatted = events.map(ev => ({
       _id: ev._id,
-      title: ev.name,
+      title: ev.title,
       description: ev.description,
       color: ev.color,
       startDate: ev.startDate,
@@ -64,7 +64,7 @@ const getEventById = async (req, res) => {
 
     res.json({
       _id: ev._id,
-      title: ev.name,
+      title: ev.title,
       description: ev.description,
       color: ev.color,
       startDate: ev.startDate,
@@ -84,7 +84,7 @@ const updateEvent = async (req, res) => {
 
     const { title, description, color, startDate, endDate } = req.body;
 
-    event.name = title || event.name;
+    event.title = title || event.title;
     event.description = description || event.description;
     event.color = color || event.color;
     event.startDate = startDate || event.startDate;
@@ -94,7 +94,7 @@ const updateEvent = async (req, res) => {
 
     res.json({
       _id: updated._id,
-      title: updated.name,
+      title: updated.title,
       description: updated.description,
       color: updated.color,
       startDate: updated.startDate,

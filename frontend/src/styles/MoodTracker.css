@@ -22,23 +22,28 @@ body {
   padding: 20px;
 }
 
-.header {
+.mood-header {
   text-align: center;
   margin-bottom: 30px;
 }
+
 .title-row {
   display: flex;
-  align-items: center;     /* vertically align svg + h1 */
-  justify-content: center; /* keep them centered as a group */
-  gap: 10px;               /* space between svg and h1 */
+  align-items: center;
+  /* vertically align svg + h1 */
+  justify-content: center;
+  /* keep them centered as a group */
+  gap: 10px;
+  /* space between svg and h1 */
 }
 
 .title-row svg {
-  width: 32px; /* adjust as needed */
+  width: 32px;
+  /* adjust as needed */
   height: 32px;
 }
 
-.header h1 {
+.mood-header h1 {
   font-size: 28.71px;
   font-weight: bold;
   color: #2B2F3B;
@@ -46,7 +51,7 @@ body {
   display: flex;
 }
 
-.header p {
+.mood-header p {
   font-size: 14.88px;
   color: #626A84;
   margin-top: 10px;
@@ -59,7 +64,9 @@ body {
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-h2, h3, h4 {
+h2,
+h3,
+h4 {
   color: #2c3e50;
   margin-bottom: 15px;
 }
@@ -227,7 +234,7 @@ h4 {
   border-left: 4px solid #3498db;
 }
 
-.entry-header {
+.mood-entry-header {
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
@@ -235,32 +242,33 @@ h4 {
   font-weight: 500;
 }
 
-.entry-date {
+.mood-entry-date {
   color: #7f8c8d;
 }
 
-.entry-mood {
+.mood-entry-mood {
   color: #2c3e50;
 }
 
-.entry-stress {
+.mood-entry-stress {
   color: #e74c3c;
 }
 
-.entry-note {
+.mood-entry-note {
   font-style: italic;
   color: #34495e;
   margin-top: 5px;
 }
 
 .divider {
-  border: none;
-  height: 1px;
-  background-color: #e0e0e0;
-  margin: 25px 0;
+  border: none !important;
+  height: 1px !important;
+  background-color: #e0e0e0 !important;
+  margin: 25px 0 !important;
+  width: auto;
 }
 
-.footer {
+.mood-footer {
   text-align: center;
   margin-top: 30px;
   color: #7f8c8d;
@@ -272,22 +280,22 @@ h4 {
   .App {
     padding: 15px;
   }
-  
+
   .mood-options {
     justify-content: space-between;
   }
-  
+
   .mood-option {
     flex: 1;
     min-width: 70px;
     padding: 10px;
   }
-  
+
   .mood-emoji {
     font-size: 1.5rem;
   }
-  
-  .entry-header {
+
+  .mood-entry-header {
     flex-direction: column;
     gap: 5px;
   }

@@ -5,7 +5,7 @@ import "../../styles/Challenges/tensizgame.css";
 function Tenzies() {
   const generateDice = () => {
     return Array.from({ length: 10 }, () => ({
-        // random number between 1-6
+      // random number between 1-6
       value: Math.ceil(Math.random() * 6),
       isHeld: false,
       id: Math.random().toString(36).substr(2, 9),

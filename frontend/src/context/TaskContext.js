@@ -45,6 +45,8 @@ export const TaskProvider = ({ children }) => {
         calculateStats(updatedTasks);
         return updatedTasks;
       });
+      // Also refresh the task list to ensure consistency
+      await fetchTasks();
     } catch (error) {
       console.error("Error adding task:", error);
     }

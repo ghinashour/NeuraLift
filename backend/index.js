@@ -34,29 +34,7 @@ app.use(cors({
 app.post("/api/user/:id/update-streak", async (req, res) => {
    const { id } = req.params;
 
-  if (!id) {
-    return res.status(400).json({ error: "User ID is required" });
-  }
-  const user = await User.findById(req.params.id);
-  const today = new Date();
-  today.setHours(0,0,0,0);
-
-  let lastActive = user.streak.lastActiveDate ? new Date(user.streak.lastActiveDate) : null;
-  if (lastActive) lastActive.setHours(0,0,0,0);
-
-  if (!lastActive || lastActive < today - 1*24*60*60*1000) {
-    // Missed a day → reset streak
-    user.streak.current = 1;
-  } else if (lastActive.getTime() === today - 1*24*60*60*1000) {
-    // Consecutive day → increment streak
-    user.streak.current += 1;
-  }
-
-  user.streak.lastActiveDate = today;
-  await user.save();
-
-  res.json({ streak: user.streak.current });
-});
+app.use(passport.initialize());
 
 // Routes
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
@@ -80,7 +58,6 @@ app.use("/api/tasks", tasksRouter); // user task routes
 app.use("/api/admin/tasks", adminTaskRouter); // admin task routes
 //server uploaded files
 app.use('/uploads', express.static('uploads'));
-app.use(passport.initialize());
 // Connect to MongoDB
 mongoose.connect(process.env.MONGO_URI)
   .then(() => console.log("MongoDB connected ✅"))

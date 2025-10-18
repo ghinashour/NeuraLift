@@ -61,7 +61,7 @@ export default function MoodTracker({ token }) {
 
     for (let m of testMoods) {
       try {
-        const res = await addMood(m, token);
+        const res = await addMood(m);
         setMoodEntries(prev => [res, ...prev]);
       } catch (err) {
         console.error("Failed to add test mood:", err.response || err);
@@ -78,7 +78,9 @@ export default function MoodTracker({ token }) {
           <h2>This Week's Insights</h2>
           <WeeklyInsights entries={Array.isArray(moodEntries) ? moodEntries : []} />
           {error && <p className="error-message">{error}</p>}
-          <button onClick={addTestMoods}>Add Test Moods</button>
+          {false && ( //for development mode only we will replace this line with {process.env.NODE_ENV !== 'production' && (
+            <button onClick={addTestMoods}>Add Test Moods</button>
+          )}
         </section>
 
         <Divider />

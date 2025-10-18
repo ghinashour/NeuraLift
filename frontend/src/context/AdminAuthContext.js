@@ -15,7 +15,7 @@ export const AdminAuthProvider = ({ children }) => {
     try {
       const savedToken = localStorage.getItem("adminToken");
       const savedAdmin = localStorage.getItem("admin");
-      
+
       if (savedToken && savedAdmin) {
         if (isTokenValid(savedToken)) {
           setToken(savedToken);
@@ -34,9 +34,9 @@ export const AdminAuthProvider = ({ children }) => {
 
   const isTokenValid = (token) => {
     if (!token) return false;
-    
+
     if (token.split('.').length !== 3) return false;
-    
+
     try {
       const payload = JSON.parse(atob(token.split('.')[1]));
       if (payload.exp && Date.now() >= payload.exp * 1000) {

@@ -1,11 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import useSuccessStories from '../../hooks/useSuccessStories';
+import useUserData from '../../hooks/useUserData';
+import Swal from 'sweetalert2';
 import '../../styles/SuccessStories/MyStory.css';
 
 const MyStory = () => {
     const navigate = useNavigate();
     const { createStory } = useSuccessStories();
+    const { user, loading: userLoading } = useUserData();
     const [formData, setFormData] = useState({
         title: '',
         description: '',
@@ -13,6 +16,16 @@ const MyStory = () => {
         author: ''
     });
     const [isSubmitting, setIsSubmitting] = useState(false);
+
+    // Update author field when user data is loaded
+    useEffect(() => {
+        if (user) {
+            setFormData(prev => ({
+                ...prev,
+                author: user.username || user.name || ''
+            }));
+        }
+    }, [user]);
 
     const categories = [
         'Mindfulness',
@@ -36,8 +49,13 @@ const MyStory = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        if (!formData.title || !formData.description || !formData.category || !formData.author) {
-            alert('Please fill in all required fields');
+        if (!formData.title || !formData.description || !formData.category) {
+            Swal.fire({
+                icon: 'warning',
+                title: 'Missing Information',
+                text: 'Please fill in all required fields',
+                confirmButtonColor: '#3C83F6'
+            });
             return;
         }
 
@@ -56,14 +74,19 @@ const MyStory = () => {
             await createStory(storyData);
 
             // Show success message
-            alert('Your success story has been shared! Thank you for inspiring others.');
+            Swal.fire({
+                icon: 'success',
+                title: 'Story Shared!',
+                text: 'Your success story has been shared! Thank you for inspiring others.',
+                confirmButtonColor: '#3C83F6'
+            });
 
             // Reset form
             setFormData({
                 title: '',
                 description: '',
                 category: '',
-                author: ''
+                author: user?.username || user?.name || ''
             });
 
             // Navigate back to success stories page
@@ -71,7 +94,12 @@ const MyStory = () => {
         } catch (error) {
             console.error('Error submitting story:', error);
             console.error('Error details:', error.response?.data || error.message);
-            alert(`Failed to submit story: ${error.response?.data?.message || error.message || 'Please check your connection and try again.'}`);
+            Swal.fire({
+                icon: 'error',
+                title: 'Submission Failed',
+                text: error.response?.data?.message || error.message || 'Please check your connection and try again.',
+                confirmButtonColor: '#3C83F6'
+            });
         } finally {
             setIsSubmitting(false);
         }
@@ -80,6 +108,23 @@ const MyStory = () => {
     const getInitials = (name) => {
         return name.split(' ').map(n => n[0]).join('').toUpperCase();
     };
+
+    // Show loading state while fetching user data
+    if (userLoading) {
+        return (
+            <div className="my-story">
+                <div className="loading-message">
+                    <p>Loading...</p>
+                </div>
+            </div>
+        );
+    }
+
+    // Redirect to login if user is not authenticated
+    if (!user) {
+        navigate('/login');
+        return null;
+    }
 
     return (
         <div className="my-story">
@@ -101,19 +146,6 @@ const MyStory = () => {
             <div className="my-story-content">
                 <div className="form-section">
                     <form onSubmit={handleSubmit} className="story-form">
-                        <div className="my-story-form-group">
-                            <label htmlFor="author">Your Name *</label>
-                            <input
-                                type="text"
-                                id="author"
-                                name="author"
-                                value={formData.author}
-                                onChange={handleInputChange}
-                                placeholder="Enter your name"
-                                required
-                            />
-                        </div>
-
                         <div className="my-story-form-group">
                             <label htmlFor="title">Story Title *</label>
                             <input

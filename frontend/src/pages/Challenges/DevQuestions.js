@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import "../../styles/Challenges/DevQuestions.css"; 
+import "../../styles/Challenges/DevQuestions.css";
+import Swal from 'sweetalert2';
 
 function DevQuestions() {
   const [questions, setQuestions] = useState([]);
@@ -35,7 +36,12 @@ function DevQuestions() {
   // Reset when score reaches 10
   useEffect(() => {
     if (score === 10) {
-      alert("🎉 Congratulations! You scored 10 points!");
+      Swal.fire({
+        icon: 'success',
+        title: '🎉 Congratulations!',
+        text: 'You scored 10 points!',
+        confirmButtonColor: '#3C83F6'
+      });
       setScore(0);
       setCurrentIndex(0);
     }

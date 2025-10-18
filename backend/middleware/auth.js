@@ -1,6 +1,6 @@
 // middleware/auth.js
-const  jwt = require ("jsonwebtoken");
-const User = require ("../models/User.js");
+const jwt = require("jsonwebtoken");
+const User = require("../models/User.js");
 
 const authMiddleware = async (req, res, next) => {
   const token = req.header("Authorization")?.replace("Bearer ", "");

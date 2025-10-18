@@ -18,7 +18,7 @@ router.put("/", authMiddleware, upload.single("photo"), async (req, res) => {
     const { name, email } = req.body;
     const updateData = {};
 
-    if (name) updateData.name = name;
+    if (name) updateData.username = name; // Update username field instead of name
     if (email) updateData.email = email;
     if (req.file) updateData.profilePhoto = req.file.filename; // save photo filename
 

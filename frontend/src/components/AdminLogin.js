@@ -3,6 +3,7 @@ import axios from "axios";
 import { useNavigate, Link } from "react-router-dom";
 import "../styles/Auth.css";
 import { AdminAuthContext } from "../context/AdminAuthContext";
+import Swal from 'sweetalert2';
 function AdminLogin() {
   const [form, setForm] = useState({ email: "", password: "" });
   const [error, setError] = useState(null);
@@ -28,9 +29,13 @@ function AdminLogin() {
       console.log('Login response:', res.data);
 
       const loginSuccess = login(res.data);
-      
+
       if (loginSuccess) {
-        alert("Admin login successful ✅");
+        Swal.fire({
+          icon: 'success',
+          title: 'Admin login successful ✅',
+          confirmButtonColor: '#3C83F6'
+        });
         navigate("/admin/dashboard");
       } else {
         setError("Failed to save login data. Please try again.");
@@ -67,9 +72,9 @@ function AdminLogin() {
             required
             disabled={loading}
           />
-          <button 
-            type="submit" 
-            className="btn-primary" 
+          <button
+            type="submit"
+            className="btn-primary"
             disabled={loading}
           >
             {loading ? "Logging in..." : "Login as Admin"}
