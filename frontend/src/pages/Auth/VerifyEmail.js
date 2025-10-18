@@ -1,31 +1,25 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 export default function VerifyEmail() {
   const [status, setStatus] = useState("Verifying...");
   const navigate = useNavigate();
+  const { verificationToken } = useParams();
 
   useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    const token = params.get("token");
-
-    if (!token) {
+    if (!verificationToken) {
       setStatus("Invalid verification link.");
       return;
     }
 
-    fetch("http://localhost:4000/api/auth/verify", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ token }),
-    })
+    fetch(`http://localhost:4000/api/auth/verify/${verificationToken}`)
       .then((res) => res.text())
       .then((msg) => {
         setStatus(msg);
         setTimeout(() => navigate("/login"), 3000);
       })
       .catch(() => setStatus("Verification failed. Try again."));
-  }, [navigate]);
+  }, [navigate, verificationToken]);
 
   return (
     <div style={{ textAlign: "center", marginTop: "50px" }}>

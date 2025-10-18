@@ -3,13 +3,14 @@ const router = express.Router();
 const passport = require("passport");
 const jwt = require("jsonwebtoken");
 
-const { signup, login , verifyEmail, getMe} = require("../controllers/authController");
+const { signup, login , verifyEmail, getMe, resendVerification } = require("../controllers/authController");
 const authMiddleware = require ("../middleware/auth");
 
 // Routes
 router.post("/signup", signup);
 router.post("/login", login);
 router.get("/verify/:token", verifyEmail);
+router.post('/resend-verification', resendVerification);
 
 // Protected route
 router.get("/me", authMiddleware, getMe);
