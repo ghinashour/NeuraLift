@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useContext } from "react";
 import axios from "axios";
 import { AdminAuthContext } from "../../context/AdminAuthContext";
+import Swal from 'sweetalert2';
 
 function UsersManagement() {
   const [users, setUsers] = useState([]);
@@ -34,7 +35,7 @@ function UsersManagement() {
       const res = await axios.get(`http://localhost:4000/api/admin/users?${params}`, {
         headers: getAuthHeader()
       });
-      
+
       setUsers(res.data.users);
       setTotalUsers(res.data.total);
       setError(null); // Clear any previous errors
@@ -47,30 +48,47 @@ function UsersManagement() {
   };
 
   const handleSuspendUser = async (userId) => {
-    if (!window.confirm("Are you sure you want to suspend this user?")) return;
-    
+    const result = await Swal.fire({
+      title: 'Are you sure you want to suspend this user?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3C83F6',
+      cancelButtonColor: '#aaa',
+      confirmButtonText: 'Yes, suspend'
+    });
+    if (result.isDismissed) return;
+
     setActionLoading(userId); // Set loading for this specific user
-    
+
     try {
-      const res = await axios.post(`http://localhost:4000/api/admin/users/${userId}/suspend`, 
+      const res = await axios.post(`http://localhost:4000/api/admin/users/${userId}/suspend`,
         { reason: "Suspended by admin" },
         { headers: getAuthHeader() }
       );
-      
+
       // ✅ Use functional update to ensure we have the latest state
-      setUsers(prevUsers => 
-        prevUsers.map(user => 
+      setUsers(prevUsers =>
+        prevUsers.map(user =>
           user._id === userId ? { ...user, isSuspended: true } : user
         )
       );
-      
+
       // ✅ Optional: Refetch users to ensure data consistency
       await fetchUsers();
-      
-      alert("User suspended successfully");
+
+      Swal.fire({
+        icon: 'success',
+        title: 'User suspended successfully',
+        confirmButtonColor: '#3C83F6'
+      });
     } catch (err) {
       console.error("Suspend user error:", err);
-      alert(err.response?.data?.error || "Failed to suspend user");
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: err.response?.data?.error || 'Failed to suspend user',
+        confirmButtonColor: '#3C83F6'
+      });
     } finally {
       setActionLoading(null); // Clear loading state
     }
@@ -78,44 +96,72 @@ function UsersManagement() {
 
   const handleUnsuspendUser = async (userId) => {
     setActionLoading(userId);
-    
+
     try {
-      const res = await axios.post(`http://localhost:4000/api/admin/users/${userId}/unsuspend`, 
+      const res = await axios.post(`http://localhost:4000/api/admin/users/${userId}/unsuspend`,
         {},
         { headers: getAuthHeader() }
       );
-      
+
       // ✅ Use functional update
-      setUsers(prevUsers => 
-        prevUsers.map(user => 
+      setUsers(prevUsers =>
+        prevUsers.map(user =>
           user._id === userId ? { ...user, isSuspended: false } : user
         )
       );
-      
-      alert("User unsuspended successfully");
+
+      Swal.fire({
+        icon: 'success',
+        title: 'User unsuspended successfully',
+        confirmButtonColor: '#3C83F6'
+      });
     } catch (err) {
       console.error("Unsuspend user error:", err);
-      alert(err.response?.data?.error || "Failed to unsuspend user");
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: err.response?.data?.error || 'Failed to unsuspend user',
+        confirmButtonColor: '#3C83F6'
+      });
     } finally {
       setActionLoading(null);
     }
   };
 
   const handleResetPassword = async (userId) => {
-    if (!window.confirm("Reset this user's password? A new password will be generated.")) return;
-    
+    const result2 = await Swal.fire({
+      title: "Reset this user's password?",
+      text: 'A new password will be generated.',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3C83F6',
+      cancelButtonColor: '#aaa',
+      confirmButtonText: 'Yes, reset'
+    });
+    if (result2.isDismissed) return;
+
     setActionLoading(userId);
-    
+
     try {
-      const res = await axios.post(`http://localhost:4000/api/admin/users/${userId}/reset-password`, 
+      const res = await axios.post(`http://localhost:4000/api/admin/users/${userId}/reset-password`,
         {},
         { headers: getAuthHeader() }
       );
-      
-      alert(`Password reset successfully! New password: ${res.data.newPassword}`);
+
+      Swal.fire({
+        icon: 'success',
+        title: 'Password Reset',
+        text: `Password reset successfully! New password: ${res.data.newPassword}`,
+        confirmButtonColor: '#3C83F6'
+      });
     } catch (err) {
       console.error("Reset password error:", err);
-      alert(err.response?.data?.error || "Failed to reset password");
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: err.response?.data?.error || 'Failed to reset password',
+        confirmButtonColor: '#3C83F6'
+      });
     } finally {
       setActionLoading(null);
     }
@@ -133,25 +179,34 @@ function UsersManagement() {
   const handleUpdateUser = async (e) => {
     e.preventDefault();
     setActionLoading(selectedUser._id);
-    
+
     try {
-      const res = await axios.put(`http://localhost:4000/api/admin/users/${selectedUser._id}`, 
+      const res = await axios.put(`http://localhost:4000/api/admin/users/${selectedUser._id}`,
         editForm,
         { headers: getAuthHeader() }
       );
-      
+
       // ✅ Update local state with functional update
-      setUsers(prevUsers => 
-        prevUsers.map(user => 
+      setUsers(prevUsers =>
+        prevUsers.map(user =>
           user._id === selectedUser._id ? { ...user, ...res.data } : user
         )
       );
-      
+
       setShowEditModal(false);
-      alert("User updated successfully");
+      Swal.fire({
+        icon: 'success',
+        title: 'User updated successfully',
+        confirmButtonColor: '#3C83F6'
+      });
     } catch (err) {
       console.error("Update user error:", err);
-      alert(err.response?.data?.error || "Failed to update user");
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: err.response?.data?.error || 'Failed to update user',
+        confirmButtonColor: '#3C83F6'
+      });
     } finally {
       setActionLoading(null);
     }
@@ -188,8 +243,8 @@ function UsersManagement() {
           />
         </div>
         <div className="filter-box">
-          <select 
-            value={statusFilter} 
+          <select
+            value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value)}
             className="filter-select"
           >
@@ -237,14 +292,14 @@ function UsersManagement() {
                   </td>
                   <td>{new Date(user.createdAt).toLocaleDateString()}</td>
                   <td>
-                    {user.lastActive 
+                    {user.lastActive
                       ? new Date(user.lastActive).toLocaleDateString()
                       : "Never"
                     }
                   </td>
                   <td>
                     <div className="action-buttons">
-                      <button 
+                      <button
                         onClick={() => handleEditUser(user)}
                         className="btn-edit"
                         title="Edit User"
@@ -252,9 +307,9 @@ function UsersManagement() {
                       >
                         {actionLoading === user._id ? "⏳" : "✏️"}
                       </button>
-                      
+
                       {user.isSuspended ? (
-                        <button 
+                        <button
                           onClick={() => handleUnsuspendUser(user._id)}
                           className="btn-success"
                           title="Unsuspend User"
@@ -263,7 +318,7 @@ function UsersManagement() {
                           {actionLoading === user._id ? "⏳" : "✅"}
                         </button>
                       ) : (
-                        <button 
+                        <button
                           onClick={() => handleSuspendUser(user._id)}
                           className="btn-warning"
                           title="Suspend User"
@@ -272,8 +327,8 @@ function UsersManagement() {
                           {actionLoading === user._id ? "⏳" : "⏸️"}
                         </button>
                       )}
-                      
-                      <button 
+
+                      <button
                         onClick={() => handleResetPassword(user._id)}
                         className="btn-secondary"
                         title="Reset Password"
@@ -293,19 +348,19 @@ function UsersManagement() {
       {/* Pagination */}
       {totalPages > 1 && (
         <div className="pagination">
-          <button 
+          <button
             onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
             disabled={currentPage === 1}
             className="pagination-btn"
           >
             Previous
           </button>
-          
+
           <span className="pagination-info">
             Page {currentPage} of {totalPages}
           </span>
-          
-          <button 
+
+          <button
             onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
             disabled={currentPage === totalPages}
             className="pagination-btn"
@@ -321,7 +376,7 @@ function UsersManagement() {
           <div className="modal">
             <div className="modal-header">
               <h2>Edit User</h2>
-              <button 
+              <button
                 onClick={() => setShowEditModal(false)}
                 className="modal-close"
                 disabled={actionLoading === selectedUser?._id}
@@ -335,7 +390,7 @@ function UsersManagement() {
                 <input
                   type="text"
                   value={editForm.name}
-                  onChange={(e) => setEditForm({...editForm, name: e.target.value})}
+                  onChange={(e) => setEditForm({ ...editForm, name: e.target.value })}
                   required
                   disabled={actionLoading === selectedUser?._id}
                 />
@@ -345,21 +400,21 @@ function UsersManagement() {
                 <input
                   type="url"
                   value={editForm.avatarUrl}
-                  onChange={(e) => setEditForm({...editForm, avatarUrl: e.target.value})}
+                  onChange={(e) => setEditForm({ ...editForm, avatarUrl: e.target.value })}
                   placeholder="https://example.com/avatar.jpg"
                   disabled={actionLoading === selectedUser?._id}
                 />
               </div>
               <div className="modal-actions">
-                <button 
-                  type="button" 
+                <button
+                  type="button"
                   onClick={() => setShowEditModal(false)}
                   disabled={actionLoading === selectedUser?._id}
                 >
                   Cancel
                 </button>
-                <button 
-                  type="submit" 
+                <button
+                  type="submit"
                   className="btn-primary"
                   disabled={actionLoading === selectedUser?._id}
                 >

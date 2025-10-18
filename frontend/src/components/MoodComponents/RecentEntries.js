@@ -33,7 +33,7 @@ const RecentEntries = ({ entries = [], loading = false, error = null }) => {
   return (
     <div className="recent-entries">
       {entries.map((entry) => (
-        <MoodEntryItem key={entry._id || Math.random()} entry={entry} />
+        <MoodEntryItem key={entry._id} entry={entry} />
       ))}
     </div>
   );

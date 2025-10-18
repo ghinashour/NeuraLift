@@ -192,7 +192,7 @@ const TaskFormModal = ({ isOpen, onClose, task = null }) => {
                 id="category"
                 className="form-input"
                 value={formData.category}
-                onChange={(e) => handleChange("category", e.target.value)}
+                onChange={(e) => handleChange('category', e.target.value)}
                 placeholder="Enter category..."
               />
             </div>
@@ -246,8 +246,8 @@ const TaskFormModal = ({ isOpen, onClose, task = null }) => {
               {loading
                 ? "Saving..."
                 : isEditing
-                ? "Update Task"
-                : "Add Task"}
+                  ? 'Update Task'
+                  : 'Add Task'}
             </button>
           </div>
         </form>

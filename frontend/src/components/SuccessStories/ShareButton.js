@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import { successStoriesAPI } from '../../api/successStories';
 import '../../styles/SuccessStories/ShareButton.css';
+import Swal from 'sweetalert2';
 
 const ShareButton = ({ storyId, shareCount, onShare }) => {
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -94,7 +95,6 @@ const ShareButton = ({ storyId, shareCount, onShare }) => {
                     // Get the current story data from the page
                     const storyElement = document.querySelector(`[data-story-id="${storyId}"]`);
                     if (storyElement) {
-                        const title = storyElement.querySelector('.story-title')?.textContent || 'Success Story';
                         const author = storyElement.querySelector('.story-author')?.textContent?.replace('by ', '') || 'Anonymous';
                         const content = storyElement.querySelector('.story-description')?.textContent || '';
                         const category = storyElement.querySelector('.category-tag')?.textContent?.trim() || 'General';
@@ -120,7 +120,12 @@ const ShareButton = ({ storyId, shareCount, onShare }) => {
                         const alreadyShared = existingStories.some(story => story.originalStoryId === storyId);
 
                         if (alreadyShared) {
-                            alert('This story has already been added to the landing page!');
+                            Swal.fire({
+                                icon: 'warning',
+                                title: 'Already Added',
+                                text: 'This story has already been added to the landing page!',
+                                confirmButtonColor: '#3C83F6'
+                            });
                         } else {
                             // Add to landing page stories
                             const updatedStories = [...existingStories, landingPageStory];
@@ -133,14 +138,29 @@ const ShareButton = ({ storyId, shareCount, onShare }) => {
                             window.dispatchEvent(event);
 
                             console.log(`Story ${storyId} added to landing page`);
-                            alert('Story successfully added to the landing page! It will appear in the Success Stories section.');
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Success',
+                                text: 'Story successfully added to the landing page! It will appear in the Success Stories section.',
+                                confirmButtonColor: '#3C83F6'
+                            });
                         }
                     } else {
-                        alert('Unable to find story data. Please try again.');
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Data Not Found',
+                            text: 'Unable to find story data. Please try again.',
+                            confirmButtonColor: '#3C83F6'
+                        });
                     }
                 } catch (error) {
                     console.error('Error adding story to landing page:', error);
-                    alert('Failed to add story to landing page. Please try again.');
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Failed',
+                        text: 'Failed to add story to landing page. Please try again.',
+                        confirmButtonColor: '#3C83F6'
+                    });
                 }
                 break;
             case 'twitter':

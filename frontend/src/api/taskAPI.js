@@ -3,7 +3,7 @@ import API from "./axios";
 // Get all tasks
 export const getTasks = async () => {
   const res = await API.get("/tasks");
-  return res.data.tasks;
+  return res.data; // Backend returns tasks directly, not wrapped in a tasks property
 };
 
 // Add a new task

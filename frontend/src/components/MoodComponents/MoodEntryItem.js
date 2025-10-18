@@ -1,22 +1,23 @@
 import React from 'react';
-import MoodEntryItem from './MoodEntryItem';
 
-const RecentEntries = ({ entries }) => {
-  if (entries.length === 0) {
-    return (
-      <div className="recent-entries">
-        <p>No entries yet. Your mood entries will appear here.</p>
-      </div>
-    );
-  }
+const MoodEntryItem = ({ entry }) => {
+  const { mood, isStressed, note, date } = entry || {};
+  const formattedDate = date ? new Date(date).toLocaleString() : '';
 
   return (
-    <div className="recent-entries">
-      {entries.map(entry => (
-        <MoodEntryItem key={entry._id} entry={entry} />
-      ))}
+    <div className="mood-entry-item">
+      <div className="mood-entry-header">
+        <span className="mood-entry-mood">{mood}</span>
+        {formattedDate && <span className="mood-entry-date">{formattedDate}</span>}
+      </div>
+      <div className="mood-entry-meta">
+        <span className={`mood-entry-stress ${isStressed ? 'stressed' : 'calm'}`}>
+          {isStressed ? 'Stressed' : 'Not stressed'}
+        </span>
+      </div>
+      {note ? <div className="mood-entry-note">{note}</div> : null}
     </div>
   );
 };
 
-export default RecentEntries;
+export default MoodEntryItem;
