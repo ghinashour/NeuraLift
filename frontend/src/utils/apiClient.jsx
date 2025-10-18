@@ -1,5 +1,5 @@
 // src/utils/apiClient.js
-const BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:4000';
+const BASE_URL = (process.env.REACT_APP_API_URL || 'http://localhost:4000').replace(/\/$/, '');
 
 const hasBody = (method) => ['POST', 'PUT', 'PATCH', 'DELETE'].includes(method.toUpperCase());
 
@@ -26,7 +26,14 @@ async function request(path, options = {}) {
 
     let res, data;
     try {
-        res = await fetch(BASE_URL + path, fetchOptions);
+        // Prevent duplicate '/api' when BASE_URL already contains '/api' and path starts with '/api'
+        let normalizedPath = path || '';
+        if (BASE_URL.endsWith('/api') && /^\/api\b/.test(normalizedPath)) {
+            normalizedPath = normalizedPath.replace(/^\/api/, '');
+        }
+        // Ensure single slash between BASE_URL and path
+        const url = BASE_URL + (normalizedPath.startsWith('/') ? normalizedPath : '/' + normalizedPath);
+        res = await fetch(url, fetchOptions);
         clearTimeout(timeoutId);
 
         const text = await res.text();

@@ -3,6 +3,8 @@
 .pomodoro-timer {
   font-family: 'Inter', sans-serif;
   display: flex;
+  width: 1200px;
+  height: 800px;
   flex-direction: column;
   align-items: center;
   padding: 2rem;

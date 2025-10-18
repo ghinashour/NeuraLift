@@ -7,6 +7,8 @@ const ChatInterface = ({
   onSendMessage, 
   isTyping, 
   onClearChat,
+  onRetryMessage,
+  onCancelPending,
   title = "AI Assistant"
 }) => {
   const [inputText, setInputText] = useState('');
@@ -70,7 +72,18 @@ const ChatInterface = ({
             </p>
           </div>
         </div>
-        {onClearChat && messages.length > 0 && (
+        <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+          {onCancelPending && (
+            <button
+              className="cancel-pending-btn"
+              onClick={onCancelPending}
+              title="Cancel pending response"
+            >
+              ✖
+            </button>
+          )}
+
+          {onClearChat && messages.length > 0 && (
           <button 
             className="clear-chat-btn"
             onClick={onClearChat}
@@ -80,7 +93,8 @@ const ChatInterface = ({
               <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
             </svg>
           </button>
-        )}
+          )}
+        </div>
       </div>
 
       {/* Messages Container */}
@@ -105,8 +119,23 @@ const ChatInterface = ({
                   <div className="message-text">
                     {message.text}
                   </div>
-                  <div className="message-time">
-                    {formatMessageTime(message.timestamp || Date.now())}
+                  <div className="message-meta" style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+                    <div className="message-time">
+                      {formatMessageTime(message.timestamp || Date.now())}
+                    </div>
+                    {message.sender === 'ai' && (
+                      <div className="message-status">
+                        {message.status === 'pending' && <span className="status-dot pending">● Pending</span>}
+                        {message.status === 'failed' && <>
+                          <span className="status-dot failed">● Failed</span>
+                          {onRetryMessage && (
+                            <button className="retry-btn" onClick={() => onRetryMessage(message.id)} title="Retry">
+                              Retry
+                            </button>
+                          )}
+                        </>}
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>

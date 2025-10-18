@@ -1,21 +1,6 @@
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: "Inter", "Arial", sans-serif;
-}
-
-body {
-  background-color: #f9fafb;
-  color: #e5e7eb;
-  padding: 20px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh;
-}
 
 .success-stories {
+  width: 1200px;
   padding: 60px 20px;
   max-width: 1200px;
   margin: 0 auto;

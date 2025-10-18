@@ -1,6 +1,10 @@
 /* General Container */
 .challenges-container {
   min-height: 100vh;
+  width: 1200px;
+  height: 800px;
+  background-color: #f4f7fb;
+  color: black;
   text-align: center;
   padding: 2rem;
   font-family: "Poppins", sans-serif;
