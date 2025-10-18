@@ -1,0 +1,106 @@
+/* Input Area - Modern AI Style */
+.input-area {
+  background: linear-gradient(135deg, #73B9FF 0%, #093894 100%);
+  backdrop-filter: blur(20px);
+  padding: 1.25rem 1.5rem;
+  border-top: 1px solid #e5e7eb;
+  position: relative;
+}
+
+.input-container {
+  display: flex;
+  align-items: flex-end;
+  gap: 0.75rem;
+  background: linear-gradient(135deg, #73B9FF 0%, #093894 100%);
+  border-radius: 24px;
+  padding: 0.75rem 1.25rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  border: 1.5px solid #e5e7eb;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.input-container:focus-within {
+  border-color: #667eea;
+  box-shadow: 0 4px 20px rgba(102, 126, 234, 0.15);
+  transform: translateY(-1px);
+}
+
+.input-icon-button {
+  background: transparent;
+  border: none;
+  color: #9ca3af;
+  cursor: pointer;
+  padding: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.input-icon-button:hover:not(:disabled) {
+  background: #f3f4f6;
+  color: #4b5563;
+  transform: scale(1.05);
+}
+
+.input-icon-button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.message-input {
+  flex: 1;
+  border: none;
+  outline: none;
+  background: transparent;
+  color: #093894;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  resize: none;
+  min-height: 24px;
+  max-height: 120px;
+  font-family: inherit;
+  padding: 0;
+}
+
+.message-input::placeholder {
+  color: #6e9dee;
+}
+
+.message-input:disabled {
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+.send-button {
+  background: linear-gradient(135deg, #667eea, #2c4ae0);
+  border: none;
+  color: white;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  flex-shrink: 0;
+  box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
+}
+
+.send-button:hover:not(:disabled) {
+  background: linear-gradient(135deg, #6e9dee, #2c4ae0);
+  transform: scale(1.05);
+  box-shadow: 0 4px 16px rgba(102, 126, 234, 0.4);
+}
+
+.send-button:disabled {
+  background: #d1d5db;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}

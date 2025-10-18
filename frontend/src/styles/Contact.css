@@ -1,5 +1,5 @@
 .contact-section {
-  background: linear-gradient(180deg, #E5E7EB, #F9F9FA);
+  background: linear-gradient(180deg, #e5e7eb, #f9f9fa);
   width: 100vw;
   position: relative;
   left: 50%;
@@ -11,18 +11,17 @@
   text-align: center;
 }
 
-
 .contact-title {
   font-size: 48px;
   font-weight: 700;
-  color: #2A303C;
+  color: #2a303c;
   margin-bottom: 16px;
 }
 
 .contact-subtitle {
   font-size: 20px;
   line-height: 28px;
-  color: #98A1B3;
+  color: #98a1b3;
   max-width: 746px;
   margin: 0 auto 60px auto;
 }
@@ -42,39 +41,31 @@
 .contact-form {
   background: #fff;
   width: 528px;
-  min-height: 540px;
+  height: 570px;
   padding: 24px;
   border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 .form-title {
   font-size: 24px;
   font-weight: 600;
-  color: #2A303C;
-  margin-bottom: 20px;
-}
-
-.form-row {
-  display: flex;
-  gap: 16px;
-}
-
-.contact-form-group {
-  display: flex;
-  flex-direction: column;
-  flex: 1;
+  color: #2a303c;
   margin-bottom: 20px;
 }
 
 label {
   font-size: 14px;
   margin-bottom: 6px;
-  color: #2A303C;
+  color: #2a303c;
+  width: 180px;
+}
+.inputcolor {
+  background-color: #e5e7eb80;
 }
 
 .required {
-  color: red;
+  color: black;
 }
 
 input,
@@ -94,7 +85,7 @@ textarea {
 .send-button {
   width: 100%;
   height: 44px;
-  background: linear-gradient(90deg, #3C8AF6, #76ABF4);
+  background: linear-gradient(90deg, #3c8af6, #76abf4);
   color: #fff;
   font-size: 14px;
   font-weight: 500;
@@ -125,13 +116,13 @@ textarea {
 .info-title {
   font-size: 24px;
   font-weight: 600;
-  color: #2A303C;
+  color: #2a303c;
   margin-bottom: 12px;
 }
 
 .info-subtitle {
   font-size: 16px;
-  color: #98A1B3;
+  color: #98a1b3;
   margin-bottom: 24px;
 }
 
@@ -145,7 +136,7 @@ textarea {
   padding: 20px;
   margin-bottom: 20px;
   height: 134px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
 }
 
 .icon-box {
@@ -165,25 +156,25 @@ textarea {
 
 /* Gradient backgrounds */
 .icon-box.email {
-  background: linear-gradient(90deg, #3C8AF6, #76ABF4);
+  background: linear-gradient(90deg, #3c8af6, #76abf4);
 }
 .icon-box.chat {
-  background: linear-gradient(90deg, #1A994F, #1BBB5E);
+  background: linear-gradient(90deg, #1a994f, #1bbb5e);
 }
 .icon-box.phone {
-  background: linear-gradient(90deg, #895AF6, #A684F5);
+  background: linear-gradient(90deg, #895af6, #a684f5);
 }
 
 .info-card h4 {
   font-size: 16px;
   font-weight: 600;
-  color: #2A303C;
+  color: #2a303c;
   margin: 0 0 6px 0;
 }
 
 .info-card p {
   font-size: 16px;
-  color: #98A1B3;
+  color: #98a1b3;
   margin: 0 0 6px 0;
 }
 
@@ -193,13 +184,128 @@ textarea {
 }
 
 .highlight {
-  color: #2563EB;
+  color: #2563eb;
 }
 
 .highlight.green {
-  color: #16A34A;
+  color: #16a34a;
 }
 
 .highlight.purple {
   color: #933EA9;
+}
+/* Responsive Styles */
+@media (max-width: 1024px) {
+  .contact-grid {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+
+  .contact-form,
+  .contact-info {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .form-row {
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 768px) {
+  .contact-section {
+    padding: 60px 16px;
+  }
+
+  .contact-title {
+    font-size: 36px;
+  }
+
+  .contact-subtitle {
+    font-size: 18px;
+    line-height: 24px;
+    margin-bottom: 40px;
+  }
+
+  .form-title {
+    font-size: 20px;
+    margin-bottom: 16px;
+  }
+
+  input,
+  textarea {
+    font-size: 13px;
+  }
+
+  .send-button {
+    font-size: 13px;
+    height: 40px;
+  }
+
+  .info-title {
+    font-size: 20px;
+  }
+
+  .info-subtitle,
+  .info-card h4,
+  .info-card p,
+  .highlight {
+    font-size: 14px;
+  }
+
+  .info-card {
+    flex-direction: column;
+    height: auto;
+  }
+
+  .icon-box {
+    width: 36px;
+    height: 36px;
+  }
+
+  .icon-box .icon {
+    width: 20px;
+    height: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .contact-section {
+    padding: 40px 12px;
+  }
+
+  .contact-title {
+    font-size: 28px;
+  }
+
+  .contact-subtitle {
+    font-size: 16px;
+    line-height: 22px;
+    margin-bottom: 32px;
+  }
+
+  .form-title {
+    font-size: 18px;
+  }
+
+  .send-button {
+    font-size: 12px;
+    height: 36px;
+  }
+
+  .info-title {
+    font-size: 18px;
+  }
+
+  .info-subtitle,
+  .info-card h4,
+  .info-card p,
+  .highlight {
+    font-size: 13px;
+  }
+
+  .contact-form,
+  .contact-info {
+    padding: 16px;
+  }
 }

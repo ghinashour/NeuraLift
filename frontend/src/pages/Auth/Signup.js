@@ -1,11 +1,13 @@
 import React, { useState } from "react";
-import axios from "axios";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { signup } from "../../api/auth";
 import "../../styles/Auth.css";
 import Swal from 'sweetalert2';
 function Signup() {
   const [form, setForm] = useState({ username: "", email: "", password: "" });
   const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
   //sign up to the site with google
   const handleGoogleLogin = () => {

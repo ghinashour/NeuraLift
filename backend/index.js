@@ -15,7 +15,10 @@ const quoteRoutes = require("./routes/quotes.js");
 const moodRoutes = require("./routes/moodroutes.js");
 const tasksRouter = require("./routes/tasks.js");
 const noteRoute = require("./routes/noteUserRoute.js");
-const adminTaskRouter = require("./routes/admin/taskRoutes.js")
+const adminTaskRouter = require("./routes/admin/taskRoutes.js");
+const Notifications = require("./routes/Notification.js");
+const chatRoutes = require("./routes/chatRoutes.js");
+const User = require("./models/User.js"); 
 const passport = require("passport");
 require("./config/passport");
 require("dotenv").config();
@@ -27,6 +30,9 @@ app.use(cors({
   origin: "http://localhost:3000", // allow frontend
   methods: ["GET", "POST", "PUT", "DELETE"],
 }));
+//streak logic of the user
+app.post("/api/user/:id/update-streak", async (req, res) => {
+   const { id } = req.params;
 
 app.use(passport.initialize());
 
@@ -44,6 +50,8 @@ app.use("/api/events", eventRoutes);
 app.use("/api/quotes", quoteRoutes);
 app.use('/api/moods', moodRoutes);
 app.use("/api/notes", noteRoute);
+app.use("/api/notifications" , Notifications);
+app.use('/api/chat', chatRoutes);
 //protected admin routes
 app.use("/api/admin", adminRoutes);
 app.use("/api/tasks", tasksRouter); // user task routes

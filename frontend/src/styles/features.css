@@ -1,14 +1,14 @@
 * {
   box-sizing: border-box;
 }
-body{
-  background-color: #FFFFFF;
+body {
+  background-color: #ffffff;
 }
 
-section{
-  background-color: #FFFFFF;
+section {
+  background-color: #ffffff;
 }
-.expression{
+.expression {
   margin-top: 10px;
   width: 85%;
   padding-left: 10px;
@@ -16,7 +16,8 @@ section{
 }
 .container {
   width: 100%;
-  background-color: #FFFFFF;
+  background-color: #ffffff;
+  margin-top: 10px;
 }
 
 .box-container {
@@ -27,6 +28,7 @@ section{
   padding: 10px;
   padding-top: 0px;
   margin-top: 35px;
+  margin-left: 200px;
 }
 
 .box {
@@ -48,7 +50,6 @@ section{
   margin-bottom: 20px;
   padding-left: 10px;
   font-size: 20px;
-
 }
 @media (max-width: 1200px) {
   .box-container {

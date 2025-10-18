@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
-import TagSelector from './TagSelector';
-import { useTaskContext } from '../context/TaskContext';
-import { useTags } from '../hooks/useTags';
-import '../styles/TaskFormModal.css';
+import React, { useState, useEffect } from "react";
+import TagSelector from "./TagSelector";
+import { useTaskContext } from "../context/TaskContext";
+import { useTags } from "../hooks/useTags";
+import "../styles/TaskFormModal.css";
 
 const TaskFormModal = ({ isOpen, onClose, task = null }) => {
   const { addTask, updateTask } = useTaskContext();
@@ -10,12 +10,12 @@ const TaskFormModal = ({ isOpen, onClose, task = null }) => {
   const isEditing = !!task;
 
   const [formData, setFormData] = useState({
-    title: '',
-    description: '',
-    priority: 'medium',
-    category: '',
+    title: "",
+    description: "",
+    priority: "medium",
+    category: "",
     tags: [],
-    dueDate: '',
+    dueDate: "",
   });
 
   const [errors, setErrors] = useState({});
@@ -24,21 +24,21 @@ const TaskFormModal = ({ isOpen, onClose, task = null }) => {
   useEffect(() => {
     if (task) {
       setFormData({
-        title: task.title || '',
-        description: task.description || '',
-        priority: task.priority || 'medium',
-        category: task.category || '',
+        title: task.title || "",
+        description: task.description || "",
+        priority: task.priority || "medium",
+        category: task.category || "",
         tags: task.tags || [],
-        dueDate: task.dueDate ? task.dueDate.split('T')[0] : '',
+        dueDate: task.dueDate ? task.dueDate.split("T")[0] : "",
       });
     } else {
       setFormData({
-        title: '',
-        description: '',
-        priority: 'medium',
-        category: '',
+        title: "",
+        description: "",
+        priority: "medium",
+        category: "",
         tags: [],
-        dueDate: '',
+        dueDate: "",
       });
     }
     setErrors({});
@@ -46,11 +46,11 @@ const TaskFormModal = ({ isOpen, onClose, task = null }) => {
 
   const validateForm = () => {
     const newErrors = {};
-    if (!formData.title.trim()) newErrors.title = 'Title is required';
+    if (!formData.title.trim()) newErrors.title = "Title is required";
     if (formData.title.length > 100)
-      newErrors.title = 'Title must be less than 100 characters';
+      newErrors.title = "Title must be less than 100 characters";
     if (formData.description.length > 500)
-      newErrors.description = 'Description must be less than 500 characters';
+      newErrors.description = "Description must be less than 500 characters";
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -77,8 +77,8 @@ const TaskFormModal = ({ isOpen, onClose, task = null }) => {
       }
       onClose();
     } catch (error) {
-      console.error('Error saving task:', error);
-      setErrors({ submit: 'Failed to save task. Please try again.' });
+      console.error("Error saving task:", error);
+      setErrors({ submit: "Failed to save task. Please try again." });
     } finally {
       setLoading(false);
     }
@@ -86,7 +86,7 @@ const TaskFormModal = ({ isOpen, onClose, task = null }) => {
 
   const handleChange = (field, value) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
-    if (errors[field]) setErrors((prev) => ({ ...prev, [field]: '' }));
+    if (errors[field]) setErrors((prev) => ({ ...prev, [field]: "" }));
   };
 
   const handleTagsChange = (selectedTags) => {
@@ -100,14 +100,34 @@ const TaskFormModal = ({ isOpen, onClose, task = null }) => {
       <div className="task-modal-content" onClick={(e) => e.stopPropagation()}>
         <div className="task-modal-header">
           <h2 className="task-modal-title">
-            {isEditing ? 'Edit Task' : 'Add New Task'}
+            {isEditing ? "Edit Task" : "Add New Task"}
           </h2>
-          <button className="task-modal-close" onClick={onClose} aria-label="Close">
-            ✕
+          <button
+            className="task-modal-close"
+            onClick={onClose}
+            aria-label="Close"
+          >
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+              <path
+                d="M18 6L6 18"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+              <path
+                d="M6 6L18 18"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
           </button>
         </div>
 
         <form onSubmit={handleSubmit} className="task-modal-form">
+          {/* Title */}
           <div className="task-modal-form-group">
             <label htmlFor="title" className="form-label">
               Task Title *
@@ -115,24 +135,27 @@ const TaskFormModal = ({ isOpen, onClose, task = null }) => {
             <input
               type="text"
               id="title"
-              className={`form-input ${errors.title ? 'error' : ''}`}
+              className={`form-input ${errors.title ? "error" : ""}`}
               value={formData.title}
-              onChange={(e) => handleChange('title', e.target.value)}
+              onChange={(e) => handleChange("title", e.target.value)}
               placeholder="Enter task title..."
               maxLength={100}
             />
-            {errors.title && <span className="error-message">{errors.title}</span>}
+            {errors.title && (
+              <span className="error-message">{errors.title}</span>
+            )}
           </div>
 
+          {/* Description */}
           <div className="task-modal-form-group">
             <label htmlFor="description" className="form-label">
               Description
             </label>
             <textarea
               id="description"
-              className={`form-textarea ${errors.description ? 'error' : ''}`}
+              className={`form-textarea ${errors.description ? "error" : ""}`}
               value={formData.description}
-              onChange={(e) => handleChange('description', e.target.value)}
+              onChange={(e) => handleChange("description", e.target.value)}
               placeholder="Enter task description..."
               rows={4}
               maxLength={500}
@@ -142,6 +165,7 @@ const TaskFormModal = ({ isOpen, onClose, task = null }) => {
             )}
           </div>
 
+          {/* Priority + Category */}
           <div className="form-row">
             <div className="task-modal-form-group">
               <label htmlFor="priority" className="form-label">
@@ -151,7 +175,7 @@ const TaskFormModal = ({ isOpen, onClose, task = null }) => {
                 id="priority"
                 className="form-select"
                 value={formData.priority}
-                onChange={(e) => handleChange('priority', e.target.value)}
+                onChange={(e) => handleChange("priority", e.target.value)}
               >
                 <option value="low">Low</option>
                 <option value="medium">Medium</option>
@@ -174,6 +198,7 @@ const TaskFormModal = ({ isOpen, onClose, task = null }) => {
             </div>
           </div>
 
+          {/* Due Date */}
           <div className="task-modal-form-group">
             <label htmlFor="dueDate" className="form-label">
               Due Date
@@ -183,11 +208,12 @@ const TaskFormModal = ({ isOpen, onClose, task = null }) => {
               id="dueDate"
               className="form-input"
               value={formData.dueDate}
-              onChange={(e) => handleChange('dueDate', e.target.value)}
-              min={new Date().toISOString().split('T')[0]}
+              onChange={(e) => handleChange("dueDate", e.target.value)}
+              min={new Date().toISOString().split("T")[0]}
             />
           </div>
 
+          {/* Tags */}
           <div className="task-modal-form-group">
             <label className="form-label">Tags</label>
             <TagSelector
@@ -197,10 +223,12 @@ const TaskFormModal = ({ isOpen, onClose, task = null }) => {
             />
           </div>
 
+          {/* Error message */}
           {errors.submit && (
             <div className="error-message submit-error">{errors.submit}</div>
           )}
 
+          {/* Buttons */}
           <div className="task-modal-form-actions">
             <button
               type="button"
@@ -216,7 +244,7 @@ const TaskFormModal = ({ isOpen, onClose, task = null }) => {
               disabled={loading}
             >
               {loading
-                ? 'Saving...'
+                ? "Saving..."
                 : isEditing
                   ? 'Update Task'
                   : 'Add Task'}

@@ -21,25 +21,28 @@ export default function MoodTracker({ token }) {
   // Fetch moods
   useEffect(() => {
     const fetchMoods = async () => {
+      setLoading(true);
       try {
         const res = await getMoods();
-        setMoodEntries(res);
+        // Ensure res is an array
+        setMoodEntries(Array.isArray(res) ? res : []);
+        setError(null);
       } catch (err) {
         console.error("Failed to fetch moods:", err);
         setError("Failed to load mood entries.");
+        setMoodEntries([]);
       } finally {
         setLoading(false);
       }
     };
-
     fetchMoods();
   }, []);
 
   const handleSubmit = async () => {
     if (!currentMood) return;
     try {
-      const res = await addMood({ mood: currentMood, isStressed, note: noteText });
-      setMoodEntries([res, ...moodEntries]);
+      const res = await addMood({ mood: currentMood, isStressed, note: noteText }, token);
+      setMoodEntries(prev => [res, ...prev]);
       setCurrentMood(null);
       setIsStressed(false);
       setNoteText("");
@@ -49,8 +52,6 @@ export default function MoodTracker({ token }) {
     }
   };
 
-
-  // Add test moods quickly
   const addTestMoods = async () => {
     const testMoods = [
       { mood: "Happy", isStressed: false, note: "Great day!" },
@@ -75,7 +76,7 @@ export default function MoodTracker({ token }) {
       <main className="main-content">
         <section className="insights-section">
           <h2>This Week's Insights</h2>
-          {loading ? <p>Loading...</p> : <WeeklyInsights entries={moodEntries} />}
+          <WeeklyInsights entries={Array.isArray(moodEntries) ? moodEntries : []} />
           {error && <p className="error-message">{error}</p>}
           {false && ( //for development mode only we will replace this line with {process.env.NODE_ENV !== 'production' && (
             <button onClick={addTestMoods}>Add Test Moods</button>
@@ -102,7 +103,11 @@ export default function MoodTracker({ token }) {
 
         <section className="recent-entries-section">
           <h3>Recent Entries</h3>
-          {loading ? <p>Loading...</p> : <RecentEntries entries={moodEntries} />}
+          <RecentEntries
+            entries={Array.isArray(moodEntries) ? moodEntries : []}
+            loading={loading}
+            error={error}
+          />
         </section>
       </main>
     </div>

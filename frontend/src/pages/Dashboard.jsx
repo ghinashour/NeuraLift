@@ -7,19 +7,17 @@ import ActionButton from "../components/ActionButton";
 import { getCurrentUser } from "../api/axios";
 
 function Dashboard() {
-  const [name, setName] = useState("User");
+  const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
+  // Fetch current user
   useEffect(() => {
     let mounted = true;
 
     const fetchUser = async () => {
       try {
-        const res = await getCurrentUser(); // Axios response
-        if (mounted) {
-          // Access only the username from res.data
-          setName(res.data?.username || "User");
-        }
+        const res = await getCurrentUser();
+        if (mounted) setUser(res.data);
       } catch (err) {
         console.error("Failed to fetch user:", err);
       } finally {
@@ -28,23 +26,20 @@ function Dashboard() {
     };
 
     fetchUser();
-
-    return () => {
-      mounted = false;
-    };
+    return () => { mounted = false; };
   }, []);
 
   return (
     <div className="dashboard-page">
-      {/* Top: centered greeting + right icons */}
+      {/* Header: Greeting (includes streak + notifications) */}
       <header className="dashboard-header">
-        <Greeting name={name} loading={loading} />
+        {user && <Greeting name={user.username} userId={user._id} />}
       </header>
 
-      {/* Middle: Daily Inspiration */}
+      {/* Daily Inspiration */}
       <InspirationSection />
 
-      {/* Bottom: Four action cards */}
+      {/* Action Buttons */}
       <section className="action-grid">
         <ActionButton
           title="Focus Timer"

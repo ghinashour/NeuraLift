@@ -1,258 +1,195 @@
-/* AdminSuccessStories.css
-   Modern admin table styles — responsive, accessible, and clean.
-*/
+/* ===============================
+   Admin Success Stories (Minimized)
+   =============================== */
 
-/* Color palette (easy to tweak) */
-:root{
-  --bg: #f6f8fb;
-  --card: #ffffff;
+:root {
+  --bg: #f6f7f8;
+  --card: #fff;
   --muted: #6b7280;
   --text: #0f1724;
-  --accent: #2563eb;     /* blue */
-  --danger: #ef4444;     /* red */
-  --success: #10b981;    /* green */
+  --accent: #2563eb;
+  --danger: #ef4444;
   --soft-border: rgba(15,23,36,0.06);
-  --glass: rgba(37,99,235,0.06);
-  --shadow: 0 6px 24px rgba(9,30,66,0.08);
-  --radius: 12px;
-  --gap: 12px;
-  --pad: 18px;
-  --small-pad: 10px;
-  --font-sans: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  --shadow: 0 4px 12px rgba(0,0,0,0.05);
+  --radius: 10px;
+  --pad: 1.2rem;
+  --font: "Inter", sans-serif;
 }
 
-/* Page background and root wrapper */
 .admin-stories-root {
-  font-family: var(--font-sans);
   background: var(--bg);
-  padding: 28px;
   min-height: 100vh;
+  padding: 1.5rem;
+  font-family: var(--font);
   color: var(--text);
-  box-sizing: border-box;
 }
 
-/* Card container */
 .admin-stories-card {
-  background: linear-gradient(180deg, var(--card), var(--card));
+  background: var(--card);
   border-radius: var(--radius);
   box-shadow: var(--shadow);
   padding: var(--pad);
   border: 1px solid var(--soft-border);
-  max-width: 1200px;
+  max-width: 1000px;
   margin: 0 auto;
 }
 
-/* Header */
 .admin-stories-header {
   display: flex;
-  gap: 12px;
-  align-items: center;
   justify-content: space-between;
-  margin-bottom: 18px;
+  align-items: center;
+  margin-bottom: 1rem;
 }
 
 .admin-stories-header h2 {
-  margin: 0;
-  font-size: 1.25rem;
+  font-size: 1.2rem;
   font-weight: 600;
-  letter-spacing: -0.2px;
+  margin: 0;
 }
 
-/* Optional controls area (filters, search, add) */
 .admin-controls {
   display: flex;
-  gap: 10px;
+  gap: 0.5rem;
   align-items: center;
 }
 
-/* Table wrapper to allow horizontal scroll on small screens */
 .table-wrap {
   width: 100%;
   overflow-x: auto;
-  border-radius: 10px;
-  background: linear-gradient(180deg, rgba(255,255,255,0.8), rgba(255,255,255,0.75));
-  padding: 6px;
+  border-radius: 8px;
+  background: rgba(255,255,255,0.8);
+  padding: 0.4rem;
   border: 1px solid var(--soft-border);
 }
 
-/* Table styling */
 .admin-stories-table {
   width: 100%;
   border-collapse: collapse;
-  min-width: 800px; /* forces horizontal scroll on narrow screens */
-  font-size: 0.95rem;
+  font-size: 0.9rem;
+  min-width: 700px;
 }
 
-.admin-stories-table thead th {
+.admin-stories-table th,
+.admin-stories-table td {
+  padding: 0.6rem 0.8rem;
+  border-bottom: 1px solid #eee;
   text-align: left;
-  font-weight: 600;
-  color: var(--muted);
-  padding: 12px 14px;
-  border-bottom: 1px solid var(--soft-border);
-  background: rgba(250,250,252,0.7);
-  position: sticky;
-  top: 0;
-  z-index: 2;
 }
 
-/* Body rows */
-.admin-stories-table tbody tr {
-  background: transparent;
-  transition: background 120ms ease, transform 120ms ease;
+.admin-stories-table th {
+  background: #f9fafc;
+  color: var(--muted);
+  font-weight: 600;
 }
 
 .admin-stories-table tbody tr:hover {
   background: rgba(37,99,235,0.03);
-  transform: translateY(-1px);
 }
 
-/* Cells */
-.admin-stories-table td {
-  padding: 12px 14px;
-  border-bottom: 1px dashed rgba(15,23,36,0.03);
-  vertical-align: middle;
-  color: var(--text);
-}
-
-/* Title cell — allow wrapping and limit height */
 .story-title {
-  max-width: 360px;
-  white-space: normal;
+  max-width: 300px;
   word-break: break-word;
 }
 
-/* Tiny meta text */
 .meta {
-  display: block;
+  font-size: 0.8rem;
   color: var(--muted);
-  font-size: 0.85rem;
-  margin-top: 6px;
+  margin-top: 0.3rem;
 }
 
-/* Featured badge */
 .badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 6px 10px;
+  padding: 0.3rem 0.6rem;
   border-radius: 999px;
-  font-weight: 600;
-  font-size: 0.78rem;
-  letter-spacing: 0.2px;
+  font-size: 0.75rem;
+  font-weight: 500;
 }
 
 .badge.yes {
-  background: var(--glass);
+  background: rgba(37,99,235,0.08);
   color: var(--accent);
-  border: 1px solid rgba(37,99,235,0.12);
 }
 
 .badge.no {
-  background: rgba(15,23,36,0.03);
+  background: rgba(15,23,36,0.05);
   color: var(--muted);
 }
 
-/* Action buttons */
 .actions {
   display: flex;
-  gap: 8px;
+  gap: 0.5rem;
   align-items: center;
 }
 
-/* Primary action (feature/unfeature) */
 .btn {
   border: none;
-  padding: 8px 12px;
-  font-size: 0.9rem;
-  border-radius: 8px;
+  border-radius: 6px;
+  padding: 0.5rem 0.8rem;
   cursor: pointer;
-  transition: transform 120ms ease, box-shadow 120ms ease;
-  display: inline-flex;
-  gap: 8px;
-  align-items: center;
-  justify-content: center;
+  font-size: 0.85rem;
+  transition: 0.2s;
 }
 
-.btn:focus {
-  outline: 3px solid rgba(37,99,235,0.14);
-  outline-offset: 2px;
-}
-
-/* Feature toggle */
 .btn-feature {
   background: transparent;
   color: var(--accent);
-  border: 1px solid rgba(37,99,235,0.12);
-  box-shadow: 0 1px 0 rgba(37,99,235,0.02);
+  border: 1px solid rgba(37,99,235,0.2);
 }
-.btn-feature:hover { transform: translateY(-2px); }
 
-/* Delete */
+.btn-feature:hover {
+  background: rgba(37,99,235,0.08);
+}
+
 .btn-delete {
   background: transparent;
   color: var(--danger);
-  border: 1px solid rgba(239,68,68,0.08);
-  box-shadow: 0 1px 0 rgba(239,68,68,0.02);
-}
-.btn-delete:hover { transform: translateY(-2px); }
-
-/* Small icon-only button */
-.icon-btn {
-  padding: 8px;
-  min-width: 36px;
-  border-radius: 8px;
+  border: 1px solid rgba(239,68,68,0.2);
 }
 
-/* Empty state */
+.btn-delete:hover {
+  background: rgba(239,68,68,0.08);
+}
+
 .empty {
-  padding: 36px;
   text-align: center;
   color: var(--muted);
+  padding: 2rem 0;
 }
 
-/* Pagination area (if you add) */
 .pagination {
-  display:flex;
-  gap:8px;
-  justify-content:flex-end;
-  margin-top:14px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  margin-top: 1rem;
 }
 
-/* Responsive: stack rows on very small screens */
+.pagination button {
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 0.4rem 0.8rem;
+  cursor: pointer;
+}
+
+.pagination button:disabled {
+  background: #b0c8e5;
+  cursor: not-allowed;
+}
+
+/* Responsive */
 @media (max-width: 700px) {
-  .admin-stories-card {
-    padding: 14px;
-  }
-
-  .admin-stories-table {
-    min-width: 100%;
-    border-radius: 8px;
-  }
-
-  .admin-stories-table thead {
-    display: none; /* hide header to use stacked layout */
-  }
-
+  .admin-stories-card { padding: 1rem; }
+  .admin-stories-table thead { display: none; }
   .admin-stories-table tbody tr {
     display: grid;
     grid-template-columns: 1fr auto;
-    gap: 8px;
-    padding: 12px;
-    border-radius: 10px;
-    margin-bottom: 10px;
+    gap: 0.5rem;
+    padding: 0.8rem;
+    border-radius: 8px;
     background: var(--card);
     border: 1px solid var(--soft-border);
+    margin-bottom: 0.6rem;
   }
-
-  .admin-stories-table tbody td {
-    border: none;
-    padding: 6px 8px;
-  }
-
-  .actions {
-    justify-self: end;
-    align-self: center;
-  }
-
-  .story-title { max-width: 100%; }
+  .admin-stories-table td { border: none; }
+  .actions { justify-self: end; }
 }

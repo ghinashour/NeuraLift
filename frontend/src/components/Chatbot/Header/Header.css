@@ -1,0 +1,87 @@
+.chat-header {
+  background: linear-gradient(135deg, #73B9FF 0%, #093894 100%);
+  border-bottom: 1px solid #e2e8f0;
+  padding: 1rem 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  width: 100%;
+}
+
+.header-content {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.bot-avatar-small {
+  position: relative;
+  width: 40px;
+  height: 40px;
+    background: linear-gradient(135deg, #73B9FF 0%, #093894 100%);
+
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.bot-icon-small {
+  width: 20px;
+  height: 20px;
+  color: white;
+}
+
+.status-dot {
+  position: absolute;
+  bottom: -2px;
+  right: -2px;
+  width: 12px;
+  height: 12px;
+  background: #10b981;
+  border: 2px solid white;
+  border-radius: 50%;
+}
+
+.agent-info h2 {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #093894;
+}
+
+.agent-info p {
+  margin: 0;
+  font-size: 0.875rem;
+  color: #718096;
+}
+
+.minimize-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #718096;
+  padding: 0.5rem;
+  border-radius: 8px;
+  transition: background-color 0.2s;
+}
+
+.minimize-button:hover {
+  background: #f7fafc;
+  color: #4a5568;
+}
+
+@media (max-width: 768px) {
+  .chat-header {
+    padding: 0.875rem 1rem;
+  }
+  
+  .agent-info h2 {
+    font-size: 1.125rem;
+  }
+  
+  .agent-info p {
+    font-size: 0.8rem;
+  }
+}

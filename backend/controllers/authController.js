@@ -29,8 +29,8 @@ exports.signup = async (req, res) => {
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
 
-    const verificationToken = crypto.randomBytes(32).toString("hex");
-    const tokenExpiry = Date.now() + 3600000; // 1 hour expiry
+  const verificationToken = crypto.randomBytes(32).toString("hex");
+  const tokenExpiry = Date.now() + 24 * 60 * 60 * 1000; // 24 hour expiry
 
     const newUser = new User({
       username,
@@ -143,15 +143,31 @@ exports.verifyEmail = async (req, res) => {
       return res.status(400).send("<h2>Invalid verification link.</h2>");
     }
 
+    // Find user with valid token
     const user = await User.findOne({
       verificationToken: token,
       verificationTokenExpiry: { $gt: Date.now() },
     });
 
     if (!user) {
-      return res
-        .status(400)
-        .send("<h2>Invalid or expired verification link.</h2>");
+      // If token exists but expired, offer a resend link
+      const expiredUser = await User.findOne({ verificationToken: token });
+      if (expiredUser) {
+        return res.status(400).send(`
+          <html>
+            <head><title>Verification Expired</title></head>
+            <body style="font-family: sans-serif; text-align: center; margin-top: 50px;">
+              <h2>Verification link expired</h2>
+              <p>Your verification link has expired. Click the button below to request a new verification email.</p>
+              <form method="POST" action="${process.env.API_URL}/api/auth/resend-verification">
+                <input type="hidden" name="email" value="${expiredUser.email}" />
+                <button type="submit">Resend verification email</button>
+              </form>
+            </body>
+          </html>
+        `);
+      }
+      return res.status(400).send("<h2>Invalid or expired verification link.</h2>");
     }
 
     // Mark verified
@@ -173,6 +189,33 @@ exports.verifyEmail = async (req, res) => {
   } catch (err) {
     console.error("Verify error:", err);
     res.status(500).send("<h2>Server error. Please try again later.</h2>");
+  }
+};
+
+// Resend verification email
+exports.resendVerification = async (req, res) => {
+  try {
+    const { email } = req.body;
+    if (!email) return res.status(400).json({ msg: 'Email is required' });
+
+    const user = await User.findOne({ email });
+    if (!user) return res.status(404).json({ msg: 'User not found' });
+    if (user.isVerified) return res.status(400).json({ msg: 'User already verified' });
+
+    const verificationToken = crypto.randomBytes(32).toString('hex');
+    const tokenExpiry = Date.now() + 24 * 60 * 60 * 1000; // 24 hours
+
+    user.verificationToken = verificationToken;
+    user.verificationTokenExpiry = tokenExpiry;
+    await user.save();
+
+    const verifyURL = `${process.env.API_URL}/api/auth/verify/${verificationToken}`;
+    await sendVerificationEmail(user.email, verifyURL);
+
+    res.json({ msg: 'Verification email resent' });
+  } catch (err) {
+    console.error('Resend verification error:', err);
+    res.status(500).json({ msg: 'Server error' });
   }
 };
 

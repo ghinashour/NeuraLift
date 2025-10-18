@@ -27,13 +27,12 @@
   background: linear-gradient(180deg, #f9fafb, #e5e7eb);
 }
 
-/* Header section styles */
+/* Header section */
 .header-section {
   text-align: center;
   margin-bottom: 64px;
   width: 100%;
 }
-
 
 .main-title {
   font-size: 48px;
@@ -54,8 +53,8 @@
 /* Grid layout */
 .founders-grid {
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  gap: 5px;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); /* ✅ Auto-fit columns for flexibility */
+  gap: 24px;
   width: 100%;
   justify-content: center;
 }
@@ -67,20 +66,21 @@
   box-shadow: 0px 4px 20px rgba(42, 48, 60, 0.1);
   border: 1px solid rgba(229, 231, 235, 0.3);
   overflow: hidden;
-  transition: box-shadow 0.3s ease;
-  width: 195.19px;
-  height: 638.75px;
+  transition: box-shadow 0.3s ease, transform 0.2s ease;
   display: flex;
   flex-direction: column;
+  height: auto; /* ✅ Let height adapt */
+  min-height: 500px;
 }
 
 .founder-card:hover {
   box-shadow: 0px 8px 30px rgba(42, 48, 60, 0.15);
+  transform: translateY(-4px);
 }
 
 .founder-image {
   width: 100%;
-  height: 100%;
+  height: 320px; /* ✅ Set a flexible but consistent image height */
   object-fit: cover;
   border-radius: 20px;
   transition: transform 0.3s ease;
@@ -107,9 +107,10 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  height: 48px;
+  height: 40px;
   border-radius: 9999px;
-  padding: 5px 15.9px 6px 12px;
+  padding: 5px 16px;
+  margin-bottom: 12px;
 }
 
 .role-badge-blue {
@@ -126,16 +127,10 @@
 
 .role-text {
   color: white;
-  font-family: Inter;
+  font-family: Inter, sans-serif;
   font-size: 14px;
-  font-style: normal;
-  font-weight: 400;
-  line-height: 20px;
-  display: flex;
-  width: 117.29px;
-  height: 37px;
-  flex-direction: column;
-  justify-content: center;
+  font-weight: 500;
+  line-height: 1.4;
 }
 
 .founder-description {
@@ -144,69 +139,60 @@
   line-height: 1.5;
 }
 
-/* Responsive design - MODIFIED FOR BETTER ALIGNMENT */
-@media (max-width: 1200px) {
-  .founders-grid {
-    grid-template-columns: repeat(3, 1fr); /* 3 columns on medium screens */
-  }
-}
-
-@media (max-width: 900px) {
-  .founders-grid {
-    grid-template-columns: repeat(2, 1fr); /* 2 columns on smaller screens */
-  }
-}
-
-@media (max-width: 768px) {
-  .container {
-    padding: 40px 16px;
-  }
-
+/* Responsive breakpoints */
+@media (max-width: 1024px) {
   .main-title {
-    font-size: 36px;
+    font-size: 40px;
   }
-
   .main-description {
     font-size: 18px;
   }
 }
-@media (max-width: 600px) {
-  .founders-grid {
-    grid-template-columns: 1fr; /* 1 column on mobile */
-    max-width: 400px;
-  }
-  
-  .image-container {
-    height: 240px;
-  }
-}
 
-/* Small screen adjustments */
-@media (max-width: 480px) {
-  .container {
-    padding: 24px 16px;
+@media (max-width: 768px) {
+  .container2 {
+    padding: 32px 16px;
   }
-
   .main-title {
     font-size: 32px;
   }
-
   .main-description {
     font-size: 16px;
   }
-.header-section {
-    margin-bottom: 32px;
+  .founder-image {
+    height: 260px;
   }
-
-  .founders-grid {
-    gap: 20px;
-  }
-
   .card-content {
     padding: 20px;
   }
-  
-  .image-container {
+}
+
+@media (max-width: 600px) {
+  .founders-grid {
+    gap: 16px;
+  }
+  .main-title {
+    font-size: 28px;
+  }
+  .founder-card {
+    min-height: 460px;
+  }
+}
+
+@media (max-width: 480px) {
+  .about-section {
+    padding: 40px 12px;
+  }
+  .main-title {
+    font-size: 24px;
+  }
+  .main-description {
+    font-size: 15px;
+  }
+  .founder-image {
     height: 220px;
+  }
+  .role-text {
+    font-size: 12px;
   }
 }

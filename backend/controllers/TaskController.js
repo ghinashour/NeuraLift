@@ -1,4 +1,5 @@
 const Task = require('../models/Task');
+const Notification = require("../models/Notification");
 
 // Create Task
 exports.createTask = async (req, res) => {
@@ -25,7 +26,13 @@ exports.createTask = async (req, res) => {
     }
 
     const task = await Task.create(taskData);
-
+      // Create notification
+    await Notification.create({
+      user: task.user,
+      type: "task",
+      title: `New Task: ${task.title}`,
+      description: `You have a new task to complete!`
+    });
     res.status(201).json(task);
   } catch (error) {
     console.error(error);

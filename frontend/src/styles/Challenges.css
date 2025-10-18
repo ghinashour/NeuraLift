@@ -1,6 +1,10 @@
 /* General Container */
 .challenges-container {
   min-height: 100vh;
+  width: 1200px;
+  height: 800px;
+  background-color: #f4f7fb;
+  color: black;
   text-align: center;
   padding: 2rem;
   font-family: "Poppins", sans-serif;
@@ -101,7 +105,6 @@
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   position: relative;
   overflow: hidden;
- 
 }
 
 .challenge-card::before {
@@ -134,4 +137,103 @@
 .challenge-card p {
   font-size: 0.95rem;
   color: #444;
+}
+
+/* ===============================
+   ✅ RESPONSIVE ADJUSTMENTS
+   =============================== */
+
+/* Tablets and small laptops */
+@media (max-width: 900px) {
+  .title {
+    font-size: 2rem;
+  }
+
+  .subtitle {
+    font-size: 1rem;
+  }
+
+  .category-btn {
+    padding: 0.8rem 1.4rem;
+    font-size: 0.9rem;
+  }
+}
+
+/* Mobile screens */
+@media (max-width: 600px) {
+  .challenges-container {
+    padding: 1.5rem 1rem;
+  }
+
+  .header {
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .title {
+    font-size: 1.8rem;
+    text-align: center;
+  }
+
+  .subtitle {
+    font-size: 0.95rem;
+    white-space: normal; /* ✅ allow wrapping on small screens */
+    border: none;        /* ✅ removes blinking line that overflows */
+    animation: none;     /* ✅ disables typing animation on small screens */
+  }
+
+  .button-row {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .category-btn {
+    width: 100%;
+    font-size: 0.9rem;
+    padding: 0.9rem 1.2rem;
+    border-radius: 25px;
+  }
+
+  .cards-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .challenge-card {
+    padding: 1.4rem;
+  }
+
+  .challenge-card h3 {
+    font-size: 1.1rem;
+  }
+
+  .challenge-card p {
+    font-size: 0.9rem;
+  }
+
+  .challenge-card::before {
+    font-size: 2.2rem;
+    top: 0;
+    right: 8px;
+  }
+}
+
+/* Very small devices (≤400px) */
+@media (max-width: 400px) {
+  .title {
+    font-size: 1.6rem;
+  }
+
+  .subtitle {
+    font-size: 0.85rem;
+  }
+
+  .category-btn {
+    font-size: 0.85rem;
+    padding: 0.8rem 1rem;
+  }
+
+  .challenge-card {
+    padding: 1.2rem;
+  }
 }
