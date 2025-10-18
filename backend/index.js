@@ -2,14 +2,19 @@ const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
 const path = require("path");
+const passport = require("passport");
+require("dotenv").config();
+require("./config/passport");
+
+// Import routes
 const profileRoutes = require("./routes/profile.js");
 const questionRoutes = require("./routes/questions.js");
 const devQuestionRoutes = require("./routes/DevQuestionRoute.js");
-const assemblyGameRoutes = require('./routes/assemblyGame');
+const assemblyGameRoutes = require("./routes/assemblyGame");
 const tensizesRoutes = require("./routes/tenziesRoutes");
 const eventRoutes = require("./routes/eventRoutes.js");
-const authRoutes = require('./routes/authRoute');
-const adminRoutes = require('./routes/admin.js');
+const authRoutes = require("./routes/authRoute");
+const adminRoutes = require("./routes/admin.js");
 const successStoryRoutes = require("./routes/successStories");
 const quoteRoutes = require("./routes/quotes.js");
 const moodRoutes = require("./routes/moodroutes.js");
@@ -18,51 +23,94 @@ const noteRoute = require("./routes/noteUserRoute.js");
 const adminTaskRouter = require("./routes/admin/taskRoutes.js");
 const Notifications = require("./routes/Notification.js");
 const chatRoutes = require("./routes/chatRoutes.js");
-const User = require("./models/User.js"); 
-const passport = require("passport");
-require("./config/passport");
-require("dotenv").config();
+const User = require("./models/User.js"); // <-- used for streak logic
 
 const app = express();
-app.use(express.json());
+
 // Middleware
+app.use(express.json());
 app.use(cors({
-  origin: "http://localhost:3000", // allow frontend
+  origin: "http://localhost:3000", // Allow your frontend
   methods: ["GET", "POST", "PUT", "DELETE"],
 }));
-//streak logic of the user
-app.post("/api/user/:id/update-streak", async (req, res) => {
-   const { id } = req.params;
 
 app.use(passport.initialize());
 
-// Routes
+// Static uploads folder
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
+
+// ------------------------------
+// ✅ USER STREAK LOGIC
+// ------------------------------
+app.post("/api/user/:id/update-streak", async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const user = await User.findById(id);
+    if (!user) return res.status(404).json({ msg: "User not found" });
+
+    const today = new Date();
+    const lastLogin = user.lastLoginDate ? new Date(user.lastLoginDate) : null;
+
+    if (lastLogin) {
+      const diffInDays = Math.floor((today - lastLogin) / (1000 * 60 * 60 * 24));
+
+      if (diffInDays === 1) {
+        // User logged in the next day → increment streak
+        user.streak += 1;
+      } else if (diffInDays > 1) {
+        // Missed at least one day → reset streak
+        user.streak = 1;
+      } 
+      // If diffInDays === 0 → same day login, no change
+    } else {
+      // First login
+      user.streak = 1;
+    }
+
+    user.lastLoginDate = today;
+    await user.save();
+
+    res.status(200).json({
+      msg: "Streak updated successfully",
+      streak: user.streak,
+      lastLoginDate: user.lastLoginDate,
+    });
+  } catch (err) {
+    console.error("Error updating streak:", err);
+    res.status(500).json({ msg: "Server error", error: err.message });
+  }
+});
+
+// ------------------------------
+// ✅ ROUTES
+// ------------------------------
 app.use("/api/auth", authRoutes);
 app.use("/api/profile", profileRoutes);
-//fetching the challenges
 app.use("/api/questions", questionRoutes);
 app.use("/api/devquestions", devQuestionRoutes);
-app.use('/api/assembly-game', assemblyGameRoutes);
+app.use("/api/assembly-game", assemblyGameRoutes);
 app.use("/api/tenzies", tensizesRoutes);
 app.use("/api/success-stories", successStoryRoutes);
 app.use("/api/events", eventRoutes);
 app.use("/api/quotes", quoteRoutes);
-app.use('/api/moods', moodRoutes);
+app.use("/api/moods", moodRoutes);
 app.use("/api/notes", noteRoute);
-app.use("/api/notifications" , Notifications);
-app.use('/api/chat', chatRoutes);
-//protected admin routes
+app.use("/api/notifications", Notifications);
+app.use("/api/chat", chatRoutes);
+app.use("/api/tasks", tasksRouter);
+app.use("/api/admin/tasks", adminTaskRouter);
 app.use("/api/admin", adminRoutes);
-app.use("/api/tasks", tasksRouter); // user task routes
-app.use("/api/admin/tasks", adminTaskRouter); // admin task routes
-//server uploaded files
-app.use('/uploads', express.static('uploads'));
-// Connect to MongoDB
-mongoose.connect(process.env.MONGO_URI)
-  .then(() => console.log("MongoDB connected ✅"))
-  .catch((err) => console.log("MongoDB connection error:", err));
 
-// Start server
+// ------------------------------
+// ✅ MONGO CONNECTION
+// ------------------------------
+mongoose.connect(process.env.MONGO_URI)
+  .then(() => console.log("✅ MongoDB connected"))
+  .catch((err) => console.error("❌ MongoDB connection error:", err));
+
+// ------------------------------
+// ✅ START SERVER
+// ------------------------------
 const PORT = process.env.PORT || 4000;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
