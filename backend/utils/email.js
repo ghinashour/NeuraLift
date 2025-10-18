@@ -10,25 +10,26 @@ async function sendVerificationEmail(to, url) {
 
   // Transporter setup (using Ethereal’s fake SMTP)
   const transporter = nodemailer.createTransport({
-    host: "smtp.ethereal.email",
-    port: 587,
-    secure: false, // true for 465, false for other ports
+     service: "gmail", 
     auth: {
-      user: testAccount.user, // generated user
-      pass: testAccount.pass, // generated password
+    user: process.env.MAIL_USER,
+    pass: process.env.MAIL_PASS,
     },
   });
 
-  // Send email
-  const info = await transporter.sendMail({
-    from: '"Neuralift 👋" <no-reply@Neuralift.com>',
-    to, // recipient email
-    subject: "Verify your email",
-    html: `<p>Click <a href="${url}">here</a> to verify your account</p>`,
-  });
+  const mailOptions = {
+    from: `"Neuralift" <${process.env.MAIL_USER}>`,
+    to,
+    subject: "Verify your Neuralift account",
+    html: `
+      <h2>Verify your email</h2>
+      <p>Click the link below to verify your account:</p>
+      <a href="${url}" target="_blank">Verify Email</a>
+    `,
+  };
 
-  console.log("Message sent: %s", info.messageId);
-  console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
+  const info = await transporter.sendMail(mailOptions);
+  console.log("✅ Verification email sent to:", to);
 }
 
 module.exports = sendVerificationEmail;

@@ -22,15 +22,14 @@ exports.signup = async (req, res) => {
 
   try {
     const existingUser = await User.findOne({ email });
-    if (existingUser) {
+    if (existingUser)
       return res.status(400).json({ msg: "Email already registered" });
-    }
 
-    const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash(password, salt);
+    const hashedPassword = await bcrypt.hash(password, 10);
 
-  const verificationToken = crypto.randomBytes(32).toString("hex");
-  const tokenExpiry = Date.now() + 24 * 60 * 60 * 1000; // 24 hour expiry
+    // Generate verification token
+    const verificationToken = crypto.randomBytes(32).toString("hex");
+    const tokenExpiry = Date.now() + 24 * 60 * 60 * 1000; // 24h
 
     const newUser = new User({
       username,
@@ -39,17 +38,20 @@ exports.signup = async (req, res) => {
       isVerified: false,
       verificationToken,
       verificationTokenExpiry: tokenExpiry,
-      isSuspended: false,
     });
 
     await newUser.save();
 
-    const verifyURL = `${process.env.API_URL}/api/auth/verify/${verificationToken}`;
-    await sendVerificationEmail(newUser.email, verifyURL);
+    // Send verification email
+    const verifyURL = `${process.env.CLIENT_URL}/verify/${verificationToken}`;
+    await sendVerificationEmail(email, verifyURL);
 
-    res.status(201).json({ msg: "Signup successful, please check your email to verify your account." });
+    // Response (optional: include token only for testing)
+    res.status(201).json({
+      msg: "Signup successful. Check your email to verify your account.",
+    });
   } catch (err) {
-    console.error("Signup error:", err);
+    console.error(err);
     res.status(500).json({ msg: "Server error" });
   }
 };
@@ -136,59 +138,39 @@ exports.loginAdmin = async (req, res) => {
 
 // ✅ Verify Email Controller
 exports.verifyEmail = async (req, res) => {
+  const { token } = req.params;
+
   try {
-    const { token } = req.params; // use params for GET links
-
-    if (!token) {
-      return res.status(400).send("<h2>Invalid verification link.</h2>");
-    }
-
-    // Find user with valid token
     const user = await User.findOne({
       verificationToken: token,
       verificationTokenExpiry: { $gt: Date.now() },
     });
 
     if (!user) {
-      // If token exists but expired, offer a resend link
-      const expiredUser = await User.findOne({ verificationToken: token });
-      if (expiredUser) {
-        return res.status(400).send(`
-          <html>
-            <head><title>Verification Expired</title></head>
-            <body style="font-family: sans-serif; text-align: center; margin-top: 50px;">
-              <h2>Verification link expired</h2>
-              <p>Your verification link has expired. Click the button below to request a new verification email.</p>
-              <form method="POST" action="${process.env.API_URL}/api/auth/resend-verification">
-                <input type="hidden" name="email" value="${expiredUser.email}" />
-                <button type="submit">Resend verification email</button>
-              </form>
-            </body>
-          </html>
-        `);
-      }
-      return res.status(400).send("<h2>Invalid or expired verification link.</h2>");
+      return res
+        .status(400)
+        .send("<h2>Invalid or expired verification link.</h2>");
     }
 
-    // Mark verified
+    // Mark user as verified
     user.isVerified = true;
     user.verificationToken = null;
     user.verificationTokenExpiry = null;
     await user.save();
 
-    // ✅ Respond with a simple HTML confirmation
+    // Success response
     res.send(`
       <html>
         <head><title>Email Verified</title></head>
         <body style="font-family: sans-serif; text-align: center; margin-top: 50px;">
           <h2>Email Verified Successfully 🎉</h2>
-          <p>You can now <a href="http://localhost:3000/login">log in</a> to your account.</p>
+          <p>You can now <a href="${process.env.CLIENT_URL}/login">log in</a></p>
         </body>
       </html>
     `);
   } catch (err) {
-    console.error("Verify error:", err);
-    res.status(500).send("<h2>Server error. Please try again later.</h2>");
+    console.error(err);
+    res.status(500).send("<h2>Server error</h2>");
   }
 };
 

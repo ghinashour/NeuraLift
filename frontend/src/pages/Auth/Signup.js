@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { signup } from "../../api/auth";
+import axios from "../../api/axios"
 import "../../styles/Auth.css";
 import Swal from 'sweetalert2';
 function Signup() {

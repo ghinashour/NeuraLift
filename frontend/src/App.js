@@ -90,7 +90,7 @@ function App() {
               {/* Auth Pages */}
               <Route path="/login" element={<Login />} />
               <Route path="/signup" element={<Signup />} />
-              <Route path="/verify/:token" element={<VerifyEmail />} />
+              <Route path="/verify/:verificationToken" element={<VerifyEmail />} />
               <Route path="/admin/login" element={<AdminLogin />} />
 
               {/* Main App Pages - Require Layout */}
