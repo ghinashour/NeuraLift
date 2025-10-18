@@ -1,10 +1,12 @@
 import React, { useState } from "react";
-import axios from "axios";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { signup } from "../../api/auth";
 import "../../styles/Auth.css";
 function Signup() {
   const [form, setForm] = useState({ username: "", email: "", password: "" });
   const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
   //sign up to the site with google
   const handleGoogleLogin = () => {
@@ -24,10 +26,14 @@ function Signup() {
     }
 
     try {
-      const res = await axios.post("http://localhost:4000/api/auth/signup", form);
-      alert(res.data.msg);
+      setLoading(true);
+      const res = await signup(form);
+      // backend might return { msg } or { success }
+      alert(res.data?.msg || "Account created. Check your email to verify.");
     } catch (err) {
       setError(err.response?.data?.msg || "Signup failed");
+    } finally {
+      setLoading(false);
     }
   };
 
