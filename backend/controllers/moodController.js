@@ -38,3 +38,22 @@ exports.addMood = async (req, res) => {
     res.status(500).json({ message: "Server error" });
   }
 };
+
+// 🗑️ DELETE mood by ID
+exports.deleteMood = async (req, res) => {
+  if (!req.user) return res.status(401).json({ message: "User not authenticated" });
+
+  try {
+    const mood = await Mood.findOne({ _id: req.params.id, user: req.user._id });
+
+    if (!mood) {
+      return res.status(404).json({ message: "Mood not found or not authorized" });
+    }
+
+    await mood.deleteOne();
+    res.status(200).json({ message: "Mood deleted successfully" });
+  } catch (error) {
+    console.error("deleteMood error:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+};

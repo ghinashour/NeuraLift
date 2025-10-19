@@ -1,13 +1,13 @@
-/* Layout.css - Main layout styles */
-/* The actual layout styles are handled by Sidebar.css */
-/* This file is here for consistency and future layout-specific styles */
-
 .layout-container {
     display: flex;
+    justify-content: center; /* center the content horizontally */
     min-height: 100vh;
+    background-color: #f5f7fa; /* optional: page background */
 }
 
 .layout-content {
-    flex: 1;
-    padding: 0;
+    width: 100%;
+    max-width: 1300px; /* fixed max width */
+    padding: 20px;     /* optional padding inside content */
+    box-sizing: border-box;
 }

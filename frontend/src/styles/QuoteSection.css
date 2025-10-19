@@ -1,25 +1,101 @@
 .quote-section {
-  background: #f9fafb;
-  border-radius: 12px;
-  padding: 1.5rem;
+  width: 95%;                   /* responsive width */
+  max-width: 800px;             /* matches Pomodoro cards */
+  background: #fff;             /* white card background */
+  border-radius: 16px;
+  padding: 2rem;
   text-align: center;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: 2rem auto;            /* centered horizontally */
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.quote-section:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+}
+
+.quote-section__content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
 .quote-section__text {
-  font-size: 0.95rem;
-  color: #374151;
-  margin-bottom: 1rem;
-  line-height: 1.5;
+  font-size: 1rem;
+  color: #111827;
+  line-height: 1.6;
+  margin-bottom: 0.8rem;
+  font-weight: 500;
 }
 
 .quote-section__author {
-  font-size: 0.85rem;
+  font-size: 0.875rem;
   margin-top: 0.5rem;
   color: #6b7280;
   font-style: italic;
 }
 
 .quote-section__refresh {
-  margin-top: 1rem;
+  margin-top: 1.5rem;
+  padding: 0.6rem 1.2rem;
+  font-size: 0.95rem;
+  border-radius: 10px;
+  background-color: #3498db;
+  color: white;
+  transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+.quote-section__refresh:hover:not(:disabled) {
+  background-color: #2980b9;
+  transform: translateY(-2px);
+}
+
+.quote-section__refresh:disabled {
+  background-color: #bdc3c7;
+  cursor: not-allowed;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .quote-section {
+    padding: 1.5rem;
+  }
+
+  .quote-section__text {
+    font-size: 0.95rem;
+  }
+
+  .quote-section__author {
+    font-size: 0.8rem;
+  }
+
+  .quote-section__refresh {
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .quote-section {
+    padding: 1.2rem;
+    max-width: 95%;
+  }
+
+  .quote-section__text {
+    font-size: 0.9rem;
+  }
+
+  .quote-section__author {
+    font-size: 0.75rem;
+  }
+
+  .quote-section__refresh {
+    font-size: 0.85rem;
+    padding: 0.5rem 1rem;
+  }
 }
