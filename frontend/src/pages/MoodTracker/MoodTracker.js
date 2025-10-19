@@ -75,7 +75,13 @@ export default function MoodTracker({ token }) {
 
       <main className="main-content">
         <section className="insights-section">
-          <h2>This Week's Insights</h2>
+          <h2>
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M18.3333 5.8335L11.25 12.9168L7.08334 8.75016L1.66667 14.1668" stroke="#3C83F6" stroke-width="1.66667" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M13.3333 5.8335H18.3333V10.8335" stroke="#3C83F6" stroke-width="1.66667" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+                This Week's Insights
+          </h2>
           <WeeklyInsights entries={Array.isArray(moodEntries) ? moodEntries : []} />
           {error && <p className="error-message">{error}</p>}
           {false && ( //for development mode only we will replace this line with {process.env.NODE_ENV !== 'production' && (

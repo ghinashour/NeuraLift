@@ -275,6 +275,87 @@ h4 {
   font-size: 0.9rem;
 }
 
+.weekly-insights-cards {
+  display: flex;
+  justify-content: space-between;
+  gap: 15px;
+  margin-bottom: 25px;
+  flex-wrap: wrap;
+}
+
+.insight-card {
+  flex: 1 1 30%;
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+  text-align: center;
+  transition: transform 0.2s ease;
+}
+
+.insight-card:hover {
+  transform: translateY(-4px);
+}
+
+.insight-card .icon {
+  margin-bottom: 10px;
+}
+
+.insight-card .value {
+  font-size: 0.9rem;
+  font-weight: bold;
+  margin-bottom: 5px;
+  color: #626A84;
+}
+
+.insight-card .label {
+  font-size: 0.9rem;
+  color: #7f8c8d;
+}
+
+.icon-circle {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 10px auto;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.delete-button {
+  margin-left: auto;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  color: #e74c3c;
+  font-size: 1rem;
+  transition: color 0.2s ease;
+}
+
+.delete-button:hover:not(:disabled) {
+  color: #c0392b;
+}
+
+.delete-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+
+
+/* Responsive */
+@media (max-width: 600px) {
+  .weekly-insights-cards {
+    flex-direction: column;
+  }
+  .insight-card {
+    flex: 1 1 100%;
+  }
+}
+
+
 /* Responsive design */
 @media (max-width: 600px) {
   .App {
