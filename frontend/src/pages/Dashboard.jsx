@@ -5,6 +5,7 @@ import Greeting from "../components/Greetings";
 import InspirationSection from "../components/InspirationSection";
 import ActionButton from "../components/ActionButton";
 import { getCurrentUser } from "../api/axios";
+import AILogo from '../components/AiLogo';
 
 function Dashboard() {
   const [user, setUser] = useState(null);
@@ -70,6 +71,14 @@ function Dashboard() {
           href="/stressrelief"
         />
       </section>
+       <div style={{ 
+        position: 'fixed', 
+        bottom: '20px', 
+        right: '20px',
+        zIndex: 1000 
+      }}>
+        <AILogo />
+      </div>
     </div>
   );
 }

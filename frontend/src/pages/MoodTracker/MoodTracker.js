@@ -8,6 +8,8 @@ import NoteInput from "../../components/MoodComponents/NoteInput";
 import SubmitButton from "../../components/MoodComponents/SubmitButton";
 import RecentEntries from "../../components/MoodComponents/RecentEntries";
 import Divider from "../../components/MoodComponents/Divider";
+import AILogo from '../../components/AiLogo';
+
 import "../../styles/MoodTracker.css";
 export default function MoodTracker({ token }) {
   const [moodEntries, setMoodEntries] = useState([]);
@@ -129,6 +131,14 @@ export default function MoodTracker({ token }) {
           />
         </section>
       </main>
+      <div style={{ 
+        position: 'fixed', 
+        bottom: '20px', 
+        right: '20px',
+        zIndex: 1000 
+      }}>
+        <AILogo />
+      </div>
     </div>
   );
 }

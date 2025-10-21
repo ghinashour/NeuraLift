@@ -7,6 +7,7 @@ import ModeSelector from '../../components/ModeSelector';
 import StatsDisplay from '../../components/StatsDisplay';
 import QuoteSection from '../../components/QuoteSection';
 import '../../styles/FocusTimer.css';
+import AILogo from '../../components/AiLogo';
 
 const PomodoroTimer = () => {
   const {
@@ -87,7 +88,16 @@ const PomodoroTimer = () => {
           isLoading={isLoading}
         />
       </div>
+      <div style={{ 
+        position: 'fixed', 
+        bottom: '20px', 
+        right: '20px',
+        zIndex: 1000 
+      }}>
+        <AILogo />
+      </div>
     </div>
+    
   );
 };
 

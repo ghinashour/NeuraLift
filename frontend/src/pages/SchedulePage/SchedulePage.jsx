@@ -4,6 +4,8 @@ import CalendarView from '../../components/Schedule/CalendarView';
 import EventCard from '../../components/Schedule/EventCard';
 import AddEventModal from '../../components/Schedule/AddEventModal';
 import Button from '../../components/UI/Button/Button';
+import AILogo from '../../components/AiLogo';
+
 import './SchedulePage.css';
 import API from '../../api/axios';
 import Swal from 'sweetalert2';
@@ -158,6 +160,14 @@ const SchedulePage = () => {
             event={editingEvent}
           />
         )}
+      </div>
+      <div style={{ 
+        position: 'fixed', 
+        bottom: '20px', 
+        right: '20px',
+        zIndex: 1000 
+      }}>
+        <AILogo />
       </div>
     </div>
   );

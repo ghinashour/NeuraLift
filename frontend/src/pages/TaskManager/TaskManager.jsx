@@ -5,6 +5,8 @@ import ProgressSummary from '../../components/ProgressSummary';
 import TaskList from '../../components/TaskList';
 import ProgressChart from '../../components/ProgressChart';
 import TaskFormModal from '../../components/TaskFormModal';
+import AILogo from '../../components/AiLogo';
+
 import { useTaskContext } from '../../context/TaskContext';
 const TaskManagerPage = () => {
     const { tasks, updateTask, deleteTask, toggleTask, stats } = useTaskContext();
@@ -114,6 +116,14 @@ const TaskManagerPage = () => {
                     task={editingTask}
                 />
             </div>
+            <div style={{ 
+        position: 'fixed', 
+        bottom: '20px', 
+        right: '20px',
+        zIndex: 1000 
+      }}>
+        <AILogo />
+      </div>
         </>
     );
 };

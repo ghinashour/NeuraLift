@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import "./StressReliefSpace.css";
 import Whiteboard from "./WhiteBoard";
 import API from "../../api/axios"; // your Axios instance
+import AILogo from '../../components/AiLogo';
 
 const StressRelief = () => {
   const [input, setInput] = useState("");
@@ -194,6 +195,14 @@ const StressRelief = () => {
             ))}
           </div>
         </div>
+      </div>
+      <div style={{ 
+        position: 'fixed', 
+        bottom: '20px', 
+        right: '20px',
+        zIndex: 1000 
+      }}>
+        <AILogo />
       </div>
     </div>
   );

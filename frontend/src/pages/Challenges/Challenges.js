@@ -2,6 +2,8 @@
 import React from "react";
 import ChallengeCard from "../../components/Challenges/ChallengeCard";
 import CategoryButton from "../../components/Challenges/CategoryButton";
+import AILogo from '../../components/AiLogo';
+
 import "../../styles/Challenges.css";
 
 const svgIcon = (<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -83,6 +85,14 @@ function Challenges() {
           description="Challenge yourself with tricky developer questions."
           link="/challenges/dev-questions"
         />
+      </div>
+       <div style={{ 
+        position: 'fixed', 
+        bottom: '20px', 
+        right: '20px',
+        zIndex: 1000 
+      }}>
+        <AILogo />
       </div>
     </div>
   );

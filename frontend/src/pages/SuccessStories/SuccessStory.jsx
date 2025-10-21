@@ -3,6 +3,8 @@ import { Link } from 'react-router-dom';
 import StatsCard from '../../components/SuccessStories/StatsCard';
 import StoryCard from '../../components/SuccessStories/StoryCard';
 import useSuccessStories from '../../hooks/useSuccessStories';
+import AILogo from '../../components/AiLogo';
+
 import '../../styles/SuccessStories/SuccessStories.css';
 
 const SuccessStory = () => {
@@ -78,6 +80,14 @@ const SuccessStory = () => {
                     />
                 ))}
             </div>
+             <div style={{ 
+        position: 'fixed', 
+        bottom: '20px', 
+        right: '20px',
+        zIndex: 1000 
+      }}>
+        <AILogo />
+      </div>
         </div>
     );
 };
