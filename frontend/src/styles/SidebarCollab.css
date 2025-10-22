@@ -1,0 +1,64 @@
+.side-collab-container {
+  position: fixed;
+  right: 0;
+  top: 0;
+  height: 100%;
+  width: 60px;
+  background:linear-gradient(90deg, #3C8AFC, #76ABF4);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 10px 0;
+  box-shadow: -2px 0 6px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+}
+
+.side-collab-icons {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.side-collab-icon {
+  font-size: 24px;
+  color: white;
+  cursor: pointer;
+}
+
+.side-collab-popup {
+  position: absolute;
+  right: 70px;
+  top: 20px;
+  width: 300px;
+  background: white;
+  border-radius: 10px;
+  padding: 15px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.side-collab-popup h3 {
+  margin-top: 0;
+}
+
+.side-collab-popup input,
+.side-collab-popup textarea,
+.side-collab-popup select {
+  width: 100%;
+  padding: 8px;
+  margin: 5px 0;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+
+.side-collab-popup button {
+  background: #3C8AFC;
+  color: white;
+  padding: 8px 12px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.side-collab-popup button:hover {
+  background: #3478d3;
+}
