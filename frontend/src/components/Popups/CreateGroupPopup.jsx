@@ -8,19 +8,28 @@ function CreateGroupPopup({ onClose, onSubmit }) {
     isPublic: true
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!formData.name.trim() || !formData.description.trim()) {
-      alert('Please fill in all fields');
+      setError('Please fill in all fields');
       return;
     }
 
     setIsSubmitting(true);
+    setError("");
+    
     try {
       await onSubmit(formData);
+      // If successful, the parent component should close the popup
     } catch (error) {
       console.error('Error creating group:', error);
+      // Get detailed error message
+      const errorMessage = error.response?.data?.message || 
+                          error.message || 
+                          'Failed to create group. Please try again.';
+      setError(errorMessage);
     } finally {
       setIsSubmitting(false);
     }
@@ -32,6 +41,8 @@ function CreateGroupPopup({ onClose, onSubmit }) {
       ...prev,
       [name]: type === 'checkbox' ? checked : value
     }));
+    // Clear error when user starts typing
+    if (error) setError("");
   };
 
   return (
@@ -44,6 +55,13 @@ function CreateGroupPopup({ onClose, onSubmit }) {
         </div>
         
         <div className="popup-body">
+          {/* Error Display */}
+          {error && (
+            <div className="error-message">
+              <strong>Error:</strong> {error}
+            </div>
+          )}
+          
           <form onSubmit={handleSubmit}>
             <div className="form-group">
               <label className="form-label">Group Name *</label>
@@ -56,6 +74,7 @@ function CreateGroupPopup({ onClose, onSubmit }) {
                 className="form-input"
                 required
                 maxLength="50"
+                disabled={isSubmitting}
               />
               <div className="character-count">
                 {formData.name.length}/50
@@ -73,6 +92,7 @@ function CreateGroupPopup({ onClose, onSubmit }) {
                 rows="4"
                 required
                 maxLength="200"
+                disabled={isSubmitting}
               />
               <div className="character-count">
                 {formData.description.length}/200
@@ -87,6 +107,7 @@ function CreateGroupPopup({ onClose, onSubmit }) {
                   checked={formData.isPublic}
                   onChange={handleChange}
                   className="checkbox-input"
+                  disabled={isSubmitting}
                 />
                 <span className="checkbox-custom"></span>
                 Public Group

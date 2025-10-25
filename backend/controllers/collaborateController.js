@@ -115,9 +115,9 @@ exports.createGroup = async (req, res) => {
     });
     
     await group.save();
-    await group.populate('creator', 'name avatar')
-               .populate('members', 'name avatar');
-    
+    await group.populate('creator', 'name avatar');
+await group.populate('members', 'name avatar');
+
     res.status(201).json(group);
   } catch (error) {
     console.error('Create group error:', error);
@@ -332,5 +332,75 @@ exports.getUserTasks = async (req, res) => {
   } catch (error) {
     console.error('Get user tasks error:', error);
     res.status(500).json({ message: 'Error fetching tasks', error: error.message });
+  }
+};
+
+// Add to your collaborateController.js
+
+// Invite member by email
+exports.inviteMemberByEmail = async (req, res) => {
+  try {
+    const { groupId, email, role } = req.body;
+    
+    if (!groupId || !email) {
+      return res.status(400).json({ message: 'Group ID and email are required' });
+    }
+
+    const group = await CollaborationGroup.findById(groupId);
+    if (!group) {
+      return res.status(404).json({ message: 'Group not found' });
+    }
+
+    // Check if user has permission to add members
+    if (!group.members.includes(req.user.id)) {
+      return res.status(403).json({ message: 'You are not a member of this group' });
+    }
+
+    // Find user by email (you need a User model)
+    const userToAdd = await User.findOne({ email });
+    if (!userToAdd) {
+      return res.status(404).json({ message: 'User not found with this email' });
+    }
+
+    // Check if user is already a member
+    if (group.members.includes(userToAdd._id)) {
+      return res.status(400).json({ message: 'User is already a member of this group' });
+    }
+
+    // Add user to group
+    group.members.push(userToAdd._id);
+    await group.save();
+
+    // Here you would typically send an email notification
+    console.log(`Invited ${email} to group ${group.name}`);
+
+    await group.populate('members', 'name email avatar');
+
+    res.json({
+      message: 'Member added successfully',
+      group
+    });
+  } catch (error) {
+    console.error('Invite member error:', error);
+    res.status(500).json({ message: 'Error inviting member', error: error.message });
+  }
+};
+
+// Get group members for task assignment
+exports.getGroupMembers = async (req, res) => {
+  try {
+    const { groupId } = req.params;
+    
+    const group = await CollaborationGroup.findById(groupId)
+      .populate('members', 'name email avatar role');
+    
+    if (!group) {
+      return res.status(404).json({ message: 'Group not found' });
+    }
+
+    res.json(group.members);
+  } catch (error) {
+    console.error('Get group members error:', error);
+    res.status(500).json({ message: 'Error fetching group members', error: error.message });
   }
 };

@@ -180,38 +180,43 @@ export default function Collaborate() {
     }
   };
 
-  const handleAssignTask = async (taskData) => {
-    try {
-      await axiosInstance.post("/collaborate/tasks", {
-        title: taskData.title,
-        description: taskData.description,
-        assignedTo: taskData.assignedTo,
-        groupId: taskData.groupId,
-        dueDate: taskData.dueDate,
-        priority: taskData.priority,
-      });
-      
-      setActivePopup(null);
-      alert("Task assigned successfully!");
-    } catch (err) {
-      console.error("Error assigning task:", err);
-      alert("Failed to assign task. Please try again.");
-    }
-  };
+const handleAssignTask = async (taskData) => {
+  try {
+    const response = await axiosInstance.post("/collaborate/tasks", {
+      title: taskData.title,
+      description: taskData.description,
+      assignedTo: taskData.assignedTo,
+      groupId: taskData.groupId,
+      dueDate: taskData.dueDate,
+      priority: taskData.priority,
+    });
+    
+    setActivePopup(null);
+    alert("Task assigned successfully!");
+  } catch (err) {
+    console.error("Error assigning task:", err);
+    throw err; // This will be caught in the popup component
+  }
+};
 
   const handleAddMember = async (memberData) => {
-    try {
-      await axiosInstance.post(`/collaborate/groups/${memberData.groupId}/members`, {
-        userId: memberData.userId,
-      });
-      
-      setActivePopup(null);
-      alert("Member added successfully!");
-    } catch (err) {
-      console.error("Error adding member:", err);
-      alert("Failed to add member. Please try again.");
-    }
-  };
+  try {
+    const response = await axiosInstance.post("/collaborate/invite/member", {
+      email: memberData.email,
+      groupId: memberData.groupId,
+      role: memberData.role
+    });
+    
+    setActivePopup(null);
+    alert("Member added successfully!");
+    
+    // Refresh groups to show new member
+    fetchGroups();
+  } catch (err) {
+    console.error("Error adding member:", err);
+    throw err; // This will be caught in the popup component
+  }
+};
 
   const handleInvite = async (inviteData) => {
     try {
@@ -223,6 +228,7 @@ export default function Collaborate() {
       alert("Failed to prepare invitation. Please try again.");
     }
   };
+
 
   // Format post data for PostCard component
   const formatPostForCard = (post) => ({

@@ -13,7 +13,9 @@ const {
   getUserTasks,
   generateInviteLink,
   verifyInvite,
-  joinGroupViaInvite
+  joinGroupViaInvite,
+  inviteMemberByEmail,
+  getGroupMembers
 } = require('../controllers/collaborateController');
 
 // Post routes
@@ -31,9 +33,12 @@ router.post('/groups/:groupId/members', auth, addMemberToGroup);
 router.get('/groups/:groupId/generate-invite', auth, generateInviteLink);
 router.get('/groups/:groupId/verify-invite', verifyInvite);
 router.post('/groups/:groupId/join', auth, joinGroupViaInvite);
+router.post('/invite/member', auth, inviteMemberByEmail);
+router.get('/groups/:groupId/members', auth, getGroupMembers);
 
 // Task routes
 router.post('/tasks', auth, assignTask);
 router.get('/tasks/my-tasks', auth, getUserTasks);
+
 
 module.exports = router;

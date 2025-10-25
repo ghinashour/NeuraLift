@@ -394,3 +394,24 @@
     grid-template-columns: repeat(2, 1fr);
   }
 }
+
+
+.error-message {
+  background: #ffeaea;
+  color: #d63031;
+  padding: 12px;
+  border-radius: 8px;
+  border: 1px solid #ff7675;
+  font-size: 0.9rem;
+  margin-bottom: 16px;
+}
+
+.success-message {
+  background: #e8f8ef;
+  color: #27ae60;
+  padding: 12px;
+  border-radius: 8px;
+  border: 1px solid #58d68d;
+  font-size: 0.9rem;
+  margin-bottom: 16px;
+}

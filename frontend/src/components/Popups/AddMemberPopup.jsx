@@ -8,19 +8,24 @@ function AddMemberPopup({ onClose, onSubmit, groups }) {
     role: "member"
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!formData.email || !formData.groupId) {
-      alert('Please fill in all fields');
+      setError('Please fill in all fields');
       return;
     }
 
     setIsSubmitting(true);
+    setError("");
+    
     try {
       await onSubmit(formData);
-    } catch (error) {
-      console.error('Error adding member:', error);
+      // Success - form will be reset by parent component
+    } catch (err) {
+      setError(err.response?.data?.message || 'Failed to add member');
+      console.error('Error adding member:', err);
     } finally {
       setIsSubmitting(false);
     }
@@ -31,6 +36,8 @@ function AddMemberPopup({ onClose, onSubmit, groups }) {
       ...prev,
       [e.target.name]: e.target.value
     }));
+    // Clear error when user starts typing
+    if (error) setError("");
   };
 
   return (
@@ -43,27 +50,34 @@ function AddMemberPopup({ onClose, onSubmit, groups }) {
         </div>
         
         <div className="popup-body">
+          {error && (
+            <div className="error-message" style={{color: 'red', marginBottom: '16px', padding: '8px', background: '#ffeaea', borderRadius: '4px'}}>
+              {error}
+            </div>
+          )}
+          
           <form onSubmit={handleSubmit}>
             <div className="form-group">
-              <label className="form-label">Select Group</label>
+              <label className="form-label">Select Group *</label>
               <select 
                 name="groupId"
                 value={formData.groupId}
                 onChange={handleChange}
                 className="form-select"
                 required
+                disabled={isSubmitting}
               >
                 <option value="">Choose a group</option>
                 {groups?.map(group => (
                   <option key={group._id} value={group._id}>
-                    {group.name}
+                    {group.name} ({group.members?.length || 0} members)
                   </option>
                 ))}
               </select>
             </div>
 
             <div className="form-group">
-              <label className="form-label">Email Address</label>
+              <label className="form-label">Email Address *</label>
               <input 
                 type="email" 
                 name="email"
@@ -72,6 +86,7 @@ function AddMemberPopup({ onClose, onSubmit, groups }) {
                 placeholder="Enter member's email address"
                 className="form-input"
                 required
+                disabled={isSubmitting}
               />
             </div>
 
@@ -82,6 +97,7 @@ function AddMemberPopup({ onClose, onSubmit, groups }) {
                 value={formData.role}
                 onChange={handleChange}
                 className="form-select"
+                disabled={isSubmitting}
               >
                 <option value="member">Member</option>
                 <option value="admin">Admin</option>
@@ -104,7 +120,7 @@ function AddMemberPopup({ onClose, onSubmit, groups }) {
               <button 
                 type="submit" 
                 className="btn btn-primary"
-                disabled={isSubmitting}
+                disabled={isSubmitting || !formData.email || !formData.groupId}
               >
                 {isSubmitting ? (
                   <>
