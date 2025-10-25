@@ -311,9 +311,9 @@ exports.assignTask = async (req, res) => {
     });
     
     await task.save();
-    await task.populate('assignedTo', 'name avatar')
-              .populate('assignedBy', 'name avatar')
-              .populate('group', 'name');
+    await task.populate('assignedTo', 'name avatar');
+    await task.populate('assignedBy', 'name avatar');
+    await task.populate('group', 'name');
     
     res.status(201).json(task);
   } catch (error) {
@@ -403,5 +403,84 @@ exports.getGroupMembers = async (req, res) => {
   } catch (error) {
     console.error('Get group members error:', error);
     res.status(500).json({ message: 'Error fetching group members', error: error.message });
+  }
+};
+
+// Get tasks assigned by current user
+exports.getAssignedTasks = async (req, res) => {
+  try {
+    const tasks = await CollaborationTask.find({ assignedBy: req.user.id })
+      .populate('assignedTo', 'name avatar email')
+      .populate('assignedBy', 'name avatar')
+      .populate('group', 'name')
+      .sort({ createdAt: -1 });
+    
+    res.json(tasks);
+  } catch (error) {
+    console.error('Get assigned tasks error:', error);
+    res.status(500).json({ message: 'Error fetching assigned tasks', error: error.message });
+  }
+};
+
+// Update task
+exports.updateTask = async (req, res) => {
+  try {
+    const { taskId } = req.params;
+    const { title, description, assignedTo, dueDate, priority, status } = req.body;
+    
+    const task = await CollaborationTask.findById(taskId);
+    if (!task) {
+      return res.status(404).json({ message: 'Task not found' });
+    }
+    
+    // Check if user is the task creator
+    if (task.assignedBy.toString() !== req.user.id) {
+      return res.status(403).json({ message: 'You can only edit tasks you created' });
+    }
+    
+    const updatedTask = await CollaborationTask.findByIdAndUpdate(
+      taskId,
+      {
+        title,
+        description,
+        assignedTo,
+        dueDate,
+        priority,
+        status
+      },
+      { new: true }
+    )
+    .populate('assignedTo', 'name avatar email')
+    .populate('assignedBy', 'name avatar')
+    .populate('group', 'name');
+    
+    res.json(updatedTask);
+  } catch (error) {
+    console.error('Update task error:', error);
+    res.status(500).json({ message: 'Error updating task', error: error.message });
+  }
+};
+
+// Delete task
+exports.deleteTask = async (req, res) => {
+  try {
+    const { taskId } = req.params;
+    
+    const task = await CollaborationTask.findById(taskId);
+    if (!task) {
+      return res.status(404).json({ message: 'Task not found' });
+    }
+    
+    // Check if user is the task creator
+    if (task.assignedBy.toString() !== req.user.id) {
+      return res.status(403).json({ message: 'You can only delete tasks you created' });
+    }
+    
+    await CollaborationTask.findByIdAndDelete(taskId);
+    
+    res.json({ message: 'Task deleted successfully' });
+  } catch (error) {
+    console.error('Delete task error:', error);
+    res.status(500).json({ message: 'Error deleting task', error: error.message });
   }
 };

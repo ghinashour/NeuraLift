@@ -295,6 +295,111 @@
 .groups-list::-webkit-scrollbar-thumb:hover {
   background: #a8a8a8;
 }
+/* Add these styles to your existing SidebarCollab.css */
+
+.task-management-section {
+  background: var(--card-bg);
+  border-radius: 12px;
+  padding: 20px;
+  margin-top: 20px;
+  border: 1px solid var(--border-color);
+}
+
+.section-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 15px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.task-links {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.task-link-btn {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  width: 100%;
+  text-align: left;
+}
+
+.task-link-btn:hover {
+  background: var(--primary-color);
+  color: white;
+  border-color: var(--primary-color);
+  transform: translateY(-1px);
+}
+
+.task-link-btn:hover .link-arrow {
+  transform: translateX(3px);
+}
+
+.link-arrow {
+  margin-left: auto;
+  font-weight: bold;
+  transition: transform 0.2s ease;
+}
+
+/* Update stats section if needed */
+.sidebar-stats {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.stat-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  background: var(--card-bg);
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+}
+
+.stat-icon {
+  color: var(--primary-color);
+  font-size: 18px;
+}
+
+.stat-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.stat-number {
+  font-weight: 600;
+  color: var(--text-primary);
+  font-size: 18px;
+}
+
+.stat-label {
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+/* Quick Actions update */
+.quick-actions {
+  margin-top: 20px;
+}
+
+.action-btn {
+  margin-bottom: 8px;
+}
 
 /* Responsive Design */
 @media (max-width: 768px) {

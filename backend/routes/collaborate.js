@@ -15,7 +15,10 @@ const {
   verifyInvite,
   joinGroupViaInvite,
   inviteMemberByEmail,
-  getGroupMembers
+  getGroupMembers,
+  getAssignedTasks,
+  updateTask,
+  deleteTask
 } = require('../controllers/collaborateController');
 
 // Post routes
@@ -39,6 +42,9 @@ router.get('/groups/:groupId/members', auth, getGroupMembers);
 // Task routes
 router.post('/tasks', auth, assignTask);
 router.get('/tasks/my-tasks', auth, getUserTasks);
-
+// admins assigned tasks
+router.get('/assigned-tasks',auth, getAssignedTasks);
+router.put('/tasks/:taskId', auth,updateTask);
+router.delete('/tasks/:taskId', auth,deleteTask);
 
 module.exports = router;

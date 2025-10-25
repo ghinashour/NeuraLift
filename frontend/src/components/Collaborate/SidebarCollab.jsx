@@ -9,6 +9,8 @@ import {
   FiPlusCircle,
   FiCheckSquare,
   FiMessageSquare,
+  FiList,
+  FiEdit3
 } from "react-icons/fi";
 
 const SidebarCollab = ({ onOpenPopup, groups, onInviteGroup }) => {
@@ -34,6 +36,9 @@ const SidebarCollab = ({ onOpenPopup, groups, onInviteGroup }) => {
         break;
       case "myTasks":
         navigate("/my-tasks");
+        break;
+      case "assignedTasks":
+        navigate("/assigned-tasks");
         break;
       default:
         break;
@@ -92,13 +97,22 @@ const SidebarCollab = ({ onOpenPopup, groups, onInviteGroup }) => {
           <span className="tooltip-text">Add Member</span>
         </div>
 
-        {/* My Tasks */}
+        {/* My Tasks (Tasks assigned to me) */}
         <div className="icon-tooltip">
           <FiCheckSquare
             className="side-collab-icon"
             onClick={() => handleIconClick("myTasks")}
           />
           <span className="tooltip-text">My Tasks</span>
+        </div>
+
+        {/* Tasks I Assigned */}
+        <div className="icon-tooltip">
+          <FiList
+            className="side-collab-icon"
+            onClick={() => handleIconClick("assignedTasks")}
+          />
+          <span className="tooltip-text">Tasks I Assigned</span>
         </div>
       </div>
 
@@ -166,6 +180,13 @@ const SidebarCollab = ({ onOpenPopup, groups, onInviteGroup }) => {
             <span className="stat-label">Your Groups</span>
           </div>
         </div>
+        <div className="stat-item">
+          <FiList className="stat-icon" />
+          <div className="stat-info">
+            <span className="stat-number">-</span>
+            <span className="stat-label">Tasks Assigned</span>
+          </div>
+        </div>
       </div>
 
       {/* Quick Actions */}
@@ -192,6 +213,44 @@ const SidebarCollab = ({ onOpenPopup, groups, onInviteGroup }) => {
           <FiClipboard size={16} />
           Assign Task
         </button>
+        <button 
+          className="action-btn"
+          onClick={() => handleIconClick("assignedTasks")}
+        >
+          <FiEdit3 size={16} />
+          Manage My Tasks
+        </button>
+      </div>
+
+      {/* Task Management Section */}
+      <div className="task-management-section">
+        <h3 className="section-title">Task Management</h3>
+        <div className="task-links">
+          <button 
+            className="task-link-btn"
+            onClick={() => handleIconClick("myTasks")}
+          >
+            <FiCheckSquare size={16} />
+            <span>Tasks Assigned to Me</span>
+            <span className="link-arrow">→</span>
+          </button>
+          <button 
+            className="task-link-btn"
+            onClick={() => handleIconClick("assignedTasks")}
+          >
+            <FiList size={16} />
+            <span>Tasks I Assigned</span>
+            <span className="link-arrow">→</span>
+          </button>
+          <button 
+            className="task-link-btn"
+            onClick={() => handleIconClick("task")}
+          >
+            <FiClipboard size={16} />
+            <span>Assign New Task</span>
+            <span className="link-arrow">+</span>
+          </button>
+        </div>
       </div>
     </div>
   );

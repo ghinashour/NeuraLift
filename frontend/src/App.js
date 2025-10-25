@@ -35,6 +35,7 @@ import ChatbotPage from "./pages/ChatbotPage/ChatbotPage";
 import MyTaskPage from "./pages/MyTaskPage";
 import MyTaskDetails from "./pages/MyTaskDetails";
 import ChattingCollab from "./pages/ChattingCollab";
+import AssignedTasksPage from "./pages/AssignedTasksPage";
 // Auth pages
 import Login from "./pages/Auth/Login";
 import Signup from "./pages/Auth/Signup";
@@ -202,6 +203,7 @@ function App() {
              <Route path="/ChattingCollab" element={<ChattingCollab />} />
               <Route path="/my-tasks" element={<MyTaskPage />} />
               <Route path="/mytasks/:id" element={<MyTaskDetails />} />
+              <Route path="/assigned-tasks" element={<AssignedTasksPage />} />
               {/* Admin Routes */}
               <Route path="/admin" element={<AdminLayout />}>
                 <Route index element={<Navigate to="/admin/dashboard" replace />} />
