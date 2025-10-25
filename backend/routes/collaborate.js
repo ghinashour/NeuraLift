@@ -18,7 +18,9 @@ const {
   getGroupMembers,
   getAssignedTasks,
   updateTask,
-  deleteTask
+  deleteTask,
+  getTaskDetails,
+  updateTaskStatus
 } = require('../controllers/collaborateController');
 
 // Post routes
@@ -46,5 +48,7 @@ router.get('/tasks/my-tasks', auth, getUserTasks);
 router.get('/assigned-tasks',auth, getAssignedTasks);
 router.put('/tasks/:taskId', auth,updateTask);
 router.delete('/tasks/:taskId', auth,deleteTask);
+router.get('/tasks/:taskId', auth,getTaskDetails);
+router.put('/tasks/:taskId/status', auth,updateTaskStatus);
 
 module.exports = router;

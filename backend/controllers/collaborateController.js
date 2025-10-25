@@ -484,3 +484,60 @@ exports.deleteTask = async (req, res) => {
     res.status(500).json({ message: 'Error deleting task', error: error.message });
   }
 };
+// Get single task details
+exports.getTaskDetails = async (req, res) => {
+  try {
+    const { taskId } = req.params;
+    
+    const task = await CollaborationTask.findById(taskId)
+      .populate('assignedTo', 'name avatar email')
+      .populate('assignedBy', 'name avatar')
+      .populate('group', 'name');
+    
+    if (!task) {
+      return res.status(404).json({ message: 'Task not found' });
+    }
+
+    // Check if user is either the assignee or the assigner
+    if (task.assignedTo._id.toString() !== req.user.id && task.assignedBy._id.toString() !== req.user.id) {
+      return res.status(403).json({ message: 'Access denied' });
+    }
+
+    res.json(task);
+  } catch (error) {
+    console.error('Get task details error:', error);
+    res.status(500).json({ message: 'Error fetching task details', error: error.message });
+  }
+};
+
+// Update task status (for task assignee)
+exports.updateTaskStatus = async (req, res) => {
+  try {
+    const { taskId } = req.params;
+    const { status } = req.body;
+    
+    const task = await CollaborationTask.findById(taskId);
+    if (!task) {
+      return res.status(404).json({ message: 'Task not found' });
+    }
+
+    // Check if user is the task assignee
+    if (task.assignedTo.toString() !== req.user.id) {
+      return res.status(403).json({ message: 'You can only update tasks assigned to you' });
+    }
+
+    const updatedTask = await CollaborationTask.findByIdAndUpdate(
+      taskId,
+      { status },
+      { new: true }
+    )
+    .populate('assignedTo', 'name avatar email')
+    .populate('assignedBy', 'name avatar')
+    .populate('group', 'name');
+
+    res.json(updatedTask);
+  } catch (error) {
+    console.error('Update task status error:', error);
+    res.status(500).json({ message: 'Error updating task status', error: error.message });
+  }
+};
