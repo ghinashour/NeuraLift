@@ -2,6 +2,7 @@ const Post = require('../models/Post');
 const CollaborationGroup = require('../models/CollaborationGroup');
 const CollaborationTask = require('../models/CollaborationTask');
 const GroupInvite = require('../models/GroupInvite');
+const User = require('../models/User');
 const crypto = require('crypto');
 
 // Post Controllers (keep existing ones)
