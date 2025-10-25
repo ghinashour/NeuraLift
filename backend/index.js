@@ -24,7 +24,6 @@ const adminTaskRouter = require("./routes/admin/taskRoutes.js");
 const Notifications = require("./routes/Notification.js");
 const chatRoutes = require("./routes/chatRoutes.js");
 const User = require("./models/User.js"); // <-- used for streak logic
-
 const app = express();
 
 // Middleware
@@ -101,6 +100,7 @@ app.use("/api/chat", chatRoutes);
 app.use("/api/tasks", tasksRouter);
 app.use("/api/admin/tasks", adminTaskRouter);
 app.use("/api/admin", adminRoutes);
+app.use('/api/collaborate', require('./routes/collaborate')); // Collaborate routes
 
 // ------------------------------
 // ✅ MONGO CONNECTION

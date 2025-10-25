@@ -32,7 +32,9 @@ import TaskDetails from "./pages/TaskDetails";
 import Schedule from "./pages/SchedulePage/SchedulePage";
 import MoodTracker from "./pages/MoodTracker/MoodTracker";
 import ChatbotPage from "./pages/ChatbotPage/ChatbotPage";
-
+import MyTaskPage from "./pages/MyTaskPage";
+import MyTaskDetails from "./pages/MyTaskDetails";
+import ChattingCollab from "./pages/ChattingCollab";
 // Auth pages
 import Login from "./pages/Auth/Login";
 import Signup from "./pages/Auth/Signup";
@@ -197,7 +199,9 @@ function App() {
                 <Route path="challenges/dev-questions" element={<DevQuestions />} />
                 <Route path="challenges/assembly-game" element={<AssemblyGameComponent />} />
               </Route>
-
+             <Route path="/ChattingCollab" element={<ChattingCollab />} />
+              <Route path="/my-tasks" element={<MyTaskPage />} />
+              <Route path="/mytasks/:id" element={<MyTaskDetails />} />
               {/* Admin Routes */}
               <Route path="/admin" element={<AdminLayout />}>
                 <Route index element={<Navigate to="/admin/dashboard" replace />} />
