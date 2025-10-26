@@ -3,29 +3,37 @@
   position: fixed;
   top: 0;
   left: 0;
-  width: 100%; /* full width */
+  width: 100%;
+  /* full width */
   display: flex;
-  justify-content: center; /* center content group */
+  justify-content: center;
+  /* center content group */
   align-items: center;
-  height: 70px; /* fixed height */
+  height: 70px;
+  /* fixed height */
   font-family: 'Inter', sans-serif;
   background-color: #ffffff;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* bottom shadow */
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  /* bottom shadow */
   z-index: 1000;
-  transition: background-color 0.4s ease, backdrop-filter 0.4s ease; /* smooth transition */
+  transition: background-color 0.4s ease, backdrop-filter 0.4s ease;
+  /* smooth transition */
 }
 
 /* Navbar content group */
 .navbar-content {
   display: flex;
   align-items: center;
-  gap: 60px; /* fixed gap */
-  width: max-content; /* prevents stretching */
+  gap: 60px;
+  /* fixed gap */
+  width: max-content;
+  /* prevents stretching */
 }
 
 /* Logo */
 .logo img {
-  height: 120px; /* fixed logo size */
+  height: 120px;
+  /* fixed logo size */
   width: auto;
   display: block;
 }
@@ -39,7 +47,7 @@
   padding: 0;
 }
 
-.nav-links  a {
+.nav-links a {
   text-decoration: none;
   font-size: 16px;
   color: #98A1B3;
@@ -62,11 +70,14 @@
   font-weight: 500;
   cursor: pointer;
   transition: transform 0.2s ease, opacity 0.2s ease;
-  text-decoration: none;   /* ✅ remove underline for link */
-  display: flex;           /* ✅ center text properly */
+  text-decoration: none;
+  /* ✅ remove underline for link */
+  display: flex;
+  /* ✅ center text properly */
   align-items: center;
   justify-content: center;
 }
+
 .get-started:hover {
   opacity: 0.9;
   transform: scale(1.05);
@@ -75,6 +86,8 @@
 
 /* Scroll effect: glass/blur with smooth fade-in */
 .navbar.scrolled {
-  backdrop-filter: blur(10px); /* glass effect */
-  background-color: rgba(255, 255, 255, 0.85); /* semi-transparent */
+  backdrop-filter: blur(10px);
+  /* glass effect */
+  background-color: rgba(255, 255, 255, 0.85);
+  /* semi-transparent */
 }

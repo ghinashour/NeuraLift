@@ -71,11 +71,11 @@ function Dashboard() {
           href="/stressrelief"
         />
       </section>
-       <div style={{ 
-        position: 'fixed', 
-        bottom: '20px', 
+      <div style={{
+        position: 'fixed',
+        bottom: '20px',
         right: '20px',
-        zIndex: 1000 
+        zIndex: 1000
       }}>
         <AILogo />
       </div>
