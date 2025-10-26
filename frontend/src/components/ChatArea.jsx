@@ -1,180 +1,291 @@
 // src/components/ChatArea.jsx
 import React, { useState, useRef, useEffect } from "react";
+import "../styles/ChatArea.css";
 
-/**
- * ChatArea (enhanced)
- * - sticky header
- * - scrollable, auto-scroll to bottom on new message
- * - date separators (Today / Yesterday / DD/MM/YY)
- * - message grouping and polished timestamps
- *
- * Props:
- * - group: active group object { id, name, members, messages[] }
- * - joined: boolean (can send)
- * - onPostMessage(msg)
- * - onLeave()
- */
-export default function ChatArea({ group, joined, onPostMessage, onLeave }) {
-  const [text, setText] = useState("");
-  const messagesRef = useRef(null);
-  const [autoScroll, setAutoScroll] = useState(true);
-
-  useEffect(() => {
-    // scroll to bottom when group changes
-    scrollToBottom();
-    // eslint-disable-next-line
-  }, [group?.id]);
-
-  useEffect(() => {
-    if (autoScroll) scrollToBottom();
-    // eslint-disable-next-line
-  }, [group?.messages?.length]);
+const ChatArea = ({
+  group = null,
+  messages = [],
+  onPostMessage,
+  loading = false,
+  onBackToGroups = null
+}) => {
+  const [newMessage, setNewMessage] = useState("");
+  const [isTyping, setIsTyping] = useState(false);
+  const messagesEndRef = useRef(null);
+  const textareaRef = useRef(null);
 
   const scrollToBottom = () => {
-    if (!messagesRef.current) return;
-    messagesRef.current.scrollTop = messagesRef.current.scrollHeight;
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
-  const handleScroll = () => {
-    if (!messagesRef.current) return;
-    const { scrollTop, scrollHeight, clientHeight } = messagesRef.current;
-    const atBottom = scrollTop + clientHeight >= scrollHeight - 30;
-    setAutoScroll(atBottom);
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages]);
+
+  useEffect(() => {
+    if (textareaRef.current) {
+      textareaRef.current.style.height = 'auto';
+      textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`;
+    }
+  }, [newMessage]);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (!newMessage.trim()) return;
+
+    if (onPostMessage) {
+      onPostMessage(newMessage);
+      setNewMessage("");
+      setIsTyping(false);
+    }
   };
 
-  const sendMessage = () => {
-    if (!text.trim() || !joined) return;
-    const msg = {
-      id: "m" + Date.now(),
-      type: "user",
-      user: { id: "current-user", name: "You", avatar: null },
-      text: text.trim(),
-      ts: Date.now(),
-    };
-    onPostMessage(msg);
-    setText("");
-    // allow time for DOM update then scroll
-    setTimeout(() => setAutoScroll(true), 50);
+  const handleInputChange = (e) => {
+    setNewMessage(e.target.value);
+    setIsTyping(e.target.value.length > 0);
   };
 
-  const formatTime = (ts) => {
-    const d = new Date(ts);
-    return d.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+  const handleKeyPress = (e) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      handleSubmit(e);
+    }
   };
 
-  const formatDayLabel = (ts) => {
-    const d = new Date(ts);
-    const now = new Date();
-    const diffDays = Math.floor((+now - +d) / (1000 * 60 * 60 * 24));
-    if (diffDays === 0) return "Today";
-    if (diffDays === 1) return "Yesterday";
-    if (diffDays < 30) return `${diffDays}d ago`;
-    return d.toLocaleDateString("en-GB");
+  const formatTime = (timestamp) => {
+    if (!timestamp) return '';
+    const date = new Date(timestamp);
+    return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
   };
 
-  // build grouped messages by day to show separators
-  const groupedByDay = () => {
-    if (!group?.messages) return [];
-    const groups = [];
-    let currentDay = null;
-    group.messages.forEach((m) => {
-      const day = new Date(m.ts).toDateString();
-      if (day !== currentDay) {
-        currentDay = day;
-        groups.push({ type: "day", label: formatDayLabel(m.ts) });
+  const formatDate = (timestamp) => {
+    if (!timestamp) return '';
+    const date = new Date(timestamp);
+    const today = new Date();
+    const yesterday = new Date(today);
+    yesterday.setDate(yesterday.getDate() - 1);
+
+    if (date.toDateString() === today.toDateString()) {
+      return 'Today';
+    } else if (date.toDateString() === yesterday.toDateString()) {
+      return 'Yesterday';
+    } else {
+      return date.toLocaleDateString();
+    }
+  };
+
+  // Group messages by date
+  const groupMessagesByDate = () => {
+    if (!messages || !Array.isArray(messages)) return {};
+
+    const grouped = {};
+    
+    messages.forEach(message => {
+      if (!message) return;
+      
+      const date = formatDate(message.createdAt || message.ts);
+      if (!grouped[date]) {
+        grouped[date] = [];
       }
-      groups.push({ type: "msg", payload: m });
+      grouped[date].push(message);
     });
-    return groups;
+
+    return grouped;
   };
 
-  if (!group) {
+  const groupedMessages = groupMessagesByDate();
+
+  if (loading) {
     return (
-      <main className="chat-area empty">
-        <div className="empty-inner">Select or create a group to start chatting</div>
-      </main>
+      <div className="chat-area">
+        <div className="loading-container">
+          <div className="loading-spinner"></div>
+          <p>Loading messages...</p>
+        </div>
+      </div>
     );
   }
 
-  const items = groupedByDay();
+  if (!group) {
+    return (
+      <div className="chat-area">
+        <div className="no-group-selected">
+          <div className="empty-state-icon">💬</div>
+          <h3>Welcome to Collaboration</h3>
+          <p>Select a group from the sidebar to start chatting with your team</p>
+          {onBackToGroups && (
+            <button className="browse-groups-btn" onClick={onBackToGroups}>
+              Browse Groups
+            </button>
+          )}
+        </div>
+      </div>
+    );
+  }
 
   return (
-    <main className="chat-area">
-      <div className="chat-header sticky">
-        <div className="chat-title">{group.name}</div>
-        <div className="chat-header-right">
-          <div className="avatars">
-            {group.members.map((m) => (
-              <div key={m.id} className="avatar-small" title={m.name}>
-                {m.avatar ? <img src={m.avatar} alt={m.name} /> : <span>{m.name[0]}</span>}
-              </div>
-            ))}
+    <div className="chat-area">
+      {/* Chat Header */}
+      <div className="chat-header">
+        <div className="header-left">
+          {onBackToGroups && (
+            <button className="back-btn mobile-only" onClick={onBackToGroups}>
+              ←
+            </button>
+          )}
+          <div className="group-info">
+            <div className="group-avatar">
+              {group.name ? group.name.charAt(0).toUpperCase() : 'G'}
+            </div>
+            <div>
+              <h3>{group.name || "Unnamed Group"}</h3>
+              <p>
+                {group.members ? group.members.length : 0} members • 
+                {group.description || "Collaboration group"}
+              </p>
+            </div>
           </div>
-          <button className="leave-btn" onClick={() => onLeave()}>
-            Leave Chat
+        </div>
+        
+        <div className="header-actions">
+          <button className="header-btn" title="Video call">
+            📹
+          </button>
+          <button className="header-btn" title="Group info">
+            ℹ️
           </button>
         </div>
       </div>
 
-      <div
-        className="messages"
-        ref={messagesRef}
-        onScroll={handleScroll}
-        role="log"
-        aria-live="polite"
-      >
-        {items.map((it, idx) =>
-          it.type === "day" ? (
-            <div key={"d-" + idx} className="msg-day-sep">
-              <span>{it.label}</span>
-            </div>
-          ) : (
-            (() => {
-              const m = it.payload;
-              if (m.type === "system") {
+      {/* Messages Container */}
+      <div className="messages-container">
+        {Object.keys(groupedMessages).length === 0 ? (
+          <div className="no-messages">
+            <div className="empty-state-icon">💭</div>
+            <h4>No messages yet</h4>
+            <p>Be the first to start the conversation in this group!</p>
+          </div>
+        ) : (
+          Object.entries(groupedMessages).map(([date, dateMessages]) => (
+            <div key={date} className="message-date-group">
+              <div className="date-divider">
+                <span>{date}</span>
+              </div>
+              
+              {dateMessages.map((message, index) => {
+                if (!message) return null;
+
+                const isSystem = message.type === 'system' || message.type === 'task_update';
+                const isConsecutive = index > 0 && 
+                  dateMessages[index - 1]?.sender?._id === message.sender?._id &&
+                  !isSystem;
+                
                 return (
-                  <div key={m.id} className="msg-system">
-                    {m.text}
+                  <div
+                    key={message._id || message.id || index}
+                    className={`message ${isSystem ? 'system-message' : 'user-message'} ${
+                      isConsecutive ? 'consecutive' : ''
+                    }`}
+                  >
+                    {!isSystem && message.sender && !isConsecutive && (
+                      <div className="message-avatar" title={message.sender.name}>
+                        {message.sender.avatar ? (
+                          <img 
+                            src={message.sender.avatar} 
+                            alt={message.sender.name} 
+                          />
+                        ) : (
+                          <span>
+                            {message.sender.name ? 
+                              message.sender.name.charAt(0).toUpperCase() : 'U'
+                            }
+                          </span>
+                        )}
+                      </div>
+                    )}
+                    
+                    <div className="message-content">
+                      {!isSystem && message.sender && !isConsecutive && (
+                        <div className="message-sender">
+                          {message.sender.name || 'Unknown User'}
+                          <span className="message-time">
+                            {formatTime(message.createdAt || message.ts)}
+                          </span>
+                        </div>
+                      )}
+                      
+                      <div className="message-bubble">
+                        <div className="message-text">
+                          {message.content}
+                        </div>
+                        
+                        {(isSystem || isConsecutive) && (
+                          <div className="message-time compact">
+                            {formatTime(message.createdAt || message.ts)}
+                          </div>
+                        )}
+                      </div>
+                    </div>
                   </div>
                 );
-              }
-              const isMine = m.user && m.user.id === "current-user";
-              return (
-                <div key={m.id} className={`msg-row ${isMine ? "mine" : "theirs"}`}>
-                  {!isMine && (
-                    <div className="msg-avatar" title={m.user?.name}>
-                      {m.user?.avatar ? <img src={m.user.avatar} alt={m.user.name} /> : <span>{m.user?.name?.[0]}</span>}
-                    </div>
-                  )}
-                  <div className={`msg-bubble ${isMine ? "bubble-mine" : "bubble-their"}`}>
-                    {!isMine && <div className="msg-author">{m.user?.name}</div>}
-                    <div className="msg-text">{m.text}</div>
-                    <div className="msg-time">{formatTime(m.ts)}</div>
-                  </div>
-                  {isMine && (
-                    <div className="msg-avatar" title="You">
-                      <span>Y</span>
-                    </div>
-                  )}
-                </div>
-              );
-            })()
-          )
+              })}
+            </div>
+          ))
         )}
+        
+        {/* Typing Indicator */}
+        {isTyping && (
+          <div className="typing-indicator">
+            <div className="typing-dots">
+              <span></span>
+              <span></span>
+              <span></span>
+            </div>
+            <span>typing...</span>
+          </div>
+        )}
+        
+        <div ref={messagesEndRef} />
       </div>
 
-      <div className="chat-input-row sticky-bottom">
-        <input
-          placeholder={joined ? "Type a message and press Enter..." : "Join the group to send messages"}
-          value={text}
-          onChange={(e) => setText(e.target.value)}
-          disabled={!joined}
-          onKeyDown={(e) => e.key === "Enter" && sendMessage()}
-        />
-        <button onClick={sendMessage} disabled={!joined || !text.trim()}>
-          Send
-        </button>
-      </div>
-    </main>
+      {/* Message Input */}
+      <form onSubmit={handleSubmit} className="message-input-form">
+        <div className="input-container">
+          <button type="button" className="attach-btn" title="Attach file">
+            📎
+          </button>
+          
+          <div className="text-input-wrapper">
+            <textarea
+              ref={textareaRef}
+              value={newMessage}
+              onChange={handleInputChange}
+              onKeyPress={handleKeyPress}
+              placeholder="Type a message... (Press Enter to send, Shift+Enter for new line)"
+              disabled={!group}
+              rows={1}
+              className="message-textarea"
+            />
+          </div>
+          
+          <button 
+            type="submit" 
+            disabled={!newMessage.trim() || !group}
+            className="send-btn"
+            title="Send message"
+          >
+            {newMessage.trim() ? '↑' : '➤'}
+          </button>
+        </div>
+        
+        <div className="input-actions">
+          <span className="char-count">
+            {newMessage.length}/1000
+          </span>
+        </div>
+      </form>
+    </div>
   );
-}
+};
+
+export default ChatArea;

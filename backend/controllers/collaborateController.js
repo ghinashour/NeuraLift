@@ -541,3 +541,36 @@ exports.updateTaskStatus = async (req, res) => {
     res.status(500).json({ message: 'Error updating task status', error: error.message });
   }
 };
+
+
+// Join group (for chat integration)
+exports.joinGroup = async (req, res) => {
+  try {
+    const { groupId } = req.params;
+    
+    const group = await CollaborationGroup.findById(groupId);
+    if (!group) {
+      return res.status(404).json({ message: 'Group not found' });
+    }
+
+    // Check if user is already a member
+    if (group.members.includes(req.user.id)) {
+      return res.status(400).json({ message: 'You are already a member of this group' });
+    }
+
+    // Add user to group
+    group.members.push(req.user.id);
+    await group.save();
+
+    await group.populate('creator', 'name avatar')
+               .populate('members', 'name avatar');
+
+    res.json({
+      message: 'Successfully joined group',
+      group
+    });
+  } catch (error) {
+    console.error('Join group error:', error);
+    res.status(500).json({ message: 'Error joining group', error: error.message });
+  }
+};

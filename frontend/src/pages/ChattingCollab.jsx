@@ -1,188 +1,321 @@
-import React, { useState } from "react";
+// src/pages/ChattingCollab.jsx
+import React, { useState, useEffect, useRef } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+import axios from "axios";
 import SidebarChatCollab from "../components/SidebarChatCollab";
 import ChatArea from "../components/ChatArea";
 import RightChatCollab from "../components/RightChatCollab";
+import CreateGroupPopup from "../components/Popups/CreateGroupPopup";
 import "../styles/ChattingCollab.css";
 
-/**
- * ChattingCollab page (3-column layout)
- * - left: SidebarChatCollab (group tasks by status)
- * - center: ChatArea (messages + input)
- * - right: RightChatCollab (task details + change status)
- *
- * All data mocked locally. Status changes produce system messages.
- */
-const INITIAL_GROUPS = [
-  {
-    id: "g1",
-    name: "Design Team",
-    desc: "UI/UX discussions and assets",
-    members: [
-      { id: "u1", name: "Ghinaa Shour", avatar: null },
-      { id: "u2", name: "Hassan", avatar: null },
-      { id: "u3", name: "Maya", avatar: null },
-    ],
-    tasks: [
-      {
-        id: "t1",
-        title: "Design Homepage",
-        description: "Create a responsive and modern homepage design.",
-        status: "To-Do",
-        attachments: [{ id: "a1", name: "wireframe.pdf", type: "file" }],
-      },
-      {
-        id: "t2",
-        title: "Develop API Endpoints",
-        description: "Create endpoints for auth and profiles.",
-        status: "In Progress",
-        attachments: [],
-      },
-      {
-        id: "t3",
-        title: "User Personas Research",
-        description: "Build personas for target audience.",
-        status: "Done",
-        attachments: [],
-      },
-    ],
-    messages: [
-      {
-        id: "m1",
-        type: "system",
-        text: "Group created by Ghinaa Shour",
-        ts: Date.now() - 1000 * 60 * 60 * 24,
-      },
-      {
-        id: "m2",
-        type: "user",
-        user: { id: "u3", name: "Maya", avatar: null },
-        text: "Hey team, I uploaded the draft presentation",
-        ts: Date.now() - 1000 * 60 * 60,
-      },
-    ],
-  },
-];
+const API_BASE_URL = process.env.REACT_APP_API_URL || "http://localhost:4000/api";
 
 export default function ChattingCollab() {
-  const [groups, setGroups] = useState(INITIAL_GROUPS);
-  const [activeGroupId, setActiveGroupId] = useState(groups[0].id);
-  const [joinedGroups, setJoinedGroups] = useState([]); // ids of groups the current user joined
+  const location = useLocation();
+  const navigate = useNavigate();
+  const [groups, setGroups] = useState([]);
+  const [activeGroup, setActiveGroup] = useState(null);
+  const [messages, setMessages] = useState([]);
+  const [tasks, setTasks] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [showCreateGroup, setShowCreateGroup] = useState(false);
+  const [mobileView, setMobileView] = useState('sidebar'); // 'sidebar', 'chat', 'tasks'
+  const messagesIntervalRef = useRef();
 
-  const activeGroup = groups.find((g) => g.id === activeGroupId);
+  // Get task data from navigation if coming from task details
+  const taskData = location.state;
 
-  const createGroup = (group) => {
-    setGroups((prev) => [group, ...prev]);
-    setActiveGroupId(group.id);
-  };
+  useEffect(() => {
+    fetchUserGroups();
+    
+    // Set up real-time updates (polling every 5 seconds)
+    messagesIntervalRef.current = setInterval(() => {
+      if (activeGroup && activeGroup._id) {
+        fetchGroupMessages(activeGroup._id);
+      }
+    }, 5000);
 
-  const copyInviteLink = (groupId) => {
-    const link = `${window.location.origin}/chat/group/${groupId}`;
-    navigator.clipboard?.writeText(link);
-    return link;
-  };
+    return () => {
+      if (messagesIntervalRef.current) {
+        clearInterval(messagesIntervalRef.current);
+      }
+    };
+  }, []);
 
-  const joinGroup = (groupId, user) => {
-    if (!joinedGroups.includes(groupId)) {
-      setJoinedGroups((s) => [...s, groupId]);
-      // add system message to group
-      setGroups((prev) =>
-        prev.map((g) =>
-          g.id === groupId
-            ? {
-                ...g,
-                members: [...g.members, user],
-                messages: [
-                  ...g.messages,
-                  {
-                    id: "sys-" + Date.now(),
-                    type: "system",
-                    text: `${user.name} joined the group`,
-                    ts: Date.now(),
-                  },
-                ],
-              }
-            : g
-        )
-      );
+  useEffect(() => {
+    if (activeGroup && activeGroup._id) {
+      fetchGroupMessages(activeGroup._id);
+      fetchGroupTasks(activeGroup._id);
+    }
+  }, [activeGroup]);
+
+  const fetchUserGroups = async () => {
+    try {
+      setLoading(true);
+      const token = localStorage.getItem("token");
+      const response = await axios.get(`${API_BASE_URL}/collaborate/chat/groups`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      setGroups(response.data);
+      
+      // Set active group based on task data or first group
+      if (taskData?.groupId) {
+        const taskGroup = response.data.find(g => g._id === taskData.groupId);
+        setActiveGroup(taskGroup || response.data[0]);
+      } else if (response.data.length > 0) {
+        setActiveGroup(response.data[0]);
+      }
+    } catch (err) {
+      console.error("Error fetching groups:", err);
+      setError("Failed to load groups");
+    } finally {
+      setLoading(false);
     }
   };
 
-  const leaveGroup = (groupId, userId) => {
-    setGroups((prev) =>
-      prev.map((g) =>
-        g.id === groupId
-          ? {
-              ...g,
-              members: g.members.filter((m) => m.id !== userId),
-              messages: [
-                ...g.messages,
-                {
-                  id: "sys-" + Date.now(),
-                  type: "system",
-                  text: "A member left the group",
-                  ts: Date.now(),
-                },
-              ],
-            }
-          : g
-      )
-    );
-    setJoinedGroups((s) => s.filter((id) => id !== groupId));
+  const fetchGroupMessages = async (groupId) => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await axios.get(`${API_BASE_URL}/collaborate/chat/groups/${groupId}/messages`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      setMessages(response.data);
+    } catch (err) {
+      console.error("Error fetching messages:", err);
+    }
   };
 
-  const postMessage = (groupId, message) => {
-    setGroups((prev) =>
-      prev.map((g) => (g.id === groupId ? { ...g, messages: [...g.messages, message] } : g))
-    );
+  const fetchGroupTasks = async (groupId) => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await axios.get(`${API_BASE_URL}/collaborate/chat/groups/${groupId}/tasks`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      setTasks(response.data);
+    } catch (err) {
+      console.error("Error fetching tasks:", err);
+    }
   };
 
-  const changeTaskStatus = (groupId, taskId, newStatus, user) => {
-    setGroups((prev) =>
-      prev.map((g) =>
-        g.id === groupId
-          ? {
-              ...g,
-              tasks: g.tasks.map((t) => (t.id === taskId ? { ...t, status: newStatus } : t)),
-              messages: [
-                ...g.messages,
-                {
-                  id: "sys-" + Date.now(),
-                  type: "system",
-                  text: `${user.name} changed "${g.tasks.find(t => t.id===taskId)?.title || 'task'}" status to ${newStatus}`,
-                  ts: Date.now(),
-                },
-              ],
-            }
-          : g
-      )
-    );
+  const postMessage = async (messageContent) => {
+    if (!activeGroup || !activeGroup._id) {
+      alert("No active group selected");
+      return;
+    }
+
+    try {
+      const token = localStorage.getItem("token");
+      const response = await axios.post(
+        `${API_BASE_URL}/collaborate/chat/groups/${activeGroup._id}/messages`,
+        {
+          content: messageContent,
+          type: 'text'
+        },
+        {
+          headers: { Authorization: `Bearer ${token}` }
+        }
+      );
+
+      setMessages(prev => [...prev, response.data]);
+      
+      // Refresh messages immediately after sending
+      setTimeout(() => fetchGroupMessages(activeGroup._id), 100);
+    } catch (err) {
+      console.error("Error posting message:", err);
+      alert("Failed to send message");
+    }
   };
+
+  const changeTaskStatus = async (taskId, newStatus, taskTitle) => {
+    if (!activeGroup || !activeGroup._id) {
+      alert("No active group selected");
+      return;
+    }
+
+    try {
+      const token = localStorage.getItem("token");
+      
+      // Update task status
+      await axios.put(
+        `${API_BASE_URL}/collaborate/tasks/${taskId}`,
+        { status: newStatus },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+
+      // Create system message for status change
+      await axios.post(
+        `${API_BASE_URL}/collaborate/chat/groups/${activeGroup._id}/task-update`,
+        {
+          taskId,
+          taskTitle,
+          oldStatus: tasks.find(t => t._id === taskId)?.status,
+          newStatus
+        },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+
+      // Refresh tasks and messages
+      fetchGroupTasks(activeGroup._id);
+      fetchGroupMessages(activeGroup._id);
+      
+    } catch (err) {
+      console.error("Error updating task status:", err);
+      alert("Failed to update task status");
+    }
+  };
+
+  const createGroup = async (groupData) => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await axios.post(
+        `${API_BASE_URL}/collaborate/groups`,
+        groupData,
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+
+      setGroups(prev => [response.data, ...prev]);
+      setActiveGroup(response.data);
+      setShowCreateGroup(false);
+      
+      // Switch to chat view on mobile
+      if (window.innerWidth <= 768) {
+        setMobileView('chat');
+      }
+    } catch (err) {
+      console.error("Error creating group:", err);
+      alert("Failed to create group");
+    }
+  };
+
+  const joinGroup = async (groupId) => {
+    try {
+      const token = localStorage.getItem("token");
+      await axios.post(
+        `${API_BASE_URL}/collaborate/groups/${groupId}/join`,
+        {},
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+
+      // Refresh groups
+      fetchUserGroups();
+    } catch (err) {
+      console.error("Error joining group:", err);
+      alert("Failed to join group");
+    }
+  };
+
+  const handleGroupSelect = (group) => {
+    setActiveGroup(group);
+    if (window.innerWidth <= 768) {
+      setMobileView('chat');
+    }
+  };
+
+  const handleBackToGroups = () => {
+    setMobileView('sidebar');
+  };
+
+  const handleShowTasks = () => {
+    setMobileView('tasks');
+  };
+
+  const handleShowChat = () => {
+    setMobileView('chat');
+  };
+
+  if (loading) {
+    return (
+      <div className="chat-page">
+        <div className="loading-container">
+          <div className="loading-spinner"></div>
+          <p>Loading your collaboration workspace...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="chat-page">
+        <div className="error-container">
+          <div className="error-icon">⚠️</div>
+          <h3>Something went wrong</h3>
+          <p>{error}</p>
+          <button onClick={fetchUserGroups} className="retry-btn">
+            Try Again
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="chat-page">
-      <SidebarChatCollab
-        groups={groups}
-        activeGroupId={activeGroupId}
-        onSelectGroup={(id) => setActiveGroupId(id)}
-        onCreateGroup={createGroup}
-        onCopyInvite={copyInviteLink}
-        onJoinGroup={joinGroup}
-        joinedGroups={joinedGroups}
-      />
+      {/* Mobile Navigation Header */}
+      <div className="mobile-nav-header">
+        {mobileView !== 'sidebar' && (
+          <button className="back-btn" onClick={handleBackToGroups}>
+            ← Groups
+          </button>
+        )}
+        <div className="mobile-tabs">
+          <button 
+            className={`mobile-tab ${mobileView === 'chat' ? 'active' : ''}`}
+            onClick={handleShowChat}
+          >
+            💬 Chat
+          </button>
+          <button 
+            className={`mobile-tab ${mobileView === 'tasks' ? 'active' : ''}`}
+            onClick={handleShowTasks}
+          >
+            📋 Tasks
+          </button>
+        </div>
+      </div>
 
-      <ChatArea
-        group={activeGroup}
-        joined={joinedGroups.includes(activeGroupId)}
-        onPostMessage={(msg) => postMessage(activeGroupId, msg)}
-        onLeave={() => leaveGroup(activeGroupId, "current-user")}
-      />
+      {/* Sidebar - Hidden on mobile when in chat/tasks view */}
+      <div className={`sidebar-container ${mobileView !== 'sidebar' ? 'mobile-hidden' : ''}`}>
+        <SidebarChatCollab
+          groups={groups}
+          activeGroup={activeGroup}
+          onSelectGroup={handleGroupSelect}
+          onCreateGroup={() => setShowCreateGroup(true)}
+          onJoinGroup={joinGroup}
+          loading={loading}
+        />
+      </div>
 
-      <RightChatCollab
-        group={activeGroup}
-        onChangeTaskStatus={(taskId, status, user) =>
-          changeTaskStatus(activeGroupId, taskId, status, user)
-        }
-      />
+      {/* Chat Area - Hidden on mobile when in sidebar/tasks view */}
+      <div className={`chat-container ${mobileView !== 'chat' ? 'mobile-hidden' : ''}`}>
+        <ChatArea
+          group={activeGroup}
+          messages={messages}
+          onPostMessage={postMessage}
+          loading={loading}
+          onBackToGroups={handleBackToGroups}
+        />
+      </div>
+
+      {/* Tasks Panel - Hidden on mobile when in sidebar/chat view */}
+      <div className={`tasks-container ${mobileView !== 'tasks' ? 'mobile-hidden' : ''}`}>
+        <RightChatCollab
+          group={activeGroup}
+          tasks={tasks}
+          onChangeTaskStatus={changeTaskStatus}
+          currentTask={taskData}
+          loading={loading}
+        />
+      </div>
+
+      {/* Create Group Popup */}
+      {showCreateGroup && (
+        <CreateGroupPopup
+          onClose={() => setShowCreateGroup(false)}
+          onSubmit={createGroup}
+        />
+      )}
     </div>
   );
 }

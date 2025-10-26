@@ -22,6 +22,8 @@ const {
   getTaskDetails,
   updateTaskStatus
 } = require('../controllers/collaborateController');
+const {getGroupTasks,getUserGroups,getGroupMessages,createTaskUpdateMessage,sendMessage} = require('../controllers/collabchatController');
+
 
 // Post routes
 router.post('/posts', auth, createPost);
@@ -51,4 +53,17 @@ router.delete('/tasks/:taskId', auth,deleteTask);
 router.get('/tasks/:taskId', auth,getTaskDetails);
 router.put('/tasks/:taskId/status', auth,updateTaskStatus);
 
+
+//chatting collab routes
+router.get('/chat/groups', auth,getUserGroups);
+router.get('/chat/groups/:groupId/messages',auth,getGroupMessages);
+router.post('/chat/groups/:groupId/messages',auth,sendMessage);
+router.get('/chat/groups/:groupId/tasks', auth,getGroupTasks);
+router.post('/chat/groups/:groupId/task-update', auth,createTaskUpdateMessage);
+
+
+// Add this route
+router.post('/groups/:groupId/join', auth, joinGroupViaInvite); // You can reuse this or create a separate one
+
 module.exports = router;
+

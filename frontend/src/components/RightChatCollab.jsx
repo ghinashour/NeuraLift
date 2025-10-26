@@ -1,85 +1,388 @@
 // src/components/RightChatCollab.jsx
 import React, { useState } from "react";
+import "../styles/RightChatCollab.css";
 
-/**
- * RightChatCollab:
- * - shows selected group tasks in vertical list (click to view / change)
- * - when a task selected, shows its details, assigned members, attachments, and status dropdown
- */
-export default function RightChatCollab({ group, onChangeTaskStatus }) {
-  const [selectedTaskId, setSelectedTaskId] = useState(group?.tasks?.[0]?.id || null);
-  const currentUser = { id: "current-user", name: "You" };
+const RightChatCollab = ({
+  group = null,
+  tasks = [],
+  onChangeTaskStatus,
+  currentTask = null,
+  loading = false
+}) => {
+  const [activeTab, setActiveTab] = useState("tasks");
+  const [expandedTask, setExpandedTask] = useState(null);
 
-  if (!group) {
-    return <aside className="right-chat empty">Select a group</aside>;
+  // Safe task filtering with null checks
+  const getTasksByStatus = (status) => {
+    if (!tasks || !Array.isArray(tasks)) return [];
+    return tasks.filter(task => task && task.status === status);
+  };
+
+  const todoTasks = getTasksByStatus("pending");
+  const inProgressTasks = getTasksByStatus("in_progress");
+  const doneTasks = getTasksByStatus("completed");
+
+  const handleStatusChange = (taskId, newStatus, taskTitle) => {
+    if (onChangeTaskStatus) {
+      onChangeTaskStatus(taskId, newStatus, taskTitle);
+    }
+  };
+
+  const toggleTaskExpand = (taskId) => {
+    setExpandedTask(expandedTask === taskId ? null : taskId);
+  };
+
+  const getProgressPercentage = () => {
+    const total = tasks.length;
+    if (total === 0) return 0;
+    const completed = doneTasks.length;
+    return Math.round((completed / total) * 100);
+  };
+
+  if (loading) {
+    return (
+      <div className="right-chat">
+        <div className="loading-container">
+          <div className="loading-spinner"></div>
+          <p>Loading task details...</p>
+        </div>
+      </div>
+    );
   }
 
-  const selectTask = (id) => {
-    setSelectedTaskId(id);
-  };
+  if (!group) {
+    return (
+      <div className="right-chat">
+        <div className="empty-state">
+          <div className="empty-icon">📋</div>
+          <h3>No Group Selected</h3>
+          <p>Select a group from the sidebar to view tasks and details</p>
+        </div>
+      </div>
+    );
+  }
 
-  const task = group.tasks.find((t) => t.id === selectedTaskId) || group.tasks[0];
+  // Check if user is a member of the group
+  const isMember = group.members && Array.isArray(group.members) && group.members.length > 0;
 
-  const handleStatus = (s) => {
-    if (!task) return;
-    onChangeTaskStatus(task.id, s, currentUser);
-  };
+  if (!isMember) {
+    return (
+      <div className="right-chat">
+        <div className="empty-state">
+          <div className="empty-icon">🔒</div>
+          <h3>Not a Member</h3>
+          <p>You need to be a member of this group to view tasks</p>
+          <button className="join-btn">
+            Request to Join
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   return (
-    <aside className="right-chat">
-      <h3 className="right-title">Task Details</h3>
-
-      <div className="task-list-vertical">
-        {group.tasks.map((t) => (
-          <div
-            key={t.id}
-            className={`task-vertical-card ${t.id === selectedTaskId ? "active" : ""}`}
-            onClick={() => selectTask(t.id)}
-          >
-            <div className="tv-title">{t.title}</div>
-            <div className="tv-desc">{t.description}</div>
-            <div className="tv-meta">
-              <span className="tv-status">{t.status}</span>
-              <span className="tv-count">{t.attachments?.length || 0} attachments</span>
-            </div>
+    <div className="right-chat">
+      {/* Group Info Header */}
+      <div className="group-header">
+        <div className="group-avatar-large">
+          {group.name ? group.name.charAt(0).toUpperCase() : 'G'}
+        </div>
+        <div className="group-info">
+          <h3>{group.name || "Group Tasks"}</h3>
+          <p className="group-description">
+            {group.description || "Task management for this group"}
+          </p>
+        </div>
+        
+        {/* Progress Overview */}
+        <div className="progress-overview">
+          <div className="progress-header">
+            <span>Group Progress</span>
+            <span className="progress-percent">{getProgressPercentage()}%</span>
           </div>
-        ))}
+          <div className="progress-bar">
+            <div 
+              className="progress-fill"
+              style={{ width: `${getProgressPercentage()}%` }}
+            ></div>
+          </div>
+          <div className="progress-stats">
+            <span>{doneTasks.length} of {tasks.length} tasks completed</span>
+          </div>
+        </div>
       </div>
 
-      {task && (
-        <div className="task-details">
-          <h4>{task.title}</h4>
-          <p className="tdesc">{task.description}</p>
+      {/* Tabs */}
+      <div className="tabs">
+        <button
+          className={`tab ${activeTab === "tasks" ? "active" : ""}`}
+          onClick={() => setActiveTab("tasks")}
+        >
+          <span className="tab-icon">📋</span>
+          Tasks
+          <span className="tab-badge">{tasks.length}</span>
+        </button>
+        <button
+          className={`tab ${activeTab === "details" ? "active" : ""}`}
+          onClick={() => setActiveTab("details")}
+        >
+          <span className="tab-icon">👥</span>
+          Members
+          <span className="tab-badge">{group.members?.length || 0}</span>
+        </button>
+      </div>
 
-          <div className="assigned">
-            <strong>Assigned To:</strong>
-            <div className="assigned-avatars">
-              {group.members.map((m) => (
-                <div key={m.id} className="avatar-small">{m.avatar ? <img src={m.avatar} alt={m.name} /> : <span>{m.name[0]}</span>}</div>
-              ))}
-            </div>
+      {/* Tasks Tab */}
+      {activeTab === "tasks" && (
+        <div className="tasks-tab">
+          {/* Quick Actions */}
+          <div className="quick-actions">
+            <button className="action-btn" title="Create new task">
+              + New Task
+            </button>
+            <button className="action-btn" title="Filter tasks">
+              🔍 Filter
+            </button>
           </div>
 
-          <div className="attachments">
-            <strong>Attachments</strong>
-            <div className="att-list">
-              {task.attachments.length === 0 && <div className="muted">No attachments</div>}
-              {task.attachments.map((a) => (
-                <div key={a.id} className="att-item">{a.name}</div>
-              ))}
-            </div>
-          </div>
+          {tasks.length > 0 ? (
+            <div className="tasks-list">
+              {/* To Do Tasks */}
+              {todoTasks.length > 0 && (
+                <div className="task-section">
+                  <div className="section-header">
+                    <h4 className="section-title todo">
+                      <span className="status-dot todo"></span>
+                      To Do ({todoTasks.length})
+                    </h4>
+                  </div>
+                  {todoTasks.map(task => (
+                    <TaskCard
+                      key={task._id || task.id}
+                      task={task}
+                      onStatusChange={handleStatusChange}
+                      isExpanded={expandedTask === (task._id || task.id)}
+                      onToggleExpand={toggleTaskExpand}
+                    />
+                  ))}
+                </div>
+              )}
 
-          <div className="status-control">
-            <strong>Status</strong>
-            <div className="status-buttons">
-              <button className={`st-btn ${task.status === "To-Do" ? "active" : ""}`} onClick={() => handleStatus("To-Do")}>To-Do</button>
-              <button className={`st-btn ${task.status === "In Progress" ? "active" : ""}`} onClick={() => handleStatus("In Progress")}>In Progress</button>
-              <button className={`st-btn ${task.status === "Done" ? "active" : ""}`} onClick={() => handleStatus("Done")}>Done</button>
+              {/* In Progress Tasks */}
+              {inProgressTasks.length > 0 && (
+                <div className="task-section">
+                  <div className="section-header">
+                    <h4 className="section-title in-progress">
+                      <span className="status-dot in-progress"></span>
+                      In Progress ({inProgressTasks.length})
+                    </h4>
+                  </div>
+                  {inProgressTasks.map(task => (
+                    <TaskCard
+                      key={task._id || task.id}
+                      task={task}
+                      onStatusChange={handleStatusChange}
+                      isExpanded={expandedTask === (task._id || task.id)}
+                      onToggleExpand={toggleTaskExpand}
+                    />
+                  ))}
+                </div>
+              )}
+
+              {/* Done Tasks */}
+              {doneTasks.length > 0 && (
+                <div className="task-section">
+                  <div className="section-header">
+                    <h4 className="section-title done">
+                      <span className="status-dot done"></span>
+                      Done ({doneTasks.length})
+                    </h4>
+                  </div>
+                  {doneTasks.map(task => (
+                    <TaskCard
+                      key={task._id || task.id}
+                      task={task}
+                      onStatusChange={handleStatusChange}
+                      isExpanded={expandedTask === (task._id || task.id)}
+                      onToggleExpand={toggleTaskExpand}
+                    />
+                  ))}
+                </div>
+              )}
             </div>
+          ) : (
+            <div className="empty-tasks">
+              <div className="empty-icon">📝</div>
+              <h4>No Tasks Yet</h4>
+              <p>This group doesn't have any tasks assigned yet</p>
+              <button className="create-task-btn">
+                Create First Task
+              </button>
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* Members Tab */}
+      {activeTab === "details" && (
+        <div className="members-tab">
+          <div className="members-list">
+            {group.members && group.members.map((member, index) => (
+              <div key={member._id || index} className="member-item">
+                <div className="member-avatar">
+                  {member.avatar ? (
+                    <img src={member.avatar} alt={member.name} />
+                  ) : (
+                    <span>{member.name?.charAt(0)?.toUpperCase() || 'U'}</span>
+                  )}
+                </div>
+                <div className="member-info">
+                  <div className="member-name">{member.name || 'Unknown User'}</div>
+                  <div className="member-role">
+                    {member._id === group.creator?._id ? 'Creator' : 'Member'}
+                  </div>
+                </div>
+                {member._id === group.creator?._id && (
+                  <span className="creator-badge">👑</span>
+                )}
+              </div>
+            ))}
+          </div>
+          
+          <div className="group-actions">
+            <button className="group-action-btn">
+              👥 Invite Members
+            </button>
+            <button className="group-action-btn">
+              ⚙️ Group Settings
+            </button>
           </div>
         </div>
       )}
-    </aside>
+
+      {/* Current Task Highlight */}
+      {currentTask && (
+        <div className="current-task-banner">
+          <div className="banner-content">
+            <h4>🎯 Current Task</h4>
+            <p>{currentTask.taskTitle}</p>
+            <button className="focus-btn">
+              Focus on Task
+            </button>
+          </div>
+        </div>
+      )}
+    </div>
   );
-}
+};
+
+// Task Card Component
+const TaskCard = ({ task, onStatusChange, isExpanded, onToggleExpand }) => {
+  if (!task) return null;
+
+  const getStatusOptions = (currentStatus) => {
+    switch (currentStatus) {
+      case "pending":
+        return [
+          { value: "in_progress", label: "Start Progress", icon: "▶️" },
+          { value: "completed", label: "Mark Done", icon: "✅" }
+        ];
+      case "in_progress":
+        return [
+          { value: "pending", label: "Move Back", icon: "↩️" },
+          { value: "completed", label: "Mark Done", icon: "✅" }
+        ];
+      case "completed":
+        return [
+          { value: "pending", label: "Reopen", icon: "🔄" },
+          { value: "in_progress", label: "In Progress", icon: "▶️" }
+        ];
+      default:
+        return [];
+    }
+  };
+
+  const statusOptions = getStatusOptions(task.status);
+  const dueDate = task.dueDate ? new Date(task.dueDate) : null;
+  const isOverdue = dueDate && dueDate < new Date() && task.status !== 'completed';
+
+  return (
+    <div className={`task-card ${isExpanded ? 'expanded' : ''} ${isOverdue ? 'overdue' : ''}`}>
+      <div className="task-header" onClick={() => onToggleExpand(task._id || task.id)}>
+        <div className="task-main">
+          <h5 className="task-title">{task.title || "Untitled Task"}</h5>
+          <div className="task-meta">
+            <span className={`priority-badge priority-${task.priority || "medium"}`}>
+              {task.priority || "medium"}
+            </span>
+            {dueDate && (
+              <span className={`due-date ${isOverdue ? 'overdue' : ''}`}>
+                📅 {dueDate.toLocaleDateString()}
+              </span>
+            )}
+          </div>
+        </div>
+        <button className="expand-btn">
+          {isExpanded ? '▲' : '▼'}
+        </button>
+      </div>
+      
+      {isExpanded && (
+        <div className="task-details">
+          <p className="task-description">
+            {task.description || "No description provided"}
+          </p>
+
+          <div className="task-info">
+            {task.assignedTo && (
+              <div className="assignee">
+                <strong>Assigned to:</strong>
+                <div className="assignee-info">
+                  {task.assignedTo.avatar ? (
+                    <img src={task.assignedTo.avatar} alt={task.assignedTo.name} />
+                  ) : (
+                    <span className="assignee-avatar">
+                      {task.assignedTo.name?.charAt(0)?.toUpperCase() || 'U'}
+                    </span>
+                  )}
+                  <span>{task.assignedTo.name || "Unassigned"}</span>
+                </div>
+              </div>
+            )}
+            
+            {task.assignedBy && (
+              <div className="assigner">
+                <strong>Assigned by:</strong>
+                <span>{task.assignedBy.name || "Unknown"}</span>
+              </div>
+            )}
+            
+            {task.createdAt && (
+              <div className="task-created">
+                <strong>Created:</strong>
+                <span>{new Date(task.createdAt).toLocaleDateString()}</span>
+              </div>
+            )}
+          </div>
+
+          {statusOptions.length > 0 && (
+            <div className="task-actions">
+              {statusOptions.map(option => (
+                <button
+                  key={option.value}
+                  className={`status-btn ${option.value}`}
+                  onClick={() => onStatusChange(task._id || task.id, option.value, task.title)}
+                >
+                  <span className="btn-icon">{option.icon}</span>
+                  {option.label}
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default RightChatCollab;

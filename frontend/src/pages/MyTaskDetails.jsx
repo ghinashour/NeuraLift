@@ -59,6 +59,30 @@ export default function MyTaskDetails() {
     updateTaskStatus(newStatus);
   };
 
+  const handleStartTask = () => {
+    // Navigate to Pomodoro timer with task context
+    navigate("/focusTimer", { 
+      state: { 
+        taskId: task._id,
+        taskTitle: task.title,
+        taskDescription: task.description,
+        fromTask: true
+      } 
+    });
+  };
+
+  const handleDiscussTask = () => {
+    // Navigate to chatting/collaboration page
+    navigate("/ChattingCollab", { 
+      state: { 
+        taskId: task._id,
+        taskTitle: task.title,
+        assignedBy: task.assignedBy?.name,
+        groupId: task.group?._id
+      } 
+    });
+  };
+
   const formatDateShort = (dateString) => {
     if (!dateString) return 'Not set';
     const d = new Date(dateString);
@@ -252,21 +276,15 @@ export default function MyTaskDetails() {
         <div className="td-actions">
           <button 
             className="td-start-btn" 
-            onClick={() => navigate("/ChattingCollab")}
+            onClick={handleStartTask}
           >
-            Start with tasks
+            🎯 Start with Focus Timer
           </button>
           <button 
             className="td-chat-btn"
-            onClick={() => navigate("/ChattingCollab", { 
-              state: { 
-                taskId: task._id,
-                taskTitle: task.title,
-                assignedBy: task.assignedBy?.name 
-              } 
-            })}
+            onClick={handleDiscussTask}
           >
-            Discuss Task
+            💬 Discuss Task
           </button>
         </div>
       </div>
