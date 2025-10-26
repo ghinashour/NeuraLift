@@ -1,0 +1,69 @@
+const express = require('express');
+const router = express.Router();
+const auth = require('../middleware/auth');
+const {
+  createPost,
+  getPosts,
+  addReply,
+  updatePostLikes,
+  createGroup,
+  getGroups,
+  addMemberToGroup,
+  assignTask,
+  getUserTasks,
+  generateInviteLink,
+  verifyInvite,
+  joinGroupViaInvite,
+  inviteMemberByEmail,
+  getGroupMembers,
+  getAssignedTasks,
+  updateTask,
+  deleteTask,
+  getTaskDetails,
+  updateTaskStatus
+} = require('../controllers/collaborateController');
+const {getGroupTasks,getUserGroups,getGroupMessages,createTaskUpdateMessage,sendMessage} = require('../controllers/collabchatController');
+
+
+// Post routes
+router.post('/posts', auth, createPost);
+router.get('/posts', auth, getPosts);
+router.post('/posts/:postId/replies', auth, addReply);
+router.put('/posts/:postId/likes', auth, updatePostLikes);
+
+// Group routes
+router.post('/groups', auth, createGroup);
+router.get('/groups', auth, getGroups);
+router.post('/groups/:groupId/members', auth, addMemberToGroup);
+
+// Invite routes
+router.get('/groups/:groupId/generate-invite', auth, generateInviteLink);
+router.get('/groups/:groupId/verify-invite', verifyInvite);
+router.post('/groups/:groupId/join', auth, joinGroupViaInvite);
+router.post('/invite/member', auth, inviteMemberByEmail);
+router.get('/groups/:groupId/members', auth, getGroupMembers);
+
+// Task routes
+router.post('/tasks', auth, assignTask);
+router.get('/tasks/my-tasks', auth, getUserTasks);
+// admins assigned tasks
+router.get('/assigned-tasks',auth, getAssignedTasks);
+router.put('/tasks/:taskId', auth,updateTask);
+router.delete('/tasks/:taskId', auth,deleteTask);
+router.get('/tasks/:taskId', auth,getTaskDetails);
+router.put('/tasks/:taskId/status', auth,updateTaskStatus);
+
+
+//chatting collab routes
+router.get('/chat/groups', auth,getUserGroups);
+router.get('/chat/groups/:groupId/messages',auth,getGroupMessages);
+router.post('/chat/groups/:groupId/messages',auth,sendMessage);
+router.get('/chat/groups/:groupId/tasks', auth,getGroupTasks);
+router.post('/chat/groups/:groupId/task-update', auth,createTaskUpdateMessage);
+
+
+// Add this route
+router.post('/groups/:groupId/join', auth, joinGroupViaInvite); // You can reuse this or create a separate one
+
+module.exports = router;
+

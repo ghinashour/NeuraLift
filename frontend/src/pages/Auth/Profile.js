@@ -7,7 +7,7 @@ import "../../styles/Profile.css";
 function Profile() {
   const { user, loading, fetchUserData } = useUserData();
   const [photo, setPhoto] = useState(null);
-  const [form, setForm] = useState({ name: "", email: "" });
+  const [form, setForm] = useState({ name: "", email: "", username: "" });
   const [passwords, setPasswords] = useState({ currentPassword: "", newPassword: "" });
   const [message, setMessage] = useState("");
 
@@ -16,7 +16,11 @@ function Profile() {
   // Update form when user data changes
   useEffect(() => {
     if (user) {
-      setForm({ name: user.username || user.name, email: user.email });
+      setForm({ 
+        name: user.name || "", // Use name field
+        email: user.email || "",
+        username: user.username || "" // Keep username if needed
+      });
     }
   }, [user]);
 
@@ -34,6 +38,7 @@ function Profile() {
     const data = new FormData();
     data.append("name", form.name);
     data.append("email", form.email);
+    data.append("username", form.username);
     data.append("photo", photo);
 
     try {
@@ -58,6 +63,7 @@ function Profile() {
     const data = new FormData();
     data.append("name", form.name);
     data.append("email", form.email);
+    data.append("username", form.username);
 
     try {
       const res = await axios.put("http://localhost:4000/api/profile", data, {
@@ -127,7 +133,7 @@ function Profile() {
         {/* ✅ Interactive profile photo with hover overlay */}
         <div style={{ display: 'flex', justifyContent: 'center' }}>
           <div className="profile-photo-container">
-            `1`            <img
+            <img
               src={
                 user.profilePhoto
                   ? `http://localhost:4000/uploads/${user.profilePhoto}`
@@ -155,41 +161,75 @@ function Profile() {
           </div>
         </div>
 
-        {message && <p>{message}</p>}
+        {/* User info display */}
+        <div className="user-info-display">
+          <h3>{user.name || "User"}</h3>
+          <p>@{user.username}</p>
+          <p>{user.email}</p>
+        </div>
+
+        {message && <p className="message">{message}</p>}
 
         {/* Update Profile Form */}
-        <form onSubmit={handleProfileUpdate}>
-          <input
-            type="text"
-            value={form.name}
-            onChange={(e) => setForm({ ...form, name: e.target.value })}
-            placeholder="Name"
-          />
-          <input
-            type="email"
-            value={form.email}
-            onChange={(e) => setForm({ ...form, email: e.target.value })}
-            placeholder="Email"
-          />
+        <form onSubmit={handleProfileUpdate} className="profile-form">
+          <div className="form-group">
+            <label>Full Name</label>
+            <input
+              type="text"
+              value={form.name}
+              onChange={(e) => setForm({ ...form, name: e.target.value })}
+              placeholder="Your full name"
+            />
+          </div>
+          
+          <div className="form-group">
+            <label>Username</label>
+            <input
+              type="text"
+              value={form.username}
+              onChange={(e) => setForm({ ...form, username: e.target.value })}
+              placeholder="Username"
+            />
+          </div>
+
+          <div className="form-group">
+            <label>Email</label>
+            <input
+              type="email"
+              value={form.email}
+              onChange={(e) => setForm({ ...form, email: e.target.value })}
+              placeholder="Email address"
+            />
+          </div>
+          
           <button type="submit" className="update-btn">
             Update Profile
           </button>
         </form>
 
         {/* Change Password Form */}
-        <form onSubmit={handlePasswordChange}>
-          <input
-            type="password"
-            placeholder="Current Password"
-            value={passwords.currentPassword}
-            onChange={(e) => setPasswords({ ...passwords, currentPassword: e.target.value })}
-          />
-          <input
-            type="password"
-            placeholder="New Password"
-            value={passwords.newPassword}
-            onChange={(e) => setPasswords({ ...passwords, newPassword: e.target.value })}
-          />
+        <form onSubmit={handlePasswordChange} className="password-form">
+          <h3>Change Password</h3>
+          <div className="form-group">
+            <label>Current Password</label>
+            <input
+              type="password"
+              placeholder="Enter current password"
+              value={passwords.currentPassword}
+              onChange={(e) => setPasswords({ ...passwords, currentPassword: e.target.value })}
+            />
+          </div>
+          
+          <div className="form-group">
+            <label>New Password</label>
+            <input
+              type="password"
+              placeholder="Enter new password"
+              value={passwords.newPassword}
+              onChange={(e) => setPasswords({ ...passwords, newPassword: e.target.value })}
+            />
+          </div>
+          
           <button type="submit" className="password-btn">
             Change Password
           </button>

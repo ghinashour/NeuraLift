@@ -11,6 +11,121 @@
   padding-top: 50px;
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 }
+/* Add these styles to your Profile.css */
+.user-info-display {
+  text-align: center;
+  margin-bottom: 20px;
+  padding: 15px;
+  background: #f8fafc;
+  border-radius: 10px;
+}
+
+.user-info-display h3 {
+  margin: 0 0 5px 0;
+  color: #1e293b;
+  font-size: 1.4rem;
+}
+
+.user-info-display p {
+  margin: 2px 0;
+  color: #64748b;
+  font-size: 0.9rem;
+}
+
+.profile-form,
+.password-form {
+  margin-bottom: 25px;
+}
+
+.password-form h3 {
+  margin-bottom: 15px;
+  color: #374151;
+  font-size: 1.1rem;
+}
+
+.form-group {
+  margin-bottom: 15px;
+  text-align: left;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: 500;
+  color: #374151;
+  font-size: 0.9rem;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font-size: 0.95rem;
+  transition: border-color 0.2s;
+}
+
+.form-group input:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.message {
+  padding: 10px 15px;
+  border-radius: 6px;
+  margin-bottom: 15px;
+  text-align: center;
+  font-weight: 500;
+}
+
+.message:contains("✅") {
+  background: #d1fae5;
+  color: #065f46;
+  border: 1px solid #a7f3d0;
+}
+
+.update-btn,
+.password-btn,
+.logout-btn {
+  width: 100%;
+  padding: 12px;
+  border: none;
+  border-radius: 6px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  margin-bottom: 10px;
+}
+
+.update-btn {
+  background: #3b82f6;
+  color: white;
+}
+
+.update-btn:hover {
+  background: #2563eb;
+}
+
+.password-btn {
+  background: #f59e0b;
+  color: white;
+}
+
+.password-btn:hover {
+  background: #d97706;
+}
+
+.logout-btn {
+  background: #ef4444;
+  color: white;
+}
+
+.logout-btn:hover {
+  background: #dc2626;
+}
+
 
 .profile-card {
   background-color: #fff;

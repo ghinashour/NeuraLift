@@ -185,6 +185,60 @@
   margin-top: 18px;
 }
 
+/* Add these styles to your MyTaskDetails.css */
+.td-actions {
+  display: flex;
+  gap: 15px;
+  margin-top: 30px;
+  flex-wrap: wrap;
+}
+
+.td-start-btn, .td-chat-btn {
+  flex: 1;
+  min-width: 200px;
+  padding: 15px 25px;
+  border: none;
+  border-radius: 12px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-align: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.td-start-btn {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  color: white;
+}
+
+.td-start-btn:hover {
+  background: linear-gradient(135deg, #059669 0%, #047857 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(16, 185, 129, 0.3);
+}
+
+.td-chat-btn {
+  background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+  color: white;
+}
+
+.td-chat-btn:hover {
+  background: linear-gradient(135deg, #1d4ed8 0%, #1e40af 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(59, 130, 246, 0.3);
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .td-actions {
+    flex-direction: column;
+  }
+  
+  .td-start-btn, .td-chat-btn {
+    min-width: 100%;
+  }
+}
 .td-start-btn {
   background: linear-gradient(135deg, #3C8AFC, #76ABF4);
   color: #fff;
