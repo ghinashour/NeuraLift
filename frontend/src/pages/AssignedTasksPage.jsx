@@ -42,7 +42,7 @@ export default function AssignedTasksPage() {
       await axios.delete(`${API_BASE_URL}/collaborate/tasks/${taskId}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
-      
+
       setTasks(prev => prev.filter(task => task._id !== taskId));
       alert("Task deleted successfully");
     } catch (err) {
@@ -60,7 +60,7 @@ export default function AssignedTasksPage() {
         { headers: { Authorization: `Bearer ${token}` } }
       );
 
-      setTasks(prev => prev.map(task => 
+      setTasks(prev => prev.map(task =>
         task._id === editingTask._id ? response.data : task
       ));
       setEditingTask(null);
@@ -77,7 +77,7 @@ export default function AssignedTasksPage() {
       in_progress: { class: "status-in-progress", text: "In Progress" },
       completed: { class: "status-completed", text: "Completed" }
     };
-    
+
     const config = statusConfig[status] || statusConfig.pending;
     return <span className={`status-badge ${config.class}`}>{config.text}</span>;
   };
@@ -114,7 +114,7 @@ export default function AssignedTasksPage() {
         {tasks.length === 0 ? (
           <div className="no-tasks">
             <p>You haven't assigned any tasks yet.</p>
-            <button 
+            <button
               onClick={() => navigate("/collaborate")}
               className="btn btn-primary"
             >
@@ -124,10 +124,10 @@ export default function AssignedTasksPage() {
         ) : (
           <div className="tasks-grid">
             {tasks.map((task) => (
-              <div key={task._id} className="task-card">
+              <div key={task._id} className="assigned-tasks-task-card">
                 <div className="task-header">
                   <h3 className="task-title">{task.title}</h3>
-                  <div 
+                  <div
                     className="task-actions"
                     style={{
                       display: 'flex',
@@ -138,7 +138,7 @@ export default function AssignedTasksPage() {
                       opacity: 1
                     }}
                   >
-                    <button 
+                    <button
                       className="btn-edit"
                       onClick={() => setEditingTask(task)}
                       style={{
@@ -161,7 +161,7 @@ export default function AssignedTasksPage() {
                     >
                       Edit
                     </button>
-                    <button 
+                    <button
                       className="btn-delete"
                       onClick={() => handleDeleteTask(task._id)}
                       style={{
@@ -189,7 +189,7 @@ export default function AssignedTasksPage() {
 
                 <div className="task-body">
                   <p className="task-description">{task.description}</p>
-                  
+
                   <div className="task-meta">
                     <div className="meta-item">
                       <strong>Assigned to:</strong>
@@ -200,14 +200,14 @@ export default function AssignedTasksPage() {
                         <span>{task.assignedTo?.name || 'Unknown User'}</span>
                       </div>
                     </div>
-                    
+
                     {task.group && (
                       <div className="meta-item">
                         <strong>Group:</strong>
                         <span>{task.group.name}</span>
                       </div>
                     )}
-                    
+
                     <div className="meta-item">
                       <strong>Due Date:</strong>
                       <span>{task.dueDate ? new Date(task.dueDate).toLocaleDateString() : 'Not set'}</span>

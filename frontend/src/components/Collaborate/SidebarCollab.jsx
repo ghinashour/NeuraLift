@@ -132,7 +132,7 @@ const SidebarCollab = ({ onOpenPopup, groups, onInviteGroup }) => {
                     {group.members?.length || 0} members
                   </p>
                   <p className="group-description">
-                    {group.description?.length > 50 
+                    {group.description?.length > 50
                       ? `${group.description.substring(0, 50)}...`
                       : group.description
                     }
@@ -151,7 +151,7 @@ const SidebarCollab = ({ onOpenPopup, groups, onInviteGroup }) => {
             <div className="no-groups">
               <FiUsers size={24} className="no-groups-icon" />
               <p>No groups yet</p>
-              <button 
+              <button
                 className="create-group-btn"
                 onClick={() => handleIconClick("group")}
               >
@@ -190,31 +190,31 @@ const SidebarCollab = ({ onOpenPopup, groups, onInviteGroup }) => {
       </div>
 
       {/* Quick Actions */}
-      <div className="quick-actions">
+      <div className="rcc-quick-actions">
         <h3 className="actions-title">Quick Actions</h3>
-        <button 
-          className="action-btn primary"
+        <button
+          className="rcc-action-btn primary"
           onClick={() => handleIconClick("post")}
         >
           <FiPlusCircle size={16} />
           Create Post
         </button>
-        <button 
-          className="action-btn"
+        <button
+          className="rcc-action-btn"
           onClick={() => handleIconClick("group")}
         >
           <FiUsers size={16} />
           New Group
         </button>
-        <button 
-          className="action-btn"
+        <button
+          className="rcc-action-btn"
           onClick={() => handleIconClick("task")}
         >
           <FiClipboard size={16} />
           Assign Task
         </button>
-        <button 
-          className="action-btn"
+        <button
+          className="rcc-action-btn"
           onClick={() => handleIconClick("assignedTasks")}
         >
           <FiEdit3 size={16} />
@@ -226,7 +226,7 @@ const SidebarCollab = ({ onOpenPopup, groups, onInviteGroup }) => {
       <div className="task-management-section">
         <h3 className="section-title">Task Management</h3>
         <div className="task-links">
-          <button 
+          <button
             className="task-link-btn"
             onClick={() => handleIconClick("myTasks")}
           >
@@ -234,7 +234,7 @@ const SidebarCollab = ({ onOpenPopup, groups, onInviteGroup }) => {
             <span>Tasks Assigned to Me</span>
             <span className="link-arrow">→</span>
           </button>
-          <button 
+          <button
             className="task-link-btn"
             onClick={() => handleIconClick("assignedTasks")}
           >
@@ -242,7 +242,7 @@ const SidebarCollab = ({ onOpenPopup, groups, onInviteGroup }) => {
             <span>Tasks I Assigned</span>
             <span className="link-arrow">→</span>
           </button>
-          <button 
+          <button
             className="task-link-btn"
             onClick={() => handleIconClick("task")}
           >

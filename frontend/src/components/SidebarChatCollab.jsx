@@ -11,9 +11,9 @@ const SidebarChatCollab = ({
   loading = false
 }) => {
   const [searchTerm, setSearchTerm] = useState("");
-  
+
   // Filter groups based on search
-  const filteredGroups = groups.filter(group => 
+  const filteredGroups = groups.filter(group =>
     group.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
     group.description?.toLowerCase().includes(searchTerm.toLowerCase())
   );
@@ -28,7 +28,7 @@ const SidebarChatCollab = ({
 
     group.tasks.forEach(task => {
       if (!task || !task.status) return;
-      
+
       switch (task.status) {
         case 'pending':
         case 'To-Do':
@@ -112,13 +112,13 @@ const SidebarChatCollab = ({
           <h3>Your Groups</h3>
           <span className="groups-count">{filteredGroups.length}</span>
         </div>
-        
+
         <div className="groups-list">
           {filteredGroups.length > 0 ? (
             filteredGroups.map(group => {
               const tasksByStatus = groupedTasks(group);
               const totalTasks = tasksByStatus.todo.length + tasksByStatus.inProgress.length + tasksByStatus.done.length;
-              
+
               return (
                 <div
                   key={group._id || group.id}
@@ -128,25 +128,25 @@ const SidebarChatCollab = ({
                   <div className="group-avatar">
                     {getGroupAvatar(group)}
                   </div>
-                  
+
                   <div className="group-content">
-                    <div className="group-header">
+                    <div className="rcc-group-header">
                       <h4 className="group-name">{group.name || 'Unnamed Group'}</h4>
                       <span className="member-count">
                         👥 {group.members ? group.members.length : 0}
                       </span>
                     </div>
-                    
+
                     <p className="group-desc">
                       {group.description || 'No description available'}
                     </p>
-                    
+
                     {/* Task Progress */}
                     {totalTasks > 0 && (
                       <div className="task-progress">
-                        <div className="progress-bar">
-                          <div 
-                            className="progress-fill"
+                        <div className="rcc-progress-bar">
+                          <div
+                            className="rcc-progress-fill"
                             style={{
                               width: `${(tasksByStatus.done.length / totalTasks) * 100}%`
                             }}
@@ -196,7 +196,7 @@ const SidebarChatCollab = ({
                 {searchTerm ? 'Try adjusting your search' : 'Create your first group to start collaborating'}
               </p>
               {!searchTerm && (
-                <button 
+                <button
                   className="create-group-btn primary"
                   onClick={onCreateGroup}
                 >
@@ -211,7 +211,7 @@ const SidebarChatCollab = ({
       {/* Create Group Button */}
       {filteredGroups.length > 0 && (
         <div className="create-group-section">
-          <button 
+          <button
             className="create-group-btn primary"
             onClick={onCreateGroup}
           >

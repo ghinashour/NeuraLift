@@ -19,13 +19,13 @@ const RightChatCollab = ({
   // Safe task filtering with null checks
   const getTasksByStatus = (status) => {
     if (!tasks || !Array.isArray(tasks)) return [];
-    
+
     let filteredTasks = tasks.filter(task => task && task.status === status);
-    
+
     // Apply date filters
     filteredTasks = filteredTasks.filter(task => {
       if (!task.dueDate) return filterType === "all" || filterType === "no-date";
-      
+
       const dueDate = new Date(task.dueDate);
       const today = new Date();
       const startOfToday = new Date(today.getFullYear(), today.getMonth(), today.getDate());
@@ -72,7 +72,7 @@ const RightChatCollab = ({
   const handleFilterChange = (newFilterType) => {
     setFilterType(newFilterType);
     setShowFilterDropdown(false);
-    
+
     // Call parent filter handler if provided
     if (onFilterTasks) {
       onFilterTasks(newFilterType);
@@ -113,7 +113,7 @@ const RightChatCollab = ({
 
   if (loading) {
     return (
-      <div className="right-chat">
+      <div className="rcc-right-chat">
         <div className="loading-container">
           <div className="loading-spinner"></div>
           <p>Loading task details...</p>
@@ -124,7 +124,7 @@ const RightChatCollab = ({
 
   if (!group) {
     return (
-      <div className="right-chat">
+      <div className="rcc-right-chat">
         <div className="empty-state">
           <div className="empty-icon">📋</div>
           <h3>No Group Selected</h3>
@@ -139,7 +139,7 @@ const RightChatCollab = ({
 
   if (!isMember) {
     return (
-      <div className="right-chat">
+      <div className="rcc-right-chat">
         <div className="empty-state">
           <div className="empty-icon">🔒</div>
           <h3>Not a Member</h3>
@@ -153,9 +153,9 @@ const RightChatCollab = ({
   }
 
   return (
-    <div className="right-chat">
+    <div className="rcc-right-chat">
       {/* Group Info Header */}
-      <div className="group-header">
+      <div className="rcc-group-header">
         <div className="group-avatar-large">
           {group.name ? group.name.charAt(0).toUpperCase() : 'G'}
         </div>
@@ -165,15 +165,15 @@ const RightChatCollab = ({
             {group.description || "Task management for this group"}
           </p>
         </div>
-        
+
         {/* Progress Overview */}
         <div className="progress-overview">
           <div className="progress-header">
             <span>Group Progress</span>
             <span className="progress-percent">{getProgressPercentage()}%</span>
           </div>
-          <div className="progress-bar">
-            <div 
+          <div className="rcc-progress-bar">
+            <div
               className="progress-fill"
               style={{ width: `${getProgressPercentage()}%` }}
             ></div>
@@ -185,9 +185,9 @@ const RightChatCollab = ({
       </div>
 
       {/* Tabs */}
-      <div className="tabs">
+      <div className="rcc-tabs">
         <button
-          className={`tab ${activeTab === "tasks" ? "active" : ""}`}
+          className={`rcc-tab ${activeTab === "tasks" ? "active" : ""}`}
           onClick={() => setActiveTab("tasks")}
         >
           <span className="tab-icon">📋</span>
@@ -195,7 +195,7 @@ const RightChatCollab = ({
           <span className="tab-badge">{getTaskCountByFilter()}</span>
         </button>
         <button
-          className={`tab ${activeTab === "details" ? "active" : ""}`}
+          className={`rcc-tab ${activeTab === "details" ? "active" : ""}`}
           onClick={() => setActiveTab("details")}
         >
           <span className="tab-icon">👥</span>
@@ -209,17 +209,17 @@ const RightChatCollab = ({
         <div className="tasks-tab">
           {/* Quick Actions */}
           <div className="quick-actions">
-            <button 
-              className="action-btn primary" 
+            <button
+              className="action-btn primary"
               onClick={handleNewTask}
               title="Create new task"
             >
               <span className="action-icon">+</span>
               New Task
             </button>
-            
+
             <div className="filter-container">
-              <button 
+              <button
                 className="action-btn filter-btn"
                 onClick={() => setShowFilterDropdown(!showFilterDropdown)}
                 title="Filter tasks"
@@ -228,34 +228,34 @@ const RightChatCollab = ({
                 {getFilterDisplayText()}
                 <span className="dropdown-arrow">▼</span>
               </button>
-              
+
               {showFilterDropdown && (
                 <div className="filter-dropdown">
-                  <button 
+                  <button
                     className={`filter-option ${filterType === "all" ? "active" : ""}`}
                     onClick={() => handleFilterChange("all")}
                   >
                     All Tasks
                   </button>
-                  <button 
+                  <button
                     className={`filter-option ${filterType === "today" ? "active" : ""}`}
                     onClick={() => handleFilterChange("today")}
                   >
                     Today
                   </button>
-                  <button 
+                  <button
                     className={`filter-option ${filterType === "week" ? "active" : ""}`}
                     onClick={() => handleFilterChange("week")}
                   >
                     This Week
                   </button>
-                  <button 
+                  <button
                     className={`filter-option ${filterType === "overdue" ? "active" : ""}`}
                     onClick={() => handleFilterChange("overdue")}
                   >
                     Overdue
                   </button>
-                  <button 
+                  <button
                     className={`filter-option ${filterType === "no-date" ? "active" : ""}`}
                     onClick={() => handleFilterChange("no-date")}
                   >
@@ -270,7 +270,7 @@ const RightChatCollab = ({
           {filterType !== "all" && (
             <div className="filter-indicator">
               <span>Showing: {getFilterDisplayText()}</span>
-              <button 
+              <button
                 className="clear-filter"
                 onClick={() => handleFilterChange("all")}
               >
@@ -349,20 +349,20 @@ const RightChatCollab = ({
               <div className="empty-icon">📝</div>
               <h4>No Tasks Found</h4>
               <p>
-                {filterType !== "all" 
+                {filterType !== "all"
                   ? `No tasks match the "${getFilterDisplayText()}" filter`
                   : "This group doesn't have any tasks assigned yet"
                 }
               </p>
               {filterType !== "all" ? (
-                <button 
+                <button
                   className="create-task-btn"
                   onClick={() => handleFilterChange("all")}
                 >
                   Show All Tasks
                 </button>
               ) : (
-                <button 
+                <button
                   className="create-task-btn"
                   onClick={handleNewTask}
                 >
@@ -399,7 +399,7 @@ const RightChatCollab = ({
               </div>
             ))}
           </div>
-          
+
           <div className="group-actions">
             <button className="group-action-btn">
               👥 Invite Members
@@ -477,7 +477,7 @@ const TaskCard = ({ task, onStatusChange, isExpanded, onToggleExpand }) => {
           {isExpanded ? '▲' : '▼'}
         </button>
       </div>
-      
+
       {isExpanded && (
         <div className="task-details">
           <p className="task-description">
@@ -500,14 +500,14 @@ const TaskCard = ({ task, onStatusChange, isExpanded, onToggleExpand }) => {
                 </div>
               </div>
             )}
-            
+
             {task.assignedBy && (
               <div className="assigner">
                 <strong>Assigned by:</strong>
                 <span>{task.assignedBy.name || "Unknown"}</span>
               </div>
             )}
-            
+
             {task.createdAt && (
               <div className="task-created">
                 <strong>Created:</strong>

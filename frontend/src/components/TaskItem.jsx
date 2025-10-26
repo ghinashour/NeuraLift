@@ -57,7 +57,7 @@ const TaskItem = ({ task, onToggleComplete, onEdit, onDelete }) => {
             </div>
 
             <div className="task-content">
-                <div className="task-header">
+                <div className="taskItem-task-header">
                     <div className="task-title-row">
                         <h3 className={`task-title ${task.completed ? 'completed-title' : ''}`}>
                             {task.title}
@@ -79,14 +79,14 @@ const TaskItem = ({ task, onToggleComplete, onEdit, onDelete }) => {
                     <div className={`task-actions ${isHovered ? 'visible' : ''}`}>
                         <button
                             onClick={handleEdit}
-                            className="action-btn edit-btn"
+                            className="taskItem-action-btn edit-btn"
                             title="Edit task"
                         >
                             <Edit3 size={16} />
                         </button>
                         <button
                             onClick={handleDelete}
-                            className="action-btn delete-btn"
+                            className="taskItem-action-btn delete-btn"
                             title="Delete task"
                         >
                             <Trash2 size={16} />

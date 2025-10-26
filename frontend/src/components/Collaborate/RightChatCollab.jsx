@@ -11,7 +11,7 @@ export default function RightChatCollab({ group, onChangeTaskStatus }) {
   const currentUser = { id: "current-user", name: "You" };
 
   if (!group) {
-    return <aside className="right-chat empty">Select a group</aside>;
+    return <aside className="rcc-right-chat rcc-empty">Select a group</aside>;
   }
 
   const selectTask = (id) => {
@@ -26,8 +26,8 @@ export default function RightChatCollab({ group, onChangeTaskStatus }) {
   };
 
   return (
-    <aside className="right-chat">
-      <h3 className="right-title">Task Details</h3>
+    <aside className="rcc-right-chat">
+      <h3 className="rcc-right-title">Task Details</h3>
 
       <div className="task-list-vertical">
         {group.tasks.map((t) => (
