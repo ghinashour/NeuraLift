@@ -726,3 +726,160 @@
     padding: 16px;
   }
 }
+
+
+
+/* Enhanced Quick Actions */
+.quick-actions {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
+  position: relative;
+}
+
+.action-btn {
+  flex: 1;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  padding: 10px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: #374151;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.action-btn.primary {
+  background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+  color: white;
+  border-color: #3b82f6;
+}
+
+.action-btn.primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+}
+
+.action-btn:hover:not(.primary) {
+  background: #f1f5f9;
+  border-color: #cbd5e1;
+}
+
+.action-icon {
+  font-size: 0.9rem;
+}
+
+/* Filter Container */
+.filter-container {
+  position: relative;
+  flex: 1;
+}
+
+.filter-btn {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.dropdown-arrow {
+  font-size: 0.7rem;
+  color: #64748b;
+  transition: transform 0.3s ease;
+}
+
+.filter-btn:hover .dropdown-arrow {
+  transform: rotate(180deg);
+}
+
+/* Filter Dropdown */
+.filter-dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: white;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+  margin-top: 4px;
+  overflow: hidden;
+}
+
+.filter-option {
+  width: 100%;
+  padding: 10px 12px;
+  background: none;
+  border: none;
+  text-align: left;
+  cursor: pointer;
+  font-size: 0.85rem;
+  color: #374151;
+  transition: all 0.2s ease;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.filter-option:last-child {
+  border-bottom: none;
+}
+
+.filter-option:hover {
+  background: #f8fafc;
+}
+
+.filter-option.active {
+  background: #3b82f6;
+  color: white;
+}
+
+/* Filter Indicator */
+.filter-indicator {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 12px;
+  background: #f0f9ff;
+  border: 1px solid #bae6fd;
+  border-radius: 6px;
+  margin-bottom: 16px;
+  font-size: 0.85rem;
+  color: #0369a1;
+}
+
+.clear-filter {
+  background: none;
+  border: none;
+  color: #3b82f6;
+  cursor: pointer;
+  font-size: 0.8rem;
+  font-weight: 500;
+  text-decoration: underline;
+}
+
+.clear-filter:hover {
+  color: #1e40af;
+}
+
+/* Empty States Enhancement */
+.empty-tasks .create-task-btn {
+  background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-top: 8px;
+}
+
+.empty-tasks .create-task-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+}

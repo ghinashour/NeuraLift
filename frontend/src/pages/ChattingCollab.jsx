@@ -6,6 +6,7 @@ import SidebarChatCollab from "../components/SidebarChatCollab";
 import ChatArea from "../components/ChatArea";
 import RightChatCollab from "../components/RightChatCollab";
 import CreateGroupPopup from "../components/Popups/CreateGroupPopup";
+import AssignTaskPopup from "../components/Popups/AssignTaskPopup";
 import "../styles/ChattingCollab.css";
 
 const API_BASE_URL = process.env.REACT_APP_API_URL || "http://localhost:4000/api";
@@ -22,7 +23,8 @@ export default function ChattingCollab() {
   const [showCreateGroup, setShowCreateGroup] = useState(false);
   const [mobileView, setMobileView] = useState('sidebar'); // 'sidebar', 'chat', 'tasks'
   const messagesIntervalRef = useRef();
-
+  const [showAssignTask, setShowAssignTask] = useState(false);
+  const [selectedGroupForTask, setSelectedGroupForTask] = useState(null);
   // Get task data from navigation if coming from task details
   const taskData = location.state;
 
@@ -223,7 +225,19 @@ export default function ChattingCollab() {
   const handleShowChat = () => {
     setMobileView('chat');
   };
-
+const handleNewTask = (groupId) => {
+  setSelectedGroupForTask(groupId);
+  setShowAssignTask(true);
+};
+const handleTaskCreated = () => {
+  setShowAssignTask(false);
+  setSelectedGroupForTask(null);
+  // Refresh tasks for the current group
+  if (activeGroup && activeGroup._id) {
+    fetchGroupTasks(activeGroup._id);
+  }
+};
+  
   if (loading) {
     return (
       <div className="chat-page">
@@ -300,13 +314,15 @@ export default function ChattingCollab() {
 
       {/* Tasks Panel - Hidden on mobile when in sidebar/chat view */}
       <div className={`tasks-container ${mobileView !== 'tasks' ? 'mobile-hidden' : ''}`}>
-        <RightChatCollab
-          group={activeGroup}
-          tasks={tasks}
-          onChangeTaskStatus={changeTaskStatus}
-          currentTask={taskData}
-          loading={loading}
-        />
+      <RightChatCollab
+        group={activeGroup}
+        tasks={tasks || []}
+        onChangeTaskStatus={changeTaskStatus}
+        currentTask={taskData}
+        loading={loading}
+        onNewTask={handleNewTask} // Pass the new task handler
+        onFilterTasks={(filterType) => console.log('Filtering by:', filterType)} // Optional filter callback
+      />
       </div>
 
       {/* Create Group Popup */}
@@ -315,6 +331,15 @@ export default function ChattingCollab() {
           onClose={() => setShowCreateGroup(false)}
           onSubmit={createGroup}
         />
+      )}
+      {/* Assign Task Popup */}
+      {showAssignTask && (
+      <AssignTaskPopup
+        onClose={() => setShowAssignTask(false)}
+        onSubmit={handleTaskCreated}
+        groups={groups}
+        defaultGroupId={selectedGroupForTask}
+       />
       )}
     </div>
   );

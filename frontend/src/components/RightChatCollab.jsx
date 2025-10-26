@@ -7,15 +7,48 @@ const RightChatCollab = ({
   tasks = [],
   onChangeTaskStatus,
   currentTask = null,
-  loading = false
+  loading = false,
+  onNewTask = null, // New prop for task creation
+  onFilterTasks = null // New prop for filtering
 }) => {
   const [activeTab, setActiveTab] = useState("tasks");
   const [expandedTask, setExpandedTask] = useState(null);
+  const [filterType, setFilterType] = useState("all"); // "all", "today", "week", "overdue"
+  const [showFilterDropdown, setShowFilterDropdown] = useState(false);
 
   // Safe task filtering with null checks
   const getTasksByStatus = (status) => {
     if (!tasks || !Array.isArray(tasks)) return [];
-    return tasks.filter(task => task && task.status === status);
+    
+    let filteredTasks = tasks.filter(task => task && task.status === status);
+    
+    // Apply date filters
+    filteredTasks = filteredTasks.filter(task => {
+      if (!task.dueDate) return filterType === "all" || filterType === "no-date";
+      
+      const dueDate = new Date(task.dueDate);
+      const today = new Date();
+      const startOfToday = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+      const endOfToday = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 1);
+      const startOfWeek = new Date(today.getFullYear(), today.getMonth(), today.getDate() - today.getDay());
+      const endOfWeek = new Date(startOfWeek.getFullYear(), startOfWeek.getMonth(), startOfWeek.getDate() + 7);
+
+      switch (filterType) {
+        case "today":
+          return dueDate >= startOfToday && dueDate < endOfToday;
+        case "week":
+          return dueDate >= startOfWeek && dueDate < endOfWeek;
+        case "overdue":
+          return dueDate < startOfToday && task.status !== 'completed';
+        case "no-date":
+          return !task.dueDate;
+        case "all":
+        default:
+          return true;
+      }
+    });
+
+    return filteredTasks;
   };
 
   const todoTasks = getTasksByStatus("pending");
@@ -28,6 +61,24 @@ const RightChatCollab = ({
     }
   };
 
+  const handleNewTask = () => {
+    if (onNewTask && group) {
+      onNewTask(group._id);
+    } else {
+      alert("Please select a group first to create a task");
+    }
+  };
+
+  const handleFilterChange = (newFilterType) => {
+    setFilterType(newFilterType);
+    setShowFilterDropdown(false);
+    
+    // Call parent filter handler if provided
+    if (onFilterTasks) {
+      onFilterTasks(newFilterType);
+    }
+  };
+
   const toggleTaskExpand = (taskId) => {
     setExpandedTask(expandedTask === taskId ? null : taskId);
   };
@@ -37,6 +88,27 @@ const RightChatCollab = ({
     if (total === 0) return 0;
     const completed = doneTasks.length;
     return Math.round((completed / total) * 100);
+  };
+
+  const getFilterDisplayText = () => {
+    switch (filterType) {
+      case "today":
+        return "Today";
+      case "week":
+        return "This Week";
+      case "overdue":
+        return "Overdue";
+      case "no-date":
+        return "No Date";
+      case "all":
+      default:
+        return "All Tasks";
+    }
+  };
+
+  const getTaskCountByFilter = () => {
+    const total = todoTasks.length + inProgressTasks.length + doneTasks.length;
+    return total;
   };
 
   if (loading) {
@@ -120,7 +192,7 @@ const RightChatCollab = ({
         >
           <span className="tab-icon">📋</span>
           Tasks
-          <span className="tab-badge">{tasks.length}</span>
+          <span className="tab-badge">{getTaskCountByFilter()}</span>
         </button>
         <button
           className={`tab ${activeTab === "details" ? "active" : ""}`}
@@ -137,15 +209,77 @@ const RightChatCollab = ({
         <div className="tasks-tab">
           {/* Quick Actions */}
           <div className="quick-actions">
-            <button className="action-btn" title="Create new task">
-              + New Task
+            <button 
+              className="action-btn primary" 
+              onClick={handleNewTask}
+              title="Create new task"
+            >
+              <span className="action-icon">+</span>
+              New Task
             </button>
-            <button className="action-btn" title="Filter tasks">
-              🔍 Filter
-            </button>
+            
+            <div className="filter-container">
+              <button 
+                className="action-btn filter-btn"
+                onClick={() => setShowFilterDropdown(!showFilterDropdown)}
+                title="Filter tasks"
+              >
+                <span className="action-icon">🔍</span>
+                {getFilterDisplayText()}
+                <span className="dropdown-arrow">▼</span>
+              </button>
+              
+              {showFilterDropdown && (
+                <div className="filter-dropdown">
+                  <button 
+                    className={`filter-option ${filterType === "all" ? "active" : ""}`}
+                    onClick={() => handleFilterChange("all")}
+                  >
+                    All Tasks
+                  </button>
+                  <button 
+                    className={`filter-option ${filterType === "today" ? "active" : ""}`}
+                    onClick={() => handleFilterChange("today")}
+                  >
+                    Today
+                  </button>
+                  <button 
+                    className={`filter-option ${filterType === "week" ? "active" : ""}`}
+                    onClick={() => handleFilterChange("week")}
+                  >
+                    This Week
+                  </button>
+                  <button 
+                    className={`filter-option ${filterType === "overdue" ? "active" : ""}`}
+                    onClick={() => handleFilterChange("overdue")}
+                  >
+                    Overdue
+                  </button>
+                  <button 
+                    className={`filter-option ${filterType === "no-date" ? "active" : ""}`}
+                    onClick={() => handleFilterChange("no-date")}
+                  >
+                    No Due Date
+                  </button>
+                </div>
+              )}
+            </div>
           </div>
 
-          {tasks.length > 0 ? (
+          {/* Filter Indicator */}
+          {filterType !== "all" && (
+            <div className="filter-indicator">
+              <span>Showing: {getFilterDisplayText()}</span>
+              <button 
+                className="clear-filter"
+                onClick={() => handleFilterChange("all")}
+              >
+                Clear
+              </button>
+            </div>
+          )}
+
+          {getTaskCountByFilter() > 0 ? (
             <div className="tasks-list">
               {/* To Do Tasks */}
               {todoTasks.length > 0 && (
@@ -213,11 +347,28 @@ const RightChatCollab = ({
           ) : (
             <div className="empty-tasks">
               <div className="empty-icon">📝</div>
-              <h4>No Tasks Yet</h4>
-              <p>This group doesn't have any tasks assigned yet</p>
-              <button className="create-task-btn">
-                Create First Task
-              </button>
+              <h4>No Tasks Found</h4>
+              <p>
+                {filterType !== "all" 
+                  ? `No tasks match the "${getFilterDisplayText()}" filter`
+                  : "This group doesn't have any tasks assigned yet"
+                }
+              </p>
+              {filterType !== "all" ? (
+                <button 
+                  className="create-task-btn"
+                  onClick={() => handleFilterChange("all")}
+                >
+                  Show All Tasks
+                </button>
+              ) : (
+                <button 
+                  className="create-task-btn"
+                  onClick={handleNewTask}
+                >
+                  Create First Task
+                </button>
+              )}
             </div>
           )}
         </div>
@@ -276,7 +427,7 @@ const RightChatCollab = ({
   );
 };
 
-// Task Card Component
+// Task Card Component (keep the same as before)
 const TaskCard = ({ task, onStatusChange, isExpanded, onToggleExpand }) => {
   if (!task) return null;
 
