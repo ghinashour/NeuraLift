@@ -4,6 +4,7 @@ import { useNavigate, Link, useLocation } from "react-router-dom";
 import "../../styles/Auth.css";
 import { showError } from "../../utils/alerts";
 import Swal from "sweetalert2";
+import googleLogo from "../../assets/google-logo.svg"; // ✅ Add this (you’ll create this asset)
 
 function Login() {
   const [form, setForm] = useState({ email: "", password: "" });
@@ -18,9 +19,8 @@ function Login() {
     const user = query.get("user");
 
     if (token && user) {
-      // Store token + user info
       localStorage.setItem("token", token);
-      localStorage.setItem("user", user); // backend sends it already stringified
+      localStorage.setItem("user", user);
 
       Swal.fire({
         icon: "success",
@@ -33,12 +33,10 @@ function Login() {
     }
   }, [location, navigate]);
 
-  // ✅ Update form values
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  // ✅ Handle login with email/password
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError(null);
@@ -46,13 +44,11 @@ function Login() {
     try {
       const res = await axios.post("http://localhost:4000/api/auth/login", form);
 
-      // ✅ Store JWT token and user info
       if (res.data?.accessToken && res.data?.user) {
         localStorage.setItem("token", res.data.accessToken);
         localStorage.setItem("user", JSON.stringify(res.data.user));
       }
 
-      // ✅ Show success message before redirecting
       await Swal.fire({
         icon: "success",
         title: "Login Successful!",
@@ -63,7 +59,6 @@ function Login() {
 
       navigate("/dashboard");
     } catch (err) {
-      console.error("Login error:", err.response || err);
       const message =
         err.response?.data?.message ||
         err.response?.data?.msg ||
@@ -73,7 +68,6 @@ function Login() {
     }
   };
 
-  // ✅ Google login redirect
   const handleGoogleLogin = () => {
     window.location.href = "http://localhost:4000/api/auth/google";
   };
@@ -83,6 +77,7 @@ function Login() {
       <div className="auth-card">
         <h2>Login</h2>
         {error && <p className="error">{error}</p>}
+
         <form onSubmit={handleSubmit}>
           <input
             type="email"
@@ -105,24 +100,19 @@ function Login() {
           </button>
         </form>
 
+        <div className="auth-divider">
+          <span>or</span>
+        </div>
+
+        {/* ✅ Modern Google Sign-In Button */}
+        <button onClick={handleGoogleLogin} className="btn-google">
+          <img src={googleLogo} alt="Google" />
+          Continue with Google
+        </button>
+
         <p className="bottom-text">
           Don’t have an account? <Link to="/signup">Sign Up</Link>
         </p>
-
-        <button
-          onClick={handleGoogleLogin}
-          style={{
-            padding: "10px 20px",
-            backgroundColor: "#4285F4",
-            color: "#fff",
-            border: "none",
-            borderRadius: "5px",
-            cursor: "pointer",
-            marginTop: "10px",
-          }}
-        >
-          Continue with Google
-        </button>
       </div>
     </div>
   );
