@@ -47,6 +47,13 @@ const PomodoroTimer = () => {
         </div>
       </div>
 
+    <div className="pomodoro-timer__footer">
+        <QuoteSection
+          quote={quote}
+          onNewQuote={fetchNewQuote}
+          isLoading={isLoading}
+        />
+      </div>
       <div className="pomodoro-timer__tabs">
         <ModeSelector
           selectedMode={mode}
@@ -81,13 +88,7 @@ const PomodoroTimer = () => {
         </div>
       </div>
 
-      <div className="pomodoro-timer__footer">
-        <QuoteSection
-          quote={quote}
-          onNewQuote={fetchNewQuote}
-          isLoading={isLoading}
-        />
-      </div>
+      
       <div style={{ 
         position: 'fixed', 
         bottom: '20px', 

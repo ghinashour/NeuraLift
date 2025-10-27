@@ -9,7 +9,7 @@ const AddEventModal = ({ isOpen, onClose, onSave, event }) => {
     description: '',
     startDate: '',
     endDate: '',
-    color: '#4A90E2',
+    color: '#1a73e8',
   });
 
   useEffect(() => {
@@ -25,7 +25,7 @@ const AddEventModal = ({ isOpen, onClose, onSave, event }) => {
       setFormData({
         title: '',
         description: '',
-        color: '#4A90E2',
+        color: '#1a73e8',
         startDate: '',
         endDate: '',
       });
@@ -34,10 +34,7 @@ const AddEventModal = ({ isOpen, onClose, onSave, event }) => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleSubmit = (e) => {
@@ -54,62 +51,82 @@ const AddEventModal = ({ isOpen, onClose, onSave, event }) => {
   return (
     <div className="modal-overlay">
       <div className="modal">
+        {/* Header */}
         <div className="modal-header">
           <h3>{event ? 'Edit Event' : 'Add Event'}</h3>
-          <button onClick={onClose} className="close-btn">
+          <button onClick={onClose} className="close-btn" aria-label="Close Modal">
             ×
           </button>
         </div>
 
+        {/* Form */}
         <form onSubmit={handleSubmit} className="modal-form">
+          {/* Title */}
           <Input
-            label="Event Name"
+            label="Event Title"
             name="title"
             value={formData.title}
             onChange={handleChange}
+            placeholder="Enter event name"
             required
           />
 
+          {/* Description */}
           <Input
             label="Description"
             name="description"
             value={formData.description}
             onChange={handleChange}
+            placeholder="Short event details"
             type="textarea"
           />
 
-          <Input
-            label="Color"
-            name="color"
-            value={formData.color}
-            onChange={handleChange}
-            type="color"
-          />
+          {/* Date & Time */}
+          <div className="date-time-section">
+            <label className="section-label">🕒 Date & Time</label>
+            <div className="date-time-fields">
+              <div className="date-field">
+                <label>Start</label>
+                <input
+                  type="datetime-local"
+                  name="startDate"
+                  value={formData.startDate}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+              <div className="date-field">
+                <label>End</label>
+                <input
+                  type="datetime-local"
+                  name="endDate"
+                  value={formData.endDate}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+            </div>
+          </div>
 
-          <Input
-            label="Start Date & Time"
-            name="startDate"
-            value={formData.startDate}
-            onChange={handleChange}
-            type="datetime-local"
-            required
-          />
+          {/* Color Picker */}
+          <div className="color-section">
+            <label className="section-label">🎨 Event Color</label>
+            <input
+              type="color"
+              name="color"
+              value={formData.color}
+              onChange={handleChange}
+              className="color-picker"
+            />
+          </div>
 
-          <Input
-            label="End Date & Time"
-            name="endDate"
-            value={formData.endDate}
-            onChange={handleChange}
-            type="datetime-local"
-            required
-          />
-
+          {/* Actions */}
           <div className="modal-actions">
             <Button type="button" onClick={onClose} className="cancel-btn">
               Cancel
             </Button>
             <Button type="submit" className="save-btn">
-              {event ? 'Update' : 'Save'}
+              {event ? 'Update Event' : 'Save Event'}
             </Button>
           </div>
         </form>

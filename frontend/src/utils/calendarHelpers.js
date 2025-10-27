@@ -1,20 +1,19 @@
-// src/utils/calendarHelpers.js
-
 export const getWeekDates = (currentDate) => {
-  const startOfWeek = new Date(currentDate);
-  startOfWeek.setDate(currentDate.getDate() - currentDate.getDay()); // Sunday
-  return Array.from({ length: 7 }, (_, i) => {
-    const d = new Date(startOfWeek);
+  const start = new Date(currentDate);
+  start.setDate(start.getDate() - start.getDay()); // Sunday
+  const week = [];
+  for (let i = 0; i < 7; i++) {
+    const d = new Date(start);
     d.setDate(d.getDate() + i);
-    return d;
-  });
+    week.push(d);
+  }
+  return week;
 };
 
 export const getTimeSlots = () => {
   const slots = [];
   for (let h = 0; h < 24; h++) {
-    slots.push(`${h.toString().padStart(2, '0')}:00`);
-    slots.push(`${h.toString().padStart(2, '0')}:30`);
+    slots.push(`${h.toString().padStart(2, "0")}:00`);
   }
   return slots;
 };

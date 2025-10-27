@@ -1,21 +1,28 @@
 .day-column {
   flex-grow: 1;
   flex-basis: 0;
-  border-left: 1px solid #e0e0e0;
+  border-left: 1px solid #e1e6f0;
   position: relative;
+  background-color: #ffffff;
+  transition: background-color 0.2s ease;
 }
 
+.day-column:hover {
+  background-color: #f9fbff;
+}
+
+/* ---- Header ---- */
 .day-column__header {
   text-align: center;
   padding: 12px 0;
-  background-color: #f4f5f7;
-  border-bottom: 1px solid #e0e0e0;
+  background-color: #f4f6fb;
+  border-bottom: 1px solid #e1e6f0;
 }
 
 .day-column__day {
   font-weight: 500;
   color: #555;
-  font-size: 0.875rem;
+  font-size: 0.9rem;
 }
 
 .day-column__date {
@@ -34,10 +41,81 @@
   margin: 4px auto 0;
 }
 
+/* ---- Grid background ---- */
 .day-column__content {
   position: relative;
-  height: calc(18 * 60px); /* 18 hours * 60px/hour */
-  border-bottom: 1px solid #e0e0e0;
+  height: calc(18 * 60px); /* 18 hours x 60px */
+  border-bottom: 1px solid #e1e6f0;
   background-size: 100% 60px;
-  background-image: linear-gradient(to bottom, #e0e0e0 1px, transparent 1px);
+  background-image: linear-gradient(to bottom, #edf0f7 1px, transparent 1px);
+}
+
+/* ---- Event card ---- */
+.event-card {
+  position: absolute;
+  left: 8%;
+  right: 8%;
+  border-radius: 8px;
+  padding: 6px 8px;
+  color: white;
+  font-size: 0.85rem;
+  overflow: hidden;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.event-card:hover {
+  transform: scale(1.02);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+/* Default blue gradient for events */
+.event-card.default {
+  background: linear-gradient(135deg, #4a90e2 0%, #67aaf9 100%);
+}
+
+/* Optional color variations for event.type or priority */
+.event-card.green {
+  background: linear-gradient(135deg, #43a047 0%, #66bb6a 100%);
+}
+
+.event-card.orange {
+  background: linear-gradient(135deg, #ff8f00 0%, #ffb74d 100%);
+}
+
+.event-card.red {
+  background: linear-gradient(135deg, #e53935 0%, #ef5350 100%);
+}
+
+/* ---- Event content ---- */
+.event-card__title {
+  font-weight: 600;
+  margin-bottom: 4px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.event-card__time {
+  font-size: 0.75rem;
+  opacity: 0.9;
+}
+
+/* ---- Responsive ---- */
+@media (max-width: 768px) {
+  .day-column__header {
+    padding: 8px 0;
+  }
+
+  .day-column__content {
+    height: calc(12 * 50px);
+    background-size: 100% 50px;
+  }
+
+  .event-card {
+    left: 4%;
+    right: 4%;
+    font-size: 0.8rem;
+  }
 }
