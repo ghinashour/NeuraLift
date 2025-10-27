@@ -132,9 +132,9 @@ const Sidebar = ({ isCollapsed, setIsCollapsed, user, loading = false }) => {
           <div className="brand-icon">
             <img src={logo} alt="NeuraLift" />
           </div>
-          {  (
+          {(
             <>
-              <div className="brand-name">NeuraLift</div>
+              <div className="sidebar-brand-name">NeuraLift</div>
               <div className="brand-sub">Your wellness companion</div>
             </>
           )}
@@ -147,7 +147,7 @@ const Sidebar = ({ isCollapsed, setIsCollapsed, user, loading = false }) => {
               key={item.key}
               className={`nav-item ${isActive(item.path) ? "active" : ""}`}
               onClick={() => handleNavClick(item.path)}
-              title={item.label } // tooltip when collapsed
+              title={item.label} // tooltip when collapsed
             >
               {getNavIcon(item.key, isActive(item.path))}
               <span className="nav-label">{item.label}</span>

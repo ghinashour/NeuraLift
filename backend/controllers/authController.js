@@ -15,12 +15,16 @@ const generateAccessToken = (payload) => {
 const generateRefreshToken = (payload) => {
   return jwt.sign(payload, process.env.JWT_REFRESH_SECRET, { expiresIn: "7d" });
 };
-
 // Signup controller
 exports.signup = async (req, res) => {
-  const { username, email, password } = req.body;
+  const { name, username, email, password } = req.body; // Added name
 
   try {
+    // Validate required fields
+    if (!name || !username || !email || !password) {
+      return res.status(400).json({ msg: "All fields are required" });
+    }
+
     const existingUser = await User.findOne({ email });
     if (existingUser)
       return res.status(400).json({ msg: "Email already registered" });
@@ -32,6 +36,7 @@ exports.signup = async (req, res) => {
     const tokenExpiry = Date.now() + 24 * 60 * 60 * 1000; // 24h
 
     const newUser = new User({
+      name, // Added name
       username,
       email,
       password: hashedPassword,
@@ -55,48 +60,43 @@ exports.signup = async (req, res) => {
     res.status(500).json({ msg: "Server error" });
   }
 };
-
-// Login controller
 exports.login = async (req, res) => {
-  const { email, password } = req.body;
-
   try {
+    const { email, password } = req.body;
+    
     const user = await User.findOne({ email });
-    if (!user) return res.status(400).json({ msg: "Invalid credentials" });
-    const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) return res.status(400).json({ msg: "Invalid credentials" });
-
-    if (!user.isVerified) {
-      return res.status(403).json({ msg: "Please verify your email before logging in." });
+    if (!user) {
+      return res.status(400).json({ msg: "Invalid credentials" });
     }
 
-    // Update last login
-    user.lastLogin = new Date();
-    await user.save();
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
+      return res.status(400).json({ msg: "Invalid credentials" });
+    }
 
-    const accessToken = generateAccessToken({ id: user._id });
-    const refreshToken = generateRefreshToken({ id: user._id });
-
-    // Send refresh token in HttpOnly cookie
-    res.cookie("jwt", refreshToken, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "Strict",
-      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
-    });
+    // Generate JWT token with name included
+    const token = jwt.sign(
+      { 
+        id: user._id, 
+        name: user.name, // Include name
+        email: user.email 
+      },
+      process.env.JWT_SECRET,
+      { expiresIn: '30d' }
+    );
 
     res.json({
-      accessToken,
+      token,
       user: {
         id: user._id,
-        username: user.username,
+        name: user.name, // Include name in response
         email: user.email,
-        profilePhoto: user.profilePhoto,
-      },
+        username: user.username
+      }
     });
   } catch (err) {
-    console.error("Login error:", err);
-    res.status(500).json({ msg: "Internal Server error" });
+    console.error(err);
+    res.status(500).json({ msg: "Server error" });
   }
 };
 

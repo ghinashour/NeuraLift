@@ -53,15 +53,15 @@ const ChatbotContent = () => {
   };
 
   return (
-    <div className="chatbot-page">
+    <div className="cbPage-chatbot-page">
       {!showWelcome && (
-        <Header 
-          title="NEURALIFT Assistant" 
-          status="Online" 
+        <Header
+          title="NEURALIFT Assistant"
+          status="Online"
           onMinimize={handleRestart}
         />
       )}
-      <div className="chatbot-content">
+      <div className="cbPage-chatbot-content">
         {!showWelcome && (
           <div style={{ display: 'flex', gap: 12, alignItems: 'center', marginBottom: 8 }}>
             <label style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
@@ -97,7 +97,7 @@ const ChatbotContent = () => {
                     const p = { id, name: newPersonaName, prompt: newPersonaPrompt };
                     const next = [...customPersonas, p];
                     setCustomPersonas(next);
-                    try { localStorage.setItem('neuralift_personas', JSON.stringify(next)); } catch (e) {}
+                    try { localStorage.setItem('neuralift_personas', JSON.stringify(next)); } catch (e) { }
                     setNewPersonaName(''); setNewPersonaPrompt('');
                   }}>Add</button>
                 </div>
@@ -109,7 +109,7 @@ const ChatbotContent = () => {
                       <button onClick={() => {
                         const next = customPersonas.filter(x => x.id !== p.id);
                         setCustomPersonas(next);
-                        try { localStorage.setItem('neuralift_personas', JSON.stringify(next)); } catch (e) {}
+                        try { localStorage.setItem('neuralift_personas', JSON.stringify(next)); } catch (e) { }
                         if (persona === p.id) setPersona('system_support');
                       }}>Delete</button>
                     </div>

@@ -103,18 +103,18 @@ const SchedulePage = () => {
   const toggleCalendarView = () => setShowCalendar(prev => !prev);
 
   return (
-    <div className="schedule-container">
-      <div className="schedule-view">
+    <div className="schPage-schedule_container">
+      <div className="schPage-schedule-view">
         {/* Header */}
-        <div className="schedule-header">
+        <div className="schPage-schedule-header">
           <h1>Schedule</h1>
           <p>Time matters. Plan your day well.</p>
         </div>
 
         {/* Actions */}
-        <div className="schedule-actions">
-          <Button className="add-btn" onClick={handleAddEvent}>Add</Button>
-          <Button className="view-calendar-btn" onClick={toggleCalendarView}>
+        <div className="schPage-schedule-actions">
+          <Button className="schPage-add-btn" onClick={handleAddEvent}>Add</Button>
+          <Button className="schPage-view-calendar-btn" onClick={toggleCalendarView}>
             {showCalendar ? 'View List' : 'View Calendar'}
           </Button>
         </div>
@@ -132,9 +132,9 @@ const SchedulePage = () => {
             onToday={() => setCurrentDate(new Date())}
           />
         ) : (
-          <div className="schedule-events">
+          <div className="schPage-schedule-events">
             {events.length === 0 ? (
-              <div className="no-events">
+              <div className="schPage-no-events">
                 <p>No events scheduled. Click "Add" to create your first event!</p>
               </div>
             ) : (
@@ -161,11 +161,11 @@ const SchedulePage = () => {
           />
         )}
       </div>
-      <div style={{ 
-        position: 'fixed', 
-        bottom: '20px', 
+      <div style={{
+        position: 'fixed',
+        bottom: '20px',
         right: '20px',
-        zIndex: 1000 
+        zIndex: 1000
       }}>
         <AILogo />
       </div>

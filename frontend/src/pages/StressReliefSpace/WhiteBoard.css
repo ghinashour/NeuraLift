@@ -1,7 +1,7 @@
-canvas {
+.whiteBoardPage-canvas {
   cursor: crosshair;
 }
 
-button {
+.whiteBoardPage-button {
   margin: 5px;
 }

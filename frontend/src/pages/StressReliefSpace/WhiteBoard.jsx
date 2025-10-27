@@ -54,22 +54,22 @@ const Whiteboard = () => {
           marginBottom: "10px",
         }}
       >
-        <button onClick={() => setColor("blue")} style={{ margin: "0 5px" }}>
+        <button className="whiteBoardPage-button" onClick={() => setColor("blue")} style={{ margin: "0 5px" }}>
           <FontAwesomeIcon icon={faBrush} color="blue" />
         </button>
-        <button onClick={() => setColor("red")} style={{ margin: "0 5px" }}>
+        <button className="whiteBoardPage-button" onClick={() => setColor("red")} style={{ margin: "0 5px" }}>
           <FontAwesomeIcon icon={faBrush} color="red" />
         </button>
-        <button onClick={() => setColor("green")} style={{ margin: "0 5px" }}>
+        <button className="whiteBoardPage-button" onClick={() => setColor("green")} style={{ margin: "0 5px" }}>
           <FontAwesomeIcon icon={faBrush} color="green" />
         </button>
-        <button onClick={() => setColor("black")} style={{ margin: "0 5px" }}>
+        <button className="whiteBoardPage-button" onClick={() => setColor("black")} style={{ margin: "0 5px" }}>
           <FontAwesomeIcon icon={faBrush} color="black" />
         </button>
-        <button onClick={() => setColor("yellow")} style={{ margin: "0 5px" }}>
+        <button className="whiteBoardPage-button" onClick={() => setColor("yellow")} style={{ margin: "0 5px" }}>
           <FontAwesomeIcon icon={faBrush} color="yellow" />
         </button>
-        <button onClick={useEraser} style={{ margin: "0 5px" }}>
+        <button className="whiteBoardPage-button" onClick={useEraser} style={{ margin: "0 5px" }}>
           <FontAwesomeIcon icon={faEraser} />
         </button>
         <input
@@ -80,12 +80,13 @@ const Whiteboard = () => {
           onChange={(e) => setSize(e.target.value)}
           style={{ margin: "0 10px" }}
         />
-        <button onClick={clearCanvas} style={{ margin: "0 5px" }}>
+        <button className="whiteBoardPage-button" onClick={clearCanvas} style={{ margin: "0 5px" }}>
           Clear
         </button>
       </div>
       <canvas
         ref={canvasRef}
+        className="whiteBoardPage-canvas"
         width={470} // Set width to 500px
         height={401} // Set height to 500px
         onMouseDown={startDrawing}

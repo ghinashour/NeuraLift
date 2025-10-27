@@ -7,6 +7,7 @@ const userSchema = new mongoose.Schema({
     required: false
   },
   username: { type: String, required: true, trim: true },
+   name: {type: String,trim: true},
   email: { type: String, required: true, unique: true, lowercase: true },
   password: { type: String, required: function () { return !this.googleId; } },
   profilePhoto: { type: String, default: "avatar.jpg" },

@@ -31,7 +31,7 @@ const AssemblyGame1 = () => {
     } catch (error) {
       console.error('Error starting game:', error);
       setMessage('Error starting game. Using demo mode.');
-      
+
       // Fallback demo game
       createDemoGame();
     } finally {
@@ -48,10 +48,10 @@ const AssemblyGame1 = () => {
       'Write once run anywhere language',
       'Popular frontend library'
     ];
-    
+
     const randomIndex = Math.floor(Math.random() * demoWords.length);
     const word = demoWords[randomIndex];
-    
+
     setGame({
       gameId: 'demo-game',
       word: word,
@@ -76,7 +76,7 @@ const AssemblyGame1 = () => {
 
     try {
       setLoading(true);
-      
+
       // If demo game, handle locally
       if (game.gameId === 'demo-game') {
         handleDemoGuess(guess.toUpperCase());
@@ -115,7 +115,7 @@ const AssemblyGame1 = () => {
   const handleDemoGuess = (letter) => {
     const upperLetter = letter.toUpperCase();
     const newGame = { ...game };
-    
+
     // Check if already guessed
     if (newGame.guessedLetters.includes(upperLetter)) {
       setMessage('Letter already guessed!');
@@ -129,15 +129,15 @@ const AssemblyGame1 = () => {
       // Update displayed word
       const wordArray = newGame.word.split('');
       const newWordState = [...newGame.currentWordState];
-      
+
       wordArray.forEach((char, index) => {
         if (char === upperLetter) {
           newWordState[index] = upperLetter;
         }
       });
-      
+
       newGame.currentWordState = newWordState;
-      
+
       // Check if won
       if (!newWordState.includes('_')) {
         newGame.status = 'won';
@@ -146,7 +146,7 @@ const AssemblyGame1 = () => {
     } else {
       // Incorrect guess
       newGame.incorrectGuesses += 1;
-      
+
       // Check if lost
       if (newGame.incorrectGuesses >= newGame.maxIncorrectGuesses) {
         newGame.status = 'lost';
@@ -178,24 +178,24 @@ const AssemblyGame1 = () => {
   return (
     <div className="assembly-game-container">
       <div className="game-content">
-        <div className="hint-section">
+        <div className="assembly-game-hint-section">
           <h3>💡 Hint:</h3>
           <p>{game.hint}</p>
         </div>
-        
-        <div className="word-display">
+
+        <div className="assembly-game-word-display">
           {game.currentWordState.map((letter, index) => (
-            <span key={index} className="letter">
+            <span key={index} className="assembly-game-letter">
               {letter}
             </span>
           ))}
         </div>
 
-        <div className="programming-languages">
+        <div className="assembly-game-programming-languages">
           <h3>🛠️ Programming Languages Remaining:</h3>
-          <div className="languages-list">
+          <div className="assembly-game-languages-list">
             {getVisibleLanguages().map((lang, index) => (
-              <span key={index} className="language-tag">
+              <span key={index} className="assembly-game-language-tag">
                 {lang}
               </span>
             ))}
@@ -208,19 +208,19 @@ const AssemblyGame1 = () => {
           </p>
         </div>
 
-        <div className="game-stats">
+        <div className="assembly-game-game-stats">
           <p>❌ Incorrect Guesses: {game.incorrectGuesses}/{game.maxIncorrectGuesses}</p>
           <p>🔤 Guessed Letters: {game.guessedLetters.join(', ') || 'None'}</p>
         </div>
 
         {message && (
-          <div className={`message ${game.status === 'won' ? 'won' : game.status === 'lost' ? 'lost' : ''}`}>
+          <div className={`assembly-game-message ${game.status === 'won' ? 'won' : game.status === 'lost' ? 'lost' : ''}`}>
             {message}
           </div>
         )}
 
         {game.status === 'playing' ? (
-          <form onSubmit={handleGuess} className="guess-form">
+          <form onSubmit={handleGuess} className="assembly-game-guess-form">
             <input
               type="text"
               maxLength="1"
@@ -236,7 +236,7 @@ const AssemblyGame1 = () => {
           </form>
         ) : (
           <div className="game-end">
-            <button onClick={startNewGame} className="new-game-btn">
+            <button onClick={startNewGame} className="assembly-game-new-game-btn">
               🔄 Play Again
             </button>
           </div>

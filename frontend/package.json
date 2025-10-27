@@ -21,7 +21,11 @@
     "react-modal": "^3.16.3",
     "react-router-dom": "^7.8.2",
     "react-scroll": "^1.9.3",
+<<<<<<< HEAD
     "recharts": "^3.3.0",
+=======
+    "recharts": "^3.2.1",
+>>>>>>> c880b4874e0534f8f73e026244edef113ff909ca
     "set-cookie-parser": "^2.7.1",
     "sweetalert2": "^11.26.1",
     "web-vitals": "^2.1.4"

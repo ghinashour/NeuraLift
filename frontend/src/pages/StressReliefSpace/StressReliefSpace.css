@@ -1,25 +1,25 @@
-#stresscontainers {
+.stressPage-stresscontainers {
   width: auto;
   height: 670px;
   background-color: #f4f7fb;
   margin-right: 47px;
 }
 
-#cont2boxes {
+.stressPage-cont2boxes {
   display: flex;
   justify-content: center;
   gap: 70px;
   margin-top: 30px;
 }
 
-#boardcont {
+.stressPage-boardcont {
   margin-left: 20px;
   background-color: white;
   width: 500px;
   height: 550px;
 }
 
-#thoughtscont {
+.stressPage-thoughtscont {
   background-color: white;
   width: 500px;
   height: 550px;
@@ -29,12 +29,12 @@
   align-items: center;
 }
 
-#stressinput {
+.stressPage-stressinput {
   width: 440px;
   height: 150px;
 }
 
-#stress-btn {
+.stressPage-stress-btn {
   background-color: #3c83f6;
   color: white;
   width: 440px;
@@ -46,46 +46,46 @@
 
 /* Responsive design */
 @media (max-width: 1200px) {
-  #cont2boxes {
+  .stressPage-cont2boxes {
     flex-direction: column;
     align-items: center;
     gap: 40px;
   }
 
-  #thoughtscont {
+  .stressPage-thoughtscont {
     width: 100%;
     max-width: 700px;
     margin-right: 0;
   }
 
-  #stressinput {
+  .stressPage-stressinput {
     width: 100%;
     max-width: 640px;
   }
 
-  #stress-btn {
+  .stressPage-stress-btn {
     width: 100%;
     max-width: 640px;
   }
 }
 
 @media (max-width: 768px) {
-  #cont2boxes {
+  .stressPage-cont2boxes {
     gap: 30px;
     margin-top: 20px;
   }
 
-  #thoughtscont {
+  .stressPage-thoughtscont {
     width: 100%;
     padding: 0 20px;
   }
 
-  #stressinput {
+  .stressPage-stressinput {
     width: 100%;
     height: 120px;
   }
 
-  #stress-btn {
+  .stressPage-stress-btn {
     width: 100%;
   }
 }

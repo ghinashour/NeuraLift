@@ -69,7 +69,7 @@ const StressRelief = () => {
   };
 
   return (
-    <div id="stresscontainers">
+    <div className="stressPage-stresscontainers">
       <div style={{ display: "flex", justifyContent: "center" }}>
         <h1 style={{ color: "black" }}>Stress Relief Space</h1>
       </div>
@@ -77,13 +77,13 @@ const StressRelief = () => {
         Express yourself through art and release negative thoughts
       </p>
 
-      <div id="cont2boxes">
-        <div id="boardcont">
+      <div className="stressPage-cont2boxes">
+        <div className="stressPage-boardcont">
           <h1 style={{ color: "black", textAlign: "center" }}>Creative Canvas</h1>
           <Whiteboard />
         </div>
 
-        <div id="thoughtscont">
+        <div className="stressPage-thoughtscont">
           <h1 style={{ color: "black", textAlign: "center" }}>
             Release Your Thoughts
           </h1>
@@ -101,12 +101,12 @@ const StressRelief = () => {
 
           <input
             type="text"
-            id="stressinput"
+            className="stressPage-stressinput"
             value={input}
             onChange={(e) => setInput(e.target.value)}
             placeholder="What's on your mind? Write it all out..."
           />
-          <button id="stress-btn" onClick={addTask}>
+          <button className="stressPage-stress-btn" onClick={addTask}>
             Capture This Thought
           </button>
 
@@ -196,11 +196,11 @@ const StressRelief = () => {
           </div>
         </div>
       </div>
-      <div style={{ 
-        position: 'fixed', 
-        bottom: '20px', 
+      <div style={{
+        position: 'fixed',
+        bottom: '20px',
         right: '20px',
-        zIndex: 1000 
+        zIndex: 1000
       }}>
         <AILogo />
       </div>
