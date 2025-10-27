@@ -3,11 +3,13 @@
 .pomodoro-timer {
   font-family: 'Inter', sans-serif;
   display: flex;
-  width: 1200px;
+  width: 1650px;
   height: 800px;
   flex-direction: column;
+  gap: 3rem;
+  margin-left: 175px;
   align-items: center;
-  padding: 2rem;
+  padding: 1rem;
   color: #1f2937;
 }
 

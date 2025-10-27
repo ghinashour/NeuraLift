@@ -1,29 +1,16 @@
-/* src/pages/SchedulePage.css */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
 /* ---------- Base styles ---------- */
-
 body {
   background: #f5f7fa;
-<<<<<<< HEAD
   color: #111827;
   min-height: 100vh;
-  min-width: 200vh;
   font-family: 'Inter', sans-serif;
 }
 
-/* ---------- Container ---------- */
-.schedule_container,
-.schedule-page-container {
-  
-  flex-direction: column;
-=======
-  /* Main background color */
-  color: #111827;
-  min-height: 100vh;
-}
-
-.schPage-schedule_container {
+/* ---------- Page Container ---------- */
+.schPage-schedule-container,
+.schPage-schedule-page-container {
   display: flex;
   flex-direction: column;
   width: 100%;
@@ -32,24 +19,8 @@ body {
   gap: 20px;
 }
 
-/* ---------- Page layout ---------- */
-.schPage-schedule-page-container {
-  display: flex;
-  flex-direction: column;
-  /* Changed to column to match the new image layout */
->>>>>>> c880b4874e0534f8f73e026244edef113ff909ca
-  width: 100%;
-  min-height: 100vh;
-  padding: 200px;
-}
-
 /* ---------- Schedule View ---------- */
-.schedule-view {
-<<<<<<< HEAD
-  padding: 28px;
-  align-items: center;
-  min-height: 80vh; /* fill page even with few or no cards */
-=======
+.schPage-schedule-view {
   width: 100%;
   flex: 1;
   background: #ffffff;
@@ -58,18 +29,6 @@ body {
   padding: 28px;
   display: flex;
   flex-direction: column;
-}
-
-/* Calendar view is now a separate component, so its styles are adjusted */
-.calendar-view {
-  width: 100%;
-  flex: 1;
-  margin-top: 8px;
-  /* Spacing from the schedule view */
-  background: transparent;
-  display: flex;
-  flex-direction: column;
->>>>>>> c880b4874e0534f8f73e026244edef113ff909ca
 }
 
 /* ---------- Header ---------- */
@@ -84,24 +43,14 @@ body {
   color: #0f1724;
 }
 
-<<<<<<< HEAD
-.schedule-header p {
-  width: 100%;
-=======
 .schPage-schedule-header p {
->>>>>>> c880b4874e0534f8f73e026244edef113ff909ca
   font-size: 14px;
   color: #6b7280;
   margin-top: 6px;
 }
 
-<<<<<<< HEAD
 /* ---------- Action Buttons ---------- */
-.schedule-actions {
-=======
-/* ---------- Action buttons ---------- */
 .schPage-schedule-actions {
->>>>>>> c880b4874e0534f8f73e026244edef113ff909ca
   display: flex;
   justify-content: center;
   align-items: center;
@@ -109,13 +58,8 @@ body {
   margin-bottom: 24px;
 }
 
-<<<<<<< HEAD
-.add-btn,
-.add-to-calendar-btn {
-=======
 .schPage-add-btn,
 .schPage-add-to-calendar-btn {
->>>>>>> c880b4874e0534f8f73e026244edef113ff909ca
   padding: 10px 22px;
   border-radius: 10px;
   font-size: 14px;
@@ -131,27 +75,22 @@ body {
   color: white;
 }
 
-<<<<<<< HEAD
-.add-btn:hover {
+.schPage-add-btn:hover {
   background: #2563eb;
 }
 
-.add-to-calendar-btn {
-=======
 .schPage-add-to-calendar-btn {
->>>>>>> c880b4874e0534f8f73e026244edef113ff909ca
   background: white;
   color: #374151;
   border: 1px solid #e6e9ee;
 }
 
-<<<<<<< HEAD
-.add-to-calendar-btn:hover {
+.schPage-add-to-calendar-btn:hover {
   background: #f8fafc;
 }
 
 /* ---------- Event List ---------- */
-.schedule-event-list {
+.schPage-event-list {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -161,7 +100,7 @@ body {
 }
 
 /* ---------- Event Card ---------- */
-.schedule-event-card {
+.schPage-event-card {
   position: relative;
   width: 100%;
   background: linear-gradient(135deg, #3C8AFC 0%, #6488f4 100%);
@@ -174,24 +113,73 @@ body {
   flex-direction: column;
   justify-content: space-between;
   transition: transform 0.25s ease, box-shadow 0.25s ease;
-  min-height: 220px;  /* ensures visual weight even with short text */
-  min-width: 720px;   /* avoids tiny width shrink */
+  min-height: 220px;
   flex: 0 0 auto;
 }
 
-.schedule-event-card:hover {
+.schPage-event-card:hover {
   transform: translateY(-5px);
   box-shadow: 0 16px 40px rgba(59, 130, 246, 0.30);
 }
 
-/* ---------- Title ---------- */
-.schedule-event-title {
+/* ---------- Event Title ---------- */
+.schPage-event-title {
   font-size: 1.1rem;
   font-weight: 700;
   line-height: 1.1;
   white-space: nowrap;
-=======
-/* ---------- Calendar container ---------- */
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ---------- Event Description ---------- */
+.schPage-event-description {
+  font-size: 0.95rem;
+  line-height: 1.5;
+  opacity: 0.95;
+  color: #f1f5f9;
+  text-align: left;
+  min-height: 48px;
+  max-height: 420px;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  word-wrap: break-word;
+}
+
+/* ---------- Event Time ---------- */
+.schPage-event-time {
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: #e5e7eb;
+  text-align: right;
+  margin-top: 8px;
+}
+
+/* ---------- Event Actions (Edit/Delete) ---------- */
+.schPage-event-actions {
+  position: absolute;
+  bottom: 12px;
+  right: 14px;
+  display: flex;
+  gap: 10px;
+}
+
+.schPage-event-actions button {
+  background: rgba(255, 255, 255, 0.15);
+  border: none;
+  color: white;
+  font-size: 14px;
+  padding: 5px 7px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.schPage-event-actions button:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+/* ---------- Calendar View ---------- */
 .schPage-calendar-view-container {
   display: flex;
   width: 100%;
@@ -200,10 +188,8 @@ body {
   gap: 20px;
 }
 
-/* Right Panel: Calendar View */
 .schPage-calendar-panel {
   flex: 1;
-  /* Takes up all available space */
   background: #ffffff;
   border-radius: 12px;
   box-shadow: 0 8px 30px rgba(16, 24, 40, 0.06);
@@ -212,14 +198,14 @@ body {
   flex-direction: column;
 }
 
-.schPage-calendar-panel .schPage-panel-title {
+.schPage-panel-title {
   font-size: 22px;
   font-weight: 700;
   color: #0f1724;
   margin-bottom: 20px;
 }
 
-/* Calendar controls (prev/next week) */
+/* Calendar Controls */
 .schPage-calendar-controls {
   display: flex;
   justify-content: space-between;
@@ -229,12 +215,12 @@ body {
   gap: 16px;
 }
 
-.schPage-calendar-controls .schPage-nav-buttons {
+.schPage-nav-buttons {
   display: flex;
   gap: 8px;
 }
 
-.schPage-calendar-controls .schPage-nav-buttons button {
+.schPage-nav-buttons button {
   background: #f0f4f9;
   color: #374151;
   border: none;
@@ -246,7 +232,7 @@ body {
   box-shadow: 0 4px 12px rgba(16, 24, 40, 0.04);
 }
 
-.schPage-calendar-controls .schPage-nav-buttons button.schPage-active {
+.schPage-nav-buttons button.schPage-active {
   background: #3b82f6;
   color: white;
 }
@@ -257,7 +243,7 @@ body {
   color: #0f1724;
 }
 
-/* Calendar header (days) */
+/* Calendar Header (Days) */
 .schPage-calendar-header {
   display: grid;
   grid-template-columns: 80px repeat(7, 1fr);
@@ -292,7 +278,7 @@ body {
   margin-top: 6px;
 }
 
-/* Calendar body */
+/* Calendar Body */
 .schPage-calendar-body {
   display: grid;
   grid-template-columns: 90px 5fr;
@@ -303,7 +289,7 @@ body {
   box-shadow: 0 6px 20px rgba(16, 24, 40, 0.04);
 }
 
-/* Time column */
+/* Time Column */
 .schPage-time-column {
   display: flex;
   flex-direction: column;
@@ -344,13 +330,11 @@ body {
   border-right: none;
 }
 
-/* Day content for background lines & events */
 .schPage-day-content {
   position: relative;
   height: calc(24 * 60px);
 }
 
-/* Horizontal hour lines */
 .schPage-day-content::before {
   content: '';
   position: absolute;
@@ -366,86 +350,23 @@ body {
   pointer-events: none;
 }
 
-/* Event cards */
-.schPage-event-card {
-  position: absolute;
-  left: 5px;
-  right: 5px;
-  padding: 8px;
-  border-radius: 6px;
-  color: #fff;
-  font-size: 12px;
->>>>>>> c880b4874e0534f8f73e026244edef113ff909ca
-  overflow: hidden;
-  text-overflow: ellipsis;
-  margin-bottom: 6px;
-}
-
-<<<<<<< HEAD
-/* ---------- Description ---------- */
-.schedule-event-description {
-  font-size: 0.95rem;
-  line-height: 1.5;
-  opacity: 0.95;
-  color: #f1f5f9;
-  text-align: left;
-  min-height: 48px;      /* prevents collapse for short text */
-  max-height: 420px;
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  word-wrap: break-word;
-}
-
-/* ---------- Time ---------- */
-.schedule-event-time {
-  font-size: 0.85rem;
-  font-weight: 500;
-  color: #e5e7eb;
-  text-align: right;
-  margin-top: 8px;
-}
-
-/* ---------- Buttons (Edit/Delete) ---------- */
-.schedule-event-actions {
-  position: absolute;
-  bottom: 12px;
-  right: 14px;
-  display: flex;
-  gap: 10px;
-}
-
-.schedule-event-actions button {
-  background: rgba(255, 255, 255, 0.15);
-  border: none;
-  color: white;
-  font-size: 14px;
-  padding: 5px 7px;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.schedule-event-actions button:hover {
-  background: rgba(255, 255, 255, 0.3);
-}
-
-/* ---------- Responsiveness ---------- */
-@media (max-width: 768px) {
-  .schedule-event-card {
-    min-width: 100%;
-    min-height: 110px;
-    padding: 16px;
-  }
-
-  .schedule-event-description {
-    min-height: 40px;
-  }
-}
-=======
+/* Event cards in calendar */
 .schPage-schedule-view .schPage-event-card {
   cursor: pointer;
   width: 100%;
   height: auto;
   transition: transform 0.15s ease, box-shadow 0.15s ease;
 }
->>>>>>> c880b4874e0534f8f73e026244edef113ff909ca
+
+/* ---------- Responsiveness ---------- */
+@media (max-width: 768px) {
+  .schPage-event-card {
+    min-width: 100%;
+    min-height: 110px;
+    padding: 16px;
+  }
+
+  .schPage-event-description {
+    min-height: 40px;
+  }
+}

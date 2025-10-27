@@ -9,9 +9,10 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  margin: 2rem auto;            /* centered horizontally */
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+  margin: 4rem auto;            /* centered horizontally */
+   
   transition: transform 0.2s ease, box-shadow 0.2s ease;
+  margin-left: 52px;
 }
 
 .quote-section:hover {

@@ -1,45 +1,78 @@
-// components/ChatbotPage/ChatbotPage.js
 import React, { useState } from "react";
-import { useChat } from "../../hooks/useChat";
 import Header from "../../components/Chatbot/Header/Header";
 import WelcomeScreen from "../../components/Chatbot/WelcomeScreen/WelcomeScreen";
 import ChatInterface from "../../components/Chatbot/ChatInterface/ChatInterface";
+import { sendMessageToBackend } from "../../utils/ChatService";
 import "./ChatbotPage.css";
 
 const ChatbotContent = () => {
-  const { messages, sendMessage, isTyping, clearChat, retryMessage, cancelPending } = useChat();
+  const [messages, setMessages] = useState([]);
+  const [isTyping, setIsTyping] = useState(false);
   const [showWelcome, setShowWelcome] = useState(true);
-  const [persona, setPersona] = useState('system_support');
-  const [streaming, setStreaming] = useState(true);
+  const [persona, setPersona] = useState("system_support");
   const [customPersonas, setCustomPersonas] = useState(() => {
     try {
-      const raw = localStorage.getItem('neuralift_personas');
+      const raw = localStorage.getItem("neuralift_personas");
       return raw ? JSON.parse(raw) : [];
     } catch (e) {
       return [];
     }
   });
-  const [newPersonaName, setNewPersonaName] = useState('');
-  const [newPersonaPrompt, setNewPersonaPrompt] = useState('');
-
-  const suggestedTopics = [
-    { id: 1, text: "How can I add a story?" },
-    { id: 2, text: "Tell me about NEURALIFT" },
-    { id: 3, text: "Get started" },
-  ];
 
   const handleSendMessage = async (text) => {
     if (showWelcome) setShowWelcome(false);
+
+    // Add user message
+    const userMessage = { id: Date.now(), sender: "user", text, timestamp: Date.now() };
+    setMessages(prev => [...prev, userMessage]);
+
+    // Determine system prompt
     const systemPrompts = {
-      system_support: `You are NeuraLift System Support. Provide concise, helpful answers and reference the repo when useful.`,
-      developer: `You are a NeuraLift Developer Assistant. Provide technical explanations, code snippets, and debugging steps. Cite file paths when helpful.`,
-      tutor: `You are a helpful tutor. Provide step-by-step explanations and educational guidance; avoid doing graded homework for students unless permitted.`
+      system_support: `You are NeuraLift System Support. Provide concise, helpful answers.`,
+      developer: `You are a NeuraLift Developer Assistant. Provide technical explanations, code snippets.`,
+      tutor: `You are a helpful tutor. Provide step-by-step guidance.`
     };
-    // Merge custom personas
     const personaMap = { ...systemPrompts };
-    customPersonas.forEach(p => { if (p && p.id) personaMap[p.id] = p.prompt; });
+    customPersonas.forEach(p => { if (p?.id) personaMap[p.id] = p.prompt; });
     const systemPrompt = personaMap[persona];
-    await sendMessage(text, { systemPrompt, stream: streaming });
+
+    // Add placeholder AI message
+    const aiMessageId = Date.now() + 1;
+    const aiMessage = { id: aiMessageId, sender: "ai", text: "", status: "pending", timestamp: Date.now() };
+    setMessages(prev => [...prev, aiMessage]);
+    setIsTyping(true);
+
+    try {
+      // Send to backend
+      const response = await sendMessageToBackend([
+        { role: "system", content: systemPrompt },
+        ...messages.map(m => ({ role: m.sender === "user" ? "user" : "assistant", content: m.text })),
+        { role: "user", content: text }
+      ]);
+
+      // Update AI message
+      setMessages(prev => prev.map(m => m.id === aiMessageId ? { ...m, text: response.content, status: "done" } : m));
+    } catch (err) {
+      setMessages(prev => prev.map(m => m.id === aiMessageId ? { ...m, status: "failed" } : m));
+      console.error("Error sending message:", err);
+    } finally {
+      setIsTyping(false);
+    }
+  };
+
+  const handleRetryMessage = (messageId) => {
+    const msg = messages.find(m => m.id === messageId);
+    if (msg) handleSendMessage(msg.text);
+  };
+
+  const handleCancelPending = () => {
+    setIsTyping(false);
+    setMessages(prev => prev.filter(m => !(m.sender === "ai" && m.status === "pending")));
+  };
+
+  const handleClearChat = () => {
+    setMessages([]);
+    setShowWelcome(true);
   };
 
   const handleStartChat = (initialMessage) => {
@@ -47,94 +80,40 @@ const ChatbotContent = () => {
     handleSendMessage(initialMessage);
   };
 
-  const handleRestart = () => {
-    clearChat();
-    setShowWelcome(true);
-  };
-
   return (
     <div className="cbPage-chatbot-page">
       {!showWelcome && (
         <Header
           title="NEURALIFT Assistant"
-          status="Online"
-          onMinimize={handleRestart}
+          status={isTyping ? "Typing..." : "Online"}
+          onMinimize={handleClearChat}
         />
       )}
       <div className="cbPage-chatbot-content">
-        {!showWelcome && (
-          <div style={{ display: 'flex', gap: 12, alignItems: 'center', marginBottom: 8 }}>
-            <label style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
-              Persona:
-              <select value={persona} onChange={e => setPersona(e.target.value)}>
-                <option value="system_support">System Support</option>
-                <option value="developer">Developer Assistant</option>
-                <option value="tutor">Tutor</option>
-              </select>
-            </label>
-            <label style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
-              Streaming:
-              <input type="checkbox" checked={streaming} onChange={e => setStreaming(e.target.checked)} />
-            </label>
-          </div>
-        )}
         {showWelcome ? (
           <WelcomeScreen
             onStartChat={handleStartChat}
-            suggestedTopics={suggestedTopics}
+            suggestedTopics={[
+              { id: 1, text: "How can I add a story?" },
+              { id: 2, text: "Tell me about NEURALIFT" },
+              { id: 3, text: "Get started" },
+            ]}
           />
         ) : (
-          <div>
-            <div style={{ marginBottom: 12, display: 'flex', gap: 12 }}>
-              <div>
-                <strong>Custom Personas</strong>
-                <div style={{ display: 'flex', gap: 8, marginTop: 8 }}>
-                  <input placeholder="Name" value={newPersonaName} onChange={e => setNewPersonaName(e.target.value)} />
-                  <input placeholder="Prompt" value={newPersonaPrompt} onChange={e => setNewPersonaPrompt(e.target.value)} />
-                  <button onClick={() => {
-                    if (!newPersonaName || !newPersonaPrompt) return;
-                    const id = `custom_${Date.now()}`;
-                    const p = { id, name: newPersonaName, prompt: newPersonaPrompt };
-                    const next = [...customPersonas, p];
-                    setCustomPersonas(next);
-                    try { localStorage.setItem('neuralift_personas', JSON.stringify(next)); } catch (e) { }
-                    setNewPersonaName(''); setNewPersonaPrompt('');
-                  }}>Add</button>
-                </div>
-                <div style={{ marginTop: 8 }}>
-                  {customPersonas.map(p => (
-                    <div key={p.id} style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
-                      <input type="radio" name="persona" value={p.id} checked={persona === p.id} onChange={() => setPersona(p.id)} />
-                      <span>{p.name}</span>
-                      <button onClick={() => {
-                        const next = customPersonas.filter(x => x.id !== p.id);
-                        setCustomPersonas(next);
-                        try { localStorage.setItem('neuralift_personas', JSON.stringify(next)); } catch (e) { }
-                        if (persona === p.id) setPersona('system_support');
-                      }}>Delete</button>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-
-            <ChatInterface
-              messages={messages}
-              onSendMessage={handleSendMessage}
-              isTyping={isTyping}
-              onClearChat={handleRestart}
-              onRetryMessage={retryMessage}
-              onCancelPending={cancelPending}
-            />
-          </div>
+          <ChatInterface
+            messages={messages}
+            onSendMessage={handleSendMessage}
+            isTyping={isTyping}
+            onClearChat={handleClearChat}
+            onRetryMessage={handleRetryMessage}
+            onCancelPending={handleCancelPending}
+          />
         )}
       </div>
     </div>
   );
 };
 
-const ChatbotPage = () => {
-  return <ChatbotContent />;
-};
+const ChatbotPage = () => <ChatbotContent />;
 
 export default ChatbotPage;

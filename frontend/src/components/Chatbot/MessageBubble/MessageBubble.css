@@ -22,9 +22,11 @@
 
 .message-bubble-container.ai-message {
   justify-content: flex-start;
+  margin-left: 400px;
 }
 
 .message-bubble {
+  margin: 12px 0;
   max-width: 75%;
   padding: 1rem 1.25rem;
   border-radius: 20px;
