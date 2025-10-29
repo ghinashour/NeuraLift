@@ -98,8 +98,7 @@ const getFeaturedStories = async (req, res) => {
 const getStoryById = async (req, res) => {
     try {
         const story = await SuccessStory.findById(req.params.id)
-            .populate('userId', 'username profilePhoto')
-            .populate('likes', 'username');
+            .populate('userId', 'username profilePhoto');
 
         if (!story) {
             return res.status(404).json({

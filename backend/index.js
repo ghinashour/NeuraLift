@@ -23,6 +23,7 @@ const noteRoute = require("./routes/noteUserRoute.js");
 const adminTaskRouter = require("./routes/admin/taskRoutes.js");
 const Notifications = require("./routes/Notification.js");
 const chatRoutes = require("./routes/chatRoutes.js");
+const contactRoutes = require("./routes/contactRoute.js"); // Import new contact route
 const User = require("./models/User.js"); // <-- used for streak logic
 const app = express();
 
@@ -60,7 +61,7 @@ app.post("/api/user/:id/update-streak", async (req, res) => {
       } else if (diffInDays > 1) {
         // Missed at least one day → reset streak
         user.streak = 1;
-      } 
+      }
       // If diffInDays === 0 → same day login, no change
     } else {
       // First login
@@ -97,6 +98,7 @@ app.use("/api/moods", moodRoutes);
 app.use("/api/notes", noteRoute);
 app.use("/api/notifications", Notifications);
 app.use("/api/chat", chatRoutes);
+app.use("/api/contact", contactRoutes); // Use new contact route
 app.use("/api/tasks", tasksRouter);
 app.use("/api/admin/tasks", adminTaskRouter);
 app.use("/api/admin", adminRoutes);

@@ -21,10 +21,10 @@ router.get('/stats', getStats); // Get statistics
 router.post('/:id/share', trackShare); // Track share (public route)
 
 // Protected routes (require authentication)
-router.post('/', createStory); // Create new story (public for now)
+router.post('/', auth, createStory); // Create new story (public for now)
 router.put('/:id', auth, updateStory); // Update story
 router.delete('/:id', auth, deleteStory); // Delete story
-router.post('/:id/like', toggleLike); // Like/Unlike story (public)
+router.post('/:id/like', auth, toggleLike); // Like/Unlike story (public)
 router.get('/user/my-stories', auth, getUserStories); // Get user's own stories
 
 router.get('/:id', getStoryById); // Get single story by ID

@@ -72,7 +72,8 @@ body {
 
 .collaborate-posts {
   flex: 1;
-  min-width: 0; /* Prevents flex item from overflowing */
+  min-width: 0;
+  /* Prevents flex item from overflowing */
   background: #fff;
   border-radius: 0.75rem;
   box-shadow: 0 0.625rem 1.875rem rgba(16, 24, 40, 0.08);
@@ -375,8 +376,13 @@ body {
 }
 
 @keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 .error-banner {
@@ -434,7 +440,7 @@ body {
     background: white;
     padding: 0;
   }
-  
+
   .post-card,
   .reply-card {
     break-inside: avoid;
@@ -450,7 +456,7 @@ body {
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
   }
-  
+
   .loading-spinner {
     animation: none;
     border: 3px solid #f3f3f3;
@@ -464,7 +470,7 @@ body {
     background: #000;
     border: 2px solid #fff;
   }
-  
+
   .reply-card {
     border: 2px solid #000;
   }
@@ -472,13 +478,14 @@ body {
 
 /* ===== Touch Device Optimizations ===== */
 @media (hover: none) and (pointer: coarse) {
+
   .icon-action,
   .btn-reply,
   .retry-btn {
     min-height: 44px;
     min-width: 44px;
   }
-  
+
   .view-replies {
     min-height: 44px;
     display: inline-flex;

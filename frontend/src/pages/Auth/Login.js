@@ -47,8 +47,8 @@ function Login() {
       const res = await axios.post("http://localhost:4000/api/auth/login", form);
 
       // ✅ Store JWT token and user info
-      if (res.data?.accessToken && res.data?.user) {
-        localStorage.setItem("token", res.data.accessToken);
+      if (res.data?.token && res.data?.user) {
+        localStorage.setItem("token", res.data.token);
         localStorage.setItem("user", JSON.stringify(res.data.user));
       }
 
