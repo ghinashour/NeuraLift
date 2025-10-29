@@ -56,7 +56,7 @@ function Profile() {
       });
 
       await fetchUserData();
-      showAlert("success", "Profile Photo Updated ✅", "Your new photo has been saved.");
+      window.location.reload();
       setPhoto(null);
     } catch (err) {
       showAlert("error", "Photo Update Failed", err.response?.data?.message || "Something went wrong.");

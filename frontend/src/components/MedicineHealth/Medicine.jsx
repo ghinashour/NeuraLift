@@ -14,13 +14,27 @@ const MedicineHealth = () => {
   const [repeatValue, setRepeatValue] = useState(1);
   const [repeatUnit, setRepeatUnit] = useState("hours");
 
-  const { addMedicine } = useMedicineContext();
   const { medicines } = useMedicineContext();
+  const { addMedicine, markMedicineTaken } = useMedicineContext();
 
-  const handleSubmit = () => {
-    if (!name.trim()) return;
+  const formatTime = (timeStr) => {
+  const date = new Date(timeStr);
+  return date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+};
 
-    addMedicine({
+const handleTakeMedicine = async (medicineId) => {
+  try {
+    await markMedicineTaken(medicineId);
+    // Optionally show a success message
+  } catch (error) {
+    alert("Failed to mark medicine as taken. Please try again.");
+  }
+};
+  const handleSubmit = async () => {
+  if (!name.trim()) return;
+
+  try {
+    await addMedicine({
       name,
       capsule,
       time,
@@ -32,7 +46,11 @@ const MedicineHealth = () => {
     setTime("");
     setRepeatValue(1);
     setRepeatUnit("hours");
-  };
+    closeForm();
+  } catch (error) {
+    alert("Failed to add medicine. Please try again.");
+  }
+};
 
   return (
     <div id="Medicinecontainer">
@@ -278,11 +296,16 @@ const MedicineHealth = () => {
                     <p>Capsule: {medicine.capsule || "N/A"}</p>
                   </div>
                   <div className="time-detail">
-                    <span className="time"> {medicine.time}</span>
+                    <span className="time">{formatTime(medicine.time)}</span>
                     <span className="repeat">Every {medicine.repeat}</span>
                   </div>
                 </div>
-                <button id="take">Take Now</button>
+                <button 
+  id="take" 
+  onClick={() => handleTakeMedicine(medicine.id)}
+>
+  Take Now
+</button>
               </div>
             </div>
           ))}
@@ -384,6 +407,7 @@ const MedicineHealth = () => {
           </div>
         )}
       </div>
+      
       
       {/* AI Logo positioned at bottom right */}
       <div style={{ 

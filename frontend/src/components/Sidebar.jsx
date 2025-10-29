@@ -1,8 +1,9 @@
-import React from 'react';
+import React,{useEffect}from 'react';
 import { useNavigate, Link, useLocation } from 'react-router-dom';
 import '../styles/Sidebar.css';
 import logo from '../assets/logo.svg';
 import avatarPlaceholder from "../assets/avatar.png";
+import useUserData from '../hooks/useUserData';
 const getNavIcon = (key, isActive) => {
   const strokeColor = isActive ? '#F1F5F9' : '#626A84';
 
@@ -109,9 +110,18 @@ const navItems = [
   { key: 'assistant', label: 'AI Assistant', path: '/ai-assistant' }
 ];
 
-const Sidebar = ({ isCollapsed, setIsCollapsed, user, loading = false }) => {
+const Sidebar = ({ isCollapsed, setIsCollapsed, loading = false }) => {
   const navigate = useNavigate();
   const location = useLocation();
+  const { user, fetchUserData } = useUserData();
+
+  useEffect(() => {
+  const handleUserUpdate = () => fetchUserData(); // refresh user data
+  window.addEventListener("userUpdated", handleUserUpdate);
+
+  return () => window.removeEventListener("userUpdated", handleUserUpdate);
+}, [fetchUserData]);
+
 
   const handleNavClick = (path) => {
     // Navigation for all items
@@ -119,11 +129,9 @@ const Sidebar = ({ isCollapsed, setIsCollapsed, user, loading = false }) => {
   };
 
   const isActive = (path) => {
-    if (path === '/') {
-      return location.pathname === '/';
-    }
-    return location.pathname.startsWith(path);
-  };
+  if (path === '/') return location.pathname === '/';
+  return location.pathname.toLowerCase().startsWith(path.toLowerCase());
+};
 
   return (
     <>
@@ -165,19 +173,13 @@ const Sidebar = ({ isCollapsed, setIsCollapsed, user, loading = false }) => {
                 </div>
               ) : (
                 <Link to="/profile" className="profile-link" title={isCollapsed ? (user?.username || user?.name || "User") : undefined}>
-                  <img
-                    src={
-                      user?.profilePhoto
-                        ? `http://localhost:4000/uploads/${user.profilePhoto}`
-                        : avatarPlaceholder
-                    }
-                    alt={user?.username || user?.name || "User"}
-                    className="sidebar-avatar"
-                    onError={(e) => {
-                      // fallback to placeholder if image fails to load
-                      e.target.src = avatarPlaceholder;
-                    }}
-                  />
+               <img
+                      src={user?.profilePhoto ? `http://localhost:4000/uploads/${user.profilePhoto}` : avatarPlaceholder}
+                      alt={user?.username || user?.name || "User"}
+                      className="sidebar-avatar"
+                      onError={(e) => { e.target.onerror = null; e.target.src = avatarPlaceholder; }}
+                />
+
                   {!isCollapsed && (
                     <span className="sidebar-username">{user?.username || user?.name || "User"}</span>
                   )}
