@@ -1,6 +1,7 @@
 // src/pages/Collaborate.js
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom"; // Add this import
 import "../styles/Collaborate.css";
 
 import Sidebar from "../components/Collaborate/SidebarCollab";
@@ -36,6 +37,7 @@ axiosInstance.interceptors.request.use(
 );
 
 export default function Collaborate() {
+  const navigate = useNavigate(); // Add this hook
   const [activePopup, setActivePopup] = useState(null);
   const [posts, setPosts] = useState([]);
   const [groups, setGroups] = useState([]);
@@ -71,6 +73,16 @@ export default function Collaborate() {
     } catch (err) {
       console.error("Error fetching groups:", err);
     }
+  };
+
+  // Add this function to handle group click
+  const handleGroupClick = (group) => {
+    navigate('/chatting-collab', { 
+      state: { 
+        groupId: group._id,
+        groupName: group.name 
+      } 
+    });
   };
 
   // Sample data fallback
@@ -319,6 +331,7 @@ const handleAssignTask = async (taskData) => {
           onOpenPopup={(name) => setActivePopup(name)} 
           groups={groups}
           onInviteGroup={handleInvite}
+          onGroupClick={handleGroupClick} // Add this prop
         />
       </div>
 

@@ -259,14 +259,17 @@ exports.getMe = async (req, res) => {
   try {
     res.json({
       id: req.user._id,
+      name: req.user.name,
       username: req.user.username,
       email: req.user.email,
       profilePhoto: req.user.profilePhoto,
       isVerified: req.user.isVerified,
       lastLogin: req.user.lastLogin,
+      authProvider: req.user.authProvider || "local", // 👈 ADD THIS LINE
     });
   } catch (err) {
     console.error("GetMe error:", err);
     res.status(500).json({ message: "Server error" });
   }
 };
+

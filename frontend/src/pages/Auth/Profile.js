@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import Swal from "sweetalert2";
 import useUserData from "../../hooks/useUserData";
 import avatarPlaceholder from "../../assets/avatar.png";
 import "../../styles/Profile.css";
@@ -8,33 +9,38 @@ function Profile() {
   const { user, loading, fetchUserData } = useUserData();
   const [photo, setPhoto] = useState(null);
   const [form, setForm] = useState({ name: "", email: "", username: "" });
-  const [passwords, setPasswords] = useState({ currentPassword: "", newPassword: "" });
-  const [message, setMessage] = useState("");
+  const [passwords, setPasswords] = useState({
+    currentPassword: "",
+    newPassword: "",
+  });
 
   const token = localStorage.getItem("token");
 
-  // Update form when user data changes
   useEffect(() => {
     if (user) {
-      setForm({ 
-        name: user.name || "", // Use name field
+      setForm({
+        name: user.name || "",
         email: user.email || "",
-        username: user.username || "" // Keep username if needed
+        username: user.username || "",
       });
     }
   }, [user]);
 
-  // Auto-update profile when photo is selected
   useEffect(() => {
-    if (photo) {
-      handlePhotoUpdate();
-    }
+    if (photo) handlePhotoUpdate();
   }, [photo]);
 
-  // Handle photo update separately
+  const showAlert = (icon, title, text) => {
+    Swal.fire({
+      icon,
+      title,
+      text,
+      confirmButtonColor: "#3085d6",
+    });
+  };
+
   const handlePhotoUpdate = async () => {
     if (!photo) return;
-
     const data = new FormData();
     data.append("name", form.name);
     data.append("email", form.email);
@@ -43,21 +49,20 @@ function Profile() {
 
     try {
       await axios.put("http://localhost:4000/api/profile", data, {
-        headers: { Authorization: `Bearer ${token}`, "Content-Type": "multipart/form-data" },
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "multipart/form-data",
+        },
       });
 
-      // Refresh user data from database
       await fetchUserData();
-      // Dispatch custom event to notify other components
-      window.dispatchEvent(new CustomEvent("userUpdated"));
-      setMessage("Profile photo updated ✅");
-      setPhoto(null); // Reset photo state
+      showAlert("success", "Profile Photo Updated ✅", "Your new photo has been saved.");
+      setPhoto(null);
     } catch (err) {
-      setMessage(err.response?.data?.message || "Photo update failed");
+      showAlert("error", "Photo Update Failed", err.response?.data?.message || "Something went wrong.");
     }
   };
 
-  // Update profile info
   const handleProfileUpdate = async (e) => {
     e.preventDefault();
     const data = new FormData();
@@ -66,72 +71,76 @@ function Profile() {
     data.append("username", form.username);
 
     try {
-      const res = await axios.put("http://localhost:4000/api/profile", data, {
-        headers: { Authorization: `Bearer ${token}`, "Content-Type": "multipart/form-data" },
+      await axios.put("http://localhost:4000/api/profile", data, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "multipart/form-data",
+        },
       });
 
-      // Refresh user data from database
       await fetchUserData();
-      // Dispatch custom event to notify other components
-      window.dispatchEvent(new CustomEvent("userUpdated"));
-      setMessage("Profile updated ✅");
+      showAlert("success", "Profile Updated ✅", "Your profile has been saved.");
     } catch (err) {
-      setMessage(err.response?.data?.message || "Update failed");
+      showAlert("error", "Update Failed", err.response?.data?.message || "Unable to update profile.");
     }
   };
 
-  // Change password
   const handlePasswordChange = async (e) => {
     e.preventDefault();
     try {
       await axios.put("http://localhost:4000/api/profile/password", passwords, {
         headers: { Authorization: `Bearer ${token}` },
       });
-      setMessage("Password updated ✅");
+
+      showAlert("success", "Password Updated ✅", "Your password has been changed.");
       setPasswords({ currentPassword: "", newPassword: "" });
     } catch (err) {
-      setMessage(err.response?.data?.message || "Password update failed");
+      showAlert("error", "Password Update Failed", err.response?.data?.message || "Please check your current password.");
     }
   };
 
-  // Logout
   const handleLogout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("user");
-    window.location.href = "/login";
+    Swal.fire({
+      title: "Are you sure you want to log out?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3085d6",
+      confirmButtonText: "Yes, log out",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        localStorage.removeItem("token");
+        localStorage.removeItem("user");
+        window.location.href = "/login";
+      }
+    });
   };
 
-  if (loading) {
+  if (loading)
     return (
       <div className="profile-wrapper">
         <div className="profile-card">
-          <div className="loading-message">
-            <p>Loading profile...</p>
-          </div>
+          <p>Loading profile...</p>
         </div>
       </div>
     );
-  }
 
-  if (!user) {
+  if (!user)
     return (
       <div className="profile-wrapper">
         <div className="profile-card">
-          <div className="error-message">
-            <p>Please log in to view your profile.</p>
-          </div>
+          <p>Please log in to view your profile.</p>
         </div>
       </div>
     );
-  }
 
   return (
     <div className="profile-wrapper">
       <div className="profile-card">
         <h2>Profile</h2>
 
-        {/* ✅ Interactive profile photo with hover overlay */}
-        <div style={{ display: 'flex', justifyContent: 'center' }}>
+        {/* ✅ Profile Photo */}
+        <div style={{ display: "flex", justifyContent: "center" }}>
           <div className="profile-photo-container">
             <img
               src={
@@ -146,8 +155,17 @@ function Profile() {
               }}
             />
             <div className="profile-photo-overlay">
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 384 384" className="edit-icon">
-                <path fill="#ffffff" d="M0 304L236 68l80 80L80 384H0v-80zM378 86l-39 39l-80-80l39-39q6-6 15-6t15 6l50 50q6 6 6 15t-6 15z" />
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 384 384"
+                className="edit-icon"
+              >
+                <path
+                  fill="#ffffff"
+                  d="M0 304L236 68l80 80L80 384H0v-80zM378 86l-39 39l-80-80l39-39q6-6 15-6t15 6l50 50q6 6 6 15t-6 15z"
+                />
               </svg>
             </div>
             <input
@@ -161,16 +179,14 @@ function Profile() {
           </div>
         </div>
 
-        {/* User info display */}
+        {/* ✅ User Info */}
         <div className="user-info-display">
           <h3>{user.name || "User"}</h3>
           <p>@{user.username}</p>
           <p>{user.email}</p>
         </div>
 
-        {message && <p className="message">{message}</p>}
-
-        {/* Update Profile Form */}
+        {/* ✅ Profile Form */}
         <form onSubmit={handleProfileUpdate} className="profile-form">
           <div className="form-group">
             <label>Full Name</label>
@@ -181,7 +197,7 @@ function Profile() {
               placeholder="Your full name"
             />
           </div>
-          
+
           <div className="form-group">
             <label>Username</label>
             <input
@@ -201,40 +217,47 @@ function Profile() {
               placeholder="Email address"
             />
           </div>
-          
+
           <button type="submit" className="update-btn">
             Update Profile
           </button>
         </form>
 
-        {/* Change Password Form */}
-        <form onSubmit={handlePasswordChange} className="password-form">
-          <h3>Change Password</h3>
-          <div className="form-group">
-            <label>Current Password</label>
-            <input
-              type="password"
-              placeholder="Enter current password"
-              value={passwords.currentPassword}
-              onChange={(e) => setPasswords({ ...passwords, currentPassword: e.target.value })}
-            />
-          </div>
-          
-          <div className="form-group">
-            <label>New Password</label>
-            <input
-              type="password"
-              placeholder="Enter new password"
-              value={passwords.newPassword}
-              onChange={(e) => setPasswords({ ...passwords, newPassword: e.target.value })}
-            />
-          </div>
-          
-          <button type="submit" className="password-btn">
-            Change Password
-          </button>
-        </form>
+        {/* ✅ Show Change Password only if NOT Google User */}
+        {user.authProvider !== "google" && (
+          <form onSubmit={handlePasswordChange} className="password-form">
+            <h3>Change Password</h3>
+            <div className="form-group">
+              <label>Current Password</label>
+              <input
+                type="password"
+                placeholder="Enter current password"
+                value={passwords.currentPassword}
+                onChange={(e) =>
+                  setPasswords({ ...passwords, currentPassword: e.target.value })
+                }
+              />
+            </div>
 
+            <div className="form-group">
+              <label>New Password</label>
+              <input
+                type="password"
+                placeholder="Enter new password"
+                value={passwords.newPassword}
+                onChange={(e) =>
+                  setPasswords({ ...passwords, newPassword: e.target.value })
+                }
+              />
+            </div>
+
+            <button type="submit" className="password-btn">
+              Change Password
+            </button>
+          </form>
+        )}
+
+        {/* ✅ Logout */}
         <button onClick={handleLogout} className="logout-btn">
           Logout
         </button>
