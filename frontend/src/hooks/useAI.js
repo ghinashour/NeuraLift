@@ -1,142 +1,59 @@
-// hooks/useAI.js
 import { useState, useCallback } from 'react';
+
+const responses = {
+  "hello": "Hello! How can I assist you today?",
+  "hi": "Hi there! What can I help you with?",
+  "hey": "Hey! How can I help you?",
+  "help": "I'm here to help! You can ask me about wellness tips, mental health support, or general information about NeuraLift.",
+  "what is neuralift": "NeuraLift is your wellness companion, designed to support your mental health and well-being journey.",
+  "neuralift": "NeuraLift is dedicated to helping you maintain mental wellness through personalized support and guidance.",
+  "how are you": "I'm doing great, thank you for asking! How can I help you today?",
+  "thank you": "You're welcome! Feel free to ask if you need anything else.",
+  "thanks": "You're welcome! Happy to help!",
+  "bye": "Goodbye! Take care and come back anytime you need support.",
+  "goodbye": "Take care! I'm here whenever you need me.",
+  "wellness": "Wellness is about maintaining balance in your physical, mental, and emotional health. Would you like some tips?",
+  "mental health": "Mental health is just as important as physical health. I'm here to support you. What would you like to know?",
+  "stress": "Managing stress is important. Try deep breathing, meditation, or taking short breaks throughout your day.",
+  "anxiety": "Anxiety is common. Remember to breathe deeply, stay present, and reach out for professional help if needed.",
+  "sleep": "Good sleep is crucial for wellness. Try to maintain a regular sleep schedule and create a relaxing bedtime routine.",
+  "exercise": "Regular exercise can boost your mood and energy levels. Even a 10-minute walk can make a difference!",
+  "meditation": "Meditation can help reduce stress and improve focus. Start with just 5 minutes a day and build from there.",
+};
 
 export const useAI = () => {
   const [isProcessing, setIsProcessing] = useState(false);
 
-  /**
-   * generateResponse
-   * - userMessage: string
-   * - options: { signal?: AbortSignal }
-   * Returns the reply string on success.
-   * Throws on network errors or when the request is aborted.
-   */
-
-
-
-
-
-
-
-  const generateResponse = useCallback(async (userMessage, options = {}) => {
-    // userMessage can be a string or an object; normalize to string
-    const messageText = typeof userMessage === 'string' ? userMessage : (userMessage && userMessage.text ? userMessage.text : '');
-    if (!messageText || !messageText.toString().trim()) {
-      return 'Please enter a message.';
+  const getResponse = useCallback((input) => {
+    const lowerInput = input.toLowerCase().trim();
+    
+    // Check for exact matches
+    if (responses[lowerInput]) {
+      return responses[lowerInput];
     }
-
-    setIsProcessing(true);
-
-    try {
-      const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:4000/api';
-      // Build request payload. Include conversation history and optional system prompt when provided.
-      const payload = {
-        message: messageText,
-      };
-
-      if (options.history) payload.history = options.history;
-      if (options.systemPrompt) payload.systemPrompt = options.systemPrompt;
-
-      const response = await fetch(`${API_URL}/chat/`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload),
-        signal: options.signal,
-      });
-
-      if (!response.ok) {
-        let bodyText = '';
-        try { bodyText = await response.text(); } catch (e) { }
-        throw new Error(`HTTP error: ${response.status} ${response.statusText} ${bodyText}`);
+    
+    // Check for partial matches
+    for (const [key, value] of Object.entries(responses)) {
+      if (lowerInput.includes(key)) {
+        return value;
       }
-
-      const data = await response.json();
-
-      if (data && data.success === false) {
-        throw new Error(data.error || 'Unknown error from AI service');
-      }
-
-      return data && data.reply ? data.reply : (typeof data === 'string' ? data : '');
-
-    } catch (error) {
-      if (error.name === 'AbortError') throw error;
-      console.error('Error calling backend:', error);
-      throw new Error(`I'm experiencing technical difficulties. ${error.message}`);
-    } finally {
-      setIsProcessing(false);
     }
+    
+    // Default response
+    return "I'm still in development 🚧 Our team is working hard to expand my capabilities!";
   }, []);
 
-  /**
-   * streamResponse
-   * - userMessage: string
-   * - options: { signal?: AbortSignal, history?: Array, systemPrompt?: string, onToken?: (token)=>void }
-   * Streams token chunks from the server and calls onToken for every chunk received.
-   * Resolves when stream ends.
-   */
-  const streamResponse = useCallback(async (userMessage, options = {}) => {
-    const messageText = typeof userMessage === 'string' ? userMessage : (userMessage && userMessage.text ? userMessage.text : '');
-    if (!messageText || !messageText.toString().trim()) return '';
-
+  const processMessage = useCallback(async (message) => {
     setIsProcessing(true);
-    const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:4000/api';
+    
+    // Simulate processing delay
+    await new Promise(resolve => setTimeout(resolve, 800));
+    
+    const response = getResponse(message);
+    setIsProcessing(false);
+    
+    return response;
+  }, [getResponse]);
 
-    const controller = options.signal || new AbortController();
-    const payload = { message: messageText };
-    if (options.history) payload.history = options.history;
-    if (options.systemPrompt) payload.systemPrompt = options.systemPrompt;
-
-    const resp = await fetch(`${API_URL}/chat/stream`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload),
-      signal: controller.signal,
-    });
-
-    if (!resp.ok) {
-      const bodyText = await resp.text().catch(() => '');
-      throw new Error(`HTTP error: ${resp.status} ${resp.statusText} ${bodyText}`);
-    }
-
-    // Read stream
-    const reader = resp.body.getReader();
-    const decoder = new TextDecoder('utf-8');
-    let done = false;
-    let accumulated = '';
-
-    try {
-      while (!done) {
-        const { value, done: streamDone } = await reader.read();
-        done = streamDone;
-        if (value) {
-          const chunk = decoder.decode(value, { stream: true });
-          accumulated += chunk;
-
-          // parts separated by double newline (SSE-style)
-          const parts = accumulated.split(/\n\n/);
-          for (let i = 0; i < parts.length - 1; i++) {
-            const part = parts[i].trim();
-            if (!part) continue;
-            // Expecting 'data: <token>' lines
-            if (part.startsWith('data:')) {
-              const token = part.replace(/^data:\s*/i, '');
-              if (token === '[DONE]') continue;
-              if (options.onToken) options.onToken(token);
-            } else if (part.startsWith('event:')) {
-              // ignore events
-            } else {
-              if (options.onToken) options.onToken(part);
-            }
-          }
-          accumulated = parts[parts.length - 1];
-        }
-      }
-    } finally {
-      setIsProcessing(false);
-    }
-
-    return accumulated;
-  }, []);
-
-  return { generateResponse, streamResponse, isProcessing };
+  return { processMessage, isProcessing };
 };
