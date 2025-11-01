@@ -33,9 +33,12 @@ export const MedicineProvider = ({ children }) => {
     fetchMedicines();
   }, []);
 
+    // ✅ Filter taken medicines for display
+  const activeMedicines = medicines.filter((m) => !m.taken);
+
   return (
     <MedicineContext.Provider
-      value={{ medicines, addMedicine, markMedicineTaken, deleteMedicine, fetchMedicines }}
+      value={{ medicines, addMedicine, markMedicineTaken, deleteMedicine, fetchMedicines, activeMedicines }}
     >
       {children}
     </MedicineContext.Provider>

@@ -2,55 +2,85 @@ import "./Medicine.css";
 import React, { useState } from "react";
 import { useMedicineContext } from "../../context/MedicineContext";
 import AILogo from '../AiLogo';
+import Swal from "sweetalert2";
 
 const MedicineHealth = () => {
   const [isFormOpen, setIsFormOpen] = useState(false);
   const openForm = () => setIsFormOpen(true);
   const closeForm = () => setIsFormOpen(false);
 
+    // ✅ Use activeMedicines for filtering untaken meds
+  const { activeMedicines, addMedicine, markMedicineTaken, fetchMedicines } = useMedicineContext();
   const [name, setName] = useState("");
   const [capsule, setCapsule] = useState("");
   const [time, setTime] = useState("");
   const [repeatValue, setRepeatValue] = useState(1);
   const [repeatUnit, setRepeatUnit] = useState("hours");
 
-  const { medicines } = useMedicineContext();
-  const { addMedicine, markMedicineTaken } = useMedicineContext();
-
   const formatTime = (timeStr) => {
   const date = new Date(timeStr);
+  if (isNaN(date)) return "Invalid Time";
   return date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
 };
 
-const handleTakeMedicine = async (medicineId) => {
-  try {
-    await markMedicineTaken(medicineId);
-    // Optionally show a success message
-  } catch (error) {
-    alert("Failed to mark medicine as taken. Please try again.");
-  }
-};
+ // ✅ Mark medicine as taken
+  const handleTakeMedicine = async (medicineId) => {
+    try {
+      await markMedicineTaken(medicineId);
+      await fetchMedicines();
+      Swal.fire({
+        title: "Success!",
+        text: "Medicine marked as taken.",
+        icon: "success",
+        timer: 2000,
+        showConfirmButton: false,
+      });
+    } catch (error) {
+      console.error("Error marking medicine as taken:", error);
+      Swal.fire({
+        title: "Error",
+        text: "Failed to mark medicine as taken. Please try again.",
+        icon: "error",
+      });
+    }
+  };
+
+   // ✅ Add a new medicine
   const handleSubmit = async () => {
-  if (!name.trim()) return;
+    if (!name.trim()) return;
 
-  try {
-    await addMedicine({
-      name,
-      capsule,
-      time,
-      repeat: `${repeatValue} ${repeatUnit}`,
-    });
+    try {
+      await addMedicine({
+        name,
+        capsule,
+        time,
+        repeat: `${repeatValue} ${repeatUnit}`,
+      });
+      await fetchMedicines();
 
-    setName("");
-    setCapsule("");
-    setTime("");
-    setRepeatValue(1);
-    setRepeatUnit("hours");
-    closeForm();
-  } catch (error) {
-    alert("Failed to add medicine. Please try again.");
-  }
-};
+      setName("");
+      setCapsule("");
+      setTime("");
+      setRepeatValue(1);
+      setRepeatUnit("hours");
+      closeForm();
+
+      Swal.fire({
+        title: "Added!",
+        text: "Medicine has been added successfully.",
+        icon: "success",
+        timer: 1500,
+        showConfirmButton: false,
+      });
+    } catch (error) {
+      Swal.fire({
+        title: "Error",
+        text: "Failed to add medicine. Please try again.",
+        icon: "error",
+      });
+    }
+  };
+
 
   return (
     <div id="Medicinecontainer">
@@ -284,31 +314,31 @@ const handleTakeMedicine = async (medicineId) => {
             + Add Medicine
           </button>
         </div>
+           {/* ✅ Show only untaken medicines */}
         <div className="mainmed-container">
-          {medicines.map((medicine) => (
-            <div key={medicine.id} className="medicine-card">
-              <div className="medicine-details">
-                <div
-                  style={{ display: "flex", justifyContent: "space-between" }}
-                >
-                  <div>
-                    <h3>{medicine.name}</h3>
-                    <p>Capsule: {medicine.capsule || "N/A"}</p>
+          {activeMedicines.length === 0 ? (
+            <p style={{ textAlign: "center", color: "#888" }}>🎉 All medicines taken! Great job!</p>
+          ) : (
+            activeMedicines.map((medicine) => (
+              <div key={medicine._id} className="medicine-card">
+                <div className="medicine-details">
+                  <div style={{ display: "flex", justifyContent: "space-between" }}>
+                    <div>
+                      <h3>{medicine.name}</h3>
+                      <p>Capsule: {medicine.capsule || "N/A"}</p>
+                    </div>
+                    <div className="time-detail">
+                      <span className="time">{formatTime(medicine.time)}</span>
+                      <span className="repeat">Every {medicine.repeat}</span>
+                    </div>
                   </div>
-                  <div className="time-detail">
-                    <span className="time">{formatTime(medicine.time)}</span>
-                    <span className="repeat">Every {medicine.repeat}</span>
-                  </div>
+                  <button id="take" onClick={() => handleTakeMedicine(medicine._id)}>
+                    Take Now
+                  </button>
                 </div>
-                <button 
-  id="take" 
-  onClick={() => handleTakeMedicine(medicine.id)}
->
-  Take Now
-</button>
               </div>
-            </div>
-          ))}
+            ))
+          )}
         </div>
         {/* Medicine Form Modal */}
         {isFormOpen && (

@@ -68,17 +68,17 @@ const updateMedicine = asyncHandler(async (req, res) => {
   res.status(200).json(updated);
 });
 
-// ✅ Mark as taken
+// ✅ Mark as taken (no deletion)
 const markMedicineTaken = asyncHandler(async (req, res) => {
   const medicine = await Medicine.findById(req.params.id);
   if (!medicine) {
     res.status(404);
-    throw new Error('Medicine not found');
+    throw new Error("Medicine not found");
   }
 
   if (medicine.user.toString() !== req.user.id) {
     res.status(401);
-    throw new Error('Not authorized');
+    throw new Error("Not authorized");
   }
 
   medicine.taken = true;
