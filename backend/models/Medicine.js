@@ -21,7 +21,7 @@ const medicineSchema = new mongoose.Schema({
   repeat: {
     type: String,
   },
-  taken: {
+  isTaken: {
     type: Boolean,
     default: false,
   },

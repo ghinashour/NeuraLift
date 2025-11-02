@@ -1,5 +1,5 @@
 import "./Medicine.css";
-import React, { useState } from "react";
+import React, { useEffect,useState } from "react";
 import { useMedicineContext } from "../../context/MedicineContext";
 import AILogo from '../AiLogo';
 import Swal from "sweetalert2";
@@ -10,24 +10,86 @@ const MedicineHealth = () => {
   const closeForm = () => setIsFormOpen(false);
 
     // ✅ Use activeMedicines for filtering untaken meds
-  const { activeMedicines, addMedicine, markMedicineTaken, fetchMedicines } = useMedicineContext();
+  const { 
+  medicines = [], 
+  activeMedicines, 
+  addMedicine, 
+  markMedicineTaken, 
+  fetchMedicines, 
+  fetchActiveMedicines ,
+  todayMedicines,
+  upcomingMedicines,
+  
+} = useMedicineContext();
+
   const [name, setName] = useState("");
   const [capsule, setCapsule] = useState("");
   const [time, setTime] = useState("");
   const [repeatValue, setRepeatValue] = useState(1);
   const [repeatUnit, setRepeatUnit] = useState("hours");
 
+    // 🔥 NEW: Analytics state
+  const [takenToday, setTakenToday] = useState(0);
+  const [upcoming, setUpcoming] = useState(0);
+  const [weekProgress, setWeekProgress] = useState(0);
+
+  
+  // 🔥 Compute analysis when medicines change
+ useEffect(() => {
+    if (!medicines.length) return;
+
+    const now = new Date();
+    const today = now.toISOString().split("T")[0];
+
+    // ✅ Medicines taken today
+    const takenTodayCount = medicines.filter((m) => {
+      if (!m.takenAt) return false;
+      return m.isTaken && m.takenAt.startsWith(today);
+    }).length;
+
+    // ✅ Upcoming medicines (for today or later, not taken)
+    const upcomingCount = medicines.filter((m) => {
+      const medTime = new Date(m.time);
+      return medTime > now && !m.isTaken;
+    }).length;
+
+    // ✅ Weekly progress (last 7 days)
+    const weekAgo = new Date();
+    weekAgo.setDate(weekAgo.getDate() - 7);
+
+    const weeklyMeds = medicines.filter((m) => new Date(m.time) >= weekAgo);
+    const takenThisWeek = weeklyMeds.filter((m) => m.isTaken).length;
+    const progress =
+      weeklyMeds.length > 0
+        ? Math.round((takenThisWeek / weeklyMeds.length) * 100)
+        : 0;
+
+    setTakenToday(takenTodayCount);
+    setUpcoming(upcomingCount);
+    setWeekProgress(progress);
+  }, [medicines]);
+
+  useEffect(() => {
+    fetchMedicines(); // Load medicines on page load
+      fetchActiveMedicines(); // ✅ fetch only active medicines
+
+  }, []);
+
+    // ✅ Format time safely
   const formatTime = (timeStr) => {
-  const date = new Date(timeStr);
-  if (isNaN(date)) return "Invalid Time";
-  return date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
-};
+    if (!timeStr) return "No Time";
+    const date = new Date(timeStr);
+    return isNaN(date)
+      ? "Invalid Time"
+      : date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+  };
+
 
  // ✅ Mark medicine as taken
   const handleTakeMedicine = async (medicineId) => {
     try {
       await markMedicineTaken(medicineId);
-      await fetchMedicines();
+      await Promise.all([fetchMedicines(), fetchActiveMedicines()]);
       Swal.fire({
         title: "Success!",
         text: "Medicine marked as taken.",
@@ -56,7 +118,8 @@ const MedicineHealth = () => {
         time,
         repeat: `${repeatValue} ${repeatUnit}`,
       });
-      await fetchMedicines();
+      await Promise.all([fetchMedicines(), fetchActiveMedicines()]);
+
 
       setName("");
       setCapsule("");
@@ -80,10 +143,13 @@ const MedicineHealth = () => {
       });
     }
   };
+  
+  
 
 
   return (
     <div id="Medicinecontainer">
+      {/* Header Section */}
       <div
         style={{
           display: "flex",
@@ -121,6 +187,7 @@ const MedicineHealth = () => {
         Don't skip checking your health , healthy body healthy life !
       </p>
 
+
       <div
         style={{
           display: "flex",
@@ -129,6 +196,7 @@ const MedicineHealth = () => {
           marginTop: "15px",
         }}
       >
+        {/*today upcoming weeks insight*/}
         <div className="medicinebox">
           <svg
             style={{ marginTop: "50px" }}
@@ -173,7 +241,11 @@ const MedicineHealth = () => {
             </defs>
           </svg>
           <p style={{ marginTop: "20px", color: "#626A84" }}>Today</p>
+          <p>{todayMedicines ? todayMedicines.length : 0}</p>
+
+
         </div>
+        {/*upcoming*/}
         <div className="medicinebox">
           <svg
             style={{ marginTop: "50px" }}
@@ -234,6 +306,8 @@ const MedicineHealth = () => {
           <p style={{ marginTop: "20px", color: "#626A84" }}>
             Upcoming Medicine
           </p>
+          <p>{upcomingMedicines ? upcomingMedicines.length : 0}</p>
+
         </div>
         <div className="medicinebox">
           <svg
@@ -279,6 +353,9 @@ const MedicineHealth = () => {
             </defs>
           </svg>
           <p style={{ marginTop: "20px", color: "#626A84" }}>Week's Insight</p>
+          <p>
+      {medicines.filter((m) => m.isTaken).length}
+    </p>
         </div>
       </div>
       <div id="upcomingMed">
@@ -320,24 +397,25 @@ const MedicineHealth = () => {
             <p style={{ textAlign: "center", color: "#888" }}>🎉 All medicines taken! Great job!</p>
           ) : (
             activeMedicines.map((medicine) => (
-              <div key={medicine._id} className="medicine-card">
-                <div className="medicine-details">
-                  <div style={{ display: "flex", justifyContent: "space-between" }}>
-                    <div>
-                      <h3>{medicine.name}</h3>
-                      <p>Capsule: {medicine.capsule || "N/A"}</p>
-                    </div>
-                    <div className="time-detail">
-                      <span className="time">{formatTime(medicine.time)}</span>
-                      <span className="repeat">Every {medicine.repeat}</span>
-                    </div>
-                  </div>
-                  <button id="take" onClick={() => handleTakeMedicine(medicine._id)}>
-                    Take Now
-                  </button>
-                </div>
-              </div>
-            ))
+  <div key={medicine._id} className="medicine-card">
+    <div className="medicine-details">
+      <div style={{ display: "flex", justifyContent: "space-between" }}>
+        <div>
+          <h3>{medicine.name}</h3>
+          <p>Capsule: {medicine.capsule || "N/A"}</p>
+        </div>
+        <div className="time-detail">
+          <span className="time">{formatTime(medicine.time)}</span>
+          <span className="repeat">Every {medicine.repeat}</span>
+        </div>
+      </div>
+      <button id="take" onClick={() => handleTakeMedicine(medicine._id)}>
+        Take Now
+      </button>
+    </div>
+  </div>
+))
+
           )}
         </div>
         {/* Medicine Form Modal */}

@@ -76,18 +76,25 @@ export const successStoriesAPI = {
         }
     },
 
-    // Like/Unlike a story
+    // Like / Unlike a story
     toggleLike: async (id, hasLikedBefore = false) => {
-        try {
-            const response = await axios.post(`${API_BASE_URL}/${id}/like`, {
-                hasLikedBefore
-            });
-            return response.data;
-        } catch (error) {
-            console.error('Error toggling like:', error);
-            throw error;
-        }
-    },
+  try {
+    const storedUser = localStorage.getItem("user");
+    const user = storedUser ? JSON.parse(storedUser) : null;
+    const userId = user?._id; // make sure your user object uses "_id"
+
+    const response = await axios.post(`${API_BASE_URL}/${id}/like`, {
+      userId,
+      hasLikedBefore,
+    });
+
+    return response.data;
+  } catch (error) {
+    console.error("Error toggling like:", error.response?.data || error);
+    throw error;
+  }
+},
+
 
     // Track share
     trackShare: async (id) => {

@@ -6,6 +6,8 @@ import "./App.css";
 import { TaskProvider } from "./context/TaskContext";
 import { MedicineProvider } from "./context/MedicineContext";
 import { AdminAuthProvider } from "./context/AdminAuthContext";
+import { AuthProvider } from "./context/AuthContext";
+import { ChatProvider } from "./context/ChatContext";
 
 // Layout Components
 import Layout from "./layouts/Layout";
@@ -36,6 +38,7 @@ import MyTaskPage from "./pages/MyTaskPage";
 import MyTaskDetails from "./pages/MyTaskDetails";
 import ChattingCollab from "./pages/ChattingCollab";
 import AssignedTasksPage from "./pages/AssignedTasksPage";
+
 // Auth pages
 import Login from "./pages/Auth/Login";
 import Signup from "./pages/Auth/Signup";
@@ -61,170 +64,173 @@ import UsersManagement from "./components/admin/UsersManagement";
 import AdminEvents from "./components/admin/AdminEvents";
 import AdminNotes from "./components/admin/AdminNotes";
 import AdminNoteAnalytics from "./components/admin/AdminNoteAnalytics";
-//private route functionality
 import AdminTasksPage from "./components/admin/AdminTasksPage";
 import AdminSuccessStories from "./components/admin/AdminSucessStories";
-import { ChatProvider } from "./context/ChatContext";
 
 function App() {
   return (
     <AdminAuthProvider>
-      <TaskProvider>
-        <MedicineProvider>
-          <ChatProvider>
-            <Router>
-              <Routes>
-                {/* Landing Page */}
-                <Route
-                  path="/"
-                  element={
-                    <>
-                      <Navbar />
-                      <Home />
-                      <Features />
-                      <AboutSection />
-                      <SuccessStories />
-                      <Contact />
-                      <Footer />
-                    </>
-                  }
-                />
-
-                {/* Auth Pages */}
-                <Route path="/login" element={<Login />} />
-                <Route path="/signup" element={<Signup />} />
-                <Route path="/verify/:verificationToken" element={<VerifyEmail />} />
-                <Route path="/admin/login" element={<AdminLogin />} />
-
-                {/* Main App Pages - Require Layout */}
-                <Route element={<Layout />}>
-                  {/* Core Features */}
+      <AuthProvider> {/* ✅ Wrap the whole app in AuthProvider */}
+        <TaskProvider>
+          <MedicineProvider>
+            <ChatProvider>
+              <Router>
+                <Routes>
+                  {/* Landing Page */}
                   <Route
-                    path="dashboard"
+                    path="/"
                     element={
-                      <PrivateRoute>
-                        <Dashboard />
-                      </PrivateRoute>
-                    }
-                  />
-                  <Route
-                    path="taskmanager"
-                    element={
-                      <PrivateRoute>
-                        <TaskManagerPage />
-                      </PrivateRoute>
-                    }
-                  />
-                  <Route
-                    path="stressrelief"
-                    element={
-                      <PrivateRoute>
-                        <StressRelief />
-                      </PrivateRoute>
-                    }
-                  />
-                  <Route
-                    path="focustimer"
-                    element={
-                      <PrivateRoute>
-                        <FocusTimer />
-                      </PrivateRoute>
-                    }
-                  />
-                  <Route path="medicinehealth" element={<MedicineHealth />} />
-                  <Route
-                    path="collaborate"
-                    element={
-                      <PrivateRoute>
-                        <Collaborate />
-                      </PrivateRoute>
-                    }
-                  />
-                  <Route
-                    path="mytasks"
-                    element={
-                      <PrivateRoute>
-                        <MyTasks />
-                      </PrivateRoute>
-                    }
-                  />
-                  <Route
-                    path="task/:id"
-                    element={
-                      <PrivateRoute>
-                        <TaskDetails />
-                      </PrivateRoute>
-                    }
-                  />
-                  <Route
-                    path="schedule"
-                    element={
-                      <PrivateRoute>
-                        <Schedule />
-                      </PrivateRoute>
-                    }
-                  />
-                  <Route
-                    path="profile"
-                    element={
-                      <PrivateRoute>
-                        <Profile />
-                      </PrivateRoute>
-                    }
-                  />
-                  <Route
-                    path="moodtracker"
-                    element={
-                      <PrivateRoute>
-                        <MoodTracker />
-                      </PrivateRoute>
-                    }
-                  />
-                  <Route
-                    path="ai-assistant"
-                    element={
-                      <PrivateRoute>
-                        <ChatbotPage />
-                      </PrivateRoute>
+                      <>
+                        <Navbar />
+                        <Home />
+                        <Features />
+                        <AboutSection />
+                        <SuccessStories />
+                        <Contact />
+                        <Footer />
+                      </>
                     }
                   />
 
-                  {/* Success Stories */}
-                  <Route path="success-stories" element={<SuccessStory />} />
-                  <Route path="success-stories/my-story" element={<MyStory />} />
+                  {/* Auth Pages */}
+                  <Route path="/login" element={<Login />} />
+                  <Route path="/signup" element={<Signup />} />
+                  <Route path="/verify/:verificationToken" element={<VerifyEmail />} />
+                  <Route path="/admin/login" element={<AdminLogin />} />
 
-                {/* Challenges */}
-                <Route path="challenges" element={<Challenges />} />
-                <Route path="challenges/true-false" element={<TrueFalse />} />
-                <Route path="challenges/tenzis-game" element={<TenzisGame />} />
-                <Route path="challenges/dev-questions" element={<DevQuestions />} />
-                <Route path="challenges/assembly-game" element={<AssemblyGameComponent />} />
-              </Route>
-             <Route path="/ChattingCollab" element={<ChattingCollab />} />
-              <Route path="/my-tasks" element={<MyTaskPage />} />
-              <Route path="/mytasks/:id" element={<MyTaskDetails />} />
-              <Route path="/assigned-tasks" element={<AssignedTasksPage />} />
-              {/* Admin Routes */}
-              <Route path="/admin" element={<AdminLayout />}>
-                <Route index element={<Navigate to="/admin/dashboard" replace />} />
-                <Route path="dashboard" element={<AdminDashboard />} />
-                <Route path="users" element={<UsersManagement />} />
-                <Route path="moods" element={<div>Moods Management - Coming Soon</div>} />
-                <Route path="events" element={<AdminEvents/>} />
-                <Route path="notes" element={<AdminNotes/>} />
-                <Route path="notes/analytics" element={<AdminNoteAnalytics/>} />
-                <Route path="tasks" element={<AdminTasksPage/>} />
-                <Route path="success-stories" element={<AdminSuccessStories/>} />
-              </Route>
+                  {/* Main App Pages - Require Layout */}
+                  <Route element={<Layout />}>
+                    {/* Core Features */}
+                    <Route
+                      path="dashboard"
+                      element={
+                        <PrivateRoute>
+                          <Dashboard />
+                        </PrivateRoute>
+                      }
+                    />
+                    <Route
+                      path="taskmanager"
+                      element={
+                        <PrivateRoute>
+                          <TaskManagerPage />
+                        </PrivateRoute>
+                      }
+                    />
+                    <Route
+                      path="stressrelief"
+                      element={
+                        <PrivateRoute>
+                          <StressRelief />
+                        </PrivateRoute>
+                      }
+                    />
+                    <Route
+                      path="focustimer"
+                      element={
+                        <PrivateRoute>
+                          <FocusTimer />
+                        </PrivateRoute>
+                      }
+                    />
+                    <Route path="medicinehealth" element={<MedicineHealth />} />
+                    <Route
+                      path="collaborate"
+                      element={
+                        <PrivateRoute>
+                          <Collaborate />
+                        </PrivateRoute>
+                      }
+                    />
+                    <Route
+                      path="mytasks"
+                      element={
+                        <PrivateRoute>
+                          <MyTasks />
+                        </PrivateRoute>
+                      }
+                    />
+                    <Route
+                      path="task/:id"
+                      element={
+                        <PrivateRoute>
+                          <TaskDetails />
+                        </PrivateRoute>
+                      }
+                    />
+                    <Route
+                      path="schedule"
+                      element={
+                        <PrivateRoute>
+                          <Schedule />
+                        </PrivateRoute>
+                      }
+                    />
+                    <Route
+                      path="profile"
+                      element={
+                        <PrivateRoute>
+                          <Profile />
+                        </PrivateRoute>
+                      }
+                    />
+                    <Route
+                      path="moodtracker"
+                      element={
+                        <PrivateRoute>
+                          <MoodTracker />
+                        </PrivateRoute>
+                      }
+                    />
+                    <Route
+                      path="ai-assistant"
+                      element={
+                        <PrivateRoute>
+                          <ChatbotPage />
+                        </PrivateRoute>
+                      }
+                    />
 
-                {/* Redirects */}
-                <Route path="/admin/*" element={<Navigate to="/admin/login" replace />} />
-                <Route path="*" element={<Navigate to="/" replace />} />
-              </Routes>
-            </Router>
-          </ChatProvider>
-        </MedicineProvider>
-      </TaskProvider>
+                    {/* Success Stories */}
+                    <Route path="success-stories" element={<SuccessStory />} />
+                    <Route path="success-stories/my-story" element={<MyStory />} />
+
+                    {/* Challenges */}
+                    <Route path="challenges" element={<Challenges />} />
+                    <Route path="challenges/true-false" element={<TrueFalse />} />
+                    <Route path="challenges/tenzis-game" element={<TenzisGame />} />
+                    <Route path="challenges/dev-questions" element={<DevQuestions />} />
+                    <Route path="challenges/assembly-game" element={<AssemblyGameComponent />} />
+                  </Route>
+
+                  {/* Other Pages */}
+                  <Route path="/ChattingCollab" element={<ChattingCollab />} />
+                  <Route path="/my-tasks" element={<MyTaskPage />} />
+                  <Route path="/mytasks/:id" element={<MyTaskDetails />} />
+                  <Route path="/assigned-tasks" element={<AssignedTasksPage />} />
+
+                  {/* Admin Routes */}
+                  <Route path="/admin" element={<AdminLayout />}>
+                    <Route index element={<Navigate to="/admin/dashboard" replace />} />
+                    <Route path="dashboard" element={<AdminDashboard />} />
+                    <Route path="users" element={<UsersManagement />} />
+                    <Route path="moods" element={<div>Moods Management - Coming Soon</div>} />
+                    <Route path="events" element={<AdminEvents />} />
+                    <Route path="notes" element={<AdminNotes />} />
+                    <Route path="notes/analytics" element={<AdminNoteAnalytics />} />
+                    <Route path="tasks" element={<AdminTasksPage />} />
+                    <Route path="success-stories" element={<AdminSuccessStories />} />
+                  </Route>
+
+                  {/* Redirects */}
+                  <Route path="/admin/*" element={<Navigate to="/admin/login" replace />} />
+                  <Route path="*" element={<Navigate to="/" replace />} />
+                </Routes>
+              </Router>
+            </ChatProvider>
+          </MedicineProvider>
+        </TaskProvider>
+      </AuthProvider>
     </AdminAuthProvider>
   );
 }

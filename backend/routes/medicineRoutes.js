@@ -8,7 +8,8 @@ const {
   markMedicineTaken,
   deleteMedicine,
   getTodayMedicines,
-  getUpcomingMedicines
+  getUpcomingMedicines,
+  getActiveMedicines
 } = require('../controllers/medicineController');
 const  protect  = require('../middleware/auth');
 
@@ -23,5 +24,9 @@ router.post('/', createMedicine);
 router.put('/:id', updateMedicine);
 router.put('/:id/take', markMedicineTaken);
 router.delete('/:id', deleteMedicine);
+router.get('/active', getActiveMedicines);
 
 module.exports = router;
+
+
+  

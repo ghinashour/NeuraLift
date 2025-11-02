@@ -6,6 +6,7 @@ import InspirationSection from "../components/InspirationSection";
 import ActionButton from "../components/ActionButton";
 import { getCurrentUser } from "../api/axios";
 import AILogo from '../components/AiLogo';
+import NotificationsIcon from "../components/Notification"; // ✅ Import it
 
 function Dashboard() {
   const [user, setUser] = useState(null);
@@ -30,11 +31,20 @@ function Dashboard() {
     return () => { mounted = false; };
   }, []);
 
+  if (loading) return <div>Loading...</div>;
+
   return (
     <div className="dashboard-page">
-      {/* Header: Greeting (includes streak + notifications) */}
-      <header className="dashboard-header">
+      {/* Header: Greeting + Notifications */}
+      <header className="dashboard-header" style={{
+        display: "flex",
+        justifyContent: "space-between",
+        alignItems: "center",
+        padding: "1rem 2rem",
+        borderBottom: "1px solid #e0e0e0",
+      }}>
         {user && <Greeting name={user.username} userId={user._id} />}
+        <NotificationsIcon /> {/* ✅ Add it here */}
       </header>
 
       {/* Daily Inspiration */}
@@ -71,6 +81,8 @@ function Dashboard() {
           href="/stressrelief"
         />
       </section>
+
+      {/* Floating AI Assistant */}
       <div style={{
         position: 'fixed',
         bottom: '20px',

@@ -1,68 +1,71 @@
-// components/Notifications.jsx
-import React, { useEffect, useState } from "react";
-import API from "../api/axios";
+import React, { useEffect, useState, useContext } from "react";
+import axios from "axios";
+import socket from "../socket";
+import { AuthContext } from "../context/AuthContext";
+import { FaBell } from "react-icons/fa";
 
-export default function Notifications({ userId }) {
+export default function NotificationsIcon() {
+  const { user, token } = useContext(AuthContext);
   const [notifications, setNotifications] = useState([]);
+  const [show, setShow] = useState(false);
 
   useEffect(() => {
-    if (!userId) return; // skip if no userId
+    if (!user) return;
 
-    async function fetchNotifications() {
-      try {
-        const res = await API.get(`/notifications/${userId}`);
-        setNotifications(res.data);
-      } catch (err) {
-        console.error("Failed to fetch notifications:", err);
-      }
-    }
+    socket.emit("register", user._id);
+
+    socket.on("newNotification", (notif) => {
+      setNotifications((prev) => [notif, ...prev]);
+    });
+
+    const fetchNotifications = async () => {
+      const res = await axios.get("http://localhost:4000/api/notifications", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      setNotifications(res.data.notifications);
+    };
 
     fetchNotifications();
 
-    if (Notification.permission !== "granted") {
-      Notification.requestPermission();
-    }
-  }, [userId]);
+    return () => {
+      socket.off("newNotification");
+    };
+  }, [user, token]);
 
-  useEffect(() => {
-    if (!notifications.length) return;
-
-    notifications.forEach(async (n) => {
-      if (!n.isRead) {
-        try {
-          if (Notification.permission === "granted") {
-            new Notification(n.title, { body: n.description });
-          }
-          await API.patch(`/notifications/read/${n._id}`);
-        } catch (err) {
-          console.error("Failed to mark notification as read:", err);
-        }
-      }
+  const markAllRead = async () => {
+    await axios.post("http://localhost:4000/api/notifications/mark-read", {}, {
+      headers: { Authorization: `Bearer ${token}` },
     });
-  }, [notifications]);
+    setNotifications((prev) => prev.map(n => ({ ...n, read: true })));
+  };
 
   return (
-    <div style={{ padding: "10px" }}>
-      <h3>Notifications</h3>
-      {notifications.length === 0 ? (
-        <p>No notifications</p>
-      ) : (
-        <ul style={{ listStyle: "none", padding: 0 }}>
-          {notifications.map((n) => (
-            <li
-              key={n._id}
-              style={{
-                background: n.isRead ? "#f0f0f0" : "#ffe6b3",
-                marginBottom: "5px",
-                padding: "5px",
-                borderRadius: "5px",
-              }}
-            >
-              <strong>{n.title}</strong> <br />
-              <small>{n.description}</small>
-            </li>
-          ))}
-        </ul>
+    <div className="relative">
+      <FaBell
+        size={22}
+        className="cursor-pointer"
+        onClick={() => setShow(!show)}
+      />
+      {notifications.some(n => !n.read) && (
+        <span className="absolute top-0 right-0 bg-red-500 rounded-full w-3 h-3" />
+      )}
+
+      {show && (
+        <div className="absolute right-0 mt-2 w-64 bg-white shadow-lg rounded-lg p-2 z-50">
+          <button onClick={markAllRead} className="text-sm text-blue-600 mb-2">Mark all read</button>
+          {notifications.length === 0 ? (
+            <p className="text-gray-500 text-sm">No notifications</p>
+          ) : (
+            notifications.map((n) => (
+              <div
+                key={n._id}
+                className={`p-2 border-b ${n.read ? "bg-gray-100" : "bg-blue-50"}`}
+              >
+                {n.message}
+              </div>
+            ))
+          )}
+        </div>
       )}
     </div>
   );

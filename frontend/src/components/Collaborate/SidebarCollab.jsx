@@ -12,8 +12,10 @@ import {
   FiList,
   FiEdit3
 } from "react-icons/fi";
+import Swal from "sweetalert2";
 
-const SidebarCollab = ({ onOpenPopup, groups, onInviteGroup }) => {
+
+const SidebarCollab = ({ onOpenPopup, groups, onInviteGroup, onGroupClick }) => {
   const [activePopup, setActivePopup] = useState(null);
   const navigate = useNavigate();
 
@@ -48,6 +50,41 @@ const SidebarCollab = ({ onOpenPopup, groups, onInviteGroup }) => {
   const handleGroupInvite = (group) => {
     onInviteGroup({ group });
   };
+
+const handleGroupClick = (group) => {
+  const user = JSON.parse(localStorage.getItem("user"));
+  if (!user) {
+    Swal.fire({
+      icon: "warning",
+      title: "Not logged in",
+      text: "Please log in to access group chats.",
+    });
+    return;
+  }
+
+  const userId = user._id || user.id; // your user object uses "id"
+
+  const isMember =
+    Array.isArray(group.members) &&
+    group.members.some((member) => member._id === userId);
+
+  if (isMember) {
+    navigate("/ChattingCollab", {
+      state: {
+        groupId: group._id,
+        groupName: group.name,
+      },
+    });
+  } else {
+    Swal.fire({
+      icon: "error",
+      title: "Access Denied",
+      text: "You are not a member of this group yet.",
+      confirmButtonColor: "#3085d6",
+    });
+  }
+};
+
 
   return (
     <div className="side-collab-container">
@@ -97,7 +134,7 @@ const SidebarCollab = ({ onOpenPopup, groups, onInviteGroup }) => {
           <span className="tooltip-text">Add Member</span>
         </div>
 
-        {/* My Tasks (Tasks assigned to me) */}
+        {/* My Tasks */}
         <div className="icon-tooltip">
           <FiCheckSquare
             className="side-collab-icon"
@@ -122,7 +159,12 @@ const SidebarCollab = ({ onOpenPopup, groups, onInviteGroup }) => {
         <div className="groups-list">
           {groups && groups.length > 0 ? (
             groups.map((group) => (
-              <div key={group._id} className="group-item">
+              <div
+                key={group._id}
+                className="group-item"
+                onClick={() => handleGroupClick(group)} // 👈 added clickable action
+                style={{ cursor: "pointer" }}
+              >
                 <div className="group-avatar">
                   {group.name.charAt(0).toUpperCase()}
                 </div>
@@ -134,13 +176,15 @@ const SidebarCollab = ({ onOpenPopup, groups, onInviteGroup }) => {
                   <p className="group-description">
                     {group.description?.length > 50
                       ? `${group.description.substring(0, 50)}...`
-                      : group.description
-                    }
+                      : group.description}
                   </p>
                 </div>
                 <button
                   className="group-invite-btn"
-                  onClick={() => handleGroupInvite(group)}
+                  onClick={(e) => {
+                    e.stopPropagation(); // 👈 prevent triggering navigation
+                    handleGroupInvite(group);
+                  }}
                   title="Invite to group"
                 >
                   <FiUserPlus size={14} />
@@ -168,7 +212,10 @@ const SidebarCollab = ({ onOpenPopup, groups, onInviteGroup }) => {
           <FiUsers className="stat-icon" />
           <div className="stat-info">
             <span className="stat-number">
-              {groups?.reduce((total, group) => total + (group.members?.length || 0), 0) || 0}
+              {groups?.reduce(
+                (total, group) => total + (group.members?.length || 0),
+                0
+              ) || 0}
             </span>
             <span className="stat-label">Total Members</span>
           </div>

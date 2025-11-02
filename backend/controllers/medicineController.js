@@ -18,6 +18,18 @@ const getMedicines = asyncHandler(async (req, res) => {
   res.status(200).json(medicines);
 });
 
+// ✅ Get only active (untaken) medicines
+const getActiveMedicines = async (req, res) => {
+  try {
+    const medicines = await Medicine.find({ user: req.user.id, isTaken: false }).sort({ time: 1 });
+    res.status(200).json(medicines);
+  } catch (error) {
+    console.error("Error fetching active medicines:", error);
+    res.status(500).json({ message: "Server error fetching active medicines" });
+  }
+};
+
+
 // ✅ Create new medicine
 const createMedicine = asyncHandler(async (req, res) => {
   let { name, capsule, time, repeat } = req.body;
@@ -81,7 +93,7 @@ const markMedicineTaken = asyncHandler(async (req, res) => {
     throw new Error("Not authorized");
   }
 
-  medicine.taken = true;
+  medicine.isTaken = true;
   await medicine.save();
 
   res.status(200).json(medicine);
@@ -189,7 +201,8 @@ const getTodayMedicines = asyncHandler(async (req, res) => {
   
   const todayMedicines = await Medicine.find({
     user: req.user.id,
-    time: { $gte: todayStart, $lte: todayEnd }
+    time: { $gte: todayStart, $lte: todayEnd },
+    isTaken: false
   }).sort({ time: 1 });
   
   res.status(200).json(todayMedicines);
@@ -220,5 +233,6 @@ module.exports = {
   markMedicineTaken,
   deleteMedicine,
   getTodayMedicines,
-  getUpcomingMedicines
+  getUpcomingMedicines,
+  getActiveMedicines
 };
