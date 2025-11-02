@@ -1,41 +1,27 @@
-import { sendMessageToBackend } from "../utils/ChatService";
+// src/hooks/useChat.js
+import { useState, useEffect, useRef } from "react";
+import { useAI } from "./useAI";
 
 export const useChat = () => {
   const [messages, setMessages] = useState([]);
-  const [isTyping, setIsTyping] = useState(false);
+  const { getAIResponse, isTyping } = useAI();
+  const chatEndRef = useRef(null);
 
-  const sendMessage = async (text, options) => {
-    const userMessage = { id: Date.now(), sender: "user", text, timestamp: Date.now() };
-    setMessages((prev) => [...prev, userMessage]);
-    setIsTyping(true);
+  const sendMessage = async (text) => {
+    if (!text.trim()) return;
 
-    try {
-      // Prepare messages for context if needed
-      const preparedMessages = messages.concat(userMessage).map((m) => ({
-        role: m.sender === "user" ? "user" : "assistant",
-        content: m.text,
-      }));
+    const userMsg = { sender: "user", text, timestamp: Date.now() };
+    setMessages((prev) => [...prev, userMsg]);
 
-      const aiResponse = await sendMessageToBackend(preparedMessages);
-
-      const aiMessage = {
-        id: Date.now() + 1,
-        sender: "ai",
-        text: aiResponse.content,
-        timestamp: Date.now(),
-      };
-
-      setMessages((prev) => [...prev, aiMessage]);
-    } catch (err) {
-      console.error(err);
-    } finally {
-      setIsTyping(false);
-    }
+    const reply = await getAIResponse(text);
+    const aiMsg = { sender: "ai", text: reply, timestamp: Date.now() };
+    setMessages((prev) => [...prev, aiMsg]);
   };
 
-  const clearChat = () => setMessages([]);
-  const retryMessage = (id) => { /* optional retry logic */ };
-  const cancelPending = () => { /* optional cancel logic */ };
+  // Auto-scroll to latest message
+  useEffect(() => {
+    chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages, isTyping]);
 
-  return { messages, sendMessage, isTyping, clearChat, retryMessage, cancelPending };
+  return { messages, sendMessage, isTyping, chatEndRef };
 };

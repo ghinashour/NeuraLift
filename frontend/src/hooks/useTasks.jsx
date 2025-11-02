@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { useLocalStorage } from '../utils/localStorage';
+import useLocalStorage from './useLocalStorage';
 import { calculateProgress } from '../utils/progressCalculators';
 
 export const useTasks = (initialTasks = []) => {
