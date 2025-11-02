@@ -25,6 +25,7 @@ const Notifications = require("./routes/Notification.js");
 const chatRoutes = require("./routes/chatRoutes.js");
 const contactRoutes = require("./routes/contactRoute.js"); // Import new contact route
 const User = require("./models/User.js"); // <-- used for streak logic
+const { sendMessageToBackend } = require("./ChatService.js");
 const app = express();
 
 // Middleware
@@ -79,6 +80,19 @@ app.post("/api/user/:id/update-streak", async (req, res) => {
   } catch (err) {
     console.error("Error updating streak:", err);
     res.status(500).json({ msg: "Server error", error: err.message });
+  }
+});
+
+app.post("/api/chat", async (req, res) => {
+  const { message, history } = req.body;
+  if (!message) return res.status(400).json({ error: "Message is required" });
+
+  try {
+    const aiResponse = await sendMessageToBackend(message, history);
+    res.json({ reply: aiResponse });
+  } catch (error) {
+    console.error("Chat error:", error);
+    res.status(500).json({ error: "Failed to fetch AI response" });
   }
 });
 
