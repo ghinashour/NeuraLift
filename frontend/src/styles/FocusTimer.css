@@ -3,11 +3,13 @@
 .pomodoro-timer {
   font-family: 'Inter', sans-serif;
   display: flex;
-  width: 1200px;
+  width: 1650px;
   height: 800px;
   flex-direction: column;
+  gap: 3rem;
+  margin-left: 175px;
   align-items: center;
-  padding: 2rem;
+  padding: 1rem;
   color: #1f2937;
 }
 
@@ -21,6 +23,7 @@
   font-weight: 700;
   color: #111827;
 }
+
 .pomodoro-timer__title svg {
   width: 30px;
   padding-right: 5px;
@@ -49,7 +52,7 @@
   background: #fff;
   border-radius: 16px;
   padding: 2rem;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
   width: 100%;
 }
 

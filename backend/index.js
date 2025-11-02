@@ -33,6 +33,9 @@ const User = require("./models/User.js"); // For streak logic
 // ------------------------------------------------
 // APP + SERVER + SOCKET.IO
 // ------------------------------------------------
+const contactRoutes = require("./routes/contactRoute.js"); // Import new contact route
+const User = require("./models/User.js"); // <-- used for streak logic
+const { sendMessageToBackend } = require("./ChatService.js");
 const app = express();
 const server = http.createServer(app);
 
@@ -114,11 +117,16 @@ app.post("/api/user/:id/update-streak", async (req, res) => {
     const lastLogin = user.lastLoginDate ? new Date(user.lastLoginDate) : null;
 
     if (lastLogin) {
-      const diffInDays = Math.floor(
-        (today - lastLogin) / (1000 * 60 * 60 * 24)
-      );
-      if (diffInDays === 1) user.streak += 1;
-      else if (diffInDays > 1) user.streak = 1;
+      const diffInDays = Math.floor((today - lastLogin) / (1000 * 60 * 60 * 24));
+
+      if (diffInDays === 1) {
+        // User logged in the next day → increment streak
+        user.streak += 1;
+      } else if (diffInDays > 1) {
+        // Missed at least one day → reset streak
+        user.streak = 1;
+      }
+      // If diffInDays === 0 → same day login, no change
     } else {
       user.streak = 1;
     }
@@ -137,9 +145,22 @@ app.post("/api/user/:id/update-streak", async (req, res) => {
   }
 });
 
-// ------------------------------------------------
-// 🚀 ROUTES
-// ------------------------------------------------
+app.post("/api/chat", async (req, res) => {
+  const { message, history } = req.body;
+  if (!message) return res.status(400).json({ error: "Message is required" });
+
+  try {
+    const aiResponse = await sendMessageToBackend(message, history);
+    res.json({ reply: aiResponse });
+  } catch (error) {
+    console.error("Chat error:", error);
+    res.status(500).json({ error: "Failed to fetch AI response" });
+  }
+});
+
+// ------------------------------
+// ✅ ROUTES
+// ------------------------------
 app.use("/api/auth", authRoutes);
 app.use("/api/profile", profileRoutes);
 app.use("/api/questions", questionRoutes);
@@ -153,6 +174,7 @@ app.use("/api/moods", moodRoutes);
 app.use("/api/notes", noteRoute);
 app.use("/api/notifications", notificationRoutes);
 app.use("/api/chat", chatRoutes);
+app.use("/api/contact", contactRoutes); // Use new contact route
 app.use("/api/tasks", tasksRouter);
 app.use("/api/admin/tasks", adminTaskRouter);
 app.use("/api/admin", adminRoutes);

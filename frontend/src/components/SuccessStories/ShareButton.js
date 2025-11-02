@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import { successStoriesAPI } from '../../api/successStories';
 import '../../styles/SuccessStories/ShareButton.css';
-import Swal from 'sweetalert2';
 
 const ShareButton = ({ storyId, shareCount, onShare }) => {
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -89,80 +88,6 @@ const ShareButton = ({ storyId, shareCount, onShare }) => {
                     console.error('Failed to copy:', err);
                 });
                 break;
-            case 'landing':
-                // Add to landing page
-                try {
-                    // Get the current story data from the page
-                    const storyElement = document.querySelector(`[data-story-id="${storyId}"]`);
-                    if (storyElement) {
-                        const author = storyElement.querySelector('.story-author')?.textContent?.replace('by ', '') || 'Anonymous';
-                        const content = storyElement.querySelector('.story-description')?.textContent || '';
-                        const category = storyElement.querySelector('.category-tag')?.textContent?.trim() || 'General';
-                        const date = storyElement.querySelector('.story-date span')?.textContent || new Date().toLocaleDateString();
-
-                        // Create story object for landing page
-                        const landingPageStory = {
-                            id: `landing-${storyId}-${Date.now()}`,
-                            author: author,
-                            category: category,
-                            description: content,
-                            achievement: `Shared from Success Stories`,
-                            likeCount: 0,
-                            date: date,
-                            originalStoryId: storyId,
-                            sharedToLanding: true
-                        };
-
-                        // Get existing landing page stories
-                        const existingStories = JSON.parse(localStorage.getItem('landingPageStories') || '[]');
-
-                        // Check if this story is already shared to landing page
-                        const alreadyShared = existingStories.some(story => story.originalStoryId === storyId);
-
-                        if (alreadyShared) {
-                            Swal.fire({
-                                icon: 'warning',
-                                title: 'Already Added',
-                                text: 'This story has already been added to the landing page!',
-                                confirmButtonColor: '#3C83F6'
-                            });
-                        } else {
-                            // Add to landing page stories
-                            const updatedStories = [...existingStories, landingPageStory];
-                            localStorage.setItem('landingPageStories', JSON.stringify(updatedStories));
-
-                            // Dispatch custom event to notify other components
-                            const event = new CustomEvent('landingPageStoriesUpdated', {
-                                detail: { stories: updatedStories, newStory: landingPageStory }
-                            });
-                            window.dispatchEvent(event);
-
-                            console.log(`Story ${storyId} added to landing page`);
-                            Swal.fire({
-                                icon: 'success',
-                                title: 'Success',
-                                text: 'Story successfully added to the landing page! It will appear in the Success Stories section.',
-                                confirmButtonColor: '#3C83F6'
-                            });
-                        }
-                    } else {
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Data Not Found',
-                            text: 'Unable to find story data. Please try again.',
-                            confirmButtonColor: '#3C83F6'
-                        });
-                    }
-                } catch (error) {
-                    console.error('Error adding story to landing page:', error);
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Failed',
-                        text: 'Failed to add story to landing page. Please try again.',
-                        confirmButtonColor: '#3C83F6'
-                    });
-                }
-                break;
             case 'twitter':
                 // Share on Twitter
                 const twitterUrl = encodeURIComponent(storyUrl);
@@ -225,12 +150,6 @@ const ShareButton = ({ storyId, shareCount, onShare }) => {
         </svg>
     );
 
-    const Home = (props) => (
-        <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 432 384" {...props}>
-            <path fill="currentColor" d="M171 363H64V192H0L213 0l214 192h-64v171H256V235h-85v128z"></path>
-        </svg>
-    );
-
     const X = (props) => (
         <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 251 256" {...props}>
             <path fill="currentColor" d="M149.079 108.399L242.33 0h-22.098l-80.97 94.12L74.59 0H0l97.796 142.328L0 256h22.1l85.507-99.395L175.905 256h74.59L149.073 108.399zM118.81 143.58l-9.909-14.172l-78.84-112.773h33.943l63.625 91.011l9.909 14.173l82.705 118.3H186.3l-67.49-96.533z"></path>
@@ -255,8 +174,7 @@ const ShareButton = ({ storyId, shareCount, onShare }) => {
         { id: 'facebook', label: 'Share on Facebook', icon: <Facebook /> },
         { id: 'linkedin', label: 'Share on LinkedIn', icon: <Linkedin /> },
         { id: 'whatsapp', label: 'Share on WhatsApp', icon: <Whatsapp /> },
-        { id: 'email', label: 'Share via Email', icon: <Email /> },
-        { id: 'landing', label: 'Add to Landing Page', icon: <Home /> }
+        { id: 'email', label: 'Share via Email', icon: <Email /> }
     ];
 
     return (

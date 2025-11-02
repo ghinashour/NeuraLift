@@ -44,7 +44,7 @@ export default function MyTaskDetails() {
         { status: newStatus },
         { headers: { Authorization: `Bearer ${token}` } }
       );
-      
+
       setTask(response.data);
       setStatus(newStatus);
       alert("Task status updated successfully");
@@ -61,25 +61,25 @@ export default function MyTaskDetails() {
 
   const handleStartTask = () => {
     // Navigate to Pomodoro timer with task context
-    navigate("/focusTimer", { 
-      state: { 
+    navigate("/focusTimer", {
+      state: {
         taskId: task._id,
         taskTitle: task.title,
         taskDescription: task.description,
         fromTask: true
-      } 
+      }
     });
   };
 
   const handleDiscussTask = () => {
     // Navigate to chatting/collaboration page
-    navigate("/ChattingCollab", { 
-      state: { 
+    navigate("/ChattingCollab", {
+      state: {
         taskId: task._id,
         taskTitle: task.title,
         assignedBy: task.assignedBy?.name,
         groupId: task.group?._id
-      } 
+      }
     });
   };
 
@@ -143,11 +143,11 @@ export default function MyTaskDetails() {
 
   const initials = task.assignedBy?.name
     ? task.assignedBy.name
-        .split(" ")
-        .map((n) => n[0])
-        .slice(0, 2)
-        .join("")
-        .toUpperCase()
+      .split(" ")
+      .map((n) => n[0])
+      .slice(0, 2)
+      .join("")
+      .toUpperCase()
     : "UU";
 
   const getStatusDisplayText = (status) => {
@@ -219,8 +219,8 @@ export default function MyTaskDetails() {
           <h3 className="td-section-title">Description:</h3>
           <div className="td-description">
             <p>
-              {expanded 
-                ? task.description 
+              {expanded
+                ? task.description
                 : task.description?.slice(0, 220) + (task.description?.length > 220 ? "…" : "")
               }
             </p>
@@ -274,13 +274,13 @@ export default function MyTaskDetails() {
         </div>
 
         <div className="td-actions">
-          <button 
-            className="td-start-btn" 
+          <button
+            className="td-start-btn"
             onClick={handleStartTask}
           >
             🎯 Start with Focus Timer
           </button>
-          <button 
+          <button
             className="td-chat-btn"
             onClick={handleDiscussTask}
           >

@@ -361,30 +361,30 @@ const MedicineHealth = () => {
       <div id="upcomingMed">
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "0 50px" }}>
           {/* Replaced image with SVG */}
-          <svg 
-            width="200" 
-            height="150" 
-            viewBox="0 0 200 150" 
+          <svg
+            width="200"
+            height="150"
+            viewBox="0 0 200 150"
             style={{ marginTop: "30px" }}
           >
             {/* Medicine Bottle */}
-            <rect x="70" y="40" width="60" height="80" rx="8" fill="#3C83F6" opacity="0.8"/>
-            <rect x="75" y="45" width="50" height="70" rx="4" fill="#FFFFFF" opacity="0.3"/>
-            
+            <rect x="70" y="40" width="60" height="80" rx="8" fill="#3C83F6" opacity="0.8" />
+            <rect x="75" y="45" width="50" height="70" rx="4" fill="#FFFFFF" opacity="0.3" />
+
             {/* Bottle Cap */}
-            <rect x="80" y="30" width="40" height="10" rx="4" fill="#1456BF"/>
-            
+            <rect x="80" y="30" width="40" height="10" rx="4" fill="#1456BF" />
+
             {/* Medicine Pills */}
-            <circle cx="90" cy="70" r="8" fill="#0AE00A"/>
-            <circle cx="110" cy="70" r="8" fill="#F63C3C"/>
-            <circle cx="130" cy="70" r="8" fill="#F6F63C"/>
-            <circle cx="90" cy="90" r="8" fill="#6DA2F8"/>
-            <circle cx="110" cy="90" r="8" fill="#F8A26D"/>
-            <circle cx="130" cy="90" r="8" fill="#0AE00A"/>
-            
+            <circle cx="90" cy="70" r="8" fill="#0AE00A" />
+            <circle cx="110" cy="70" r="8" fill="#F63C3C" />
+            <circle cx="130" cy="70" r="8" fill="#F6F63C" />
+            <circle cx="90" cy="90" r="8" fill="#6DA2F8" />
+            <circle cx="110" cy="90" r="8" fill="#F8A26D" />
+            <circle cx="130" cy="90" r="8" fill="#0AE00A" />
+
             {/* Cross Symbol */}
-            <rect x="95" cy="110" width="10" height="30" fill="#FFFFFF" transform="translate(0,110)"/>
-            <rect x="85" cy="120" width="30" height="10" fill="#FFFFFF" transform="translate(0,110)"/>
+            <rect x="95" cy="110" width="10" height="30" fill="#FFFFFF" transform="translate(0,110)" />
+            <rect x="85" cy="120" width="30" height="10" fill="#FFFFFF" transform="translate(0,110)" />
           </svg>
 
           <button onClick={openForm} id="addMedBtn">
@@ -518,11 +518,11 @@ const MedicineHealth = () => {
       
       
       {/* AI Logo positioned at bottom right */}
-      <div style={{ 
-        position: 'fixed', 
-        bottom: '20px', 
+      <div style={{
+        position: 'fixed',
+        bottom: '20px',
         right: '20px',
-        zIndex: 1000 
+        zIndex: 1000
       }}>
         <AILogo />
       </div>

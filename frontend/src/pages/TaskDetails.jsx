@@ -2,7 +2,7 @@
 import React from "react";
 import "../styles/TaskDetails.css";
 import { useParams } from "react-router-dom";
-import {useTasks} from "../hooks/useTasks";
+import { useTasks } from "../hooks/useTasks";
 
 export default function TaskDetails() {
   const { id } = useParams();

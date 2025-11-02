@@ -132,11 +132,11 @@ export default function Collaborate() {
 
       setPosts((prev) =>
         prev.map((p) =>
-          p._id === postId 
-            ? { 
-                ...p, 
-                replies: [...p.replies, response.data] 
-              } 
+          p._id === postId
+            ? {
+              ...p,
+              replies: [...p.replies, response.data]
+            }
             : p
         )
       );
@@ -182,7 +182,7 @@ export default function Collaborate() {
         description: groupData.description,
         isPublic: groupData.isPublic || true,
       });
-      
+
       setGroups(prev => [response.data, ...prev]);
       setActivePopup(null);
       alert("Group created successfully!");
@@ -192,43 +192,43 @@ export default function Collaborate() {
     }
   };
 
-const handleAssignTask = async (taskData) => {
-  try {
-    const response = await axiosInstance.post("/collaborate/tasks", {
-      title: taskData.title,
-      description: taskData.description,
-      assignedTo: taskData.assignedTo,
-      groupId: taskData.groupId,
-      dueDate: taskData.dueDate,
-      priority: taskData.priority,
-    });
-    
-    setActivePopup(null);
-    alert("Task assigned successfully!");
-  } catch (err) {
-    console.error("Error assigning task:", err);
-    throw err; // This will be caught in the popup component
-  }
-};
+  const handleAssignTask = async (taskData) => {
+    try {
+      const response = await axiosInstance.post("/collaborate/tasks", {
+        title: taskData.title,
+        description: taskData.description,
+        assignedTo: taskData.assignedTo,
+        groupId: taskData.groupId,
+        dueDate: taskData.dueDate,
+        priority: taskData.priority,
+      });
+
+      setActivePopup(null);
+      alert("Task assigned successfully!");
+    } catch (err) {
+      console.error("Error assigning task:", err);
+      throw err; // This will be caught in the popup component
+    }
+  };
 
   const handleAddMember = async (memberData) => {
-  try {
-    const response = await axiosInstance.post("/collaborate/invite/member", {
-      email: memberData.email,
-      groupId: memberData.groupId,
-      role: memberData.role
-    });
-    
-    setActivePopup(null);
-    alert("Member added successfully!");
-    
-    // Refresh groups to show new member
-    fetchGroups();
-  } catch (err) {
-    console.error("Error adding member:", err);
-    throw err; // This will be caught in the popup component
-  }
-};
+    try {
+      const response = await axiosInstance.post("/collaborate/invite/member", {
+        email: memberData.email,
+        groupId: memberData.groupId,
+        role: memberData.role
+      });
+
+      setActivePopup(null);
+      alert("Member added successfully!");
+
+      // Refresh groups to show new member
+      fetchGroups();
+    } catch (err) {
+      console.error("Error adding member:", err);
+      throw err; // This will be caught in the popup component
+    }
+  };
 
   const handleInvite = async (inviteData) => {
     try {
@@ -327,8 +327,8 @@ const handleAssignTask = async (taskData) => {
         </section>
 
         {/* Sidebar */}
-        <Sidebar 
-          onOpenPopup={(name) => setActivePopup(name)} 
+        <Sidebar
+          onOpenPopup={(name) => setActivePopup(name)}
           groups={groups}
           onInviteGroup={handleInvite}
           onGroupClick={handleGroupClick} // Add this prop
@@ -337,37 +337,37 @@ const handleAssignTask = async (taskData) => {
 
       {/* Popups */}
       {activePopup === "invite" && (
-        <InvitePopup 
+        <InvitePopup
           onClose={() => {
             setActivePopup(null);
             setSelectedGroup(null);
-          }} 
+          }}
           group={selectedGroup}
         />
       )}
       {activePopup === "createGroup" && (
-        <CreateGroupPopup 
-          onClose={() => setActivePopup(null)} 
+        <CreateGroupPopup
+          onClose={() => setActivePopup(null)}
           onSubmit={handleCreateGroup}
         />
       )}
       {activePopup === "addMember" && (
-        <AddMemberPopup 
-          onClose={() => setActivePopup(null)} 
+        <AddMemberPopup
+          onClose={() => setActivePopup(null)}
           onSubmit={handleAddMember}
           groups={groups}
         />
       )}
       {activePopup === "assignTask" && (
-        <AssignTaskPopup 
-          onClose={() => setActivePopup(null)} 
+        <AssignTaskPopup
+          onClose={() => setActivePopup(null)}
           onSubmit={handleAssignTask}
           groups={groups}
         />
       )}
       {activePopup === "createPost" && (
-        <CreatePostPopup 
-          onClose={() => setActivePopup(null)} 
+        <CreatePostPopup
+          onClose={() => setActivePopup(null)}
           onSubmit={handleCreatePost}
         />
       )}

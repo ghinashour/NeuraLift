@@ -97,7 +97,7 @@ const getNavIcon = (key, isActive) => {
 };
 
 const navItems = [
-  { key: 'dashboard', label: 'Dashboard', path: '/Dashboard' },
+  { key: 'dashboard', label: 'Dashboard', path: '/dashboard' },
   { key: 'timer', label: 'Focus Timer', path: '/focusTimer' },
   { key: 'tasks', label: 'Tasks', path: '/taskManager' },
   { key: 'mood', label: 'Mood Tracker', path: '/moodTracker' },
@@ -110,7 +110,7 @@ const navItems = [
   { key: 'assistant', label: 'AI Assistant', path: '/ai-assistant' }
 ];
 
-const Sidebar = ({ isCollapsed, setIsCollapsed, loading = false }) => {
+const Sidebar = ({ isSidebarOpen, toggleSidebar, user, loading = false }) => {
   const navigate = useNavigate();
   const location = useLocation();
   const { user, fetchUserData } = useUserData();
@@ -135,7 +135,7 @@ const Sidebar = ({ isCollapsed, setIsCollapsed, loading = false }) => {
 
   return (
     <>
-      <aside className={`sidebar`}>
+      <aside className={`sidebar ${isSidebarOpen ? "sidebar-open" : ""}`}>
         <div className="brand">
           <div className="brand-icon">
             <img src={logo} alt="NeuraLift" />
@@ -147,7 +147,6 @@ const Sidebar = ({ isCollapsed, setIsCollapsed, loading = false }) => {
             </>
           )}
         </div>
-
 
         <nav className="nav">
           {navItems.map((item) => (
@@ -164,30 +163,36 @@ const Sidebar = ({ isCollapsed, setIsCollapsed, loading = false }) => {
         </nav>
 
         <div className="sidebar-bottom">
-          <div className="profile-section">
+          <Link to="/profile" className="profile-section profile-link" title={(user?.username || user?.name || "User")}> {/* Wrap entire section with Link */}
             <div className="profile">
               {loading ? (
                 <div className="profile-loading">
                   <div className="loading-avatar"></div>
-                  {!isCollapsed && <div className="loading-username"></div>}
+                  <div className="loading-username"></div>
                 </div>
               ) : (
-                <Link to="/profile" className="profile-link" title={isCollapsed ? (user?.username || user?.name || "User") : undefined}>
-               <img
-                      src={user?.profilePhoto ? `http://localhost:4000/uploads/${user.profilePhoto}` : avatarPlaceholder}
-                      alt={user?.username || user?.name || "User"}
-                      className="sidebar-avatar"
-                      onError={(e) => { e.target.onerror = null; e.target.src = avatarPlaceholder; }}
-                />
-
-                  {!isCollapsed && (
+                <>
+                  <img
+                    src={
+                      user?.profilePhoto
+                        ? `http://localhost:4000/uploads/${user.profilePhoto}`
+                        : avatarPlaceholder
+                    }
+                    alt={user?.username || user?.name || "User"}
+                    className="sidebar-avatar"
+                    onError={(e) => {
+                      // fallback to placeholder if image fails to load
+                      e.target.src = avatarPlaceholder;
+                    }}
+                  />
+                  {(
                     <span className="sidebar-username">{user?.username || user?.name || "User"}</span>
                   )}
-                </Link>
+                </>
               )}
             </div>
 
-          </div>
+          </Link> {/* Close the Link tag for the section */}
         </div>
       </aside>
     </>

@@ -208,7 +208,6 @@ function App() {
                   <Route path="/my-tasks" element={<MyTaskPage />} />
                   <Route path="/mytasks/:id" element={<MyTaskDetails />} />
                   <Route path="/assigned-tasks" element={<AssignedTasksPage />} />
-
                   {/* Admin Routes */}
                   <Route path="/admin" element={<AdminLayout />}>
                     <Route index element={<Navigate to="/admin/dashboard" replace />} />

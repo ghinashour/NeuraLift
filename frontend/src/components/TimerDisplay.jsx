@@ -34,9 +34,7 @@ const TimerDisplay = ({ time, status, mode, isActive }) => {
   return (
     <div className="timer-display">
       <div className="timer-display__header">
-        <h2 className="timer-display__title" style={{ color: getStatusColor() }}>
-          {mode === 'Focus' ? 'Focus Time' : mode}
-        </h2>
+        
         <span 
           className="timer-display__status"
           style={{

@@ -11,79 +11,42 @@ const StoryCard = ({
     likeCount,
     category,
     storyId,
-    onLikeChange,
-    onShare
+    onLikeToggle,
+    onShare,
+    isLikedByCurrentUser, // New prop for liked status
+    currentUserId // New prop for current user ID
 }) => {
-    // Load user's like state from localStorage (for UI persistence)
-    const getStoredLikeState = () => {
-        try {
-            const stored = localStorage.getItem(`story-${storyId}-liked`);
-            return stored ? JSON.parse(stored) : false;
-        } catch (error) {
-            console.error('Error loading like state:', error);
-            return false;
-        }
-    };
-
-    const [isLiked, setIsLiked] = useState(getStoredLikeState);
     const [currentLikeCount, setCurrentLikeCount] = useState(likeCount || 0);
     const [isProcessing, setIsProcessing] = useState(false);
 
-    // Save user's like state to localStorage (for UI persistence across sessions)
-    useEffect(() => {
-        try {
-            localStorage.setItem(`story-${storyId}-liked`, JSON.stringify(isLiked));
-        } catch (error) {
-            console.error('Error saving like state:', error);
-        }
-    }, [isLiked, storyId]);
-
-    // Update like count when likeCount prop changes (from database)
     useEffect(() => {
         setCurrentLikeCount(likeCount || 0);
-    }, [likeCount]);
+    }, [likeCount, isLikedByCurrentUser, storyId]);
 
     const getInitials = (name) => {
         return name.split(' ').map(n => n[0]).join('').toUpperCase();
     };
 
-    const handleLike = () => {
+    const handleLike = async () => {
         // Prevent double-click glitches
         if (isProcessing) {
             return;
         }
 
-        setIsProcessing(true);
-        const previousLikeState = isLiked;
-
-        // INSTANT UI update - no async/await here
-        if (isLiked) {
-            // Unlike
-            setIsLiked(false);
-            const newCount = Math.max(0, currentLikeCount - 1);
-            setCurrentLikeCount(newCount);
-        } else {
-            // Like
-            setIsLiked(true);
-            const newCount = currentLikeCount + 1;
-            setCurrentLikeCount(newCount);
+        // Only allow liking if a user is logged in
+        if (!currentUserId) {
+            alert("Please log in to like stories."); // Or a more sophisticated notification
+            return;
         }
 
-        // Fire and forget - don't wait for API response
-        if (onLikeChange) {
-            onLikeChange(storyId, previousLikeState)
-                .then(() => {
-                    setIsProcessing(false);
-                })
-                .catch(error => {
-                    // Only revert on error, but don't block the UI
-                    console.error('Error toggling like:', error);
-                    // Revert the optimistic update on error
-                    setIsLiked(previousLikeState);
-                    setCurrentLikeCount(likeCount || 0);
-                    setIsProcessing(false);
-                });
-        } else {
+        setIsProcessing(true);
+
+        try {
+            // Call the toggleLike function from props
+            await onLikeToggle(storyId);
+        } catch (error) {
+            console.error('Error toggling like:', error);
+        } finally {
             setIsProcessing(false);
         }
     };
@@ -131,7 +94,7 @@ const StoryCard = ({
                         <label className="ui-like">
                             <input
                                 type="checkbox"
-                                checked={isLiked}
+                                checked={isLikedByCurrentUser} // Use prop for checked state
                                 onChange={handleLike}
                                 disabled={isProcessing}
                             />
