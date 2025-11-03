@@ -3,6 +3,7 @@ const CollaborationGroup = require('../models/CollaborationGroup');
 const CollaborationTask = require('../models/CollaborationTask');
 const GroupInvite = require('../models/GroupInvite');
 const User = require('../models/User');
+const Notification = require('../models/Notification');
 const crypto = require('crypto');
 
 // Post Controllers (keep existing ones)
@@ -67,6 +68,49 @@ exports.addReply = async (req, res) => {
 
     await post.populate('replies.user', 'name avatar');
     const newReply = post.replies[post.replies.length - 1];
+
+    // Emit notification to the post owner (if someone else replied)
+    try {
+      // Ensure post.user is populated
+      await post.populate('user', 'name');
+      const postOwner = post.user;
+      const io = req.app.get('io');
+
+      if (postOwner && postOwner._id && postOwner._id.toString() !== req.user.id) {
+        const snippet = (text || '').length > 100 ? (text || '').substring(0, 97) + '...' : text || '';
+        const notifMessage = `${req.user.name} replied to your post: "${snippet}"`;
+
+        if (io) {
+          try {
+            // Include the full reply object so frontend can update UI incrementally
+            io.to(postOwner._id.toString()).emit('newNotification', {
+              type: 'reply',
+              message: notifMessage,
+              postId: post._id,
+              replyId: newReply._id,
+              reply: newReply, // include populated reply object
+              fromUser: { id: req.user.id, name: req.user.name },
+              createdAt: new Date(),
+            });
+          } catch (e) {
+            console.error('Failed to emit reply notification:', e.message);
+          }
+        }
+
+        // Persist notification
+        try {
+          await Notification.create({
+            userId: postOwner._id,
+            message: notifMessage,
+            type: 'reply',
+          });
+        } catch (e) {
+          console.error('Failed to persist reply notification:', e.message);
+        }
+      }
+    } catch (e) {
+      console.error('Reply notification flow error:', e.message);
+    }
 
     res.status(201).json(newReply);
   } catch (error) {
@@ -314,6 +358,35 @@ exports.assignTask = async (req, res) => {
     await task.populate('assignedTo', 'name avatar');
     await task.populate('assignedBy', 'name avatar');
     await task.populate('group', 'name');
+
+    // Emit a notification to the assignee and persist it
+    try {
+      const io = req.app.get('io');
+      const notifMessage = `${req.user.name} assigned you a task: "${task.title}"`;
+
+      if (io && task.assignedTo && task.assignedTo._id) {
+        io.to(task.assignedTo._id.toString()).emit('newNotification', {
+          type: 'task',
+          message: notifMessage,
+          taskId: task._id,
+          fromUser: { id: req.user.id, name: req.user.name },
+          createdAt: new Date(),
+        });
+      }
+
+      // Persist notification
+      try {
+        await Notification.create({
+          userId: task.assignedTo._id || task.assignedTo,
+          message: notifMessage,
+          type: 'task',
+        });
+      } catch (e) {
+        console.error('Failed to persist task notification:', e.message);
+      }
+    } catch (e) {
+      console.error('Task notification emit error:', e.message);
+    }
 
     res.status(201).json(task);
   } catch (error) {

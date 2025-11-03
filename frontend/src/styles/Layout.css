@@ -1,13 +1,11 @@
 .layout-container {
-    display: flex;
-    justify-content: center; /* center the content horizontally */
-    min-height: 100vh;
-    background-color: #f5f7fa; /* optional: page background */
+  display: block; /* remove flex centering */
+  min-height: 100vh;
+  background-color: #f5f7fa;
 }
 
 .layout-content {
-    width: 100%;
-    max-width: 1300px; /* fixed max width */
-    padding: 20px;     /* optional padding inside content */
-    box-sizing: border-box;
+  max-width: none; /* remove width constraint */
+  padding: 0;      /* remove left/right padding */
+  width: 100%;
 }

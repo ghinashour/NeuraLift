@@ -34,7 +34,6 @@ const User = require("./models/User.js"); // For streak logic
 // APP + SERVER + SOCKET.IO
 // ------------------------------------------------
 const contactRoutes = require("./routes/contactRoute.js"); // Import new contact route
-const User = require("./models/User.js"); // <-- used for streak logic
 const { sendMessageToBackend } = require("./ChatService.js");
 const app = express();
 const server = http.createServer(app);

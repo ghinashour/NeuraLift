@@ -25,6 +25,16 @@ body,
   transition: all 0.3s ease;
 }
 
+/* Global notifications container placed at the top-right of the viewport */
+.global-notifications {
+  position: fixed;
+  top: 14px;
+  right: 18px;
+  z-index: 220;
+  display: flex;
+  align-items: center;
+}
+
 /* ===== SIDEBAR ===== */
 .sidebar {
   width: var(--sidebar-width);
@@ -176,7 +186,7 @@ body,
 /* ===== MAIN CONTENT ===== */
 .layout-main {
   flex: 1;
-  margin-left: var(--sidebar-width);
+  margin-left:120px;
   /* Default for larger screens */
   transition: margin-left 0.3s ease;
   padding: 24px;

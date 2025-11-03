@@ -6,6 +6,7 @@ import "../styles/Collaborate.css";
 
 import Sidebar from "../components/Collaborate/SidebarCollab";
 import PostCard from "../components/Collaborate/PostCard";
+import { useSocket } from "../context/SocketProvider";
 
 import InvitePopup from "../components/Popups/InvitePopup";
 import CreateGroupPopup from "../components/Popups/CreateGroupPopup";
@@ -44,11 +45,35 @@ export default function Collaborate() {
   const [selectedGroup, setSelectedGroup] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const socket = useSocket();
 
   // Fetch posts and groups on component mount
   useEffect(() => {
     fetchPosts();
     fetchGroups();
+    // Listen for reply notifications and refresh posts when someone replies to your post
+    const handleNotif = (notif) => {
+      if (!notif) return;
+      if (notif.type === 'reply') {
+        // If the server included the reply object, update posts locally to avoid a full refetch
+        if (notif.postId && notif.reply) {
+          setPosts((prev) => prev.map((p) =>
+            p._id === notif.postId
+              ? { ...p, replies: [...(p.replies || []), notif.reply] }
+              : p
+          ));
+        } else {
+          // Fallback: refetch posts
+          fetchPosts();
+        }
+      }
+    };
+
+    if (socket) socket.on('newNotification', handleNotif);
+
+    return () => {
+      if (socket) socket.off('newNotification', handleNotif);
+    };
   }, []);
 
   const fetchPosts = async () => {

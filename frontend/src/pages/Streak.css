@@ -1,3 +1,82 @@
+/* Modernized Streak component styling */
+.streakPage-wrapper {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 72px; /* default size for standalone pages */
+  height: 72px;
+  position: relative;
+}
+
+.streakPage-progress-ring {
+  transform: rotate(-90deg);
+  width: 72px;
+  height: 72px;
+}
+
+.streakPage-progress-ring__background {
+  stroke: #e6eefb;
+  stroke-width: 6;
+}
+
+.streakPage-progress-ring__circle {
+  stroke: url(#streakGradient) ;
+  stroke-width: 6;
+  stroke-linecap: round;
+  transition: stroke-dashoffset 600ms cubic-bezier(.23,1,.32,1);
+}
+
+.streakPage-content {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.streakPage-fire {
+  color: #ff8a42;
+  font-size: 16px;
+  margin-bottom: 2px;
+}
+
+.streakPage-number {
+  font-weight: 700;
+  font-size: 18px;
+  color: #0f172a;
+}
+
+.streakPage-subtext {
+  font-size: 11px;
+  color: #64748b;
+  margin-top: 2px;
+}
+
+/* Small inline header variant */
+.streak-small {
+  width: 34px !important;
+  height: 34px !important;
+}
+.streak-small .streakPage-progress-ring {
+  width: 34px; height: 34px;
+}
+.streak-small .streakPage-progress-ring__background,
+.streak-small .streakPage-progress-ring__circle {
+  stroke-width: 4;
+}
+.streak-small .streakPage-number { font-size: 12px }
+.streak-small .streakPage-fire { font-size: 12px }
+
+/* Container hover effect when clickable */
+.streak-clickable { cursor: pointer }
+.streak-clickable:hover { transform: translateY(-2px); transition: transform 140ms ease }
+
+@media (max-width: 768px) {
+  .streakPage-wrapper { width: 56px; height: 56px }
+  .streakPage-progress-ring { width: 56px; height: 56px }
+  .streakPage-number { font-size: 16px }
+}
 .streakPage-wrapper {
   display: flex;
   flex-direction: column;

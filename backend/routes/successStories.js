@@ -9,7 +9,8 @@ const {
   deleteStory,
   trackShare,
   getUserStories,
-  getStats
+  getStats,
+    toggleLike,
 } = require('../controllers/successStoryController');
 const auth = require('../middleware/auth');
 

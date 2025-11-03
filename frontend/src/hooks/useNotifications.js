@@ -1,18 +1,19 @@
 // hooks/useNotifications.js
 import { useState, useEffect } from "react";
 import axios from "axios";
-import { io } from "socket.io-client";
-
-const socket = io("http://localhost:4000"); // replace with your server URL
+import { useSocket } from "../context/SocketProvider";
 
 export default function useNotifications(userId) {
   const [notifications, setNotifications] = useState([]);
+  const socket = useSocket();
 
   useEffect(() => {
     if (!userId) return;
 
-    // Join user's room for real-time updates
-    socket.emit("join", userId);
+    // Join user's room for real-time updates if socket available
+    if (socket && socket.connected) {
+      try { socket.emit("join", userId); } catch (e) {}
+    }
 
     // Fetch initial notifications
     const fetchNotifications = async () => {
@@ -26,12 +27,14 @@ export default function useNotifications(userId) {
     fetchNotifications();
 
     // Listen for new notifications via Socket.IO
-    socket.on("newNotification", (notif) => {
-      setNotifications(prev => [notif, ...prev]);
-    });
+    if (socket) {
+      socket.on("newNotification", (notif) => {
+        setNotifications(prev => [notif, ...prev]);
+      });
+    }
 
     return () => {
-      socket.off("newNotification");
+      if (socket) socket.off("newNotification");
     };
   }, [userId]);
 

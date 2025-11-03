@@ -7,6 +7,7 @@ import { TaskProvider } from "./context/TaskContext";
 import { MedicineProvider } from "./context/MedicineContext";
 import { AdminAuthProvider } from "./context/AdminAuthContext";
 import { AuthProvider } from "./context/AuthContext";
+import { SocketProvider } from "./context/SocketProvider";
 import { ChatProvider } from "./context/ChatContext";
 
 // Layout Components
@@ -71,9 +72,10 @@ function App() {
   return (
     <AdminAuthProvider>
       <AuthProvider> {/* ✅ Wrap the whole app in AuthProvider */}
-        <TaskProvider>
-          <MedicineProvider>
-            <ChatProvider>
+        <SocketProvider>
+          <TaskProvider>
+            <MedicineProvider>
+              <ChatProvider>
               <Router>
                 <Routes>
                   {/* Landing Page */}
@@ -229,6 +231,7 @@ function App() {
             </ChatProvider>
           </MedicineProvider>
         </TaskProvider>
+        </SocketProvider>
       </AuthProvider>
     </AdminAuthProvider>
   );

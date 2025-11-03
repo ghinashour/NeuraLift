@@ -2,6 +2,8 @@
 import React, { useState, useEffect } from "react";
 import { Outlet, useLocation } from "react-router-dom";
 import Sidebar from "../components/Sidebar";
+import NotificationsIcon from "../components/Notification";
+import Streak from "../pages/Streak";
 import useUserData from "../hooks/useUserData";
 import "../styles/Sidebar.css"; // sidebar css also contains layout variables
 
@@ -27,6 +29,17 @@ export default function Layout() {
 
   return (
     <div className={`app-layout ${isSidebarOpen ? "sidebar-open" : ""}`}>
+      {/* Global notification bell + streak (top-right) */}
+      <div className="global-notifications">
+        <div className="global-inline">
+          <div className="global-streak">
+            <Streak userId={user?._id} />
+          </div>
+          <div className="global-bell">
+            <NotificationsIcon />
+          </div>
+        </div>
+      </div>
       {/* Hamburger menu button for mobile */}
       <div className="hamburger-menu" onClick={toggleSidebar}>
         {isSidebarOpen ? (

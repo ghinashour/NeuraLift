@@ -104,13 +104,13 @@ const navItems = [
   { key: 'stress', label: 'Stress Relief', path: '/stressRelief' },
   { key: 'success', label: 'Success Stories', path: '/success-stories' },
   { key: 'challenges', label: 'Challenges', path: '/Challenges' },
-  { key: 'collab', label: 'Collaborate', path: '/Collaborate' },
+  { key: 'collab', label: 'Collaborate', path: '/collaborate' },
   { key: 'schedule', label: 'Schedule', path: '/Schedule' },
   { key: 'medicine', label: 'Medicine & Health', path: '/medicineHealth' },
   { key: 'assistant', label: 'AI Assistant', path: '/ai-assistant' }
 ];
 
-const Sidebar = ({ isSidebarOpen, toggleSidebar, user, loading = false }) => {
+const Sidebar = ({ isSidebarOpen, toggleSidebar, loading = false }) => {
   const navigate = useNavigate();
   const location = useLocation();
   const { user, fetchUserData } = useUserData();
