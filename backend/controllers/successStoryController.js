@@ -265,17 +265,42 @@ const toggleLike = async (req, res) => {
 
         if (req.user) {
             // Authenticated user - toggle like
-            isLiked = story.toggleLike(req.user.id);
+            // Use _id for Mongoose documents
+            const userId = req.user._id?.toString() || req.user.id?.toString();
+            isLiked = story.toggleLike(userId);
             await story.save();
 
             // Send notification to the story author if exists and not liking own story
-            if (story.userId && story.userId.toString() !== req.user.id) {
-                await Notification.create({
-                    user: story.userId,
+            const storyOwnerId = story.userId?.toString();
+            const currentUserId = userId;
+
+            if (storyOwnerId && storyOwnerId !== currentUserId && isLiked) {
+                // Create notification in database
+                const notification = await Notification.create({
+                    userId: story.userId,
                     type: "like",
-                    title: `Your story got a new like!`,
-                    description: `Someone liked your success story: "${story.title}"`
+                    message: `Someone liked your success story: "${story.title}"`
                 });
+
+                // Get the socket.io instance from the app
+                const io = req.app.get('io');
+
+                // Emit real-time notification to the story owner
+                if (io) {
+                    // Ensure userId is converted to string to match socket room name
+                    // The socket room is joined using socket.user.id (from JWT payload.id)
+                    // which is the user._id as a string
+                    const targetUserId = storyOwnerId;
+
+                    io.to(targetUserId).emit('newNotification', {
+                        _id: notification._id,
+                        userId: notification.userId,
+                        type: notification.type,
+                        message: notification.message,
+                        read: notification.read,
+                        createdAt: notification.createdAt
+                    });
+                }
             }
         } else {
             // Anonymous user - simple like count increment/decrement
@@ -326,13 +351,14 @@ const getUserStories = async (req, res) => {
         const page = parseInt(req.query.page) || 1;
         const limit = parseInt(req.query.limit) || 10;
 
-        const stories = await SuccessStory.find({ userId: req.user.id })
+        const userId = req.user._id?.toString() || req.user.id?.toString();
+        const stories = await SuccessStory.find({ userId: userId })
             .sort({ createdAt: -1 })
             .limit(limit * 1)
             .skip((page - 1) * limit)
             .lean();
 
-        const total = await SuccessStory.countDocuments({ userId: req.user.id });
+        const total = await SuccessStory.countDocuments({ userId: userId });
 
         res.json({
             success: true,

@@ -76,13 +76,14 @@ const connectedUsers = new Map();
 io.on("connection", (socket) => {
   console.log("🟢 Socket connected:", socket.id, "User:", socket.user.id);
 
-  // Join personal room (userId)
-  socket.join(socket.user.id);
-  connectedUsers.set(socket.user.id, socket.id);
+  // Join personal room (userId) - ensure it's a string
+  const userRoom = String(socket.user.id);
+  socket.join(userRoom);
+  connectedUsers.set(userRoom, socket.id);
 
   socket.on("disconnect", () => {
     console.log("🔴 Socket disconnected:", socket.id);
-    connectedUsers.delete(socket.user.id);
+    connectedUsers.delete(userRoom);
   });
 });
 
