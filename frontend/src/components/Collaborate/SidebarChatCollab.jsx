@@ -62,11 +62,13 @@ export default function SidebarChatCollab({
 
         <div className="create-group">
           <input
+            className="create-input"
             placeholder="New group name"
             value={newGroupName}
             onChange={(e) => setNewGroupName(e.target.value)}
+            aria-label="New group name"
           />
-          <button onClick={handleCreate}>Create</button>
+          <button className="create-btn primary-btn" onClick={handleCreate} aria-label="Create group">Create</button>
         </div>
       </div>
 
@@ -101,21 +103,38 @@ export default function SidebarChatCollab({
 
             <div className="sidebar-actions">
               <button
+                className="secondary-btn"
                 onClick={() => {
-                  const link = onCopyInvite(activeGroup.id);
-                  alert("Invite link copied to clipboard:\n" + link);
+                  try {
+                    const link = onCopyInvite(activeGroup.id);
+                    if (navigator.clipboard && typeof navigator.clipboard.writeText === "function") {
+                      navigator.clipboard.writeText(link || "").then(() => {
+                        // minimal inline feedback
+                        const el = document.createElement('div');
+                        el.textContent = 'Invite link copied';
+                        el.style.position = 'fixed'; el.style.right = '20px'; el.style.top = '80px'; el.style.background = '#111827'; el.style.color = '#fff'; el.style.padding = '8px 12px'; el.style.borderRadius = '8px'; el.style.zIndex = '1000';
+                        document.body.appendChild(el);
+                        setTimeout(() => el.remove(), 1200);
+                      });
+                    } else {
+                      alert('Invite link: ' + link);
+                    }
+                  } catch (err) {
+                    console.warn('copy failed', err);
+                  }
                 }}
+                aria-label="Copy invite link"
               >
-                Copy invite link
+                Copy invite
               </button>
 
               {joinedGroups.includes(activeGroup.id) ? (
-                <div className="joined-badge">Joined</div>
+                <div className="joined-badge" role="status" aria-label="Joined">Joined</div>
               ) : (
                 <button
-                  onClick={() =>
-                    onJoinGroup(activeGroup.id, { id: "current-user", name: "You", avatar: null })
-                  }
+                  className="create-btn primary-btn"
+                  onClick={() => onJoinGroup(activeGroup.id, { id: "current-user", name: "You", avatar: null })}
+                  aria-label="Join group"
                 >
                   Join group
                 </button>

@@ -15,14 +15,16 @@ export default function InspirationSection() {
         </div>
 
         <div className="quote-wrapper">
-          {loading ? (
-            <p>Loading...</p>
-          ) : (
-            <>
-              <p className="quote-text">{quote.text}</p>
-              <p className="quote-author">— {quote.author}</p>
-            </>
-          )}
+          <div className="quote-card">
+            {loading ? (
+              <p className="quote-text">Loading...</p>
+            ) : (
+              <>
+                <p className="quote-text">{quote.text}</p>
+                <p className="quote-author">— {quote.author}</p>
+              </>
+            )}
+          </div>
         </div>
 
         <div className="quote-actions">

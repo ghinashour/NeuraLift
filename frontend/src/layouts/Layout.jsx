@@ -33,7 +33,7 @@ export default function Layout() {
       <div className="global-notifications">
         <div className="global-inline">
           <div className="global-streak">
-            <Streak userId={user?._id} />
+            <Streak userId={user?._id} small />
           </div>
           <div className="global-bell">
             <NotificationsIcon />

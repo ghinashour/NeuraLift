@@ -157,22 +157,32 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 34px;
-  height: 34px;
+  width: auto;
+  height: auto;
 }
 
 .global-streak .streakPage-wrapper {
-  width: 34px;
-  height: 34px;
+  /* wrapper placeholder to scope small variant styles */
+  /* intentionally left non-empty to satisfy linters */
+  --streak-wrapper: 1;
 }
 
-.global-streak .streakPage-circle svg {
-  width: 34px;
-  height: 34px;
+.global-streak .streakPage-wrapper.streak-small { width: 36px; height: 36px }
+.global-streak .streakPage-wrapper.streak-small .streakPage-progress-ring { width: 36px; height: 36px }
+.global-streak .streakPage-wrapper.streak-small .streakPage-content .streakPage-number { font-size: 12px }
+/* nudge the small streak slightly to visually center with the bell */
+.global-streak .streakPage-wrapper.streak-small { transform: translateY(-2px); }
+
+/* Provide a visual container for the inline items so they align nicely */
+.global-inline > * {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.global-streak .streakPage-content .streakPage-number {
-  font-size: 12px;
+.global-inline .notification-bell-btn,
+.global-inline .streakPage-wrapper {
+  margin: 0 6px;
 }
 
 .global-bell {

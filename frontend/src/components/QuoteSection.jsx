@@ -23,7 +23,12 @@ const QuoteSection = ({ quote, onNewQuote, isLoading }) => {
               {quote ? `"${quote.text}"` : "Stay focused and productive! 🌟"}
             </p>
             {quote && quote.author && (
-              <p className="quote-section__author">— {quote.author}</p>
+              <div className="quote-section__meta">
+                <div className="quote-section__avatar" aria-hidden>
+                  {quote.author.split(" ").map(n => n[0]).slice(0,2).join("").toUpperCase()}
+                </div>
+                <p className="quote-section__author">— {quote.author}</p>
+              </div>
             )}
           </>
         )}

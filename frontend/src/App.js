@@ -54,6 +54,9 @@ import SuccessStory from "./pages/SuccessStories/SuccessStory";
 import Challenges from "./pages/Challenges/Challenges";
 import TrueFalse from "./pages/Challenges/TrueFalse";
 import TenzisGame from "./pages/Challenges/TenzisGame";
+import CodeQuiz from "./pages/Games/CodeQuiz";
+import TenzisSolo from "./pages/Games/TenzisSolo";
+import Leaderboard from "./pages/Games/Leaderboard";
 import DevQuestions from "./pages/Challenges/DevQuestions";
 import AssemblyGameComponent from "./pages/Challenges/AssemblyGame";
 
@@ -201,6 +204,9 @@ function App() {
                     <Route path="challenges" element={<Challenges />} />
                     <Route path="challenges/true-false" element={<TrueFalse />} />
                     <Route path="challenges/tenzis-game" element={<TenzisGame />} />
+                    <Route path="challenges/tenzis-solo" element={<TenzisSolo />} />
+                    <Route path="challenges/code-quiz" element={<CodeQuiz />} />
+                    <Route path="challenges/leaderboard" element={<Leaderboard />} />
                     <Route path="challenges/dev-questions" element={<DevQuestions />} />
                     <Route path="challenges/assembly-game" element={<AssemblyGameComponent />} />
                   </Route>

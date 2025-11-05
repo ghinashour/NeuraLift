@@ -28,6 +28,7 @@ const notificationRoutes = require("./routes/Notification.js");
 const chatRoutes = require("./routes/chatRoutes.js");
 const medicineRoutes = require("./routes/medicineRoutes.js");
 const collaborateRoutes = require("./routes/collaborate");
+const gamesRoutes = require("./routes/games");
 const User = require("./models/User.js"); // For streak logic
 
 // ------------------------------------------------
@@ -110,39 +111,69 @@ app.post("/api/user/:id/update-streak", async (req, res) => {
   try {
     const { id } = req.params;
     const user = await User.findById(id);
+
     if (!user) return res.status(404).json({ msg: "User not found" });
 
     const today = new Date();
     const lastLogin = user.lastLoginDate ? new Date(user.lastLoginDate) : null;
 
-    if (lastLogin) {
-      const diffInDays = Math.floor((today - lastLogin) / (1000 * 60 * 60 * 24));
+    // Normalize both dates to midnight for accurate "day difference" comparison
+    const normalizeDate = (date) => {
+      const d = new Date(date);
+      d.setHours(0, 0, 0, 0);
+      return d;
+    };
 
+    const normalizedToday = normalizeDate(today);
+    const normalizedLast = lastLogin ? normalizeDate(lastLogin) : null;
+
+    // Calculate difference in full days
+    let diffInDays = 0;
+    if (normalizedLast) {
+      diffInDays = Math.floor((normalizedToday - normalizedLast) / (1000 * 60 * 60 * 24));
+    }
+
+    if (normalizedLast) {
       if (diffInDays === 1) {
-        // User logged in the next day → increment streak
+        // ✅ Consecutive day → increment streak
         user.streak += 1;
       } else if (diffInDays > 1) {
-        // Missed at least one day → reset streak
+        // ❌ Missed one or more days → reset streak
         user.streak = 1;
       }
-      // If diffInDays === 0 → same day login, no change
+      // 💤 diffInDays === 0 → same day login, streak unchanged
     } else {
+      // 🌟 First ever login
       user.streak = 1;
     }
 
+    // 🕓 Always update last login
     user.lastLoginDate = today;
+
+    // 🏆 Optional: track the longest streak
+    if (user.longestStreak === undefined || user.streak > user.longestStreak) {
+      user.longestStreak = user.streak;
+    }
+
     await user.save();
 
     res.status(200).json({
+      success: true,
       msg: "Streak updated successfully",
       streak: user.streak,
+      longestStreak: user.longestStreak,
       lastLoginDate: user.lastLoginDate,
     });
   } catch (err) {
     console.error("Error updating streak:", err);
-    res.status(500).json({ msg: "Server error", error: err.message });
+    res.status(500).json({
+      success: false,
+      msg: "Server error while updating streak",
+      error: err.message,
+    });
   }
 });
+
 
 app.post("/api/chat", async (req, res) => {
   const { message, history } = req.body;
@@ -179,6 +210,7 @@ app.use("/api/admin/tasks", adminTaskRouter);
 app.use("/api/admin", adminRoutes);
 app.use("/api/collaborate", collaborateRoutes);
 app.use("/api/medicines", medicineRoutes);
+app.use("/api/games", gamesRoutes);
 
 // ------------------------------------------------
 // 📦 DATABASE CONNECTION
@@ -192,4 +224,8 @@ mongoose
 // 🖥️ SERVER START
 // ------------------------------------------------
 const PORT = process.env.PORT || 4000;
-server.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
+if (require.main === module) {
+  server.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
+}
+
+module.exports = app;

@@ -75,11 +75,26 @@ function Challenges() {
           description="Answer quick programming true or false questions."
           link="/challenges/true-false"
         />
-        <ChallengeCard
-          title="Tenzis Game"
-          description="Play the dice-based coding challenge game."
-          link="/challenges/tenzis-game"
-        />
+            <ChallengeCard
+              title="Tenzis Game"
+              description="Play the dice-based coding challenge game."
+              link="/challenges/tenzis-game"
+            />
+            <ChallengeCard
+              title="Tenzis (Solo)"
+              description="Quick solo dice game (new)."
+              link="/challenges/tenzis-solo"
+            />
+            <ChallengeCard
+              title="Leaderboard"
+              description="See top players for games."
+              link="/challenges/leaderboard"
+            />
+            <ChallengeCard
+              title="Code Quiz"
+              description="Short developer quiz - answer to score points."
+              link="/challenges/code-quiz"
+            />
         <ChallengeCard
           title="Dev Questions"
           description="Challenge yourself with tricky developer questions."

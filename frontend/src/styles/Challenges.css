@@ -1,43 +1,39 @@
 /* General Container */
 .challenges-container {
   min-height: 100vh;
-  width: 1200px;
-  height: 800px;
+  width: 100%;
+  max-width: 1200px; /* responsive cap */
+  margin: 0 auto;
   background-color: #f4f7fb;
-  color: black;
-  text-align: center;
-  padding: 2rem;
-  font-family: "Poppins", sans-serif;
   color: #2B2F3B;
+  text-align: center;
+  padding: 2rem 1rem;
+  font-family: "Poppins", sans-serif;
 }
 
 /* Header */
 .header {
   display: flex;
-  align-items: center;    
-  justify-content: center; 
-  gap: 10px;                
-  margin-bottom: 1rem;     
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 1rem;
 }
 
 .title {
-  font-size: 2.5rem;
+  font-size: 2.2rem;
   font-weight: 700;
   color: #2B2F3B;
   margin-bottom: 0.5rem;
-  padding-left: 10px;
+  padding-left: 8px;
 }
 
 /* Typing Animation for Subtitle */
 .subtitle {
   color: #626A84;
-  font-size: 1.1rem;
-  margin-bottom: 2rem;
+  font-size: 1rem;
+  margin-bottom: 1.5rem;
   display: inline-block;
-  border-right: 2px solid #fff;
-  white-space: nowrap;
-  overflow: hidden; 
-  animation: typing 4s steps(70, end) forwards, blink 0.8s infinite;
 }
 
 @keyframes typing {
@@ -53,26 +49,26 @@
 /* Buttons Row */
 .button-row {
   display: flex;
-  align-items: center;    
-  justify-content: center; 
-  gap: 15px;                
-  margin-bottom: 1rem;  
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 1rem;
   flex-wrap: wrap;
 }
 
 .category-btn {
-  padding: 0.9rem 1.6rem;
-  border-radius: 30px;
+  padding: 0.75rem 1.2rem;
+  border-radius: 24px;
   border: none;
   font-weight: 600;
   font-size: 0.95rem;
   color: white;
   cursor: pointer;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
-  transition: all 0.3s ease;
-  display: flex;
+  box-shadow: 0 6px 18px rgba(60,131,246,0.12);
+  transition: all 0.22s ease;
+  display: inline-flex;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
 }
 
 .category-btn:hover {
@@ -90,37 +86,63 @@
 /* Cards Grid */
 .cards-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 1.5rem;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1.25rem;
   margin-top: 2rem;
+}
+
+/* Leaderboard styles */
+.leaderboard-table {
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto;
+  border-collapse: collapse;
+  background: white;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 6px 18px rgba(43,54,81,0.06);
+}
+.leaderboard-table th,
+.leaderboard-table td {
+  padding: 12px 14px;
+  text-align: left;
+  border-bottom: 1px solid #f1f5f9;
+}
+.leaderboard-table thead th {
+  background: #f8fafc;
+  font-weight: 700;
+}
+.leaderboard-empty {
+  text-align: center;
+  padding: 18px;
+  color: #64748b;
 }
 
 /* Challenge Cards */
 .challenge-card {
   background: #fff;
   color: #222;
-  padding: 1.8rem;
-  border-radius: 20px;
-  box-shadow: 0 6px 14px rgba(0,0,0,0.15);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  padding: 1.4rem;
+  border-radius: 16px;
+  box-shadow: 0 8px 22px rgba(43,54,81,0.06);
+  transition: transform 0.24s ease, box-shadow 0.24s ease;
   position: relative;
   overflow: hidden;
 }
 
 .challenge-card::before {
-  content: "🎮";
+  /* decorative emoji replaced with subtle circle - use CSS + SVG background if desired */
+  content: "";
   position: absolute;
-  top: -10px;
-  right: 1px;
-  font-size: 3rem;
-  opacity: 0.5;
-  width: 60px;
-  display: flex;
+  top: 12px;
+  right: 12px;
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, rgba(60,131,246,0.12), rgba(124,59,237,0.08));
+  box-shadow: 0 6px 12px rgba(60,131,246,0.06);
+  opacity: 0.9;
 }
-
-.challenge-card:nth-child(2)::before { content: "✅"; }
-.challenge-card:nth-child(3)::before { content: "🎲"; }
-.challenge-card:nth-child(4)::before { content: "🤔"; }
 
 .challenge-card:hover {
   transform: translateY(-5px) rotate(-1deg);
@@ -128,15 +150,15 @@
 }
 
 .challenge-card h3 {
-  font-size: 1.3rem;
-  font-weight: 600;
+  font-size: 1.1rem;
+  font-weight: 700;
   color: #2b2f3b;
-  margin-bottom: 0.6rem;
+  margin-bottom: 0.4rem;
 }
 
 .challenge-card p {
-  font-size: 0.95rem;
-  color: #444;
+  font-size: 0.92rem;
+  color: #475569;
 }
 
 /* ===============================
@@ -154,7 +176,7 @@
   }
 
   .category-btn {
-    padding: 0.8rem 1.4rem;
+    padding: 0.8rem 1rem;
     font-size: 0.9rem;
   }
 }

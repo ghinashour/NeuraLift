@@ -222,8 +222,32 @@
 /* Quote area */
 .quote-wrapper {
   width: 100%;
-  max-width: 718px;
+  max-width: 818px;
   height: auto;
+  display: flex;
+  justify-content: center;
+}
+
+.quote-card {
+  width: 100%;
+  max-width: 720px;
+  background: linear-gradient(90deg, #3C8AF6, #76ABF4);
+  border-radius: 10px;
+  padding: 20px 22px;
+  box-shadow: 0 6px 20px rgba(16,24,40,0.08);
+  color: #ffffff;
+  text-align: left;
+  position: relative;
+}
+
+.quote-card::before {
+  content: "\201C"; /* left double quotation mark */
+  font-size: 48px;
+  line-height: 1;
+  position: absolute;
+  top: 12px;
+  left: 14px;
+  opacity: 0.12;
 }
 
 .quote-card {
@@ -241,21 +265,22 @@
 }
 
 .quote-text {
-  font-size: 16px;
-  color: #98A1B3;
+  font-size: 18px;
+  color: #eef6ff;
   font-style: italic;
-  line-height: 1.3;
-  max-height: 3.6em;
+  line-height: 1.45;
+  max-height: 6.2em;
   overflow: hidden;
   text-overflow: ellipsis;
-  text-align: center;
+  margin: 0 0 8px 0;
 }
 
 .quote-author {
   font-size: 14px;
-  color: #6b7280;
-  margin-top: 6px;
-  align-self: flex-end;
+  color: rgba(255,255,255,0.9);
+  margin-top: 8px;
+  text-align: right;
+  font-weight: 600;
 }
 
 .quote-loading {

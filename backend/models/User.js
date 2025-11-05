@@ -20,7 +20,8 @@ const userSchema = new mongoose.Schema({
   lastLogin: { type: Date },
   streak: {
     current: { type: Number, default: 0 },
-    lastActiveDate: { type: Date, default: null }
+    lastLoginDate: { type: Date },
+  longestStreak: { type: Number, default: 0 }
   },
   authProvider: {
   type: String,
@@ -29,6 +30,13 @@ const userSchema = new mongoose.Schema({
 },
   tasks: [{ type: mongoose.Schema.Types.ObjectId, ref: "Task" }],
   refreshToken: { type: String }, // optional if you want DB tracking
+  gameScores: [
+    {
+      gameType: { type: String },
+      score: { type: Number },
+      date: { type: Date, default: Date.now },
+    },
+  ],
 }, { timestamps: true });
 
 module.exports = mongoose.model("User", userSchema);

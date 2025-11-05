@@ -1,58 +1,67 @@
 import React, { useEffect, useState } from "react";
 import API from "../api/axios";
-import { FaFire } from "react-icons/fa";
+import { Flame } from "lucide-react";
+
 import "./Streak.css";
 
 export default function Streak({ userId }) {
   const [streak, setStreak] = useState(0);
-  const maxStreak = 30; // max streak for full circle
+  const [longest, setLongest] = useState(0);
+  const [showPopup, setShowPopup] = useState(false);
 
   useEffect(() => {
-    if (!userId) return; // Skip if userId is undefined
+    if (!userId) return;
 
-    async function fetchStreak() {
+    async function updateAndFetchStreak() {
       try {
         const res = await API.post(`/user/${userId}/update-streak`);
         setStreak(res.data.streak);
+        setLongest(res.data.longestStreak);
       } catch (err) {
-        console.error("Failed to fetch streak:", err);
+        console.error("Failed to update streak:", err);
       }
     }
-    fetchStreak();
+
+    updateAndFetchStreak();
   }, [userId]);
 
-  const progress = Math.min(streak / maxStreak, 1) * 100;
+  const togglePopup = () => setShowPopup((prev) => !prev);
 
   return (
-    <div className="streakPage-wrapper">
-      <div className="streakPage-circle">
-        <svg className="streakPage-progress-ring" width="60" height="60">
-          <circle
-            className="streakPage-progress-ring__background"
-            stroke="#eee"
-            strokeWidth="6"
-            fill="transparent"
-            r="26"
-            cx="30"
-            cy="30"
-          />
-          <circle
-            className="streakPage-progress-ring__circle"
-            stroke="#ff6a00"
-            strokeWidth="6"
-            fill="transparent"
-            r="26"
-            cx="30"
-            cy="30"
-            strokeDasharray={2 * Math.PI * 26}
-            strokeDashoffset={2 * Math.PI * 26 * (1 - progress / 100)}
-          />
-        </svg>
-        <div className="streakPage-content">
-          <FaFire className="streakPage-fire" />
-          <span className="streakPage-number">{streak}</span>
+    <div className="streak-container">
+      {/* Floating streak icon */}
+      <button
+        className="streak-button"
+        onClick={togglePopup}
+        aria-label="View streak details"
+      >
+        <span className="streak-emoji"><Flame color="white" size={27} fill="white"/></span>
+        <span className="streak-number">{streak}</span>
+      </button>
+
+      {/* Popup with analytics */}
+      {showPopup && (
+        <div className="streak-popup">
+          <div className="streak-popup-header">
+            <h4>Your Streak</h4>
+            <button
+              className="close-popup"
+              onClick={() => setShowPopup(false)}
+              aria-label="Close"
+            >
+              ✕
+            </button>
+          </div>
+          <div className="streak-popup-body">
+            <p>🔥 Current Streak: <strong>{streak} days</strong></p>
+            <p>🏆 Longest Streak: <strong>{longest} days</strong></p>
+            <p>
+              Keep it up! Logging in every day increases your streak and helps
+              you stay consistent toward your goals.
+            </p>
+          </div>
         </div>
-      </div>
+      )}
     </div>
   );
 }

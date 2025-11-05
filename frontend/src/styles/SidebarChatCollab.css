@@ -16,8 +16,8 @@
   color: white;
 }
 
-.sidebar-header h2 {
-  margin: 0 0 4px 0;
+
+.create-group-btn {
   font-size: 1.5rem;
   font-weight: 700;
 }
@@ -208,6 +208,7 @@
   line-height: 1.4;
   display: -webkit-box;
   -webkit-line-clamp: 2;
+  line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
@@ -349,8 +350,68 @@
   box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4);
 }
 
+.sidebar-actions button {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  color: #0f172a;
+  padding: 8px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.18s ease;
+}
+
+.sidebar-actions button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(2,6,23,0.06);
+}
+
+.joined-badge {
+  background: #ecfccb;
+  color: #166534;
+  padding: 6px 10px;
+  border-radius: 999px;
+  font-weight: 600;
+  font-size: 0.85rem;
+}
+
 .btn-icon {
   font-size: 1.1rem;
+}
+
+/* Primary / Secondary buttons used in the sidebar */
+.primary-btn {
+  background: linear-gradient(90deg, #3b82f6 0%, #60a5fa 100%);
+  border: none;
+  color: white;
+  padding: 10px 14px;
+  border-radius: 10px;
+  box-shadow: 0 6px 18px rgba(59,130,246,0.18);
+  font-weight: 700;
+}
+
+.secondary-btn {
+  background: transparent;
+  border: 1px solid #e6eefc;
+  color: #0f172a;
+  padding: 10px 12px;
+  border-radius: 10px;
+}
+
+.create-group { display: flex; gap: 8px; padding: 12px; }
+.create-input { flex: 1; padding: 10px 12px; border-radius: 10px; border: 1px solid #e2e8f0; }
+.create-btn { padding: 10px 12px; border-radius: 10px; }
+
+/* make sidebar responsive: collapse to top bar on narrow screens */
+@media (max-width: 900px) {
+  .sidebar-chat { width: 100%; height: auto; border-right: none; box-shadow: none; }
+  .groups-list { display: flex; gap: 8px; overflow-x: auto; padding: 8px; }
+  .group-item { min-width: 180px; flex: 0 0 auto; }
+  .sidebar-tasks { display: none; }
+}
+
+@media (max-width: 460px) {
+  .group-item { min-width: 140px; padding: 10px; }
+  .create-input { padding: 8px 10px; }
 }
 
 /* Loading State */
