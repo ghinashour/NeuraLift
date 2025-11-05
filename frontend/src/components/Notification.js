@@ -27,8 +27,13 @@ export default function NotificationsIcon() {
     const handleIncoming = (notif) => {
       if (!notif) return;
       // show toast and insert into list
-      setToast({ id: notif?.messageId || Date.now(), message: notif.message });
-      setNotifications((prev) => [notif, ...prev]);
+      setToast({ id: notif?._id || notif?.messageId || Date.now(), message: notif.message });
+      setNotifications((prev) => {
+        // Prevent duplicates
+        const exists = prev.find(n => n._id === notif._id);
+        if (exists) return prev;
+        return [notif, ...prev];
+      });
       // animate bell briefly
       setAnimate(true);
       setTimeout(() => setAnimate(false), 1000);
@@ -36,7 +41,9 @@ export default function NotificationsIcon() {
       setTimeout(() => setToast(null), 4000);
     };
 
-    if (socket) socket.on("newNotification", handleIncoming);
+    if (socket) {
+      socket.on("newNotification", handleIncoming);
+    }
 
     const fetchNotifications = async () => {
       try {
@@ -50,9 +57,11 @@ export default function NotificationsIcon() {
     fetchNotifications();
 
     return () => {
-      if (socket) socket.off("newNotification", handleIncoming);
+      if (socket) {
+        socket.off("newNotification", handleIncoming);
+      }
     };
-  }, [user, token]);
+  }, [user, token, socket]);
 
   // Focus first notification item when dropdown opens
   useEffect(() => {

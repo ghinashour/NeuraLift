@@ -1,3 +1,44 @@
+<<<<<<< HEAD
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "description": "the backend system to handle the data send by the site users",
+  "license": "ISC",
+  "author": "techtalks team B",
+    "main": "index.js",
+  "scripts": {
+    "start": "nodemon index.js",
+    "test": "npm test"
+  },
+  "dependencies": {
+    "@sendgrid/mail": "^8.1.6",
+    "bcrypt": "^6.0.0",
+    "bcryptjs": "^3.0.2",
+    "bull": "^4.16.5",
+    "cookie-parser": "^1.4.7",
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.3",
+    "type": "module",
+    "express": "^5.1.0",
+    "express-async-handler": "^1.2.0",
+    "express-session": "^1.18.2",
+    "express-validator": "^7.2.1",
+    "ioredis": "^5.8.0",
+    "jsonwebtoken": "^9.0.2",
+    "mongodb": "^6.20.0",
+    "mongoose": "^8.18.1",
+    "multer": "^2.0.2",
+    "nodemailer": "^7.0.6",
+    "openai": "^6.7.0",
+    "passport": "^0.7.0",
+    "passport-google-oauth20": "^2.0.0",
+    "winston": "^3.18.3"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.10"
+  }
+}
+=======
 {
   "name": "backend",
   "version": "1.0.0",
@@ -28,6 +69,7 @@
     "mongoose": "^8.19.2",
     "multer": "^2.0.2",
     "nodemailer": "^7.0.6",
+    "openai": "^6.8.0",
     "passport": "^0.7.0",
     "passport-google-oauth20": "^2.0.0",
     "socket.io": "^4.8.1",
@@ -40,3 +82,4 @@
     "mongodb-memory-server": "^8.11.0"
   }
 }
+>>>>>>> 9fa60023cfa3d37852d15b1adc926ad1b6d07103

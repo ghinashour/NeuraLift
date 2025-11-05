@@ -1,60 +1,48 @@
-import React, { createContext, useContext, useState, useCallback, useEffect } from 'react';
-import { loadChatHistory, saveChatHistory, clearChatHistory as clearHistoryUtil } from '../utils/localStorage';
+import React, { createContext, useContext, useState, useCallback } from 'react';
 
 const ChatContext = createContext();
 
-// Initial bot message for a fresh start
-const INITIAL_MESSAGE = { 
-  id: 1, 
-  sender: "bot", 
-  text: "Welcome to NeuraLift! How can I help you today?",
-  timestamp: new Date()
-};
-
 export const ChatProvider = ({ children }) => {
-  const [messages, setMessages] = useState([]);
+  const [messages, setMessages] = useState([
+    { 
+      id: Date.now(), 
+      sender: "bot", 
+      text: "Welcome to NeuraLift! How can I help you today?",
+      timestamp: new Date()
+    }
+  ]);
   const [isTyping, setIsTyping] = useState(false);
-
-  // Load chat history on mount
-  useEffect(() => {
-    const history = loadChatHistory();
-    if (history && history.length > 0) {
-      setMessages(history);
-    } else {
-      setMessages([INITIAL_MESSAGE]);
-    }
-  }, []);
-
-  // Save chat history whenever messages change
-  useEffect(() => {
-    if (messages.length > 0) {
-      saveChatHistory(messages);
-    }
-  }, [messages]);
 
   const addMessage = useCallback((message) => {
     const newMessage = {
-      id: Date.now(),
+      id: Date.now() + Math.random(), // Ensure unique ID
       timestamp: new Date(),
       ...message
     };
-    // Use functional update to ensure we get the latest state
     setMessages(prev => [...prev, newMessage]);
   }, []);
 
   const clearMessages = useCallback(() => {
-    clearHistoryUtil(); // Clear localStorage
-    setMessages([INITIAL_MESSAGE]);
+    setMessages([
+      { 
+        id: Date.now(), 
+        sender: "bot", 
+        text: "Welcome to NeuraLift! How can I help you today?",
+        timestamp: new Date()
+      }
+    ]);
   }, []);
 
+  const value = {
+    messages,
+    isTyping,
+    setIsTyping,
+    addMessage,
+    clearMessages
+  };
+
   return (
-    <ChatContext.Provider value={{
-      messages,
-      isTyping,
-      setIsTyping,
-      addMessage,
-      clearMessages
-    }}>
+    <ChatContext.Provider value={value}>
       {children}
     </ChatContext.Provider>
   );

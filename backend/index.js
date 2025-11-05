@@ -1,3 +1,4 @@
+
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
@@ -77,13 +78,14 @@ const connectedUsers = new Map();
 io.on("connection", (socket) => {
   console.log("🟢 Socket connected:", socket.id, "User:", socket.user.id);
 
-  // Join personal room (userId)
-  socket.join(socket.user.id);
-  connectedUsers.set(socket.user.id, socket.id);
+  // Join personal room (userId) - ensure it's a string
+  const userRoom = String(socket.user.id);
+  socket.join(userRoom);
+  connectedUsers.set(userRoom, socket.id);
 
   socket.on("disconnect", () => {
     console.log("🔴 Socket disconnected:", socket.id);
-    connectedUsers.delete(socket.user.id);
+    connectedUsers.delete(userRoom);
   });
 });
 
@@ -211,7 +213,18 @@ app.use("/api/admin", adminRoutes);
 app.use("/api/collaborate", collaborateRoutes);
 app.use("/api/medicines", medicineRoutes);
 app.use("/api/games", gamesRoutes);
-
+app.get("/api/admin/success-stories/analytics/stats", (req, res) => {
+  res.json({
+    totalStories: successStories.length,
+    featured: successStories.filter((s) => s.featured).length,
+  });
+});
+app.put("/api/admin/success-stories/feature/:id", (req, res) => {
+  const story = successStories.find((s) => s.id == req.params.id);
+  if (!story) return res.status(404).json({ success: false, message: "Story not found" });
+  story.featured = !story.featured;
+  res.json(story);
+});
 // ------------------------------------------------
 // 📦 DATABASE CONNECTION
 // ------------------------------------------------
@@ -224,8 +237,4 @@ mongoose
 // 🖥️ SERVER START
 // ------------------------------------------------
 const PORT = process.env.PORT || 4000;
-if (require.main === module) {
-  server.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
-}
-
-module.exports = app;
+server.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));

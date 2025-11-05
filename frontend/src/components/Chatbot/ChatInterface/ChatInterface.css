@@ -1,69 +1,173 @@
+/* ===== CHAT INTERFACE STRUCTURE ===== */
+/* ChatInterface.css top — make sure it fills its parent and doesn't offset */
 .chat-interface {
-  /* Main container size and position (can be adjusted for embed vs full screen) */
-  width: 100%;
-  max-width: 450px;
-  height: 80vh; 
-  max-height: 700px;
-  
-  /* Layout */
+  width: 100%;        /* take the width given by .chatbot-page .chat-interface */
+  height: 100%;
   display: flex;
   flex-direction: column;
+  border-radius: 14px;
   overflow: hidden;
-  
-  /* Styling */
-  background: linear-gradient(135deg, #2E5AAC 0%, #4A90E2 100%); /* NeuraLift brand colors */
-  border-radius: 16px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-  font-family: 'Inter', sans-serif;
+  position: relative;
+  background: linear-gradient(180deg, #6BB6FF 0%, #1E5BA8 100%);
 }
 
+
+/* ===== HEADER ===== */
+.chat-header {
+  flex-shrink: 0;
+  padding: 18px 24px;
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.25);
+  font-weight: 600;
+  font-size: 20px;
+  color: #ffffff;
+  text-align: center;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+/* ===== CHAT CONTENT CONTAINER ===== */
 .chat-content-container {
   flex-grow: 1;
   display: flex;
-  flex-direction: column-reverse; /* To keep quick replies closer to the input area */
+  flex-direction: column;
   overflow: hidden;
 }
 
-/* Ensure components take the correct space */
-
-/* MessageList needs to fill the remaining vertical space */
+/* ===== MESSAGE LIST ===== */
 .message-list {
-  flex-grow: 1; 
-  flex-shrink: 1;
-  /* Override default flex behavior to push it above quick replies */
-  flex-direction: column; 
-  /* Standard order for messages */
-  display: flex; 
-  order: 1; 
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 20px 28px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255,255,255,0.3) transparent;
 }
 
-/* Quick Replies and Input Area stay at the bottom */
+.message-list::-webkit-scrollbar {
+  width: 8px;
+}
+
+.message-list::-webkit-scrollbar-thumb {
+  background-color: rgba(255,255,255,0.3);
+  border-radius: 10px;
+}
+
+/* ===== INDIVIDUAL MESSAGES ===== */
+.message {
+  max-width: 75%;
+  padding: 12px 16px;
+  margin: 8px 0;
+  border-radius: 14px;
+  line-height: 1.4;
+  font-size: 15px;
+  animation: fadeIn 0.25s ease;
+}
+
+.message.user {
+  align-self: flex-end;
+  background: rgba(255, 255, 255, 0.9);
+  color: #1E5BA8;
+}
+
+.message.bot {
+  align-self: flex-start;
+  background: rgba(255, 255, 255, 0.15);
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+}
+
+/* ===== QUICK REPLIES ===== */
 .quick-replies {
-  order: 2;
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  padding: 12px 20px;
+  background: rgba(255, 255, 255, 0.08);
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
 }
 
+.quick-reply-btn {
+  background: rgba(255, 255, 255, 0.9);
+  color: #1E5BA8;
+  border: none;
+  border-radius: 30px;
+  padding: 8px 16px;
+  cursor: pointer;
+  font-weight: 500;
+  font-size: 14px;
+  transition: all 0.2s ease;
+}
+
+.quick-reply-btn:hover {
+  background: #ffffff;
+  transform: translateY(-2px);
+}
+
+/* ===== INPUT AREA ===== */
 .input-area {
-  order: 3;
-}
-
-.chat-header,
-.input-area,
-.quick-replies {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 16px 20px;
+  background: rgba(255, 255, 255, 0.12);
+  border-top: 1px solid rgba(255, 255, 255, 0.25);
   flex-shrink: 0;
 }
 
-/* Specific styling for the welcome screen to ensure it covers the full space when active */
-.welcome-screen {
-  flex-grow: 1;
+.input-area input {
+  flex: 1;
+  padding: 12px 16px;
+  border: none;
+  border-radius: 30px;
+  outline: none;
+  font-size: 15px;
+  background: rgba(255, 255, 255, 0.9);
+  color: #1E5BA8;
 }
 
-/* Media query for smaller screens, making the chat fill more of the viewport */
-@media (max-width: 600px) {
+.input-area button {
+  background: #ffffff;
+  border: none;
+  border-radius: 50%;
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.input-area button:hover {
+  background: #dbeafe;
+  transform: scale(1.05);
+}
+
+/* ===== ANIMATIONS ===== */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ===== RESPONSIVE ADJUSTMENTS ===== */
+@media (max-width: 900px) {
   .chat-interface {
-    width: 100vw;
-    height: 100vh;
-    max-width: none;
-    max-height: none;
-    border-radius: 0; /* Full screen on mobile */
+    border-radius: 10px;
+  }
+
+  .message {
+    max-width: 85%;
+    font-size: 14px;
   }
 }
