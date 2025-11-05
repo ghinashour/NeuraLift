@@ -3,6 +3,9 @@ import './MessageBubble.css';
 import { formatTime } from '../../../utils/messageHelpers';
 
 const MessageBubble = ({ message }) => {
+  // Safety check
+  if (!message) return null;
+  
   const { sender, text, timestamp } = message;
   
   return (
@@ -15,4 +18,4 @@ const MessageBubble = ({ message }) => {
   );
 };
 
-export default MessageBubble; // <-- CORRECTED
+export default MessageBubble;

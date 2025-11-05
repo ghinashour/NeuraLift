@@ -1,18 +1,49 @@
-import React from 'react';
+import React, { useRef, useEffect } from 'react';
 import './MessageList.css';
-import { formatTime } from '../../../utils/messageHelpers';
+import MessageBubble from '../MessageBubble/MessageBubble';
+import TypingIndicator from '../TypingIndicator/TypingIndicator';
+import { useChat } from '../../../context/ChatContext';
 
-const MessageBubble = ({ message }) => {
-  const { sender, text, timestamp } = message;
-  
+const MessageList = () => {
+  const { messages, isTyping } = useChat();
+  const messagesEndRef = useRef(null);
+
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [messages, isTyping]);
+
+  // Safety check for messages
+  if (!messages || !Array.isArray(messages)) {
+    return <div className="message-list">Loading...</div>;
+  }
+
   return (
-    <div className={`message-bubble ${sender === 'user' ? 'user-bubble' : 'bot-bubble'}`}>
-      <div className="bubble-content">{text}</div>
-      {timestamp && (
-        <div className="bubble-timestamp">{formatTime(timestamp)}</div>
+    <div className="message-list">
+      {messages.map((message) => {
+        // Safety check for each message
+        if (!message || !message.id) return null;
+        
+        return (
+          <div
+            key={message.id}
+            className={`message-wrapper ${message.sender === 'user' ? 'user-message' : 'bot-message'}`}
+          >
+            <MessageBubble message={message} />
+          </div>
+        );
+      })}
+      
+      {isTyping && (
+        <div className="message-wrapper bot-message">
+          <div className="typing-bubble">
+            <TypingIndicator />
+          </div>
+        </div>
       )}
+      
+      <div ref={messagesEndRef} />
     </div>
   );
 };
 
-export default MessageBubble;
+export default MessageList;

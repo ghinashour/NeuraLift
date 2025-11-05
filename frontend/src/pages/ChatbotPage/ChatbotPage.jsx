@@ -1,21 +1,15 @@
-// src/pages/ChatbotPage/ChatbotPage.jsx
-import React from "react";
-import "./ChatbotPage.css";
-import { useChat } from "../../hooks/useChat";
-import ChatInterface from "../../components/Chatbot/ChatInterface/ChatInterface";
+import React from 'react';
+import './ChatbotPage.css';
+import ChatInterface from '../../components/Chatbot/ChatInterface/ChatInterface';
+import { ChatProvider } from '../../context/ChatContext';
 
 const ChatbotPage = () => {
-  const { messages, sendMessage, isTyping, chatEndRef } = useChat();
-
   return (
-    <div className="chatbot-page">
-      <ChatInterface
-        messages={messages}
-        onSendMessage={sendMessage}
-        isTyping={isTyping}
-        chatEndRef={chatEndRef}
-      />
-    </div>
+    <ChatProvider>
+      <div className="chatbot-page">
+        <ChatInterface />
+      </div>
+    </ChatProvider>
   );
 };
 
