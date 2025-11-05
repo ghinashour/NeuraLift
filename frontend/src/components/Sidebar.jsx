@@ -1,8 +1,9 @@
-import React from 'react';
+import React,{useEffect}from 'react';
 import { useNavigate, Link, useLocation } from 'react-router-dom';
 import '../styles/Sidebar.css';
 import logo from '../assets/logo.svg';
 import avatarPlaceholder from "../assets/avatar.png";
+import useUserData from '../hooks/useUserData';
 const getNavIcon = (key, isActive) => {
   const strokeColor = isActive ? '#F1F5F9' : '#626A84';
 
@@ -96,22 +97,31 @@ const getNavIcon = (key, isActive) => {
 };
 
 const navItems = [
-  { key: 'dashboard', label: 'Dashboard', path: '/Dashboard' },
+  { key: 'dashboard', label: 'Dashboard', path: '/dashboard' },
   { key: 'timer', label: 'Focus Timer', path: '/focusTimer' },
   { key: 'tasks', label: 'Tasks', path: '/taskManager' },
   { key: 'mood', label: 'Mood Tracker', path: '/moodTracker' },
   { key: 'stress', label: 'Stress Relief', path: '/stressRelief' },
   { key: 'success', label: 'Success Stories', path: '/success-stories' },
   { key: 'challenges', label: 'Challenges', path: '/Challenges' },
-  { key: 'collab', label: 'Collaborate', path: '/Collaborate' },
+  { key: 'collab', label: 'Collaborate', path: '/collaborate' },
   { key: 'schedule', label: 'Schedule', path: '/Schedule' },
   { key: 'medicine', label: 'Medicine & Health', path: '/medicineHealth' },
   { key: 'assistant', label: 'AI Assistant', path: '/ai-assistant' }
 ];
 
-const Sidebar = ({ isCollapsed, setIsCollapsed, user, loading = false }) => {
+const Sidebar = ({ isSidebarOpen, toggleSidebar, loading = false }) => {
   const navigate = useNavigate();
   const location = useLocation();
+  const { user, fetchUserData } = useUserData();
+
+  useEffect(() => {
+  const handleUserUpdate = () => fetchUserData(); // refresh user data
+  window.addEventListener("userUpdated", handleUserUpdate);
+
+  return () => window.removeEventListener("userUpdated", handleUserUpdate);
+}, [fetchUserData]);
+
 
   const handleNavClick = (path) => {
     // Navigation for all items
@@ -119,15 +129,13 @@ const Sidebar = ({ isCollapsed, setIsCollapsed, user, loading = false }) => {
   };
 
   const isActive = (path) => {
-    if (path === '/') {
-      return location.pathname === '/';
-    }
-    return location.pathname.startsWith(path);
-  };
+  if (path === '/') return location.pathname === '/';
+  return location.pathname.toLowerCase().startsWith(path.toLowerCase());
+};
 
   return (
     <>
-      <aside className={`sidebar`}>
+      <aside className={`sidebar ${isSidebarOpen ? "sidebar-open" : ""}`}>
         <div className="brand">
           <div className="brand-icon">
             <img src={logo} alt="NeuraLift" />
@@ -139,7 +147,6 @@ const Sidebar = ({ isCollapsed, setIsCollapsed, user, loading = false }) => {
             </>
           )}
         </div>
-
 
         <nav className="nav">
           {navItems.map((item) => (
@@ -156,15 +163,15 @@ const Sidebar = ({ isCollapsed, setIsCollapsed, user, loading = false }) => {
         </nav>
 
         <div className="sidebar-bottom">
-          <div className="profile-section">
+          <Link to="/profile" className="profile-section profile-link" title={(user?.username || user?.name || "User")}> {/* Wrap entire section with Link */}
             <div className="profile">
               {loading ? (
                 <div className="profile-loading">
                   <div className="loading-avatar"></div>
-                  {!isCollapsed && <div className="loading-username"></div>}
+                  <div className="loading-username"></div>
                 </div>
               ) : (
-                <Link to="/profile" className="profile-link" title={isCollapsed ? (user?.username || user?.name || "User") : undefined}>
+                <>
                   <img
                     src={
                       user?.profilePhoto
@@ -178,14 +185,14 @@ const Sidebar = ({ isCollapsed, setIsCollapsed, user, loading = false }) => {
                       e.target.src = avatarPlaceholder;
                     }}
                   />
-                  {!isCollapsed && (
+                  {(
                     <span className="sidebar-username">{user?.username || user?.name || "User"}</span>
                   )}
-                </Link>
+                </>
               )}
             </div>
 
-          </div>
+          </Link> {/* Close the Link tag for the section */}
         </div>
       </aside>
     </>

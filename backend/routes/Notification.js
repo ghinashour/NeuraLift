@@ -1,25 +1,45 @@
-// routes/notification.js
 const express = require("express");
 const router = express.Router();
+const auth = require("../middleware/auth");
 const Notification = require("../models/Notification");
 
-// Get notifications for a user
-router.get("/:userId", async (req, res) => {
+// Get notifications for logged-in user
+router.get("/", auth, async (req, res) => {
   try {
-    const notifications = await Notification.find({ user: req.params.userId }).sort({ createdAt: -1 });
-    res.json(notifications);
+    const notifications = await Notification.find({ userId: req.user.id })
+      .sort({ createdAt: -1 });
+    res.json({ notifications });
   } catch (err) {
-    res.status(400).json({ error: err.message });
+    res.status(500).json({ message: "Server error" });
   }
 });
 
-// Mark as read
-router.patch("/read/:id", async (req, res) => {
+// Mark notifications as read
+router.post("/mark-read", auth, async (req, res) => {
   try {
-    const notification = await Notification.findByIdAndUpdate(req.params.id, { isRead: true }, { new: true });
-    res.json(notification);
+    await Notification.updateMany({ userId: req.user.id }, { read: true });
+    res.json({ success: true });
   } catch (err) {
-    res.status(400).json({ error: err.message });
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+// Mark a single notification as read
+router.put("/read/:id", auth, async (req, res) => {
+  try {
+    const notifId = req.params.id;
+    const notif = await Notification.findOneAndUpdate(
+      { _id: notifId, userId: req.user.id },
+      { read: true },
+      { new: true }
+    );
+
+    if (!notif) return res.status(404).json({ message: 'Notification not found' });
+
+    res.json({ success: true, notification: notif });
+  } catch (err) {
+    console.error('Mark single notification read error:', err);
+    res.status(500).json({ message: 'Server error' });
   }
 });
 

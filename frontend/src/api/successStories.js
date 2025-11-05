@@ -77,11 +77,9 @@ export const successStoriesAPI = {
     },
 
     // Like/Unlike a story
-    toggleLike: async (id, hasLikedBefore = false) => {
+    toggleLike: async (id) => {
         try {
-            const response = await axios.post(`${API_BASE_URL}/${id}/like`, {
-                hasLikedBefore
-            });
+            const response = await axios.post(`${API_BASE_URL}/${id}/like`);
             return response.data;
         } catch (error) {
             console.error('Error toggling like:', error);

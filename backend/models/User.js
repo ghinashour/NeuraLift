@@ -22,6 +22,11 @@ const userSchema = new mongoose.Schema({
     current: { type: Number, default: 0 },
     lastActiveDate: { type: Date, default: null }
   },
+  authProvider: {
+  type: String,
+  enum: ["local", "google"],
+  default: "local"
+},
   tasks: [{ type: mongoose.Schema.Types.ObjectId, ref: "Task" }],
   refreshToken: { type: String }, // optional if you want DB tracking
 }, { timestamps: true });

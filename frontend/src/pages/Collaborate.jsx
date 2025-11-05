@@ -1,10 +1,12 @@
 // src/pages/Collaborate.js
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom"; // Add this import
 import "../styles/Collaborate.css";
 
 import Sidebar from "../components/Collaborate/SidebarCollab";
 import PostCard from "../components/Collaborate/PostCard";
+import { useSocket } from "../context/SocketProvider";
 
 import InvitePopup from "../components/Popups/InvitePopup";
 import CreateGroupPopup from "../components/Popups/CreateGroupPopup";
@@ -36,17 +38,42 @@ axiosInstance.interceptors.request.use(
 );
 
 export default function Collaborate() {
+  const navigate = useNavigate(); // Add this hook
   const [activePopup, setActivePopup] = useState(null);
   const [posts, setPosts] = useState([]);
   const [groups, setGroups] = useState([]);
   const [selectedGroup, setSelectedGroup] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const socket = useSocket();
 
   // Fetch posts and groups on component mount
   useEffect(() => {
     fetchPosts();
     fetchGroups();
+    // Listen for reply notifications and refresh posts when someone replies to your post
+    const handleNotif = (notif) => {
+      if (!notif) return;
+      if (notif.type === 'reply') {
+        // If the server included the reply object, update posts locally to avoid a full refetch
+        if (notif.postId && notif.reply) {
+          setPosts((prev) => prev.map((p) =>
+            p._id === notif.postId
+              ? { ...p, replies: [...(p.replies || []), notif.reply] }
+              : p
+          ));
+        } else {
+          // Fallback: refetch posts
+          fetchPosts();
+        }
+      }
+    };
+
+    if (socket) socket.on('newNotification', handleNotif);
+
+    return () => {
+      if (socket) socket.off('newNotification', handleNotif);
+    };
   }, []);
 
   const fetchPosts = async () => {
@@ -71,6 +98,16 @@ export default function Collaborate() {
     } catch (err) {
       console.error("Error fetching groups:", err);
     }
+  };
+
+  // Add this function to handle group click
+  const handleGroupClick = (group) => {
+    navigate('/chatting-collab', { 
+      state: { 
+        groupId: group._id,
+        groupName: group.name 
+      } 
+    });
   };
 
   // Sample data fallback
@@ -120,11 +157,11 @@ export default function Collaborate() {
 
       setPosts((prev) =>
         prev.map((p) =>
-          p._id === postId 
-            ? { 
-                ...p, 
-                replies: [...p.replies, response.data] 
-              } 
+          p._id === postId
+            ? {
+              ...p,
+              replies: [...p.replies, response.data]
+            }
             : p
         )
       );
@@ -170,7 +207,7 @@ export default function Collaborate() {
         description: groupData.description,
         isPublic: groupData.isPublic || true,
       });
-      
+
       setGroups(prev => [response.data, ...prev]);
       setActivePopup(null);
       alert("Group created successfully!");
@@ -180,43 +217,43 @@ export default function Collaborate() {
     }
   };
 
-const handleAssignTask = async (taskData) => {
-  try {
-    const response = await axiosInstance.post("/collaborate/tasks", {
-      title: taskData.title,
-      description: taskData.description,
-      assignedTo: taskData.assignedTo,
-      groupId: taskData.groupId,
-      dueDate: taskData.dueDate,
-      priority: taskData.priority,
-    });
-    
-    setActivePopup(null);
-    alert("Task assigned successfully!");
-  } catch (err) {
-    console.error("Error assigning task:", err);
-    throw err; // This will be caught in the popup component
-  }
-};
+  const handleAssignTask = async (taskData) => {
+    try {
+      const response = await axiosInstance.post("/collaborate/tasks", {
+        title: taskData.title,
+        description: taskData.description,
+        assignedTo: taskData.assignedTo,
+        groupId: taskData.groupId,
+        dueDate: taskData.dueDate,
+        priority: taskData.priority,
+      });
+
+      setActivePopup(null);
+      alert("Task assigned successfully!");
+    } catch (err) {
+      console.error("Error assigning task:", err);
+      throw err; // This will be caught in the popup component
+    }
+  };
 
   const handleAddMember = async (memberData) => {
-  try {
-    const response = await axiosInstance.post("/collaborate/invite/member", {
-      email: memberData.email,
-      groupId: memberData.groupId,
-      role: memberData.role
-    });
-    
-    setActivePopup(null);
-    alert("Member added successfully!");
-    
-    // Refresh groups to show new member
-    fetchGroups();
-  } catch (err) {
-    console.error("Error adding member:", err);
-    throw err; // This will be caught in the popup component
-  }
-};
+    try {
+      const response = await axiosInstance.post("/collaborate/invite/member", {
+        email: memberData.email,
+        groupId: memberData.groupId,
+        role: memberData.role
+      });
+
+      setActivePopup(null);
+      alert("Member added successfully!");
+
+      // Refresh groups to show new member
+      fetchGroups();
+    } catch (err) {
+      console.error("Error adding member:", err);
+      throw err; // This will be caught in the popup component
+    }
+  };
 
   const handleInvite = async (inviteData) => {
     try {
@@ -315,46 +352,47 @@ const handleAssignTask = async (taskData) => {
         </section>
 
         {/* Sidebar */}
-        <Sidebar 
-          onOpenPopup={(name) => setActivePopup(name)} 
+        <Sidebar
+          onOpenPopup={(name) => setActivePopup(name)}
           groups={groups}
           onInviteGroup={handleInvite}
+          onGroupClick={handleGroupClick} // Add this prop
         />
       </div>
 
       {/* Popups */}
       {activePopup === "invite" && (
-        <InvitePopup 
+        <InvitePopup
           onClose={() => {
             setActivePopup(null);
             setSelectedGroup(null);
-          }} 
+          }}
           group={selectedGroup}
         />
       )}
       {activePopup === "createGroup" && (
-        <CreateGroupPopup 
-          onClose={() => setActivePopup(null)} 
+        <CreateGroupPopup
+          onClose={() => setActivePopup(null)}
           onSubmit={handleCreateGroup}
         />
       )}
       {activePopup === "addMember" && (
-        <AddMemberPopup 
-          onClose={() => setActivePopup(null)} 
+        <AddMemberPopup
+          onClose={() => setActivePopup(null)}
           onSubmit={handleAddMember}
           groups={groups}
         />
       )}
       {activePopup === "assignTask" && (
-        <AssignTaskPopup 
-          onClose={() => setActivePopup(null)} 
+        <AssignTaskPopup
+          onClose={() => setActivePopup(null)}
           onSubmit={handleAssignTask}
           groups={groups}
         />
       )}
       {activePopup === "createPost" && (
-        <CreatePostPopup 
-          onClose={() => setActivePopup(null)} 
+        <CreatePostPopup
+          onClose={() => setActivePopup(null)}
           onSubmit={handleCreatePost}
         />
       )}

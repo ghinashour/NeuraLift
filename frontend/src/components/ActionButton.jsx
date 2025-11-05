@@ -16,11 +16,15 @@ const iconMap = {
 export default function ActionButton({ title, subtitle, gradient, icon, href }) {
   return (
     <a className="action-card" href={href}>
-      <div className="action-icon" style={{ background: gradient }}>
-        {iconMap[icon] || <FaHeart className="action-icon-svg" />}
+      <div className="action-icon" style={{ background: gradient }} aria-hidden>
+        <div className="action-icon-inner">
+          {iconMap[icon] || <FaHeart className="action-icon-svg" />}
+        </div>
       </div>
-      <div className="action-title">{title}</div>
-      <div className="action-subtext">{subtitle}</div>
+      <div className="action-card-content">
+        <div className="action-title">{title}</div>
+        <div className="action-subtext">{subtitle}</div>
+      </div>
     </a>
   );
 }

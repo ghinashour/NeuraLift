@@ -131,38 +131,38 @@ function InvitePopup({ onClose, groupId, groupName }) {
           <div className="share-buttons">
             {navigator.share && (
               <button 
-                className="share-btn native-share"
+                className="invite-popup-share-btn native-share"
                 onClick={shareViaNative}
               >
                 📱 Share
               </button>
             )}
             <button 
-              className="share-btn whatsapp"
+              className="invite-popup-share-btn whatsapp"
               onClick={() => shareOnSocialMedia('whatsapp')}
             >
               💬 WhatsApp
             </button>
             <button 
-              className="share-btn telegram"
+              className="invite-popup-share-btn telegram"
               onClick={() => shareOnSocialMedia('telegram')}
             >
               ✈️ Telegram
             </button>
             <button 
-              className="share-btn twitter"
+              className="invite-popup-share-btn twitter"
               onClick={() => shareOnSocialMedia('twitter')}
             >
               🐦 Twitter
             </button>
             <button 
-              className="share-btn linkedin"
+              className="invite-popup-share-btn linkedin"
               onClick={() => shareOnSocialMedia('linkedin')}
             >
               💼 LinkedIn
             </button>
             <button 
-              className="share-btn email"
+              className="invite-popup-share-btn email"
               onClick={() => shareOnSocialMedia('email')}
             >
               📧 Email

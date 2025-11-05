@@ -92,7 +92,7 @@ export const TaskProvider = ({ children }) => {
 
   useEffect(() => {
     fetchTasks();
-  }, []);
+  }, [fetchTasks]);
 
   return (
     <TaskContext.Provider

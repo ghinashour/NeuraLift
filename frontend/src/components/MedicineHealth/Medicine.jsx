@@ -1,12 +1,26 @@
 import "./Medicine.css";
-import React, { useState } from "react";
+import React, { useEffect,useState } from "react";
 import { useMedicineContext } from "../../context/MedicineContext";
 import AILogo from '../AiLogo';
+import Swal from "sweetalert2";
 
 const MedicineHealth = () => {
   const [isFormOpen, setIsFormOpen] = useState(false);
   const openForm = () => setIsFormOpen(true);
   const closeForm = () => setIsFormOpen(false);
+
+    // ✅ Use activeMedicines for filtering untaken meds
+  const { 
+  medicines = [], 
+  activeMedicines, 
+  addMedicine, 
+  markMedicineTaken, 
+  fetchMedicines, 
+  fetchActiveMedicines ,
+  todayMedicines,
+  upcomingMedicines,
+  
+} = useMedicineContext();
 
   const [name, setName] = useState("");
   const [capsule, setCapsule] = useState("");
@@ -14,28 +28,128 @@ const MedicineHealth = () => {
   const [repeatValue, setRepeatValue] = useState(1);
   const [repeatUnit, setRepeatUnit] = useState("hours");
 
-  const { addMedicine } = useMedicineContext();
-  const { medicines } = useMedicineContext();
+    // 🔥 NEW: Analytics state
+  const [takenToday, setTakenToday] = useState(0);
+  const [upcoming, setUpcoming] = useState(0);
+  const [weekProgress, setWeekProgress] = useState(0);
 
-  const handleSubmit = () => {
+  
+  // 🔥 Compute analysis when medicines change
+ useEffect(() => {
+    if (!medicines.length) return;
+
+    const now = new Date();
+    const today = now.toISOString().split("T")[0];
+
+    // ✅ Medicines taken today
+    const takenTodayCount = medicines.filter((m) => {
+      if (!m.takenAt) return false;
+      return m.isTaken && m.takenAt.startsWith(today);
+    }).length;
+
+    // ✅ Upcoming medicines (for today or later, not taken)
+    const upcomingCount = medicines.filter((m) => {
+      const medTime = new Date(m.time);
+      return medTime > now && !m.isTaken;
+    }).length;
+
+    // ✅ Weekly progress (last 7 days)
+    const weekAgo = new Date();
+    weekAgo.setDate(weekAgo.getDate() - 7);
+
+    const weeklyMeds = medicines.filter((m) => new Date(m.time) >= weekAgo);
+    const takenThisWeek = weeklyMeds.filter((m) => m.isTaken).length;
+    const progress =
+      weeklyMeds.length > 0
+        ? Math.round((takenThisWeek / weeklyMeds.length) * 100)
+        : 0;
+
+    setTakenToday(takenTodayCount);
+    setUpcoming(upcomingCount);
+    setWeekProgress(progress);
+  }, [medicines]);
+
+  useEffect(() => {
+    fetchMedicines(); // Load medicines on page load
+      fetchActiveMedicines(); // ✅ fetch only active medicines
+
+  }, []);
+
+    // ✅ Format time safely
+  const formatTime = (timeStr) => {
+    if (!timeStr) return "No Time";
+    const date = new Date(timeStr);
+    return isNaN(date)
+      ? "Invalid Time"
+      : date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+  };
+
+
+ // ✅ Mark medicine as taken
+  const handleTakeMedicine = async (medicineId) => {
+    try {
+      await markMedicineTaken(medicineId);
+      await Promise.all([fetchMedicines(), fetchActiveMedicines()]);
+      Swal.fire({
+        title: "Success!",
+        text: "Medicine marked as taken.",
+        icon: "success",
+        timer: 2000,
+        showConfirmButton: false,
+      });
+    } catch (error) {
+      console.error("Error marking medicine as taken:", error);
+      Swal.fire({
+        title: "Error",
+        text: "Failed to mark medicine as taken. Please try again.",
+        icon: "error",
+      });
+    }
+  };
+
+   // ✅ Add a new medicine
+  const handleSubmit = async () => {
     if (!name.trim()) return;
 
-    addMedicine({
-      name,
-      capsule,
-      time,
-      repeat: `${repeatValue} ${repeatUnit}`,
-    });
+    try {
+      await addMedicine({
+        name,
+        capsule,
+        time,
+        repeat: `${repeatValue} ${repeatUnit}`,
+      });
+      await Promise.all([fetchMedicines(), fetchActiveMedicines()]);
 
-    setName("");
-    setCapsule("");
-    setTime("");
-    setRepeatValue(1);
-    setRepeatUnit("hours");
+
+      setName("");
+      setCapsule("");
+      setTime("");
+      setRepeatValue(1);
+      setRepeatUnit("hours");
+      closeForm();
+
+      Swal.fire({
+        title: "Added!",
+        text: "Medicine has been added successfully.",
+        icon: "success",
+        timer: 1500,
+        showConfirmButton: false,
+      });
+    } catch (error) {
+      Swal.fire({
+        title: "Error",
+        text: "Failed to add medicine. Please try again.",
+        icon: "error",
+      });
+    }
   };
+  
+  
+
 
   return (
     <div id="Medicinecontainer">
+      {/* Header Section */}
       <div
         style={{
           display: "flex",
@@ -73,6 +187,7 @@ const MedicineHealth = () => {
         Don't skip checking your health , healthy body healthy life !
       </p>
 
+
       <div
         style={{
           display: "flex",
@@ -81,6 +196,7 @@ const MedicineHealth = () => {
           marginTop: "15px",
         }}
       >
+        {/*today upcoming weeks insight*/}
         <div className="medicinebox">
           <svg
             style={{ marginTop: "50px" }}
@@ -125,7 +241,11 @@ const MedicineHealth = () => {
             </defs>
           </svg>
           <p style={{ marginTop: "20px", color: "#626A84" }}>Today</p>
+          <p>{todayMedicines ? todayMedicines.length : 0}</p>
+
+
         </div>
+        {/*upcoming*/}
         <div className="medicinebox">
           <svg
             style={{ marginTop: "50px" }}
@@ -186,6 +306,8 @@ const MedicineHealth = () => {
           <p style={{ marginTop: "20px", color: "#626A84" }}>
             Upcoming Medicine
           </p>
+          <p>{upcomingMedicines ? upcomingMedicines.length : 0}</p>
+
         </div>
         <div className="medicinebox">
           <svg
@@ -231,61 +353,70 @@ const MedicineHealth = () => {
             </defs>
           </svg>
           <p style={{ marginTop: "20px", color: "#626A84" }}>Week's Insight</p>
+          <p>
+      {medicines.filter((m) => m.isTaken).length}
+    </p>
         </div>
       </div>
       <div id="upcomingMed">
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "0 50px" }}>
           {/* Replaced image with SVG */}
-          <svg 
-            width="200" 
-            height="150" 
-            viewBox="0 0 200 150" 
+          <svg
+            width="200"
+            height="150"
+            viewBox="0 0 200 150"
             style={{ marginTop: "30px" }}
           >
             {/* Medicine Bottle */}
-            <rect x="70" y="40" width="60" height="80" rx="8" fill="#3C83F6" opacity="0.8"/>
-            <rect x="75" y="45" width="50" height="70" rx="4" fill="#FFFFFF" opacity="0.3"/>
-            
+            <rect x="70" y="40" width="60" height="80" rx="8" fill="#3C83F6" opacity="0.8" />
+            <rect x="75" y="45" width="50" height="70" rx="4" fill="#FFFFFF" opacity="0.3" />
+
             {/* Bottle Cap */}
-            <rect x="80" y="30" width="40" height="10" rx="4" fill="#1456BF"/>
-            
+            <rect x="80" y="30" width="40" height="10" rx="4" fill="#1456BF" />
+
             {/* Medicine Pills */}
-            <circle cx="90" cy="70" r="8" fill="#0AE00A"/>
-            <circle cx="110" cy="70" r="8" fill="#F63C3C"/>
-            <circle cx="130" cy="70" r="8" fill="#F6F63C"/>
-            <circle cx="90" cy="90" r="8" fill="#6DA2F8"/>
-            <circle cx="110" cy="90" r="8" fill="#F8A26D"/>
-            <circle cx="130" cy="90" r="8" fill="#0AE00A"/>
-            
+            <circle cx="90" cy="70" r="8" fill="#0AE00A" />
+            <circle cx="110" cy="70" r="8" fill="#F63C3C" />
+            <circle cx="130" cy="70" r="8" fill="#F6F63C" />
+            <circle cx="90" cy="90" r="8" fill="#6DA2F8" />
+            <circle cx="110" cy="90" r="8" fill="#F8A26D" />
+            <circle cx="130" cy="90" r="8" fill="#0AE00A" />
+
             {/* Cross Symbol */}
-            <rect x="95" cy="110" width="10" height="30" fill="#FFFFFF" transform="translate(0,110)"/>
-            <rect x="85" cy="120" width="30" height="10" fill="#FFFFFF" transform="translate(0,110)"/>
+            <rect x="95" cy="110" width="10" height="30" fill="#FFFFFF" transform="translate(0,110)" />
+            <rect x="85" cy="120" width="30" height="10" fill="#FFFFFF" transform="translate(0,110)" />
           </svg>
 
           <button onClick={openForm} id="addMedBtn">
             + Add Medicine
           </button>
         </div>
+           {/* ✅ Show only untaken medicines */}
         <div className="mainmed-container">
-          {medicines.map((medicine) => (
-            <div key={medicine.id} className="medicine-card">
-              <div className="medicine-details">
-                <div
-                  style={{ display: "flex", justifyContent: "space-between" }}
-                >
-                  <div>
-                    <h3>{medicine.name}</h3>
-                    <p>Capsule: {medicine.capsule || "N/A"}</p>
-                  </div>
-                  <div className="time-detail">
-                    <span className="time"> {medicine.time}</span>
-                    <span className="repeat">Every {medicine.repeat}</span>
-                  </div>
-                </div>
-                <button id="take">Take Now</button>
-              </div>
-            </div>
-          ))}
+          {activeMedicines.length === 0 ? (
+            <p style={{ textAlign: "center", color: "#888" }}>🎉 All medicines taken! Great job!</p>
+          ) : (
+            activeMedicines.map((medicine) => (
+  <div key={medicine._id} className="medicine-card">
+    <div className="medicine-details">
+      <div style={{ display: "flex", justifyContent: "space-between" }}>
+        <div>
+          <h3>{medicine.name}</h3>
+          <p>Capsule: {medicine.capsule || "N/A"}</p>
+        </div>
+        <div className="time-detail">
+          <span className="time">{formatTime(medicine.time)}</span>
+          <span className="repeat">Every {medicine.repeat}</span>
+        </div>
+      </div>
+      <button id="take" onClick={() => handleTakeMedicine(medicine._id)}>
+        Take Now
+      </button>
+    </div>
+  </div>
+))
+
+          )}
         </div>
         {/* Medicine Form Modal */}
         {isFormOpen && (
@@ -385,12 +516,13 @@ const MedicineHealth = () => {
         )}
       </div>
       
+      
       {/* AI Logo positioned at bottom right */}
-      <div style={{ 
-        position: 'fixed', 
-        bottom: '20px', 
+      <div style={{
+        position: 'fixed',
+        bottom: '20px',
         right: '20px',
-        zIndex: 1000 
+        zIndex: 1000
       }}>
         <AILogo />
       </div>

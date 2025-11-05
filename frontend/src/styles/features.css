@@ -99,17 +99,11 @@
   }
 }
 
-@media (max-width: 800px) {
+@media (max-width: 768px) {
   .features-container {
     justify-content: center;
   }
 
-  .features-box {
-    width: calc(50% - 20px);
-  }
-}
-
-@media (max-width: 600px) {
   .features-box {
     width: 100%;
     max-width: 350px;

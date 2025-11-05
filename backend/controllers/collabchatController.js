@@ -1,6 +1,7 @@
 const CollaborationGroup = require('../models/CollaborationGroup');
 const Message = require('../models/Message');
 const CollaborationTask = require('../models/CollaborationTask');
+const Notification = require('../models/Notification');
 
 // Get user's groups
 exports.getUserGroups = async (req, res) => {
@@ -65,6 +66,42 @@ exports.sendMessage = async (req, res) => {
     // Update group's last activity
     group.updatedAt = new Date();
     await group.save();
+
+    // Emit a notification to all group members except the sender
+    try {
+      const io = req.app.get('io');
+      const notifMessage = `${req.user.name} sent a new message in ${group.name}`;
+
+      // Persist notifications and emit via socket
+      for (const memberId of group.members.map(m => m.toString())) {
+        if (memberId === req.user.id.toString()) continue;
+
+        // Emit real-time notification if socket is connected
+        if (io) {
+          io.to(memberId).emit('newNotification', {
+            type: 'message',
+            message: notifMessage,
+            groupId: group._id,
+            fromUser: { id: req.user.id, name: req.user.name },
+            messageId: message._id,
+            createdAt: new Date(),
+          });
+        }
+
+        // Persist notification in DB
+        try {
+          await Notification.create({
+            userId: memberId,
+            message: notifMessage,
+            type: 'message',
+          });
+        } catch (e) {
+          console.error('Failed to create notification for user', memberId, e.message);
+        }
+      }
+    } catch (e) {
+      console.error('Notification emit error:', e.message);
+    }
 
     res.status(201).json(message);
   } catch (error) {

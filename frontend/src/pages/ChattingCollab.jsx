@@ -1,5 +1,5 @@
 // src/pages/ChattingCollab.jsx
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useContext } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 import SidebarChatCollab from "../components/SidebarChatCollab";
@@ -8,6 +8,8 @@ import RightChatCollab from "../components/RightChatCollab";
 import CreateGroupPopup from "../components/Popups/CreateGroupPopup";
 import AssignTaskPopup from "../components/Popups/AssignTaskPopup";
 import "../styles/ChattingCollab.css";
+import { useSocket } from "../context/SocketProvider";
+import { AuthContext } from "../context/AuthContext";
 
 const API_BASE_URL = process.env.REACT_APP_API_URL || "http://localhost:4000/api";
 
@@ -27,6 +29,7 @@ export default function ChattingCollab() {
   const [selectedGroupForTask, setSelectedGroupForTask] = useState(null);
   // Get task data from navigation if coming from task details
   const taskData = location.state;
+  const socket = useSocket();
 
   useEffect(() => {
     fetchUserGroups();
@@ -38,10 +41,30 @@ export default function ChattingCollab() {
       }
     }, 5000);
 
+    // Listen for real-time notifications (messages/tasks) and refresh relevant data
+    const handleNotif = (notif) => {
+      if (!notif) return;
+      // If notification references the active group, refresh messages/tasks
+      if (notif.type === 'message' && notif.groupId && activeGroup && notif.groupId === activeGroup._id) {
+        fetchGroupMessages(activeGroup._id);
+      }
+      if (notif.type === 'task' && notif.groupId && activeGroup && notif.groupId === activeGroup._id) {
+        fetchGroupTasks(activeGroup._id);
+      }
+      // If notification is for another group, optionally refresh groups list
+      // e.g., a new group created or membership changed
+      if (notif.type === 'group') {
+        fetchUserGroups();
+      }
+    };
+
+  if (socket) socket.on('newNotification', handleNotif);
+
     return () => {
       if (messagesIntervalRef.current) {
         clearInterval(messagesIntervalRef.current);
       }
+      if (socket) socket.off('newNotification', handleNotif);
     };
   }, []);
 
@@ -50,6 +73,24 @@ export default function ChattingCollab() {
       fetchGroupMessages(activeGroup._id);
       fetchGroupTasks(activeGroup._id);
     }
+  }, [activeGroup]);
+
+  // Join/leave group rooms when activeGroup changes so server can send group-specific events
+  const prevGroupRef = useRef(null);
+  useEffect(() => {
+    if (!socket) return;
+    const prev = prevGroupRef.current;
+    if (prev && socket.connected) {
+      try {
+        socket.emit('leaveGroup', prev);
+      } catch (e) {}
+    }
+    if (activeGroup && activeGroup._id && socket.connected) {
+      try {
+        socket.emit('joinGroup', activeGroup._id);
+      } catch (e) {}
+    }
+    prevGroupRef.current = activeGroup ? activeGroup._id : null;
   }, [activeGroup]);
 
   const fetchUserGroups = async () => {
@@ -209,6 +250,12 @@ export default function ChattingCollab() {
 
   const handleGroupSelect = (group) => {
     setActiveGroup(group);
+    // Join group room for future real-time events (server may handle this)
+    try {
+      if (socket && socket.connected) socket.emit('joinGroup', group._id);
+    } catch (e) {
+      // ignore
+    }
     if (window.innerWidth <= 768) {
       setMobileView('chat');
     }

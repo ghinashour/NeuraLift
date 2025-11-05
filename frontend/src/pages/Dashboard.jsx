@@ -4,6 +4,8 @@ import "../styles/Dashboard.css";
 import Greeting from "../components/Greetings";
 import InspirationSection from "../components/InspirationSection";
 import ActionButton from "../components/ActionButton";
+import DashboardStats from "../components/DashboardStats";
+import useDashboardData from "../hooks/useDashboardData";
 import { getCurrentUser } from "../api/axios";
 import AILogo from '../components/AiLogo';
 
@@ -30,17 +32,28 @@ function Dashboard() {
     return () => { mounted = false; };
   }, []);
 
+  // use dashboard data (streak, notifications)
+  const { streak, notifications } = useDashboardData(user?._id);
+
+  if (loading) return <div>Loading...</div>;
+
   return (
     <div className="dashboard-page">
-      {/* Header: Greeting (includes streak + notifications) */}
-      <header className="dashboard-header">
+      {/* Header: Greeting + Notifications */}
+      <header className="dashboard-header" style={{
+        display: "flex",
+        justifyContent: "space-between",
+        alignItems: "center",
+        padding: "1rem 2rem",
+        borderBottom: "1px solid #e0e0e0",
+      }}>
         {user && <Greeting name={user.username} userId={user._id} />}
       </header>
 
-      {/* Daily Inspiration */}
-      <InspirationSection />
+    {/* Daily Inspiration (Quote) */}
+    <InspirationSection />
 
-      {/* Action Buttons */}
+    {/* Action Buttons */}
       <section className="action-grid">
         <ActionButton
           title="Focus Timer"
@@ -63,14 +76,14 @@ function Dashboard() {
           icon="brain"
           href="/moodTracker"
         />
-        <ActionButton
-          title="Wellness"
-          subtitle="Stress-relief space"
-          gradient="linear-gradient(90deg, #3C83F6, #16A249)"
-          icon="heart"
-          href="/stressrelief"
-        />
+        
       </section>
+      {/* Statistics (placed after action buttons for better flow on desktop) */}
+      <div style={{ width: '100%', maxWidth: 1120, margin: '28px auto', padding: '0 12px' }}>
+        <DashboardStats streak={streak} unread={(notifications && notifications.length) || 0} />
+      </div>
+
+      {/* Floating AI Assistant */}
       <div style={{
         position: 'fixed',
         bottom: '20px',

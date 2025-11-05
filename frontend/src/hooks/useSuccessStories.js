@@ -1,5 +1,6 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useContext } from 'react';
 import { successStoriesAPI, migrateLocalStorageData } from '../api/successStories';
+import { AuthContext } from '../context/AuthContext'; // Import AuthContext
 
 export const useSuccessStories = () => {
     const [stories, setStories] = useState([]);
@@ -12,6 +13,7 @@ export const useSuccessStories = () => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
     const [migrationCompleted, setMigrationCompleted] = useState(false);
+    const { user } = useContext(AuthContext); // Use AuthContext to get user
 
     // Check if migration is needed
     const checkMigration = useCallback(async () => {
@@ -174,45 +176,72 @@ export const useSuccessStories = () => {
     }, []);
 
     // Toggle like on a story
-    const toggleLike = useCallback(async (id, hasLikedBefore = false) => {
-        // Update stats immediately based on the like action (no await)
+    const toggleLike = useCallback(async (id) => {
+
+        if (!user) {
+            setError('Authentication required to like stories.');
+            setLoading(false);
+            return; // Exit if no user
+        }
+
+        // Optimistically update stats based on the current like state of the story
+        const currentStory = stories.find(story => story._id === id) || featuredStories.find(story => story._id === id);
+        const wasLiked = currentStory ? currentStory.likes.includes(user.id) : false;
+
         setStats(prevStats => ({
             ...prevStats,
-            totalLikes: hasLikedBefore
-                ? Math.max(0, prevStats.totalLikes - 1)  // Decrease by 1 if unliking
-                : prevStats.totalLikes + 1                // Increase by 1 if liking
+            totalLikes: prevStats.totalLikes + (wasLiked ? -1 : 1)
         }));
 
         try {
-            const response = await successStoriesAPI.toggleLike(id, hasLikedBefore);
+            const response = await successStoriesAPI.toggleLike(id);
             if (response.success) {
                 // Update the story in the current list
                 setStories(prevStories =>
-                    prevStories.map(story =>
-                        story._id === id
-                            ? { ...story, likeCount: response.data.likeCount }
-                            : story
-                    )
+                    prevStories.map(story => {
+                        if (story._id === id) {
+                            // The backend returns isLiked and likeCount directly
+                            const updatedLikes = response.data.isLiked
+                                ? [...story.likes, user.id]
+                                : story.likes.filter(userId => userId !== user.id);
+                            return { ...story, likeCount: response.data.likeCount, likes: updatedLikes };
+                        }
+                        return story;
+                    })
                 );
                 // Update featured stories if the story is there
                 setFeaturedStories(prevFeatured =>
-                    prevFeatured.map(story =>
-                        story._id === id
-                            ? { ...story, likeCount: response.data.likeCount }
-                            : story
-                    )
+                    prevFeatured.map(story => {
+                        if (story._id === id) {
+                            const updatedLikes = response.data.isLiked
+                                ? [...story.likes, user.id]
+                                : story.likes.filter(userId => userId !== user.id);
+                            return { ...story, likeCount: response.data.likeCount, likes: updatedLikes };
+                        }
+                        return story;
+                    })
                 );
 
                 return response.data;
             } else {
+                // If backend indicates failure, revert optimistic update and throw error
+                setStats(prevStats => ({
+                    ...prevStats,
+                    totalLikes: prevStats.totalLikes + (wasLiked ? 1 : -1)
+                }));
                 throw new Error(response.message || 'Failed to toggle like');
             }
         } catch (error) {
             console.error('Error toggling like:', error);
             setError(error.message || 'Failed to toggle like');
+            // If there was an error after an optimistic update, revert it
+            setStats(prevStats => ({
+                ...prevStats,
+                totalLikes: prevStats.totalLikes + (wasLiked ? 1 : -1)
+            }));
             throw error;
         }
-    }, []);
+    }, [stories, featuredStories, user]);
 
     // Track share
     const trackShare = useCallback(async (id) => {
