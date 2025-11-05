@@ -14,10 +14,10 @@ const WelcomeScreen = ({ onStartChat, suggestedTopics }) => {
           </div>
           <div className="status-indicator"></div>
         </div>
-        <h1 className="brand-name">NEURALIFT</h1>
+        <h1 className="welcome-brand-name">NEURALIFT</h1>
         <p className="welcome-message">Where should we begin?</p>
       </div>
-      
+
       {suggestedTopics && suggestedTopics.length > 0 && (
         <div className="suggested-topics">
           {suggestedTopics.map((topic) => (

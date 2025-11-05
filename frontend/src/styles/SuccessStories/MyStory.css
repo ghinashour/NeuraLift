@@ -11,7 +11,7 @@
     margin-bottom: 32px;
 }
 
-.header-content {
+.my-story-header-content {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -22,23 +22,20 @@
     color: #626A84 !important;
 }
 
-.header-icon {
+.my-story-header-icon {
     width: 24px;
     height: 24px;
     margin-top: 4.5px;
 }
 
-.header-text h1 {
+.my-story-header-title{
     font-size: 28px;
     font-weight: 700;
     color: #2B2F3B;
+    margin-bottom: 0;
 }
 
-h1 {
-    margin-bottom: 0 !important;
-}
-
-.header-text p {
+.my-story-header-text {
     font-size: 16px;
     margin: 0;
 }
@@ -318,16 +315,18 @@ h1 {
         margin-bottom: 28px;
     }
 
-    .header-icon {
+    .my-story-header-icon {
         width: 22px;
         height: 22px;
+        margin-top: 2px;
+        margin-right: 8px;
     }
 
-    .header-text h1 {
+    .my-story-header-title {
         font-size: 26px;
     }
 
-    .header-text p {
+    .my-story-header-text {
         font-size: 15px;
     }
 
@@ -347,21 +346,20 @@ h1 {
         margin-bottom: 24px;
     }
 
-    .header-content {
+    .my-story-header-content {
         gap: 8px;
     }
 
-    .header-icon {
-        width: 20px;
-        height: 20px;
+    .my-story-header-icon {
         margin-top: 2px;
+        margin-right: 0px;
     }
 
-    .header-text h1 {
+    .my-story-header-title{
         font-size: 24px;
     }
 
-    .header-text p {
+    .my-story-header-text {
         font-size: 14px;
         margin-top: 4px;
     }
@@ -392,20 +390,41 @@ h1 {
         margin-bottom: 20px;
     }
 
-    .header-content {
+    .my-story-header-content {
         gap: 6px;
     }
 
-    .header-icon {
+    .my-story-header-icon {
         width: 18px;
         height: 18px;
     }
 
-    .header-text h1 {
-        font-size: 20px;
+    .my-story-header-title {
+        font-size: 17px;
     }
 
-    .header-text p {
+    .my-story-header-text {
         font-size: 13px;
+    }
+}
+
+/* Extra small mobile styles for 320px */
+@media (max-width: 320px) {
+    .my-story-header-content {
+        gap: 4px;
+    }
+
+    .my-story-header-icon {
+        width: 16px;
+        height: 16px;
+        margin-top: 1px;
+    }
+
+    .my-story-header-title {
+        font-size: 13px;
+    }
+
+    .my-story-header-text {
+        font-size: 12px;
     }
 }

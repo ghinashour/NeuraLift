@@ -1,13 +1,11 @@
-/* Layout.css - Main layout styles */
-/* The actual layout styles are handled by Sidebar.css */
-/* This file is here for consistency and future layout-specific styles */
-
 .layout-container {
-    display: flex;
-    min-height: 100vh;
+  display: block; /* remove flex centering */
+  min-height: 100vh;
+  background-color: #f5f7fa;
 }
 
 .layout-content {
-    flex: 1;
-    padding: 0;
+  max-width: none; /* remove width constraint */
+  padding: 0;      /* remove left/right padding */
+  width: 100%;
 }

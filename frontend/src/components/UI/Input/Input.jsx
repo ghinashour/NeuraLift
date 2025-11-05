@@ -1,36 +1,42 @@
-import React from 'react';
+// src/UI/Input/Input.jsx
+import React, { useState, useEffect } from 'react';
+import './Input.css';
 
-const Input = ({ label, name, value, onChange, type = 'text', required = false, ...props }) => {
+const Input = ({ label, type = 'text', value, onChange, name, placeholder, required }) => {
+  const [isFocused, setIsFocused] = useState(false);
+
+  const handleFocus = () => setIsFocused(true);
+  const handleBlur = () => setIsFocused(false);
+
+  const shouldFloat = isFocused || value.length > 0;
+
   return (
-    <div className="input-group">
-      {label && (
-        <label htmlFor={name} className="input-label">
-          {label}
-          {required && <span className="required">*</span>}
-        </label>
-      )}
+    <div className="input-wrapper">
       {type === 'textarea' ? (
         <textarea
-          id={name}
           name={name}
           value={value}
           onChange={onChange}
-          className="input-field textarea"
+          onFocus={handleFocus}
+          onBlur={handleBlur}
           required={required}
-          {...props}
+          className="input-field textarea-field"
         />
       ) : (
         <input
           type={type}
-          id={name}
           name={name}
           value={value}
           onChange={onChange}
-          className="input-field"
+          onFocus={handleFocus}
+          onBlur={handleBlur}
           required={required}
-          {...props}
+          className="input-field"
         />
       )}
+      <label className={`input-label ${shouldFloat ? 'float' : ''}`}>
+        {label}
+      </label>
     </div>
   );
 };

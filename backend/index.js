@@ -1,68 +1,240 @@
+
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
+const http = require("http");
 const path = require("path");
+const passport = require("passport");
+const { Server } = require("socket.io");
+const jwt = require("jsonwebtoken");
+require("dotenv").config();
+require("./config/passport");
+
+// Import routes
 const profileRoutes = require("./routes/profile.js");
 const questionRoutes = require("./routes/questions.js");
 const devQuestionRoutes = require("./routes/DevQuestionRoute.js");
-const assemblyGameRoutes = require('./routes/assemblyGame');
+const assemblyGameRoutes = require("./routes/assemblyGame");
 const tensizesRoutes = require("./routes/tenziesRoutes");
 const eventRoutes = require("./routes/eventRoutes.js");
-const authRoutes = require('./routes/authRoute');
-const adminRoutes = require('./routes/admin.js');
+const authRoutes = require("./routes/authRoute");
+const adminRoutes = require("./routes/admin.js");
 const successStoryRoutes = require("./routes/successStories");
 const quoteRoutes = require("./routes/quotes.js");
 const moodRoutes = require("./routes/moodroutes.js");
 const tasksRouter = require("./routes/tasks.js");
 const noteRoute = require("./routes/noteUserRoute.js");
 const adminTaskRouter = require("./routes/admin/taskRoutes.js");
-const Notifications = require("./routes/Notification.js");
+const notificationRoutes = require("./routes/Notification.js");
 const chatRoutes = require("./routes/chatRoutes.js");
-const User = require("./models/User.js"); 
-const passport = require("passport");
-require("./config/passport");
-require("dotenv").config();
+const medicineRoutes = require("./routes/medicineRoutes.js");
+const collaborateRoutes = require("./routes/collaborate");
+const gamesRoutes = require("./routes/games");
+const User = require("./models/User.js"); // For streak logic
 
+// ------------------------------------------------
+// APP + SERVER + SOCKET.IO
+// ------------------------------------------------
+const contactRoutes = require("./routes/contactRoute.js"); // Import new contact route
+const { sendMessageToBackend } = require("./ChatService.js");
 const app = express();
+const server = http.createServer(app);
+
+const io = new Server(server, {
+  cors: {
+    origin: process.env.CLIENT_ORIGIN || "http://localhost:3000",
+    credentials: true,
+  },
+});
+
+// ------------------------------------------------
+// 🔐 JWT verification for sockets
+// ------------------------------------------------
+const verifyJwt = async (token) => {
+  try {
+    return jwt.verify(token, process.env.JWT_SECRET);
+  } catch (err) {
+    throw new Error("Invalid token");
+  }
+};
+
+// ------------------------------------------------
+// 🔌 SOCKET.IO EVENTS
+// ------------------------------------------------
+io.use(async (socket, next) => {
+  try {
+    const token = socket.handshake.auth?.token;
+    if (!token) return next(new Error("Authentication error"));
+    const payload = await verifyJwt(token);
+    socket.user = { id: payload.id, email: payload.email };
+    next();
+  } catch (err) {
+    next(new Error("Authentication error"));
+  }
+});
+
+const connectedUsers = new Map();
+
+io.on("connection", (socket) => {
+  console.log("🟢 Socket connected:", socket.id, "User:", socket.user.id);
+
+  // Join personal room (userId) - ensure it's a string
+  const userRoom = String(socket.user.id);
+  socket.join(userRoom);
+  connectedUsers.set(userRoom, socket.id);
+
+  socket.on("disconnect", () => {
+    console.log("🔴 Socket disconnected:", socket.id);
+    connectedUsers.delete(userRoom);
+  });
+});
+
+// Make io accessible to routes/controllers
+app.set("io", io);
+
+// ------------------------------------------------
+// 🧩 MIDDLEWARE
+// ------------------------------------------------
 app.use(express.json());
-// Middleware
-app.use(cors({
-  origin: "http://localhost:3000", // allow frontend
-  methods: ["GET", "POST", "PUT", "DELETE"],
-}));
-//streak logic of the user
-app.post("/api/user/:id/update-streak", async (req, res) => {
-   const { id } = req.params;
-
+app.use(
+  cors({
+    origin: process.env.CLIENT_ORIGIN || "http://localhost:3000",
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    credentials: true,
+  })
+);
 app.use(passport.initialize());
-
-// Routes
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
+
+// ------------------------------------------------
+// 🔥 USER STREAK LOGIC
+// ------------------------------------------------
+app.post("/api/user/:id/update-streak", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const user = await User.findById(id);
+
+    if (!user) return res.status(404).json({ msg: "User not found" });
+
+    const today = new Date();
+    const lastLogin = user.lastLoginDate ? new Date(user.lastLoginDate) : null;
+
+    // Normalize both dates to midnight for accurate "day difference" comparison
+    const normalizeDate = (date) => {
+      const d = new Date(date);
+      d.setHours(0, 0, 0, 0);
+      return d;
+    };
+
+    const normalizedToday = normalizeDate(today);
+    const normalizedLast = lastLogin ? normalizeDate(lastLogin) : null;
+
+    // Calculate difference in full days
+    let diffInDays = 0;
+    if (normalizedLast) {
+      diffInDays = Math.floor((normalizedToday - normalizedLast) / (1000 * 60 * 60 * 24));
+    }
+
+    if (normalizedLast) {
+      if (diffInDays === 1) {
+        // ✅ Consecutive day → increment streak
+        user.streak += 1;
+      } else if (diffInDays > 1) {
+        // ❌ Missed one or more days → reset streak
+        user.streak = 1;
+      }
+      // 💤 diffInDays === 0 → same day login, streak unchanged
+    } else {
+      // 🌟 First ever login
+      user.streak = 1;
+    }
+
+    // 🕓 Always update last login
+    user.lastLoginDate = today;
+
+    // 🏆 Optional: track the longest streak
+    if (user.longestStreak === undefined || user.streak > user.longestStreak) {
+      user.longestStreak = user.streak;
+    }
+
+    await user.save();
+
+    res.status(200).json({
+      success: true,
+      msg: "Streak updated successfully",
+      streak: user.streak,
+      longestStreak: user.longestStreak,
+      lastLoginDate: user.lastLoginDate,
+    });
+  } catch (err) {
+    console.error("Error updating streak:", err);
+    res.status(500).json({
+      success: false,
+      msg: "Server error while updating streak",
+      error: err.message,
+    });
+  }
+});
+
+
+app.post("/api/chat", async (req, res) => {
+  const { message, history } = req.body;
+  if (!message) return res.status(400).json({ error: "Message is required" });
+
+  try {
+    const aiResponse = await sendMessageToBackend(message, history);
+    res.json({ reply: aiResponse });
+  } catch (error) {
+    console.error("Chat error:", error);
+    res.status(500).json({ error: "Failed to fetch AI response" });
+  }
+});
+
+// ------------------------------
+// ✅ ROUTES
+// ------------------------------
 app.use("/api/auth", authRoutes);
 app.use("/api/profile", profileRoutes);
-//fetching the challenges
 app.use("/api/questions", questionRoutes);
 app.use("/api/devquestions", devQuestionRoutes);
-app.use('/api/assembly-game', assemblyGameRoutes);
+app.use("/api/assembly-game", assemblyGameRoutes);
 app.use("/api/tenzies", tensizesRoutes);
 app.use("/api/success-stories", successStoryRoutes);
 app.use("/api/events", eventRoutes);
 app.use("/api/quotes", quoteRoutes);
-app.use('/api/moods', moodRoutes);
+app.use("/api/moods", moodRoutes);
 app.use("/api/notes", noteRoute);
-app.use("/api/notifications" , Notifications);
-app.use('/api/chat', chatRoutes);
-//protected admin routes
+app.use("/api/notifications", notificationRoutes);
+app.use("/api/chat", chatRoutes);
+app.use("/api/contact", contactRoutes); // Use new contact route
+app.use("/api/tasks", tasksRouter);
+app.use("/api/admin/tasks", adminTaskRouter);
 app.use("/api/admin", adminRoutes);
-app.use("/api/tasks", tasksRouter); // user task routes
-app.use("/api/admin/tasks", adminTaskRouter); // admin task routes
-//server uploaded files
-app.use('/uploads', express.static('uploads'));
-// Connect to MongoDB
-mongoose.connect(process.env.MONGO_URI)
-  .then(() => console.log("MongoDB connected ✅"))
-  .catch((err) => console.log("MongoDB connection error:", err));
+app.use("/api/collaborate", collaborateRoutes);
+app.use("/api/medicines", medicineRoutes);
+app.use("/api/games", gamesRoutes);
+app.get("/api/admin/success-stories/analytics/stats", (req, res) => {
+  res.json({
+    totalStories: successStories.length,
+    featured: successStories.filter((s) => s.featured).length,
+  });
+});
+app.put("/api/admin/success-stories/feature/:id", (req, res) => {
+  const story = successStories.find((s) => s.id == req.params.id);
+  if (!story) return res.status(404).json({ success: false, message: "Story not found" });
+  story.featured = !story.featured;
+  res.json(story);
+});
+// ------------------------------------------------
+// 📦 DATABASE CONNECTION
+// ------------------------------------------------
+mongoose
+  .connect(process.env.MONGO_URI)
+  .then(() => console.log("✅ MongoDB connected"))
+  .catch((err) => console.error("❌ MongoDB connection error:", err));
 
-// Start server
+// ------------------------------------------------
+// 🖥️ SERVER START
+// ------------------------------------------------
 const PORT = process.env.PORT || 4000;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+server.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));

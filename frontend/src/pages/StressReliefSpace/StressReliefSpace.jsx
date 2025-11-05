@@ -1,202 +1,242 @@
-import { useState, useEffect } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import "./StressReliefSpace.css";
-import Whiteboard from "./WhiteBoard";
-import API from "../../api/axios"; // your Axios instance
-
-const StressRelief = () => {
-  const [input, setInput] = useState("");
+import { Brush, Eraser, PencilLine, Send, MessageSquare, Edit2, Trash2 } from "lucide-react";
+import Ai from "../../components/AiLogo";
+const StressReliefSpace = () => {
+  const canvasRef = useRef(null);
+  const [isDrawing, setIsDrawing] = useState(false);
+  const [color, setColor] = useState("#2563eb");
+  const [size, setSize] = useState(3);
+  const [thought, setThought] = useState("");
   const [thoughts, setThoughts] = useState([]);
   const [editingId, setEditingId] = useState(null);
   const [editingText, setEditingText] = useState("");
 
-  // Fetch notes from backend
+  // ✅ Canvas setup (fixed disappearing line issue)
   useEffect(() => {
-    const fetchNotes = async () => {
-      try {
-        const { data } = await API.get("/notes");
-        setThoughts(data);
-      } catch (err) {
-        console.error("Error fetching notes:", err);
-      }
+    const canvas = canvasRef.current;
+    const ctx = canvas.getContext("2d");
+
+    // Ensure canvas matches visible area
+    const resizeCanvas = () => {
+      const savedImage = ctx.getImageData(0, 0, canvas.width, canvas.height);
+      canvas.width = canvas.clientWidth;
+      canvas.height = canvas.clientHeight;
+      ctx.putImageData(savedImage, 0, 0);
     };
-    fetchNotes();
-  }, []);
 
-  // Add new note
-  const addTask = async () => {
-    if (!input.trim()) return;
+    canvas.width = canvas.clientWidth;
+    canvas.height = canvas.clientHeight;
+    window.addEventListener("resize", resizeCanvas);
 
-    try {
-      const { data } = await API.post("/notes", { content: input });
-      setThoughts((prev) => [data, ...prev]);
-      setInput("");
-    } catch (err) {
-      console.error("Error adding note:", err);
-    }
+    const startDrawing = (e) => {
+      setIsDrawing(true);
+      const rect = canvas.getBoundingClientRect();
+      ctx.beginPath();
+      ctx.moveTo(e.clientX - rect.left, e.clientY - rect.top);
+    };
+
+    const draw = (e) => {
+      if (!isDrawing) return;
+      const rect = canvas.getBoundingClientRect();
+      ctx.lineWidth = size;
+      ctx.lineCap = "round";
+      ctx.strokeStyle = color;
+      ctx.lineTo(e.clientX - rect.left, e.clientY - rect.top);
+      ctx.stroke();
+    };
+
+    const stopDrawing = () => {
+      setIsDrawing(false);
+      ctx.closePath();
+    };
+
+    canvas.addEventListener("mousedown", startDrawing);
+    canvas.addEventListener("mousemove", draw);
+    canvas.addEventListener("mouseup", stopDrawing);
+    canvas.addEventListener("mouseleave", stopDrawing);
+
+    return () => {
+      window.removeEventListener("resize", resizeCanvas);
+      canvas.removeEventListener("mousedown", startDrawing);
+      canvas.removeEventListener("mousemove", draw);
+      canvas.removeEventListener("mouseup", stopDrawing);
+      canvas.removeEventListener("mouseleave", stopDrawing);
+    };
+  }, [color, size]);
+
+  // ✅ Thought logic
+  const addThought = () => {
+    if (!thought.trim()) return;
+    const newThought = { id: Date.now(), text: thought };
+    setThoughts((prev) => [newThought, ...prev]);
+    setThought("");
   };
 
-  // Delete a note
-  const deleteTask = async (id) => {
-    try {
-      await API.delete(`/notes/${id}`);
-      setThoughts((prev) => prev.filter((note) => note._id !== id));
-    } catch (err) {
-      console.error("Error deleting note:", err);
-    }
+  const deleteThought = (id) => setThoughts((prev) => prev.filter((t) => t.id !== id));
+
+  const startEdit = (id, text) => {
+    setEditingId(id);
+    setEditingText(text);
   };
 
-  // Start editing a note
-  const startEdit = (note) => {
-    setEditingId(note._id);
-    setEditingText(note.content);
+  const saveEdit = (id) => {
+    setThoughts((prev) =>
+      prev.map((t) => (t.id === id ? { ...t, text: editingText } : t))
+    );
+    setEditingId(null);
+    setEditingText("");
   };
 
-  // Save edited note
-  const saveEdit = async (id) => {
-    if (!editingText.trim()) return;
-
-    try {
-      const { data } = await API.put(`/notes/${id}`, { content: editingText });
-      setThoughts((prev) =>
-        prev.map((note) => (note._id === id ? data : note))
-      );
-      setEditingId(null);
-      setEditingText("");
-    } catch (err) {
-      console.error("Error editing note:", err);
-    }
+  const clearCanvas = () => {
+    const canvas = canvasRef.current;
+    const ctx = canvas.getContext("2d");
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
   };
 
   return (
-    <div id="stresscontainers">
-      <div style={{ display: "flex", justifyContent: "center" }}>
-        <h1 style={{ color: "black" }}>Stress Relief Space</h1>
-      </div>
-      <p style={{ textAlign: "center", color: "#626A84" }}>
+    <div className="stressPage-container">
+      <h1 className="stressPage-title">
+        <PencilLine size={24} color="#2563eb" />
+        Stress Relief Space
+      </h1>
+      <p className="stressPage-subtitle">
         Express yourself through art and release negative thoughts
       </p>
 
-      <div id="cont2boxes">
-        <div id="boardcont">
-          <h1 style={{ color: "black", textAlign: "center" }}>Creative Canvas</h1>
-          <Whiteboard />
+      <div className="stressPage-content">
+        {/* 🎨 Creative Canvas */}
+        <div className="stressPage-section">
+          <div className="stressPage-header">
+            <Brush size={25} color="#2563eb" />
+            <h2>Creative Canvas</h2>
+          </div>
+
+          <div className="stressPage-tools">
+            <button className="tool-btn active">Brush</button>
+            <button className="tool-btn">
+              <Eraser size={14} />
+            </button>
+            <label className="size-label">
+              Size:
+              <input
+                type="number"
+                value={size}
+                onChange={(e) => setSize(Number(e.target.value))}
+                min="1"
+                max="20"
+              />
+              px
+            </label>
+          </div>
+
+          <div className="color-palette">
+            {[
+              "#2563eb",
+              "#f87171",
+              "#fb923c",
+              "#facc15",
+              "#4ade80",
+              "#2dd4bf",
+              "#38bdf8",
+              "#a78bfa",
+              "#f472b6",
+              "#94a3b8",
+            ].map((c) => (
+              <div
+                key={c}
+                className={`color-circle ${color === c ? "active" : ""}`}
+                style={{ background: c }}
+                onClick={() => setColor(c)}
+              />
+            ))}
+          </div>
+
+          <canvas ref={canvasRef} className="stressPage-canvas"></canvas>
+
+          <div className="stressPage-actions">
+            <button onClick={clearCanvas}>Clear</button>
+            <button>Save Art</button>
+          </div>
         </div>
 
-        <div id="thoughtscont">
-          <h1 style={{ color: "black", textAlign: "center" }}>
-            Release Your Thoughts
-          </h1>
-          <p
-            style={{
-              color: "#626A84",
-              textAlign: "center",
-              width: "500px",
-              margin: "6px auto 13px",
-            }}
-          >
+        {/* 💭 Release Thoughts */}
+        <div className="stressPage-section">
+          <div className="stressPage-header">
+            <MessageSquare size={23} color="#2563eb" />
+            <h2>Release Your Thoughts</h2>
+          </div>
+          <p className="section-subtext">
             Write down any negative thoughts, worries, or stress. Once written,
             you can choose to release them.
           </p>
 
-          <input
-            type="text"
-            id="stressinput"
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            placeholder="What's on your mind? Write it all out..."
-          />
-          <button id="stress-btn" onClick={addTask}>
-            Capture This Thought
+          <textarea
+            placeholder="💭 What's weighing on your mind? Write it all out..."
+            value={thought}
+            onChange={(e) => setThought(e.target.value)}
+            className="thought-input"
+          ></textarea>
+
+          <button className="capture-btn" onClick={addThought}>
+            <Send size={16} /> Capture This Thought
           </button>
 
-          <p style={{ color: "#626A84", marginTop: "20px" }}>Thoughts to release</p>
-
-          <div
-            style={{
-              color: "black",
-              width: "440px",
-              maxHeight: "225px",
-              overflowY: "auto",
-              margin: "0 auto",
-            }}
-          >
-            {thoughts.map((note) => (
-              <div
-                key={note._id}
-                style={{
-                  background: "#f0f4ff",
-                  padding: "10px",
-                  marginBottom: "8px",
-                  borderRadius: "8px",
-                  display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                  boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
-                }}
-              >
-                {editingId === note._id ? (
-                  <>
-                    <input
-                      type="text"
-                      value={editingText}
-                      onChange={(e) => setEditingText(e.target.value)}
-                      style={{ flex: 1, marginRight: "10px", padding: "5px" }}
-                    />
-                    <button
-                      onClick={() => saveEdit(note._id)}
-                      style={{
-                        background: "#4CAF50",
-                        color: "white",
-                        border: "none",
-                        borderRadius: "4px",
-                        padding: "5px 10px",
-                        cursor: "pointer",
-                      }}
-                    >
-                      Save
-                    </button>
-                  </>
-                ) : (
-                  <>
-                    <span style={{ flex: 1 }}>- {note.content}</span>
-                    <div>
+          <div className="thought-list">
+            {thoughts.length === 0 ? (
+              <p className="no-thoughts">
+                <MessageSquare size={18} /> No thoughts captured yet
+              </p>
+            ) : (
+              thoughts.map((t) => (
+                <div key={t.id} className="thought-item">
+                  {editingId === t.id ? (
+                    <>
+                      <input
+                        value={editingText}
+                        onChange={(e) => setEditingText(e.target.value)}
+                        className="thought-edit-input"
+                      />
                       <button
-                        onClick={() => startEdit(note)}
-                        style={{
-                          marginRight: "5px",
-                          background: "#FFC107",
-                          color: "white",
-                          border: "none",
-                          borderRadius: "4px",
-                          padding: "5px 10px",
-                          cursor: "pointer",
-                        }}
+                        className="save-btn"
+                        onClick={() => saveEdit(t.id)}
                       >
-                        Edit
+                        Save
                       </button>
-                      <button
-                        onClick={() => deleteTask(note._id)}
-                        style={{
-                          background: "#F44336",
-                          color: "white",
-                          border: "none",
-                          borderRadius: "4px",
-                          padding: "5px 10px",
-                          cursor: "pointer",
-                        }}
-                      >
-                        Delete
-                      </button>
-                    </div>
-                  </>
-                )}
-              </div>
-            ))}
+                    </>
+                  ) : (
+                    <>
+                      <span>{t.text}</span>
+                      <div className="thought-actions">
+                        <Edit2
+                          size={16}
+                          color="#2563eb"
+                          onClick={() => startEdit(t.id, t.text)}
+                        />
+                        <Trash2
+                          size={16}
+                          color="#ef4444"
+                          onClick={() => deleteThought(t.id)}
+                        />
+                      </div>
+                    </>
+                  )}
+                </div>
+              ))
+            )}
           </div>
         </div>
       </div>
+      <div style={{
+        position: 'fixed',
+        bottom: '20px',
+        right: '20px',
+        zIndex: 1000
+      }}>
+        <Ai />
+        </div>
     </div>
   );
 };
 
-export default StressRelief;
+export default StressReliefSpace;

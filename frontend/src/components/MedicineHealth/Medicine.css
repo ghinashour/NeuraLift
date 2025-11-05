@@ -1,40 +1,221 @@
+/* -------------------------
+   MAIN CONTAINER STYLES
+-------------------------- */
 #Medicinecontainer {
-  width: 1200px;
-  height: 800px;
-  background-color: #f4f7fb;
-  color: black;
-}
-.medicinebox {
-  width: 300px;
-  height: 200px;
+  position: relative;
+  background: #ffffff;
   border-radius: 20px;
-  background-color: white;
+  box-shadow: 0 4px 25px rgba(0, 0, 0, 0.08);
+  padding: 30px;
+  height: auto;
+  min-height: 700px;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  overflow-y: auto; /* ✅ allows scrolling */
+  scrollbar-width: thin;
+  scrollbar-color: #3c83f6 #f1f1f1;
+}
+
+/* Scrollbar for Chrome/Edge */
+#Medicinecontainer::-webkit-scrollbar {
+  width: 8px;
+}
+#Medicinecontainer::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+#Medicinecontainer::-webkit-scrollbar-thumb {
+  background-color: #3c83f6;
+  border-radius: 10px;
+}
+
+/* -------------------------
+   UPCOMING MED SECTION
+-------------------------- */
+#upcomingMed {
+  width: 100%;
+  min-height: 420px;
+  background: linear-gradient(135deg, #f3f7ff, #e9f1ff);
+  border-radius: 16px;
+  padding: 25px;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 2px 12px rgba(60, 131, 246, 0.1);
+}
+
+#upcomingMed h2 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #1f3a7a;
+  margin-bottom: 15px;
+  text-align: left;
+}
+
+/* -------------------------
+   MEDICINE LIST
+-------------------------- */
+.mainmed-container {
+  padding: 20px;
+  max-height: 400px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.mainmed-container::-webkit-scrollbar {
+  width: 6px;
+}
+.mainmed-container::-webkit-scrollbar-thumb {
+  background-color: #3c83f6;
+  border-radius: 8px;
+}
+
+/* -------------------------
+   INDIVIDUAL CARD
+-------------------------- */
+.medicine-card {
+  background: #f9fbff;
+  border-radius: 16px;
+  padding: 18px;
+  box-shadow: 0 4px 12px rgba(60, 131, 246, 0.1);
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.medicine-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(60, 131, 246, 0.15);
+}
+
+/* -------------------------
+   CARD CONTENT
+-------------------------- */
+.medicine-details {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 8px;
+}
+
+.medicine-details h3 {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #1a2b5a;
+  margin: 0;
+}
+
+.medicine-details p {
+  font-size: 0.9rem;
+  color: #5b6b8b;
+  margin: 0;
+}
+
+.time-detail {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 6px;
+  text-align: right;
+}
+
+.time-detail .time {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #3c83f6;
+}
+
+.time-detail .repeat {
+  font-size: 0.8rem;
+  color: #6b7aa8;
+}
+
+/* Capsule icon (SVG) */
+.time-detail svg {
+  margin-top: 6px;
+  fill: none;
+  stroke: #3c83f6;
+}
+
+/* -------------------------
+   BUTTON STYLES
+-------------------------- */
+#take {
+  align-self: flex-start;
+  margin-top: 10px;
+  background: #3c83f6;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  padding: 8px 14px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+#take:hover {
+  background: #2e6fe0;
+}
+
+/* -------------------------
+   EMPTY STATE
+-------------------------- */
+.empty-state {
+  text-align: center;
+  padding: 40px;
+  color: #9aa8c5;
+  font-style: italic;
+  font-size: 1rem;
+}
+
+
+.medicinebox {
+  width: 280px;
+  height: 180px;
+  border-radius: 16px;
+  background: linear-gradient(145deg, #ffffff, #f5f5f5);
   display: flex;
   flex-direction: column;
   align-items: center;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.5);
 }
 
-#upcomingMed {
-  width: 1100px;
-  height: 360px;
+.medicinebox:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+}
+
+.medicinebox p {
+  font-weight: 600;
+  font-size: 14px;
   margin-top: 15px;
-  margin-left: 50px;
 }
+
+
 #addMedBtn {
-  background-color: #3c83f6;
-  margin-top: 30px;
-  margin-right: 50px;
-  width: 141px;
-  height: 30px;
+  background: linear-gradient(135deg, #3c83f6, #2c6fd8);
+  width: 140px;
+  height: 40px;
   color: white;
-  border-radius: 8px;
+  border-radius: 10px;
   border: none;
-  font-size: 15px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 3px 10px rgba(60, 131, 246, 0.3);
 }
+
 #addMedBtn:hover {
-  background-color: #276fe3;
+  background: linear-gradient(135deg, #2c6fd8, #1e5bbf);
+  transform: translateY(-1px);
 }
-/* css of the section that leads to add medicine */
 
 .modal-overlay {
   position: fixed;
@@ -45,19 +226,18 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: rgba(0, 0, 0, 0.4);
+  background-color: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(5px);
   z-index: 1000;
 }
 
 .medicine-form {
-  background-color: white;
+  background: white;
   padding: 25px;
-  border-radius: 10px;
-  width: 90%;
-  max-width: 700px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  border-radius: 16px;
+  width: 500px;
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
   position: relative;
-  margin-left: 200px;
 }
 
 .close-btn {
@@ -68,143 +248,120 @@
   background: none;
   border: none;
   cursor: pointer;
+  color: #666;
 }
 
 .form-group {
   margin-bottom: 20px;
-  margin-top: 20px;
   display: flex;
-  flex-direction: row;
-  gap: 50px;
+  align-items: center;
+  gap: 20px;
 }
+
 .medOpt {
-  background-color: #3c83f6;
+  background: #3c83f6;
   color: white;
-  width: 130px;
-  height: 35px;
+  width: 120px;
+  height: 40px;
   display: flex;
   justify-content: center;
   align-items: center;
-}
-
-.form-group label {
-  display: block;
-  margin-bottom: 5px;
-  font-weight: 500;
+  border-radius: 10px;
+  font-weight: 600;
+  font-size: 14px;
 }
 
 .form-group input {
-  width: 100%;
-  max-width: 450px;
-  padding: 10px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
+  flex: 1;
+  padding: 10px 14px;
+  border: 2px solid #e1e8f0;
+  border-radius: 10px;
+  font-size: 14px;
+  background: #fafbfc;
+}
+
+.form-group input:focus {
+  outline: none;
+  border-color: #3c83f6;
+  background: white;
 }
 
 .repeat-section {
-  margin: 25px 0;
+  margin: 20px 0;
   display: flex;
   align-items: center;
-  gap: 50px;
+  gap: 20px;
 }
 
 .repeat-options {
   display: flex;
   gap: 10px;
-  margin-top: 10px;
+  align-items: center;
 }
 
 .repeat-options input {
-  width: 80px;
+  width: 70px;
+  padding: 10px;
+  border: 2px solid #e1e8f0;
+  border-radius: 10px;
+  text-align: center;
 }
 
-.add-reminder-btn {
-  background-color: #3c83f6;
-  color: white;
-  border: none;
-  padding: 12px 20px;
-  width: 100%;
-  border-radius: 4px;
-  font-size: 16px;
-  cursor: pointer;
-  transition: background-color 0.3s;
-}
-
-/* Add to your CSS file */
-.repeat-container {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin: 15px 0;
-}
-
-.repeat-container input[type="number"] {
-  width: 60px;
-  padding: 8px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-}
-
-.repeat-container select {
-  padding: 8px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  background: white;
-}
-
-/* MainMedPage.css */
-.mainmed-container {
-  padding: 20px;
-}
-
-.medicine-card {
-  background: white;
-  border-radius: 20px;
-  display: flex;
-  align-items: center;
-  padding: 15px;
-  margin-bottom: 15px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-.medicine-details {
-  flex: 1;
-}
-
-.medicine-details h3 {
-  margin: 0;
-  font-size: 18px;
-  color: #333;
-}
-
-.medicine-details p {
-  margin: 5px 0;
-  color: #666;
+.repeat-options select {
+  padding: 10px 14px;
+  border: 2px solid #e1e8f0;
+  border-radius: 10px;
+  background: #fafbfc;
   font-size: 14px;
 }
 
-.time-detail {
-  display: flex;
-  flex-direction: column;
+.add-reminder-btn {
+  background: #3c83f6;
+  color: white;
+  border: none;
+  padding: 14px 20px;
+  width: 100%;
+  border-radius: 10px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+.add-reminder-btn:hover {
+  background: #2c6fd8;
 }
 
 .time {
   color: #3c83f6;
-  border-radius: 10px;
-  padding: 2px 10px;
-  font-size: 17px;
-  margin-right: 10px;
-  margin-bottom: 4px;
+  background: rgba(60, 131, 246, 0.1);
+  border-radius: 8px;
+  padding: 6px 12px;
+  font-size: 14px;
+  font-weight: 600;
 }
 
 .repeat {
   color: #666;
-  font-size: 14px;
+  font-size: 12px;
+  background: rgba(102, 102, 102, 0.05);
+  padding: 3px 8px;
+  border-radius: 6px;
 }
+
 #take {
-  width: 1020px;
-  background-color: #3c83f6;
-  border-radius: 15px;
+  width: 100%;
+  background: #3c83f6;
+  border-radius: 8px;
   border: none;
-  font-size: 18px;
+  font-size: 14px;
+  font-weight: 600;
+  color: white;
+  padding: 10px;
+  margin-top: 8px;
+  cursor: pointer;
+}
+
+#take:hover {
+  background: #2c6fd8;
 }

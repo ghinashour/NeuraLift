@@ -1,41 +1,49 @@
-// src/components/collaborate/ReplyCard.js
+// src/components/ReplyCard.js
 import React, { useState } from "react";
 import "../../styles/Collaborate.css";
-import useUserData from "../../hooks/useUserData";
+import { FaHeart } from "react-icons/fa";
 
-/**
- * If "inline" prop is passed, ReplyCard renders a small input to post a reply (onReply callback).
- * Otherwise, it renders an existing reply (white card).
- */
-export default function ReplyCard({ reply, inline = false, onReply }) {
-  const [text, setText] = useState("");
-  const user = useUserData();
+export default function ReplyCard({ reply }) {
+  const [liked, setLiked] = useState(false);
+  const [likes, setLikes] = useState(typeof reply.likes === "number" ? reply.likes : 0);
 
-  if (inline) {
-    return (
-      <div className="reply-inline">
-        <img src={user.avatar || "/avatar.png"} alt="me" className="avatar small" />
-        <div className="reply-input-wrap">
-          <textarea value={text} onChange={(e) => setText(e.target.value)} placeholder="Write a reply..." />
-          <div className="reply-controls">
-            <button onClick={() => { onReply(text); setText(""); }}>Reply</button>
-            <button onClick={() => setText("")}>Cancel</button>
-          </div>
-        </div>
-      </div>
-    );
-  }
+  const handleLike = () => {
+    const newLiked = !liked;
+    const newCount = newLiked ? likes + 1 : Math.max(0, likes - 1);
+    setLiked(newLiked);
+    setLikes(newCount);
+  };
 
   return (
     <div className="reply-card">
-      <div className="reply-top">
-        <img className="avatar small" src={reply.avatar || "/avatar.png"} alt="avatar" />
-        <div className="reply-meta">
-          <div className="username">{reply.author}</div>
-          <div className="reply-time">{new Date(reply.date).toLocaleString()}</div>
+      <header className="reply-header">
+        <div className="left">
+          <div className="reply-avatar">
+            {reply.avatar || (reply.name ? reply.name[0] : "?")}
+          </div>
+          <div className="reply-name">{reply.name}</div>
         </div>
+        <div className="reply-date">
+          {new Date(reply.date).toLocaleString()}
+        </div>
+      </header>
+
+      <div className="reply-body">
+        {reply.text || reply.content}
       </div>
-      <div className="reply-content">{reply.content}</div>
+
+      <footer className="reply-footer">
+        <div className="reply-actions">
+          <button
+            className={`icon-action like-btn ${liked ? "liked" : ""}`}
+            onClick={handleLike}
+            aria-pressed={liked}
+          >
+            <FaHeart />
+            <span className="action-count">{likes}</span>
+          </button>
+        </div>
+      </footer>
     </div>
   );
 }

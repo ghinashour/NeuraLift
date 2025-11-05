@@ -1,0 +1,59 @@
+.recent-entries {
+  background-color: #f9fafb;
+  padding: 1rem;
+  border-radius: 10px;
+}
+
+.mood-entry-item {
+  background: white;
+  border: 1px solid #f1f1f1;
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 12px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+  transition: all 0.2s ease-in-out;
+}
+
+.mood-entry-item:hover {
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+
+.mood-entry-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.mood-entry-date {
+  font-size: 0.9rem;
+  color: #6b7280;
+}
+
+.mood-entry-mood {
+  font-weight: 600;
+  background: #dcfce7;
+  color: #166534;
+  padding: 4px 10px;
+  border-radius: 9999px;
+  font-size: 0.8rem;
+  margin-left: 8px;
+}
+
+.mood-entry-note {
+  margin-top: 8px;
+  font-style: italic;
+  color: #4b5563;
+  padding-left: 1.5rem;
+}
+
+.delete-button {
+  background: none;
+  border: none;
+  color: #9ca3af;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.delete-button:hover {
+  color: #ef4444;
+}

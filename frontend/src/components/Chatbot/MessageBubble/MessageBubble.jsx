@@ -1,20 +1,19 @@
 import React from 'react';
 import './MessageBubble.css';
+import { formatTime } from '../../../utils/messageHelpers';
 
-const MessageBubble = ({ message, isUser }) => {
-  const formatTime = (timestamp) => {
-    return new Date(timestamp).toLocaleTimeString([], { 
-      hour: '2-digit', 
-      minute: '2-digit' 
-    });
-  };
-
+const MessageBubble = ({ message }) => {
+  // Safety check
+  if (!message) return null;
+  
+  const { sender, text, timestamp } = message;
+  
   return (
-    <div className={`message-bubble-container ${isUser ? 'user-message' : 'ai-message'}`}>
-      <div className="message-bubble">
-        <p className="message-text">{message.text}</p>
-        <span className="message-time">{formatTime(message.timestamp)}</span>
-      </div>
+    <div className={`message-bubble ${sender === 'user' ? 'user-bubble' : 'bot-bubble'}`}>
+      <div className="bubble-content">{text}</div>
+      {timestamp && (
+        <div className="bubble-timestamp">{formatTime(timestamp)}</div>
+      )}
     </div>
   );
 };

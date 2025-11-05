@@ -11,10 +11,14 @@ export default function useInspiration(intervalTime = 60000) {
     try {
       const res = await getRandomQuote();
       // res.data contains { _id, text, author }
-      setQuote({
-        text: res.data.text || "Stay motivated!",
-        author: res.data.author || "Unknown",
-      });
+      if (res.data) {
+        setQuote({
+          text: res.data.text || "Stay motivated!",
+          author: res.data.author || "Unknown",
+        });
+      } else {
+        setQuote({ text: "Stay motivated!", author: "Unknown" });
+      }
     } catch (err) {
       console.error("Failed to fetch quote:", err);
       setQuote({ text: "Stay motivated!", author: "Unknown" });

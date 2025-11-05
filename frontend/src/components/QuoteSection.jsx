@@ -1,31 +1,38 @@
-import React from 'react';
-import Button from './Button';
-import '../styles//QuoteSection.css';
+import React, { useEffect } from 'react';
+import '../styles/QuoteSection.css';
 
 const QuoteSection = ({ quote, onNewQuote, isLoading }) => {
+  useEffect(() => {
+    // Generate a new quote every 30 seconds
+    const interval = setInterval(() => {
+      onNewQuote();
+    }, 15000); // 15000 ms = 15 seconds
+
+    // Clean up the interval on unmount
+    return () => clearInterval(interval);
+  }, [onNewQuote]);
+
   return (
     <div className="quote-section">
-      <div className="quote-section__text">
+      <div className="quote-section__content">
         {isLoading ? (
-          "Loading inspirational quote..."
+          <p className="quote-section__text">Loading inspirational quote...</p>
         ) : (
-          quote ? `"${quote.text}"` : "Stay focused and productive! 🌟"
-        )}
-        {quote && quote.author && (
-          <div className="quote-section__author">
-            — {quote.author}
-          </div>
+          <>
+            <p className="quote-section__text">
+              {quote ? `"${quote.text}"` : "Stay focused and productive! 🌟"}
+            </p>
+            {quote && quote.author && (
+              <div className="quote-section__meta">
+                <div className="quote-section__avatar" aria-hidden>
+                  {quote.author.split(" ").map(n => n[0]).slice(0,2).join("").toUpperCase()}
+                </div>
+                <p className="quote-section__author">— {quote.author}</p>
+              </div>
+            )}
+          </>
         )}
       </div>
-      
-      <Button
-        onClick={onNewQuote}
-        variant="quote"
-        className="quote-section__refresh"
-        disabled={isLoading}
-      >
-        Generate a  New Quote!
-      </Button>
     </div>
   );
 };

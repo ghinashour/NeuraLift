@@ -2,6 +2,8 @@
 import React from "react";
 import ChallengeCard from "../../components/Challenges/ChallengeCard";
 import CategoryButton from "../../components/Challenges/CategoryButton";
+import AILogo from '../../components/AiLogo';
+
 import "../../styles/Challenges.css";
 
 const svgIcon = (<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -73,16 +75,39 @@ function Challenges() {
           description="Answer quick programming true or false questions."
           link="/challenges/true-false"
         />
-        <ChallengeCard
-          title="Tenzis Game"
-          description="Play the dice-based coding challenge game."
-          link="/challenges/tenzis-game"
-        />
+            <ChallengeCard
+              title="Tenzis Game"
+              description="Play the dice-based coding challenge game."
+              link="/challenges/tenzis-game"
+            />
+            <ChallengeCard
+              title="Tenzis (Solo)"
+              description="Quick solo dice game (new)."
+              link="/challenges/tenzis-solo"
+            />
+            <ChallengeCard
+              title="Leaderboard"
+              description="See top players for games."
+              link="/challenges/leaderboard"
+            />
+            <ChallengeCard
+              title="Code Quiz"
+              description="Short developer quiz - answer to score points."
+              link="/challenges/code-quiz"
+            />
         <ChallengeCard
           title="Dev Questions"
           description="Challenge yourself with tricky developer questions."
           link="/challenges/dev-questions"
         />
+      </div>
+       <div style={{ 
+        position: 'fixed', 
+        bottom: '20px', 
+        right: '20px',
+        zIndex: 1000 
+      }}>
+        <AILogo />
       </div>
     </div>
   );

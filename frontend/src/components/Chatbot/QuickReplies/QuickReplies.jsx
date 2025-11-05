@@ -1,18 +1,19 @@
 import React from 'react';
 import './QuickReplies.css';
+import { useSuggestions } from '../../../hooks/useSuggestions';
 
-const QuickReplies = ({ suggestions, onSelect }) => {
-  if (!suggestions || suggestions.length === 0) return null;
+const QuickReplies = ({ onSelect }) => {
+  const { suggestions } = useSuggestions();
 
   return (
     <div className="quick-replies">
-      {suggestions.map((suggestion) => (
+      {suggestions.map((suggestion, index) => (
         <button
-          key={suggestion.id}
-          onClick={() => onSelect(suggestion.text)}
-          className="quick-reply-button"
+          key={index}
+          className="quick-reply-btn"
+          onClick={() => onSelect(suggestion)}
         >
-          {suggestion.text}
+          {suggestion}
         </button>
       ))}
     </div>

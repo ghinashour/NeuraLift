@@ -1,52 +1,47 @@
-import React, { useRef, useEffect, useLayoutEffect } from 'react';
-import MessageBubble from '../MessageBubble/MessageBubble';
+import React, { useRef, useEffect } from 'react';
 import './MessageList.css';
+import MessageBubble from '../MessageBubble/MessageBubble';
+import TypingIndicator from '../TypingIndicator/TypingIndicator';
+import { useChat } from '../../../context/ChatContext';
 
-const MessageList = ({ messages, onQuickReply }) => {
-  const containerRef = useRef(null);
-  const bottomRef = useRef(null);
+const MessageList = () => {
+  const { messages, isTyping } = useChat();
+  const messagesEndRef = useRef(null);
 
-  // Scroll smoothly when new messages are added
-  const scrollToBottom = (behavior = 'smooth') => {
-    bottomRef.current?.scrollIntoView({ behavior });
-  };
-
-  // Ensure scroll to bottom on mount (instant)
-  useLayoutEffect(() => {
-    scrollToBottom('auto');
-  }, []);
-
-  // Scroll on new messages
   useEffect(() => {
-    scrollToBottom();
-  }, [messages]);
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [messages, isTyping]);
 
-  // Group messages by sender for better bubble layout
-  const groupedMessages = [];
-  for (let i = 0; i < messages.length; i++) {
-    const current = messages[i];
-    const prev = messages[i - 1];
-    const sameSender = prev && prev.sender === current.sender;
-    groupedMessages.push({
-      ...current,
-      showAvatar: !sameSender,
-      showName: !sameSender && current.sender !== 'user',
-    });
+  // Safety check for messages
+  if (!messages || !Array.isArray(messages)) {
+    return <div className="message-list">Loading...</div>;
   }
 
   return (
-    <div className="message-list" ref={containerRef}>
-      {groupedMessages.map((message) => (
-        <MessageBubble
-          key={message.id}
-          message={message}
-          isUser={message.sender === 'user'}
-          showAvatar={message.showAvatar}
-          showName={message.showName}
-          onQuickReply={onQuickReply}
-        />
-      ))}
-      <div ref={bottomRef} />
+    <div className="message-list">
+      {messages.map((message) => {
+        // Safety check for each message
+        if (!message || !message.id) return null;
+        
+        return (
+          <div
+            key={message.id}
+            className={`message-wrapper ${message.sender === 'user' ? 'user-message' : 'bot-message'}`}
+          >
+            <MessageBubble message={message} />
+          </div>
+        );
+      })}
+      
+      {isTyping && (
+        <div className="message-wrapper bot-message">
+          <div className="typing-bubble">
+            <TypingIndicator />
+          </div>
+        </div>
+      )}
+      
+      <div ref={messagesEndRef} />
     </div>
   );
 };

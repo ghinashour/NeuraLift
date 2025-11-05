@@ -1,0 +1,19 @@
+.divider {
+  border: none;               /* Remove default border */
+  height: 2px;                /* Divider thickness */
+  background: linear-gradient(
+    to right,
+    #92969c,
+    #4e4d53,
+    #92969c
+  );                           /* Gradient color */
+  transition: transform 0.3s ease, opacity 0.3s ease; 
+  opacity: 0.7;
+  margin: 1rem 0;
+  border-radius: 1px;
+}
+
+.divider:hover {
+  transform: scaleY(1.5);     /* Subtle grow animation */
+  opacity: 1;                  /* Full opacity on hover */
+}

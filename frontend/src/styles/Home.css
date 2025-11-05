@@ -1,40 +1,34 @@
-/* Home.css - Matching Figma Design */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-}
-
-body {
-    background: #f8f9fa;
-    line-height: 1.6;
-    min-height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+/* Home.css - Enhanced Design */
+.home-section * {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 .home-section {
-  background-color: #f8f9fa;
+  background-color: #ffffff;
   width: 100vw;
   position: relative;
   left: 50%;
   right: 50%;
   margin-left: -50vw;
   margin-right: -50vw;
-  padding: 70px 20px;
-  color: white;
+  padding: 35px 20px;
+  color: #2d3748;
   text-align: center;
   align-items: center;
+  line-height: 1.6;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
 }
 
 .home-container {
   text-align: center;
-  padding: 20px;
+  padding: 40px 20px;
   width: 1152px;
   max-width: 100%;
-  height: 612px;
   margin: 0 auto;
 }
 
@@ -46,7 +40,7 @@ body {
   margin-bottom: 24px;
   line-height: 1.2;
   letter-spacing: -0.02em;
-  margin-top: 70px;
+  margin-top: 0;
 }
 
 .home-title .highlight {
@@ -57,11 +51,11 @@ body {
 
 /* Tagline */
 .home-tagline {
-  font-size: 1.125rem;
-  color: #a0aec0;
-  line-height: 1.6;
+  font-size: 1.25rem;
+  color: #64748b;
+  line-height: 1.7;
   margin-bottom: 40px;
-  max-width: 600px;
+  max-width: 700px;
   margin-left: auto;
   margin-right: auto;
   font-weight: 400;
@@ -70,41 +64,64 @@ body {
 /* Buttons */
 .home-buttons {
   display: flex;
-  gap: 20px;
+  gap: 24px;
   justify-content: center;
-  margin-bottom: 30px;
+  margin-bottom: 60px;
+  flex-wrap: wrap;
 }
 
-.btn-primary {
-  max-width: 200px;
-  background-color: #4a9eff;
+.home-btn-primary {
+  background: linear-gradient(135deg, #3C8AF6, #76ABF4);
   color: white;
-  font-size: 1rem;
-  font-weight: 500;
+  font-size: 1.1rem;
+  font-weight: 600;
+  padding: 16px 32px;
   border: none;
-  border-radius: 8px;
+  border-radius: 12px;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  display: inline-flex;
   align-items: center;
+  gap: 8px;
+  box-shadow: 0 4px 15px rgba(74, 158, 255, 0.3);
+  position: relative;
+  overflow: hidden;
+}
+
+.home-btn-primary::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.5s;
+}
+
+.home-btn-primary:hover::before {
+  left: 100%;
 }
 
 .home-btn-primary:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(74, 158, 255, 0.3);
-  opacity: 0.9;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(74, 158, 255, 0.4);
 }
 
 .btn-secondary {
   background-color: transparent;
   color: #4a5568;
-  font-size: 1rem;
-  font-weight: 500;
-  padding: 14px 28px;
-  border: 1px solid #e2e8f0;
-  border-radius: 8px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  padding: 16px 32px;
+  border: 2px solid #e2e8f0;
+  border-radius: 12px;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all 0.3s ease;
   text-decoration: none;
+  display: inline-flex;
+  align-items: center;
 }
 
 .btn-secondary:hover {
@@ -117,9 +134,9 @@ body {
 .home-stats {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 60px;
-  max-width: 800px;
-  margin: 0 auto 10px auto;
+  gap: 40px;
+  max-width: 900px;
+  margin: 0 auto;
 }
 
 .stat {
@@ -127,7 +144,7 @@ body {
 }
 
 .stat h2 {
-  font-size: 30px;
+  font-size: 2.5rem;
   font-weight: 700;
   color: #2d3748;
   margin-bottom: 8px;
@@ -137,9 +154,10 @@ body {
 .stat p {
   font-size: 16px;
   color: #a0aec0;
-  font-weight: 300;
+  font-weight: 500;
   margin: 0;
   letter-spacing: 0.05em;
+  text-transform: uppercase;
 }
 
 /* ===============================
@@ -193,7 +211,6 @@ body {
   }
 
   .home-buttons {
-    flex-direction: column;
     gap: 12px;
     margin-bottom: 40px;
   }
@@ -273,6 +290,7 @@ body {
     opacity: 0;
     transform: translateY(30px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);

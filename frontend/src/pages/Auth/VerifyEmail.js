@@ -1,10 +1,11 @@
+// src/pages/VerifyEmail.jsx
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
 export default function VerifyEmail() {
   const [status, setStatus] = useState("Verifying...");
-  const navigate = useNavigate();
   const { verificationToken } = useParams();
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (!verificationToken) {
@@ -14,12 +15,12 @@ export default function VerifyEmail() {
 
     fetch(`http://localhost:4000/api/auth/verify/${verificationToken}`)
       .then((res) => res.text())
-      .then((msg) => {
-        setStatus(msg);
+      .then(() => {
+        setStatus("Email verified successfully! Redirecting...");
         setTimeout(() => navigate("/login"), 3000);
       })
       .catch(() => setStatus("Verification failed. Try again."));
-  }, [navigate, verificationToken]);
+  }, [verificationToken, navigate]);
 
   return (
     <div style={{ textAlign: "center", marginTop: "50px" }}>

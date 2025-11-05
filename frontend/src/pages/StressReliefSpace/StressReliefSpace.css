@@ -1,91 +1,237 @@
-#stresscontainers {
-  width: auto;
-  height: 670px;
-  background-color: #f4f7fb;
-  margin-right: 47px;
+/* ====== GENERAL PAGE ====== */
+.stressPage-container {
+  max-width: 1200px;
+  margin: 2rem auto;
+  text-align: center;
+  background: #eef6ff;
+  padding: 2rem;
+  font-family: 'Inter', sans-serif;
 }
 
-#cont2boxes {
+.stressPage-title {
+  font-size: 1.8rem;
+  font-weight: 700;
+  display: flex ;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  color: #1e293b;
+}
+
+.stressPage-subtitle {
+  color: #64748b;
+  margin-top: 6px;
+}
+
+.stressPage-content {
   display: flex;
   justify-content: center;
-  gap: 70px;
-  margin-top: 30px;
+  align-items: flex-start;
+  gap: 2rem;
+  margin-top: 2rem;
+  flex-wrap: wrap;
 }
 
-#boardcont {
-  margin-left: 20px;
-  background-color: white;
-  width: 500px;
-  height: 550px;
+/* ====== CANVAS SECTION ====== */
+.stressPage-section {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 1rem;
+  width: 480px;
+  height: 700px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  text-align: left;
 }
 
-#thoughtscont {
-  background-color: white;
-  width: 500px;
-  height: 550px;
-  margin-right: 10px;
+.stressPage-header {
   display: flex;
-  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  color: #2563eb;
+  margin-bottom: 0.5rem;
+}
+
+.stressPage-tools {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 0.75rem;
+}
+
+.tool-btn {
+  padding: 6px 12px;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  background: white;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: all 0.2s ease;
+}
+
+.tool-btn.active,
+.tool-btn:hover {
+  background: #2563eb;
+  color: white;
+}
+
+.size-label {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.85rem;
+  color: #334155;
+}
+
+.color-palette {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 1rem;
+}
+
+.color-circle {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  cursor: pointer;
+  border: 2px solid transparent;
+  transition: transform 0.2s;
+}
+
+.color-circle.active {
+  border-color: #2563eb;
+  transform: scale(1.2);
+}
+
+.stressPage-canvas {
+  width: 100%;
+  height: 300px;
+  border: 2px solid #e2e8f0;
+  border-radius: 8px;
+  cursor: crosshair;
+  background: #f8fafc;
+}
+
+.stressPage-actions {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+}
+
+.stressPage-actions button {
+  background: #2563eb;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.stressPage-actions button:hover {
+  background: #1d4ed8;
+}
+
+/* ====== THOUGHT SECTION ====== */
+.section-subtext {
+  color: #64748b;
+  font-size: 0.9rem;
+  margin-bottom: 1rem;
+}
+
+.thought-input {
+  width: 100%;
+  min-height: 80px;
+  border-radius: 8px;
+  border: 1px solid #e2e8f0;
+  padding: 10px;
+  font-size: 0.9rem;
+  outline: none;
+  resize: none;
+  margin-bottom: 1rem;
+}
+
+.capture-btn {
+  width: 100%;
+  background: #2563eb;
+  color: white;
+  border: none;
+  padding: 10px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
+  transition: background 0.2s;
+}
+
+.capture-btn:hover {
+  background: #1e40af;
+}
+
+.thought-list {
+  margin-top: 1rem;
+}
+
+.no-thoughts {
+  color: #94a3b8;
+  text-align: center;
+  font-size: 0.9rem;
+}
+
+.thought-item {
+  background: #f1f5f9;
+  border-radius: 8px;
+  padding: 8px 12px;
+  margin-bottom: 8px;
+  color: #1e293b;
+  font-size: 0.9rem;
+  display: flex;
+  justify-content: space-between;
   align-items: center;
 }
 
-#stressinput {
-  width: 440px;
-  height: 150px;
+.thought-actions {
+  display: flex;
+  gap: 6px;
 }
 
-#stress-btn {
-  background-color: #3c83f6;
-  color: white;
-  width: 440px;
-  height: 60px;
-  border-radius: 10px;
+.edit-btn,
+.delete-btn,
+.save-btn {
   border: none;
-  margin-top: 20px;
+  background: transparent;
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 6px;
+  transition: 0.2s ease;
 }
 
-/* Responsive design */
-@media (max-width: 1200px) {
-  #cont2boxes {
-    flex-direction: column;
-    align-items: center;
-    gap: 40px;
-  }
-
-  #thoughtscont {
-    width: 100%;
-    max-width: 700px;
-    margin-right: 0;
-  }
-
-  #stressinput {
-    width: 100%;
-    max-width: 640px;
-  }
-
-  #stress-btn {
-    width: 100%;
-    max-width: 640px;
-  }
+.edit-btn:hover {
+  background: #fde68a;
 }
 
-@media (max-width: 768px) {
-  #cont2boxes {
-    gap: 30px;
-    margin-top: 20px;
-  }
+.delete-btn:hover {
+  background: #fecaca;
+}
 
-  #thoughtscont {
-    width: 100%;
-    padding: 0 20px;
-  }
+.save-btn:hover {
+  background: #bbf7d0;
+}
 
-  #stressinput {
-    width: 100%;
-    height: 120px;
-  }
+.edit-input {
+  flex: 1;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  padding: 5px;
+}
 
-  #stress-btn {
-    width: 100%;
-  }
+/* ===== Floating AI Logo ===== */
+.ai-float {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 1000;
 }

@@ -1,5 +1,5 @@
 import React from "react";
-import "../styles/Home.css"; 
+import "../styles/Home.css";
 import { useNavigate } from "react-router-dom";
 
 
@@ -24,15 +24,15 @@ const Home = () => {
 
         {/* Buttons */}
         <div className="home-buttons">
-              <button 
-      className="home-btn-primary" 
-      onClick={() => navigate("/signup")}
-    >
-      Get Started Today →
-    </button>
-    <a href="#About" className="btn-secondary">
-  Learn More
-</a>
+          <button
+            className="home-btn-primary"
+            onClick={() => navigate("/signup")}
+          >
+            Get Started Today →
+          </button>
+          <a href="#About" className="btn-secondary">
+            Learn More
+          </a>
 
         </div>
 
