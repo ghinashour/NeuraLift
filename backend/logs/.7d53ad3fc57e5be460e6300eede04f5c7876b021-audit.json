@@ -1,0 +1,15 @@
+{
+    "keep": {
+        "days": true,
+        "amount": 14
+    },
+    "auditLog": "C:\\Users\\HP\\Documents\\PROJECTS\\Neuralift\\backend\\logs\\.7d53ad3fc57e5be460e6300eede04f5c7876b021-audit.json",
+    "files": [
+        {
+            "date": 1762457687681,
+            "name": "C:\\Users\\HP\\Documents\\PROJECTS\\Neuralift\\backend\\logs\\neuralift-2025-11-06.log",
+            "hash": "5c059bda4e991e7a3281b3cde4a7d25bae6d3d2688f4035e9f5e6a1d97be2379"
+        }
+    ],
+    "hashType": "sha256"
+}
