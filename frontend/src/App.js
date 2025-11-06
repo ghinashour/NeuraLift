@@ -34,12 +34,12 @@ import MyTasks from "./pages/MyTasks";
 import TaskDetails from "./pages/TaskDetails";
 import Schedule from "./pages/SchedulePage/SchedulePage";
 import MoodTracker from "./pages/MoodTracker/MoodTracker";
-import ChatbotPage from "./pages/ChatbotPage/ChatbotPage";
 import MyTaskPage from "./pages/MyTaskPage";
 import MyTaskDetails from "./pages/MyTaskDetails";
 import ChattingCollab from "./pages/ChattingCollab";
 import AssignedTasksPage from "./pages/AssignedTasksPage";
-
+import WelcomeScreen from "./components/Chatbot/WelcomeScreen/WelcomeScreen";
+import ChatbotPage from "./pages/ChatbotPage/ChatbotPage";
 // Auth pages
 import Login from "./pages/Auth/Login";
 import Signup from "./pages/Auth/Signup";
@@ -189,6 +189,14 @@ function App() {
                     />
                     <Route
                       path="ai-assistant"
+                      element={
+                        <PrivateRoute>
+                          <WelcomeScreen />
+                        </PrivateRoute>
+                      }
+                    />
+                    <Route
+                      path="Chatbot"
                       element={
                         <PrivateRoute>
                           <ChatbotPage />
