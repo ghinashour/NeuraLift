@@ -31,6 +31,7 @@
     opacity: 0;
     transform: translateY(-20px) scale(0.95);
   }
+
   to {
     opacity: 1;
     transform: translateY(0) scale(1);
@@ -174,12 +175,12 @@
   transition: all 0.2s ease;
 }
 
-.checkbox-input:checked + .checkbox-custom {
+.checkbox-input:checked+.checkbox-custom {
   background: #007bff;
   border-color: #007bff;
 }
 
-.checkbox-input:checked + .checkbox-custom::after {
+.checkbox-input:checked+.checkbox-custom::after {
   content: '✓';
   position: absolute;
   top: 50%;
@@ -265,8 +266,13 @@
 }
 
 @keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 /* Attach Section */
@@ -305,7 +311,15 @@
   background: #f8f9fa;
   border-radius: 8px;
   padding: 16px;
-  margin: 16px 0;
+  margin-bottom: 16px;
+}
+
+.invite-link-section label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 600;
+  color: #333;
+  font-size: 0.9rem;
 }
 
 .link-input-container {
@@ -346,7 +360,14 @@
 }
 
 .share-options {
-  margin: 24px 0;
+  margin-bottom: 20px;
+}
+
+.share-options h4 {
+  margin: 0 0 12px 0;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #333;
 }
 
 .share-buttons {
@@ -371,25 +392,76 @@
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
+.invite-popup-share-btn.whatsapp:hover {
+  background: #25d366;
+  color: white;
+  border-color: #25d366;
+}
+
+.invite-popup-share-btn.telegram:hover {
+  background: #0088cc;
+  color: white;
+  border-color: #0088cc;
+}
+
+.invite-popup-share-btn.twitter:hover {
+  background: #1da1f2;
+  color: white;
+  border-color: #1da1f2;
+}
+
+.invite-popup-share-btn.linkedin:hover {
+  background: #0077b5;
+  color: white;
+  border-color: #0077b5;
+}
+
+.invite-popup-share-btn.email:hover {
+  background: #ea4335;
+  color: white;
+  border-color: #ea4335;
+}
+
+.invite-popup-share-btn.native-share:hover {
+  background: #007bff;
+  color: white;
+  border-color: #007bff;
+}
+
+.invite-footer {
+  margin-bottom: 16px;
+}
+
+.invite-note {
+  font-size: 0.85rem;
+  color: #666;
+  line-height: 1.5;
+  margin: 0;
+  padding: 12px;
+  background: #fff8dc;
+  border-left: 3px solid #ffd700;
+  border-radius: 4px;
+}
+
 /* Responsive */
 @media (max-width: 768px) {
   .popup {
     max-width: 95vw;
     margin: 10px;
   }
-  
+
   .form-row {
     grid-template-columns: 1fr;
   }
-  
+
   .popup-actions {
     flex-direction: column-reverse;
   }
-  
+
   .btn {
     width: 100%;
   }
-  
+
   .share-buttons {
     grid-template-columns: repeat(2, 1fr);
   }

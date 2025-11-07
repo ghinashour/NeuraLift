@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const DevQuestion = require("../models/DevQuestion");
+require('dotenv').config();
 
 const devQuestions = [
   {
@@ -75,7 +76,7 @@ System.out.println(s1 == s2);`,
 
 const seedDevDB = async () => {
   try {
-    await mongoose.connect("mongodb://localhost:27017/NeuraLift", {
+    await mongoose.connect(process.env.MONGO_URI, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
     });

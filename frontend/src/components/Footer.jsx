@@ -64,7 +64,7 @@ function Footer() {
           <div className="footer-title">Get in Touch</div>
           <div className="contact-item">
             <FaEnvelope className="contact-icon" />
-            <span>helpcenter.neuraLift@gmail.com</span>
+            <a href="mailto:helpcenter.neuraLift@gmail.com" className="contact-email">helpcenter.neuraLift@gmail.com</a>
           </div>
           <div className="contact-item">
             <FaMapMarkerAlt className="contact-icon" />

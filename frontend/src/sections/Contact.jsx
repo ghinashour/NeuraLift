@@ -156,7 +156,7 @@ function Contact() {
             <div>
               <h4>Email Support</h4>
               <p>Reach us by email for any inquiries</p>
-              <span className="contact-highlight">info.NeuraLift@gmail.com</span>
+              <span className="contact-highlight">helpcenter.neuraLift@gmail.com</span>
             </div>
           </div>
 

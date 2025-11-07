@@ -35,7 +35,7 @@ const AboutSection = () => {
     {
       name: "Mohammad Zein",
       role: "Frontend Developer",
-      description: "Skilled frontend developer dedicated to building seamless, user-friendly applications. Maya focuses on creating engaging digital experiences that promote mental wellness.",
+      description: "Skilled frontend developer dedicated to building seamless, user-friendly applications. Mohammad focuses on creating engaging digital experiences that promote mental wellness.",
       image: require("../assets/mhmd.png"),
       roleClass: "about-role-badge-green"
     }
