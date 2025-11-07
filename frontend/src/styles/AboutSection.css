@@ -79,9 +79,9 @@
 
 .about-founder-image {
   width: 100%;
-  height: 320px;
-  /* ✅ Set a flexible but consistent image height */
+  aspect-ratio: 3 / 4;      /* Keeps a portrait shape without distortion */
   object-fit: cover;
+  object-position: top center; /* Ensures faces stay visible */
   border-radius: 20px;
   transition: transform 0.3s ease;
 }
@@ -176,6 +176,10 @@
   .about-founders-grid {
     gap: 16px;
   }
+   .about-founder-image {
+    aspect-ratio: 4 / 5;     /* Slightly taller to avoid cutting faces */
+    object-position: center top;
+  }
 
   .about-main-title {
     font-size: 28px;
@@ -200,10 +204,12 @@
   }
 
   .about-founder-image {
-    height: 220px;
+    aspect-ratio: 3 / 5;     /* Very tall ratio to keep heads fully visible */
+    object-position: center top;
   }
 
   .about-role-text {
     font-size: 12px;
   }
 }
+

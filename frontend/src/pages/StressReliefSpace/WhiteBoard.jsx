@@ -18,13 +18,14 @@ const Whiteboard = () => {
   }, []);
 
   const startDrawing = (e) => {
+    if (!ctx) return;
     setIsDrawing(true);
     ctx.beginPath();
     ctx.moveTo(e.nativeEvent.offsetX, e.nativeEvent.offsetY);
   };
 
   const draw = (e) => {
-    if (!isDrawing) return;
+    if (!isDrawing || !ctx) return;
     ctx.lineWidth = size;
     ctx.strokeStyle = color;
     ctx.lineTo(e.nativeEvent.offsetX, e.nativeEvent.offsetY);
@@ -32,16 +33,18 @@ const Whiteboard = () => {
   };
 
   const stopDrawing = () => {
+    if (!ctx) return;
     setIsDrawing(false);
     ctx.closePath();
   };
 
   const clearCanvas = () => {
+    if (!ctx) return;
     ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
   };
 
   const useEraser = () => {
-    setColor("white"); // Change to the background color (white)
+    setColor("white");
   };
 
   return (
@@ -72,6 +75,7 @@ const Whiteboard = () => {
         <button className="whiteBoardPage-button" onClick={useEraser} style={{ margin: "0 5px" }}>
           <FontAwesomeIcon icon={faEraser} />
         </button>
+
         <input
           type="range"
           min="1"
@@ -80,15 +84,17 @@ const Whiteboard = () => {
           onChange={(e) => setSize(e.target.value)}
           style={{ margin: "0 10px" }}
         />
+
         <button className="whiteBoardPage-button" onClick={clearCanvas} style={{ margin: "0 5px" }}>
           Clear
         </button>
       </div>
+
       <canvas
         ref={canvasRef}
         className="whiteBoardPage-canvas"
-        width={470} // Set width to 500px
-        height={401} // Set height to 500px
+        width={470}
+        height={401}
         onMouseDown={startDrawing}
         onMouseMove={draw}
         onMouseUp={stopDrawing}
