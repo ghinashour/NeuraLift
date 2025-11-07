@@ -19,7 +19,6 @@ export default function CodeQuiz() {
       setAttempts([]);
     } catch (err) {
       console.error(err);
-      alert('Failed to start quiz. Make sure you are logged in.');
     } finally {
       setLoading(false);
     }
@@ -44,9 +43,10 @@ export default function CodeQuiz() {
       <button onClick={() => navigate(-1)}>← Back</button>
       <h2>Code Quiz</h2>
       {!gameId ? (
-        <button onClick={startGame} disabled={loading} className="submit-button">
-          {loading ? 'Starting…' : 'Start Quiz (requires login)'}
-        </button>
+       <button onClick={startGame} disabled={loading} className="submit-button">
+  {loading ? 'Starting…' : 'Start Quiz'}
+</button>
+
       ) : (
         <div>
           <div style={{ marginTop: 20 }}>

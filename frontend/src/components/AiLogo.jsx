@@ -7,7 +7,7 @@ const AILogo = () => {
   const navigate = useNavigate();
 
   const handleClick = () => {
-    navigate('/chatbot'); // Adjust this path to match your chatbot route
+    navigate('/Chatbot'); // Adjust this path to match your chatbot route
   };
 
   return (

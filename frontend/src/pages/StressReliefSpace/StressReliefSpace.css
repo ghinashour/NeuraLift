@@ -1,3 +1,5 @@
+/* StressReliefSpace.css */
+
 /* ====== GENERAL PAGE ====== */
 .stressPage-container {
   max-width: 1200px;
@@ -5,13 +7,13 @@
   text-align: center;
   background: #eef6ff;
   padding: 2rem;
-  font-family: 'Inter', sans-serif;
+  font-family: "Inter", sans-serif;
 }
 
 .stressPage-title {
   font-size: 1.8rem;
   font-weight: 700;
-  display: flex ;
+  display: flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
@@ -38,9 +40,11 @@
   padding: 1.5rem;
   border-radius: 1rem;
   width: 480px;
-  height: 700px;
+  height: 400px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
   text-align: left;
+  display: flex;
+  flex-direction: column;
 }
 
 .stressPage-header {
@@ -82,6 +86,15 @@
   color: #334155;
 }
 
+.size-label input {
+  width: 60px;
+  margin-left: 6px;
+  padding: 4px 6px;
+  border-radius: 6px;
+  border: 1px solid #e2e8f0;
+}
+
+/* color palette */
 .color-palette {
   display: flex;
   flex-wrap: wrap;
@@ -103,15 +116,19 @@
   transform: scale(1.2);
 }
 
+/* canvas visible area - CSS controls display size */
 .stressPage-canvas {
   width: 100%;
-  height: 300px;
+  height: 300px; /* visible height */
   border: 2px solid #e2e8f0;
   border-radius: 8px;
   cursor: crosshair;
   background: #f8fafc;
+  display: block;
+  margin-top: 8px;
 }
 
+/* actions */
 .stressPage-actions {
   display: flex;
   justify-content: space-between;
@@ -173,12 +190,18 @@
 
 .thought-list {
   margin-top: 1rem;
+  overflow-y: auto;
+  max-height: 260px;
+  padding-right: 6px;
 }
 
 .no-thoughts {
   color: #94a3b8;
   text-align: center;
   font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .thought-item {
@@ -221,6 +244,7 @@
   background: #bbf7d0;
 }
 
+.thought-edit-input,
 .edit-input {
   flex: 1;
   border: 1px solid #cbd5e1;
