@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const { ProgrammingLanguage } = require("../models/AssemblyGame");
+require('dotenv').config();
 
 const programmingLanguages = [
   {
@@ -81,7 +82,7 @@ const programmingLanguages = [
 
 const seedDB = async () => {
   try {
-    await mongoose.connect("mongodb://localhost:27017/NeuraLift", {
+    await mongoose.connect(process.env.MONGO_URI, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
     });

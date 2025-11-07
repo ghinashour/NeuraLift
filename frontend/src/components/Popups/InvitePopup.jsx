@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import "../../styles/Collaborate.css";
+import "../../styles/Popup.css";
 
 function InvitePopup({ onClose, groupId, groupName }) {
   const [inviteLink, setInviteLink] = useState("");
@@ -71,7 +71,7 @@ function InvitePopup({ onClose, groupId, groupName }) {
   const shareOnSocialMedia = (platform) => {
     const text = encodeURIComponent(`Join ${groupName || 'my collaboration group'} on Neuralift!`);
     const url = encodeURIComponent(inviteLink);
-    
+
     const shareUrls = {
       whatsapp: `https://wa.me/?text=${text}%20${url}`,
       telegram: `https://t.me/share/url?url=${url}&text=${text}`,
@@ -101,82 +101,80 @@ function InvitePopup({ onClose, groupId, groupName }) {
   return (
     <div className="popup-overlay">
       <div className="popup invite-popup">
-        <button className="popup-close-btn" onClick={onClose}>×</button>
-        
         <div className="popup-header">
           <h2>Invite to {groupName || 'Collaborate'}</h2>
           <p>Share this link with others to join {groupName ? 'the group' : 'the collaboration'}!</p>
+          <button className="popup-close-btn" onClick={onClose}>×</button>
         </div>
 
-        <div className="invite-link-section">
-          <label>Invitation Link:</label>
-          <div className="link-input-container">
-            <input 
-              type="text" 
-              value={inviteLink} 
-              readOnly 
-              className="invite-link-input"
-            />
-            <button 
-              className={`copy-btn ${copied ? 'copied' : ''}`}
-              onClick={copyToClipboard}
-            >
-              {copied ? '✓ Copied!' : '📋 Copy'}
-            </button>
-          </div>
-        </div>
-
-        <div className="share-options">
-          <h4>Share via:</h4>
-          <div className="share-buttons">
-            {navigator.share && (
-              <button 
-                className="invite-popup-share-btn native-share"
-                onClick={shareViaNative}
+        <div className="popup-body">
+          <div className="invite-link-section">
+            <label>Invitation Link:</label>
+            <div className="link-input-container">
+              <input
+                type="text"
+                value={inviteLink}
+                readOnly
+                className="invite-link-input"
+              />
+              <button
+                className={`copy-btn ${copied ? 'copied' : ''}`}
+                onClick={copyToClipboard}
               >
-                📱 Share
+                {copied ? '✓ Copied!' : '📋 Copy'}
               </button>
-            )}
-            <button 
-              className="invite-popup-share-btn whatsapp"
-              onClick={() => shareOnSocialMedia('whatsapp')}
-            >
-              💬 WhatsApp
-            </button>
-            <button 
-              className="invite-popup-share-btn telegram"
-              onClick={() => shareOnSocialMedia('telegram')}
-            >
-              ✈️ Telegram
-            </button>
-            <button 
-              className="invite-popup-share-btn twitter"
-              onClick={() => shareOnSocialMedia('twitter')}
-            >
-              🐦 Twitter
-            </button>
-            <button 
-              className="invite-popup-share-btn linkedin"
-              onClick={() => shareOnSocialMedia('linkedin')}
-            >
-              💼 LinkedIn
-            </button>
-            <button 
-              className="invite-popup-share-btn email"
-              onClick={() => shareOnSocialMedia('email')}
-            >
-              📧 Email
-            </button>
+            </div>
           </div>
-        </div>
 
-        <div className="invite-footer">
-          <p className="invite-note">
-            This link will expire in 7 days. People with this link can join {groupName ? 'this group' : 'the collaboration'}.
-          </p>
-          <button className="close-btn secondary" onClick={onClose}>
-            Close
-          </button>
+          <div className="share-options">
+            <h4>Share via:</h4>
+            <div className="share-buttons">
+              {navigator.share && (
+                <button
+                  className="invite-popup-share-btn native-share"
+                  onClick={shareViaNative}
+                >
+                  📱 Share
+                </button>
+              )}
+              <button
+                className="invite-popup-share-btn whatsapp"
+                onClick={() => shareOnSocialMedia('whatsapp')}
+              >
+                💬 WhatsApp
+              </button>
+              <button
+                className="invite-popup-share-btn telegram"
+                onClick={() => shareOnSocialMedia('telegram')}
+              >
+                ✈️ Telegram
+              </button>
+              <button
+                className="invite-popup-share-btn twitter"
+                onClick={() => shareOnSocialMedia('twitter')}
+              >
+                🐦 Twitter
+              </button>
+              <button
+                className="invite-popup-share-btn linkedin"
+                onClick={() => shareOnSocialMedia('linkedin')}
+              >
+                💼 LinkedIn
+              </button>
+              <button
+                className="invite-popup-share-btn email"
+                onClick={() => shareOnSocialMedia('email')}
+              >
+                📧 Email
+              </button>
+            </div>
+          </div>
+
+          <div className="invite-footer">
+            <p className="invite-note">
+              This link will expire in 7 days. People with this link can join {groupName ? 'this group' : 'the collaboration'}.
+            </p>
+          </div>
         </div>
       </div>
     </div>

@@ -22,7 +22,7 @@ const CalendarView = ({
     <div className="calendar-view">
       {/* Controls */}
       <div className="calendar-controls">
-        <Button onClick={onBackToSchedule} className="back-btn">← Back</Button>
+        <Button onClick={onBackToSchedule} className="schedule-back-btn">← Back</Button>
         <div className="week-controls">
           <Button onClick={onToday}>Today</Button>
           <Button onClick={onPreviousWeek}>← Week</Button>

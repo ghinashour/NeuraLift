@@ -22,7 +22,7 @@ const successStorySchema = new mongoose.Schema({
     category: {
         type: String,
         required: true,
-        enum: ['Mindfulness', 'Habits', 'Goals', 'Health', 'Career', 'Relationships', 'Learning', 'Fitness'],
+        enum: ['Mindfulness', 'Habits', 'Goals', 'Health', 'Career', 'Relationships', 'Learning', 'Fitness', 'Mental Health', 'Productivity', 'Personal Growth', 'Stress Relief'],
         default: 'Habits'
     },
     likeCount: {
@@ -96,8 +96,7 @@ successStorySchema.methods.toggleLike = function (userId) {
         this.likes.addToSet(userId);
     }
 
-    // likeCount will be automatically synced by pre-save middleware
-    return !hasLiked; // Return true if now liked, false if now unliked
+    return !hasLiked;
 };
 
 module.exports = mongoose.model("SuccessStory", successStorySchema);
