@@ -1,18 +1,18 @@
 .quote-section {
   width: 95%;                   /* responsive width */
-  max-width: 800px;             /* matches Pomodoro cards */
+  max-width: 720px;             /* ~10% smaller to match pomodoro shrink */
   background: #fff;             /* white card background */
-  border-radius: 16px;
-  padding: 1.25rem 1rem;
+  border-radius: 14px;
+  padding: 1.125rem 0.9rem;
   text-align: center;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  margin: 1rem auto;            /* centered horizontally */
+  margin: 0.9rem auto;            /* centered horizontally, slightly smaller */
   position: relative;
   overflow: hidden;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
 }
 
 .quote-section:hover {
@@ -28,16 +28,23 @@
 }
 
 .quote-section__text {
-  font-size: 1rem;
+  font-size: 0.92rem;
   color: #111827;
-  line-height: 1.6;
-  margin-bottom: 0.8rem;
+  line-height: 1.55;
+  margin-bottom: 0.7rem;
   font-weight: 500;
+  max-height: 5.2rem; /* limit height so it won't push layout */
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  line-clamp: 4; /* standard property for compatibility */
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
 }
 
 .quote-section__author {
-  font-size: 0.875rem;
-  margin-top: 0.5rem;
+  font-size: 0.79rem;
+  margin-top: 0.45rem;
   color: #6b7280;
   font-style: italic;
 }
@@ -45,13 +52,13 @@
 .quote-section__meta {
   display: flex;
   align-items: center;
-  gap: 10px;
-  margin-top: 8px;
+  gap: 9px;
+  margin-top: 7px;
 }
 
 .quote-section__avatar {
-  width: 40px;
-  height: 40px;
+  width: 36px;
+  height: 36px;
   border-radius: 50%;
   display: inline-flex;
   align-items: center;
@@ -59,7 +66,7 @@
   background: linear-gradient(135deg, #3C83F6, #6DA2F8);
   color: white;
   font-weight: 700;
-  font-size: 14px;
+  font-size: 13px;
 }
 
 /* subtle gradient overlay for depth */
@@ -71,49 +78,43 @@
   background: linear-gradient(180deg, rgba(60,131,246,0.03), rgba(109,162,248,0.02));
 }
 
-.quote-section__refresh {
-  margin-top: 1.5rem;
-  padding: 0.6rem 1.2rem;
-  font-size: 0.95rem;
-  border-radius: 10px;
+.quote-section__controls {
+  display: flex;
+  gap: 0.6rem;
+  margin-top: 1rem;
+}
+
+.quote-section__button {
+  padding: 0.52rem 0.9rem;
+  font-size: 0.92rem;
+  border-radius: 9px;
   background-color: #3498db;
   color: white;
-  transition: background-color 0.2s ease, transform 0.2s ease;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.18s ease, transform 0.12s ease;
 }
 
-.quote-section__refresh:hover:not(:disabled) {
+.quote-section__button:hover:not(:disabled) {
   background-color: #2980b9;
-  transform: translateY(-2px);
+  transform: translateY(-1px);
 }
 
-.quote-section__refresh:disabled {
+.quote-section__button:disabled {
   background-color: #bdc3c7;
   cursor: not-allowed;
+}
+
+.quote-section__button--outline {
+  background: transparent;
+  color: #374151;
+  border: 1px solid rgba(55,65,81,0.08);
 }
 
 /* Responsive */
 @media (max-width: 768px) {
   .quote-section {
-    padding: 1.5rem;
-  }
-
-  .quote-section__text {
-    font-size: 0.95rem;
-  }
-
-  .quote-section__author {
-    font-size: 0.8rem;
-  }
-
-  .quote-section__refresh {
-    font-size: 0.9rem;
-  }
-}
-
-@media (max-width: 480px) {
-  .quote-section {
-    padding: 1.2rem;
-    max-width: 95%;
+    padding: 1.35rem;
   }
 
   .quote-section__text {
@@ -124,8 +125,27 @@
     font-size: 0.75rem;
   }
 
-  .quote-section__refresh {
-    font-size: 0.85rem;
-    padding: 0.5rem 1rem;
+  .quote-section__button {
+    font-size: 0.86rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .quote-section {
+    padding: 1.05rem;
+    max-width: 95%;
+  }
+
+  .quote-section__text {
+    font-size: 0.86rem;
+  }
+
+  .quote-section__author {
+    font-size: 0.72rem;
+  }
+
+  .quote-section__button {
+    font-size: 0.78rem;
+    padding: 0.44rem 0.78rem;
   }
 }

@@ -57,22 +57,22 @@ const PomodoroTimer = () => {
       </div>
 
       <div className="pomodoro-timer__main">
-        
         <div className="pomodoro-timer__card">
-           <div className="pomodoro-timer__footer">
-        <QuoteSection
-          quote={quote}
-          onNewQuote={fetchNewQuote}
-          isLoading={isLoading}
-        />
-      </div>
+
+          <div className="pomodoro-timer__quote">
+            <QuoteSection
+              quote={quote}
+              onNewQuote={fetchNewQuote}
+              isLoading={isLoading}
+            />
+          </div>
+
           <TimerDisplay
             time={time}
             status={status}
             mode={mode}
             isActive={isActive}
           />
-
 
           <TimerControls
             onStart={startTimer}

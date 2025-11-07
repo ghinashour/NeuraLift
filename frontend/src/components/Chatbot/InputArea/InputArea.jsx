@@ -54,10 +54,12 @@ const InputArea = () => {
       <div className="input-wrapper">
         <Input
           ref={inputRef}
+          type="textarea"
           placeholder="Ask anything..."
           value={inputText}
           onChange={(e) => setInputText(e.target.value)}
           onKeyDown={handleKeyDown}
+          aria-label="Chat message input"
         />
         <div className="input-actions">
           <button className="icon-button" aria-label="Attach file">

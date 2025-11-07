@@ -5,38 +5,38 @@ import "../styles/AboutSection.css";
 const AboutSection = () => {
   const founders = [
     {
-      name: "Sarah Johnson",
-      role: "Lead Developer & Co-Founder",
-      description: "Full-stack developer with 8+ years experience in wellness tech. Passionate about creating user-centric applications that make a real difference in people's lives.",
-      image: require("../assets/sarah.png"),
+      name: "Ghina Shour",
+      role: "Lead Developer & Team Manager",
+      description: "Full-stack developer with 2+ experience in wellness tech. Passionate about creating user-centric applications that make a real difference in people's lives.",
+      image: require("../assets/ghina.png"),
       roleClass: "about-role-badge-blue"
     },
     {
-      name: "Dr. Michael Chen",
-      role: "Wellness Expert & Advisor",
-      description: "Licensed psychologist specializing in digital therapeutics. Michael ensures our app follows evidence-based practices for mental health and wellbeing.",
-      image: require("../assets/michael.png"),
+      name: "Hassan Ramadan",
+      role: "Frontend Developer",
+      description: "Creative frontend engineer specializing in responsive, accessible designs. Hassan crafts engaging user experiences that drive wellness and personal growth.",
+      image: require("../assets/hassan.png"),
       roleClass: "about-role-badge-green"
     },
     {
-      name: "Emily Rodriguez",
-      role: "UX/UI Designer",
-      description: "Award-winning designer focused on creating intuitive, accessible interfaces. Emily's designs help millions of users navigate their wellness journey effortlessly.",
-      image: require("../assets/Emily.png"),
+      name: "Yara Eslim",
+      role: "UX/UI Designer and backend Developer",
+      description: "Award-winning designer focused on creating intuitive, accessible interfaces. Yara's designs help millions of users navigate their wellness journey effortlessly.",
+      image: require("../assets/yara.png"),
       roleClass: "about-role-badge-purple"
     },
     {
-      name: "Alex Thompson",
-      role: "Backend Developer",
-      description: "Infrastructure specialist ensuring NeuraLift scales seamlessly. Alex builds robust systems that keep our community connected and data secure.",
-      image: require("../assets/alex.png"),
+      name: "Omar Moussa",
+      role: "Ai Developer",
+      description: "AI specialist with a passion for mental health tech. Omar develops intelligent systems that provide personalized support and enhance user well-being.",
+      image: require("../assets/omar.png"),
       roleClass: "about-role-badge-blue"
     },
     {
-      name: "Maya Patel",
-      role: "Community Manager",
-      description: "Community builder and wellness advocate. Maya fosters our supportive user community and ensures everyone feels heard and valued on their journey.",
-      image: require("../assets/maya.png"),
+      name: "Mohammad Zein",
+      role: "Frontend Developer",
+      description: "Skilled frontend developer dedicated to building seamless, user-friendly applications. Maya focuses on creating engaging digital experiences that promote mental wellness.",
+      image: require("../assets/mhmd.png"),
       roleClass: "about-role-badge-green"
     }
   ];

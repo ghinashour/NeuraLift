@@ -1,37 +1,44 @@
+
+/* InputArea improvements: keep original design but enhance usability */
 .input-area {
-  padding: 16px 24px 20px 24px;
+  padding: 12px 18px 16px 18px;
+  width: 100%;
+  box-sizing: border-box;
 }
 
-.input-wrapper {
+.input-area .input-wrapper {
   background: white;
-  border-radius: 25px;
+  border-radius: 24px;
   display: flex;
-  align-items: center;
-  padding: 8px 8px 8px 20px;
-  gap: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  align-items: flex-end; /* align textarea baseline */
+  padding: 8px 10px 8px 16px;
+  gap: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
 }
 
 .input-actions {
   display: flex;
   align-items: center;
-  gap: 4px;
+  gap: 8px;
 }
 
 .icon-button {
   background: none;
   border: none;
-  padding: 8px;
+  padding: 10px; /* larger touch target */
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 50%;
-  transition: background 0.2s;
+  border-radius: 10px;
+  transition: background 0.14s, transform 0.12s;
 }
 
-.icon-button:hover {
-  background: rgba(0, 0, 0, 0.05);
+.icon-button:hover,
+.icon-button:focus {
+  background: rgba(0, 0, 0, 0.04);
+  transform: translateY(-1px);
+  outline: none;
 }
 
 .icon {
@@ -42,26 +49,66 @@
 .send-button {
   background: #2E5AAC;
   border: none;
-  border-radius: 50%;
-  width: 36px;
-  height: 36px;
-  display: flex;
+  border-radius: 12px;
+  min-width: 44px;
+  height: 40px;
+  padding: 8px 12px;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  transition: all 0.2s;
+  transition: transform 120ms ease, box-shadow 120ms ease;
+  box-shadow: 0 6px 16px rgba(46,90,172,0.12);
 }
 
 .send-button:hover:not(:disabled) {
-  background: #244888;
+  transform: translateY(-2px);
+  box-shadow: 0 10px 22px rgba(46,90,172,0.14);
 }
 
 .send-button:disabled {
-  background: #ccc;
+  background: #c6c9d1;
   cursor: not-allowed;
+  box-shadow: none;
 }
 
 .send-icon {
   font-size: 14px;
   color: white;
+}
+
+/* textarea behavior when Input is used as textarea: keep transparent background so wrapper controls appearance */
+.input-area .input-field.textarea-field {
+  width: 100%;
+  min-height: 44px;
+  max-height: 160px;
+  padding: 10px 12px;
+  resize: vertical;
+  line-height: 1.45;
+  overflow: auto;
+  border-radius: 12px;
+  border: none;
+  background: transparent;
+  font-size: 15px;
+}
+
+.input-area .input-field.textarea-field:focus {
+  outline: 3px solid rgba(59,130,246,0.12);
+  outline-offset: 2px;
+}
+
+/* small keyboard hint */
+.input-area .keyboard-hint {
+  font-size: 11px;
+  color: #94a3b8;
+  margin-left: 6px;
+  user-select: none;
+}
+
+@media (max-width: 540px) {
+  .input-area { padding: 8px 10px; }
+  .input-area .input-wrapper { padding: 6px 8px; gap: 6px; }
+  .icon-button { padding: 8px; }
+  .send-button { min-width: 40px; height: 36px; padding: 6px 10px; }
+  .input-area .input-field.textarea-field { min-height: 40px; max-height: 140px; }
 }
