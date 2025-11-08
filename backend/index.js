@@ -225,6 +225,12 @@ app.put("/api/admin/success-stories/feature/:id", (req, res) => {
   story.featured = !story.featured;
   res.json(story);
 });
+
+//testing
+app.get('/', (req, res) => {
+  res.send('Hello World');
+});
+
 // ------------------------------------------------
 // 📦 DATABASE CONNECTION
 // ------------------------------------------------
