@@ -34,7 +34,7 @@ const chatRoutes = require("./routes/chatRoutes.js");
 const medicineRoutes = require("./routes/medicineRoutes.js");
 const collaborateRoutes = require("./routes/collaborate");
 const gamesRoutes = require("./routes/games");
-const contactRoutes = require("./routes/contactRoute.js"); 
+const contactRoutes = require("./routes/contactRoute.js");
 const { sendMessageToBackend } = require("./ChatService.js");
 const User = require("./models/User.js");
 
@@ -201,7 +201,8 @@ app.use("/api/games", gamesRoutes);
 const clientBuildPath = path.join(__dirname, "../frontend/build");
 app.use(express.static(clientBuildPath));
 
-app.get("*", (req, res) => {
+// Catch-all route for React frontend (fixed for Express 4/5)
+app.get("/*", (req, res) => {
   res.sendFile(path.join(clientBuildPath, "index.html"));
 });
 
