@@ -1,3 +1,7 @@
+// backend/server.js
+// ======================================================
+// MERN Full Deployment for Render (/backend + /frontend)
+// ======================================================
 
 const express = require("express");
 const mongoose = require("mongoose");
@@ -30,13 +34,13 @@ const chatRoutes = require("./routes/chatRoutes.js");
 const medicineRoutes = require("./routes/medicineRoutes.js");
 const collaborateRoutes = require("./routes/collaborate");
 const gamesRoutes = require("./routes/games");
-const User = require("./models/User.js"); // For streak logic
+const contactRoutes = require("./routes/contactRoute.js"); 
+const { sendMessageToBackend } = require("./ChatService.js");
+const User = require("./models/User.js");
 
 // ------------------------------------------------
 // APP + SERVER + SOCKET.IO
 // ------------------------------------------------
-const contactRoutes = require("./routes/contactRoute.js"); // Import new contact route
-const { sendMessageToBackend } = require("./ChatService.js");
 const app = express();
 const server = http.createServer(app);
 
@@ -48,7 +52,21 @@ const io = new Server(server, {
 });
 
 // ------------------------------------------------
-// 🔐 JWT verification for sockets
+// MIDDLEWARE
+// ------------------------------------------------
+app.use(express.json());
+app.use(
+  cors({
+    origin: process.env.CLIENT_ORIGIN || "http://localhost:3000",
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    credentials: true,
+  })
+);
+app.use(passport.initialize());
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
+
+// ------------------------------------------------
+// JWT verification for Socket.IO
 // ------------------------------------------------
 const verifyJwt = async (token) => {
   try {
@@ -58,9 +76,6 @@ const verifyJwt = async (token) => {
   }
 };
 
-// ------------------------------------------------
-// 🔌 SOCKET.IO EVENTS
-// ------------------------------------------------
 io.use(async (socket, next) => {
   try {
     const token = socket.handshake.auth?.token;
@@ -78,7 +93,6 @@ const connectedUsers = new Map();
 io.on("connection", (socket) => {
   console.log("🟢 Socket connected:", socket.id, "User:", socket.user.id);
 
-  // Join personal room (userId) - ensure it's a string
   const userRoom = String(socket.user.id);
   socket.join(userRoom);
   connectedUsers.set(userRoom, socket.id);
@@ -89,37 +103,20 @@ io.on("connection", (socket) => {
   });
 });
 
-// Make io accessible to routes/controllers
 app.set("io", io);
 
 // ------------------------------------------------
-// 🧩 MIDDLEWARE
-// ------------------------------------------------
-app.use(express.json());
-app.use(
-  cors({
-    origin: process.env.CLIENT_ORIGIN || "http://localhost:3000",
-    methods: ["GET", "POST", "PUT", "DELETE"],
-    credentials: true,
-  })
-);
-app.use(passport.initialize());
-app.use("/uploads", express.static(path.join(__dirname, "uploads")));
-
-// ------------------------------------------------
-// 🔥 USER STREAK LOGIC
+// USER STREAK LOGIC
 // ------------------------------------------------
 app.post("/api/user/:id/update-streak", async (req, res) => {
   try {
     const { id } = req.params;
     const user = await User.findById(id);
-
     if (!user) return res.status(404).json({ msg: "User not found" });
 
     const today = new Date();
     const lastLogin = user.lastLoginDate ? new Date(user.lastLoginDate) : null;
 
-    // Normalize both dates to midnight for accurate "day difference" comparison
     const normalizeDate = (date) => {
       const d = new Date(date);
       d.setHours(0, 0, 0, 0);
@@ -129,54 +126,38 @@ app.post("/api/user/:id/update-streak", async (req, res) => {
     const normalizedToday = normalizeDate(today);
     const normalizedLast = lastLogin ? normalizeDate(lastLogin) : null;
 
-    // Calculate difference in full days
     let diffInDays = 0;
     if (normalizedLast) {
       diffInDays = Math.floor((normalizedToday - normalizedLast) / (1000 * 60 * 60 * 24));
     }
 
     if (normalizedLast) {
-      if (diffInDays === 1) {
-        // ✅ Consecutive day → increment streak
-        user.streak += 1;
-      } else if (diffInDays > 1) {
-        // ❌ Missed one or more days → reset streak
-        user.streak = 1;
-      }
-      // 💤 diffInDays === 0 → same day login, streak unchanged
+      if (diffInDays === 1) user.streak += 1;
+      else if (diffInDays > 1) user.streak = 1;
     } else {
-      // 🌟 First ever login
       user.streak = 1;
     }
 
-    // 🕓 Always update last login
     user.lastLoginDate = today;
-
-    // 🏆 Optional: track the longest streak
-    if (user.longestStreak === undefined || user.streak > user.longestStreak) {
-      user.longestStreak = user.streak;
-    }
+    if (!user.longestStreak || user.streak > user.longestStreak) user.longestStreak = user.streak;
 
     await user.save();
 
     res.status(200).json({
       success: true,
-      msg: "Streak updated successfully",
       streak: user.streak,
       longestStreak: user.longestStreak,
       lastLoginDate: user.lastLoginDate,
     });
   } catch (err) {
     console.error("Error updating streak:", err);
-    res.status(500).json({
-      success: false,
-      msg: "Server error while updating streak",
-      error: err.message,
-    });
+    res.status(500).json({ success: false, error: err.message });
   }
 });
 
-
+// ------------------------------------------------
+// CHAT API
+// ------------------------------------------------
 app.post("/api/chat", async (req, res) => {
   const { message, history } = req.body;
   if (!message) return res.status(400).json({ error: "Message is required" });
@@ -190,9 +171,9 @@ app.post("/api/chat", async (req, res) => {
   }
 });
 
-// ------------------------------
-// ✅ ROUTES
-// ------------------------------
+// ------------------------------------------------
+// API ROUTES
+// ------------------------------------------------
 app.use("/api/auth", authRoutes);
 app.use("/api/profile", profileRoutes);
 app.use("/api/questions", questionRoutes);
@@ -206,33 +187,26 @@ app.use("/api/moods", moodRoutes);
 app.use("/api/notes", noteRoute);
 app.use("/api/notifications", notificationRoutes);
 app.use("/api/chat", chatRoutes);
-app.use("/api/contact", contactRoutes); // Use new contact route
+app.use("/api/contact", contactRoutes);
 app.use("/api/tasks", tasksRouter);
 app.use("/api/admin/tasks", adminTaskRouter);
 app.use("/api/admin", adminRoutes);
 app.use("/api/collaborate", collaborateRoutes);
 app.use("/api/medicines", medicineRoutes);
 app.use("/api/games", gamesRoutes);
-app.get("/api/admin/success-stories/analytics/stats", (req, res) => {
-  res.json({
-    totalStories: successStories.length,
-    featured: successStories.filter((s) => s.featured).length,
-  });
-});
-app.put("/api/admin/success-stories/feature/:id", (req, res) => {
-  const story = successStories.find((s) => s.id == req.params.id);
-  if (!story) return res.status(404).json({ success: false, message: "Story not found" });
-  story.featured = !story.featured;
-  res.json(story);
-});
 
-//testing
-app.get('/', (req, res) => {
-  res.send('Hello World');
+// ------------------------------------------------
+// Serve React Frontend
+// ------------------------------------------------
+const clientBuildPath = path.join(__dirname, "../frontend/build");
+app.use(express.static(clientBuildPath));
+
+app.get("*", (req, res) => {
+  res.sendFile(path.join(clientBuildPath, "index.html"));
 });
 
 // ------------------------------------------------
-// 📦 DATABASE CONNECTION
+// DATABASE CONNECTION
 // ------------------------------------------------
 mongoose
   .connect(process.env.MONGO_URI)
@@ -240,7 +214,7 @@ mongoose
   .catch((err) => console.error("❌ MongoDB connection error:", err));
 
 // ------------------------------------------------
-// 🖥️ SERVER START
+// START SERVER
 // ------------------------------------------------
 const PORT = process.env.PORT || 4000;
 server.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
