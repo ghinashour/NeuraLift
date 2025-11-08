@@ -17,7 +17,6 @@
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",
     "dotenv": "^17.2.3",
-    "type": "module",
     "express": "^5.1.0",
     "express-async-handler": "^1.2.0",
     "express-session": "^1.18.2",
@@ -32,8 +31,5 @@
     "passport": "^0.7.0",
     "passport-google-oauth20": "^2.0.0",
     "winston": "^3.18.3"
-  },
-  "devDependencies": {
-    "nodemon": "^3.1.10"
   }
 }
