@@ -202,9 +202,10 @@ const clientBuildPath = path.join(__dirname, "../frontend/build");
 app.use(express.static(clientBuildPath));
 
 // Catch-all route for React frontend (fixed for Express 4/5)
-app.get("/*", (req, res) => {
+app.use((req, res) => {
   res.sendFile(path.join(clientBuildPath, "index.html"));
 });
+
 
 // ------------------------------------------------
 // DATABASE CONNECTION
