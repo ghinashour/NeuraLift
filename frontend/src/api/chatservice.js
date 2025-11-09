@@ -1,7 +1,7 @@
 // frontend/src/services/ChatService.js
 export const sendMessageToBackend = async (messages) => {
   try {
-    const response = await fetch("https://neuralift-deploy-app.onrender.com/api/chat", {
+    const response = await fetch(`${process.env.REACT_APP_API_URL}/api/chat`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
