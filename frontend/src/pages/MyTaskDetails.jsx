@@ -1,5 +1,5 @@
 // src/pages/MyTaskDetails.jsx
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import "../styles/MyTaskDetails.css";
@@ -15,26 +15,28 @@ export default function MyTaskDetails() {
   const [expanded, setExpanded] = useState(false);
   const [status, setStatus] = useState("pending");
 
-  useEffect(() => {
-    fetchTaskDetails();
-  }, [id]);
-
-  const fetchTaskDetails = async () => {
+  // fetchTaskDetails made stable with useCallback so effect deps are clean
+  const fetchTaskDetails = useCallback(async () => {
     try {
       setLoading(true);
       const token = localStorage.getItem("token");
       const response = await axios.get(`${API_BASE_URL}/collaborate/tasks/${id}`, {
-        headers: { Authorization: `Bearer ${token}` }
+        headers: { Authorization: `Bearer ${token}` },
       });
       setTask(response.data);
-      setStatus(response.data.status || "pending");
+      setStatus(response.data?.status || "pending");
+      setError(null);
     } catch (err) {
       console.error("Error fetching task details:", err);
       setError("Failed to load task details");
     } finally {
       setLoading(false);
     }
-  };
+  }, [id]);
+
+  useEffect(() => {
+    if (id) fetchTaskDetails();
+  }, [id, fetchTaskDetails]);
 
   const updateTaskStatus = async (newStatus) => {
     try {
@@ -60,44 +62,35 @@ export default function MyTaskDetails() {
   };
 
   const handleStartTask = () => {
-    // Navigate to Pomodoro timer with task context
+    if (!task) return;
     navigate("/focusTimer", {
       state: {
         taskId: task._id,
         taskTitle: task.title,
         taskDescription: task.description,
-        fromTask: true
-      }
+        fromTask: true,
+      },
     });
   };
 
   const handleDiscussTask = () => {
-    // Navigate to chatting/collaboration page
+    if (!task) return;
     navigate("/ChattingCollab", {
       state: {
         taskId: task._id,
         taskTitle: task.title,
         assignedBy: task.assignedBy?.name,
-        groupId: task.group?._id
-      }
+        groupId: task.group?._id,
+      },
     });
   };
 
-  const formatDateShort = (dateString) => {
-    if (!dateString) return 'Not set';
-    const d = new Date(dateString);
-    const dd = String(d.getDate()).padStart(2, "0");
-    const mm = String(d.getMonth() + 1).padStart(2, "0");
-    const yy = String(d.getFullYear()).slice(-2);
-    return `${dd}/${mm}/${yy}`;
-  };
-
   const formatDateLong = (dateString) => {
-    if (!dateString) return 'Not set';
-    return new Date(dateString).toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric'
+    if (!dateString) return "Not set";
+    return new Date(dateString).toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
     });
   };
 
@@ -143,20 +136,20 @@ export default function MyTaskDetails() {
 
   const initials = task.assignedBy?.name
     ? task.assignedBy.name
-      .split(" ")
-      .map((n) => n[0])
-      .slice(0, 2)
-      .join("")
-      .toUpperCase()
+        .split(" ")
+        .map((n) => n[0])
+        .slice(0, 2)
+        .join("")
+        .toUpperCase()
     : "UU";
 
-  const getStatusDisplayText = (status) => {
+  const getStatusDisplayText = (statusVal) => {
     const statusMap = {
       pending: "To-Do",
       in_progress: "In Progress",
-      completed: "Done"
+      completed: "Done",
     };
-    return statusMap[status] || status;
+    return statusMap[statusVal] || statusVal;
   };
 
   return (
@@ -169,14 +162,8 @@ export default function MyTaskDetails() {
               <span className="td-status-label">
                 Status: <strong>{getStatusDisplayText(status)}</strong>
               </span>
-              <span className="td-date">
-                Assigned: {formatDateLong(task.createdAt)}
-              </span>
-              {task.dueDate && (
-                <span className="td-due-date">
-                  Due: {formatDateLong(task.dueDate)}
-                </span>
-              )}
+              <span className="td-date">Assigned: {formatDateLong(task.createdAt)}</span>
+              {task.dueDate && <span className="td-due-date">Due: {formatDateLong(task.dueDate)}</span>}
             </div>
           </div>
 
@@ -185,32 +172,19 @@ export default function MyTaskDetails() {
               ← Back to My Tasks
             </button>
             <div className="td-avatar" title={task.assignedBy?.name || "Unknown User"}>
-              {task.assignedBy?.avatar ? (
-                <img src={task.assignedBy.avatar} alt={task.assignedBy.name} />
-              ) : (
-                <span>{initials}</span>
-              )}
+              {task.assignedBy?.avatar ? <img src={task.assignedBy.avatar} alt={task.assignedBy.name} /> : <span>{initials}</span>}
             </div>
           </div>
         </div>
 
         <div className="td-status-row">
-          <button
-            className={`td-btn ${status === "pending" ? "active todo" : ""}`}
-            onClick={() => handleStatusChange("pending")}
-          >
+          <button className={`td-btn ${status === "pending" ? "active todo" : ""}`} onClick={() => handleStatusChange("pending")}>
             To-Do
           </button>
-          <button
-            className={`td-btn ${status === "in_progress" ? "active inprogress" : ""}`}
-            onClick={() => handleStatusChange("in_progress")}
-          >
+          <button className={`td-btn ${status === "in_progress" ? "active inprogress" : ""}`} onClick={() => handleStatusChange("in_progress")}>
             In Progress
           </button>
-          <button
-            className={`td-btn ${status === "completed" ? "active done" : ""}`}
-            onClick={() => handleStatusChange("completed")}
-          >
+          <button className={`td-btn ${status === "completed" ? "active done" : ""}`} onClick={() => handleStatusChange("completed")}>
             Done
           </button>
         </div>
@@ -218,12 +192,7 @@ export default function MyTaskDetails() {
         <div className="td-section">
           <h3 className="td-section-title">Description:</h3>
           <div className="td-description">
-            <p>
-              {expanded
-                ? task.description
-                : task.description?.slice(0, 220) + (task.description?.length > 220 ? "…" : "")
-              }
-            </p>
+            <p>{expanded ? task.description : task.description?.slice(0, 220) + (task.description?.length > 220 ? "…" : "")}</p>
             {!expanded && task.description?.length > 220 && (
               <button className="td-readmore" onClick={() => setExpanded(true)}>
                 Read more
@@ -247,9 +216,7 @@ export default function MyTaskDetails() {
             )}
             <div className="td-detail-item">
               <strong>Priority:</strong>
-              <span className={`td-priority td-priority-${task.priority}`}>
-                {task.priority}
-              </span>
+              <span className={`td-priority td-priority-${task.priority}`}>{task.priority}</span>
             </div>
             <div className="td-detail-item">
               <strong>Due Date:</strong>
@@ -262,28 +229,18 @@ export default function MyTaskDetails() {
           </div>
         </div>
 
-        {/* You can add attachments section when you implement file uploads */}
         <div className="td-section">
           <h3 className="td-section-title">Attachments:</h3>
           <div className="td-attachments">
-            <div className="td-no-attachments">
-              No attachments available
-              {/* Add file upload functionality here later */}
-            </div>
+            <div className="td-no-attachments">No attachments available</div>
           </div>
         </div>
 
         <div className="td-actions">
-          <button
-            className="td-start-btn"
-            onClick={handleStartTask}
-          >
+          <button className="td-start-btn" onClick={handleStartTask}>
             🎯 Start with Focus Timer
           </button>
-          <button
-            className="td-chat-btn"
-            onClick={handleDiscussTask}
-          >
+          <button className="td-chat-btn" onClick={handleDiscussTask}>
             💬 Discuss Task
           </button>
         </div>

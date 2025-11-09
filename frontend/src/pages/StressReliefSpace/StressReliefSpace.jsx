@@ -1,21 +1,17 @@
-// StressReliefSpace.jsx
+// src/pages/StressReliefSpace.jsx
 import React, { useState, useRef, useEffect } from "react";
 import "./StressReliefSpace.css";
-import {
-  Brush,
-  Eraser,
-  PencilLine,
-  Send,
-  MessageSquare,
-  Edit2,
-  Trash2
-} from "lucide-react";
+import { Brush, Eraser, PencilLine, Send, MessageSquare, Edit2, Trash2 } from "lucide-react";
 import Ai from "../../components/AiLogo";
 
 const StressReliefSpace = () => {
   const canvasRef = useRef(null);
   const ctxRef = useRef(null);
   const isDrawingRef = useRef(false);
+
+  // Use refs for color/size to avoid reattaching event listeners on every change
+  const colorRef = useRef("#2563eb");
+  const sizeRef = useRef(3);
 
   const [color, setColor] = useState("#2563eb");
   const [size, setSize] = useState(3);
@@ -25,9 +21,18 @@ const StressReliefSpace = () => {
   const [editingId, setEditingId] = useState(null);
   const [editingText, setEditingText] = useState("");
 
+  // keep refs in sync with state
+  useEffect(() => {
+    colorRef.current = color;
+  }, [color]);
+
+  useEffect(() => {
+    sizeRef.current = size;
+  }, [size]);
+
   // Helper: set canvas size (handles devicePixelRatio and preserves content)
   const resizeCanvasToDisplaySize = (canvas) => {
-    if (!canvas) return;
+    if (!canvas) return null;
     const dpr = window.devicePixelRatio || 1;
     const rect = canvas.getBoundingClientRect();
     const displayWidth = Math.max(1, Math.round(rect.width));
@@ -35,8 +40,8 @@ const StressReliefSpace = () => {
 
     // create temp canvas to preserve content
     const temp = document.createElement("canvas");
-    temp.width = canvas.width;
-    temp.height = canvas.height;
+    temp.width = canvas.width || 0;
+    temp.height = canvas.height || 0;
     const tempCtx = temp.getContext("2d");
     if (canvas.width && canvas.height) {
       tempCtx.drawImage(canvas, 0, 0);
@@ -52,7 +57,6 @@ const StressReliefSpace = () => {
 
     // restore previous content (if any) scaled properly
     if (temp.width && temp.height) {
-      // draw temp into resized canvas (fit to display size)
       ctx.drawImage(temp, 0, 0, displayWidth, displayHeight);
     }
 
@@ -63,13 +67,12 @@ const StressReliefSpace = () => {
     const canvas = canvasRef.current;
     if (!canvas) return;
 
-    // ensure CSS gives an initial height/width (we set in CSS)
     const ctx = resizeCanvasToDisplaySize(canvas);
     if (!ctx) return;
     ctx.lineCap = "round";
     ctxRef.current = ctx;
 
-    // Handlers use refs so they see latest isDrawing, color, size via closures we will read from refs/props
+    // Event handlers reference refs for color/size to avoid stale closures
     const startDrawing = (e) => {
       const rect = canvas.getBoundingClientRect();
       isDrawingRef.current = true;
@@ -82,9 +85,9 @@ const StressReliefSpace = () => {
       const rect = canvas.getBoundingClientRect();
       const currentCtx = ctxRef.current;
       if (!currentCtx) return;
-      currentCtx.lineWidth = size;
+      currentCtx.lineWidth = sizeRef.current;
       currentCtx.lineCap = "round";
-      currentCtx.strokeStyle = color;
+      currentCtx.strokeStyle = colorRef.current;
       currentCtx.lineTo(e.clientX - rect.left, e.clientY - rect.top);
       currentCtx.stroke();
     };
@@ -98,13 +101,13 @@ const StressReliefSpace = () => {
 
     // Mouse events
     canvas.addEventListener("mousedown", startDrawing);
-    window.addEventListener("mousemove", draw); // listen on window for smoother drawing even if pointer leaves canvas
+    window.addEventListener("mousemove", draw);
     window.addEventListener("mouseup", stopDrawing);
     canvas.addEventListener("mouseleave", stopDrawing);
 
     // Resize handling
     let resizeObserver;
-    // prefer ResizeObserver if available to track changes to canvas size
+    let onResize = null;
     if (window.ResizeObserver) {
       resizeObserver = new ResizeObserver(() => {
         const newCtx = resizeCanvasToDisplaySize(canvas);
@@ -112,7 +115,7 @@ const StressReliefSpace = () => {
       });
       resizeObserver.observe(canvas);
     } else {
-      const onResize = () => {
+      onResize = () => {
         const newCtx = resizeCanvasToDisplaySize(canvas);
         if (newCtx) ctxRef.current = newCtx;
       };
@@ -127,18 +130,12 @@ const StressReliefSpace = () => {
       canvas.removeEventListener("mouseleave", stopDrawing);
       if (resizeObserver) {
         resizeObserver.disconnect();
-      } else {
-        window.removeEventListener("resize", () => {});
+      } else if (onResize) {
+        window.removeEventListener("resize", onResize);
       }
     };
-    // We intentionally do not include color/size in deps so listeners don't get reattached repeatedly.
-    // The draw handler reads `color` and `size` from closure variables — to reflect live changes,
-    // we rely on the latest values from the state accessible in this scope because React re-renders.
-    // However, because the event listeners are only attached once, we read `color` and `size`
-    // directly from the latest state via the outer scope variables. This works because `draw`
-    // references those variables via closure created by this effect on mount.
-    // (Alternatively, you could store color/size in refs and read from them.)
-  }, []); // run once on mount
+    // We intentionally do not include color/size in deps because we read them from refs.
+  }, []); // mount only
 
   // Thoughts logic
   const addThought = () => {
@@ -148,8 +145,7 @@ const StressReliefSpace = () => {
     setThought("");
   };
 
-  const deleteThought = (id) =>
-    setThoughts((prev) => prev.filter((t) => t.id !== id));
+  const deleteThought = (id) => setThoughts((prev) => prev.filter((t) => t.id !== id));
 
   const startEdit = (id, text) => {
     setEditingId(id);
@@ -157,9 +153,7 @@ const StressReliefSpace = () => {
   };
 
   const saveEdit = (id) => {
-    setThoughts((prev) =>
-      prev.map((t) => (t.id === id ? { ...t, text: editingText } : t))
-    );
+    setThoughts((prev) => prev.map((t) => (t.id === id ? { ...t, text: editingText } : t)));
     setEditingId(null);
     setEditingText("");
   };
@@ -168,39 +162,29 @@ const StressReliefSpace = () => {
     const canvas = canvasRef.current;
     const ctx = ctxRef.current;
     if (!canvas || !ctx) return;
-    // clear with respect to CSS pixels
+    // clear full internal bitmap (device pixels)
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    // after clearing, re-scale for DPR (ctx already scaled)
   };
 
   return (
     <div className="stressPage-container">
       <h1 className="stressPage-title">
-        <PencilLine size={24} color="#2563eb" />
+        <PencilLine size={24} />
         Stress Relief Space
       </h1>
 
-      <p className="stressPage-subtitle">
-        Express yourself through art and release negative thoughts
-      </p>
+      <p className="stressPage-subtitle">Express yourself through art and release negative thoughts</p>
 
       <div className="stressPage-content">
         {/* Canvas Section */}
         <div className="stressPage-section">
           <div className="stressPage-header">
-            <Brush size={25} color="#2563eb" />
+            <Brush size={25} />
             <h2>Creative Canvas</h2>
           </div>
 
           <div className="stressPage-tools">
-            <button
-              className="tool-btn active"
-              onClick={() => {
-                /* brush selected (no-op) */
-              }}
-            >
-              Brush
-            </button>
+            <button className="tool-btn active">Brush</button>
 
             <button
               className="tool-btn"
@@ -214,13 +198,7 @@ const StressReliefSpace = () => {
 
             <label className="size-label">
               Size:
-              <input
-                type="number"
-                value={size}
-                onChange={(e) => setSize(Number(e.target.value))}
-                min="1"
-                max="50"
-              />
+              <input type="number" value={size} onChange={(e) => setSize(Number(e.target.value))} min="1" max="50" />
               px
             </label>
           </div>
@@ -236,25 +214,18 @@ const StressReliefSpace = () => {
               "#38bdf8",
               "#a78bfa",
               "#f472b6",
-              "#94a3b8"
+              "#94a3b8",
             ].map((c) => (
-              <div
-                key={c}
-                className={`color-circle ${color === c ? "active" : ""}`}
-                style={{ background: c }}
-                onClick={() => setColor(c)}
-              />
+              <div key={c} className={`color-circle ${color === c ? "active" : ""}`} style={{ background: c }} onClick={() => setColor(c)} />
             ))}
           </div>
 
-          {/* Canvas element - its CSS controls visible size; JS resizes internal bitmap */}
           <canvas ref={canvasRef} className="stressPage-canvas" />
 
           <div className="stressPage-actions">
             <button onClick={clearCanvas}>Clear</button>
             <button
               onClick={() => {
-                // Simple "download" of canvas as PNG
                 const canvas = canvasRef.current;
                 if (!canvas) return;
                 const link = document.createElement("a");
@@ -271,21 +242,13 @@ const StressReliefSpace = () => {
         {/* Thoughts Section */}
         <div className="stressPage-section">
           <div className="stressPage-header">
-            <MessageSquare size={23} color="#2563eb" />
+            <MessageSquare size={23} />
             <h2>Release Your Thoughts</h2>
           </div>
 
-          <p className="section-subtext">
-            Write down any negative thoughts, worries, or stress. Once written,
-            you can choose to release them.
-          </p>
+          <p className="section-subtext">Write down any negative thoughts, worries, or stress. Once written, you can choose to release them.</p>
 
-          <textarea
-            placeholder="💭 What's weighing on your mind? Write it all out..."
-            value={thought}
-            onChange={(e) => setThought(e.target.value)}
-            className="thought-input"
-          />
+          <textarea placeholder="💭 What's weighing on your mind? Write it all out..." value={thought} onChange={(e) => setThought(e.target.value)} className="thought-input" />
 
           <button className="capture-btn" onClick={addThought}>
             <Send size={16} />
@@ -303,35 +266,17 @@ const StressReliefSpace = () => {
                 <div key={t.id} className="thought-item">
                   {editingId === t.id ? (
                     <>
-                      <input
-                        value={editingText}
-                        onChange={(e) => setEditingText(e.target.value)}
-                        className="thought-edit-input"
-                      />
-
-                      <button
-                        className="save-btn"
-                        onClick={() => saveEdit(t.id)}
-                      >
+                      <input value={editingText} onChange={(e) => setEditingText(e.target.value)} className="thought-edit-input" />
+                      <button className="save-btn" onClick={() => saveEdit(t.id)}>
                         Save
                       </button>
                     </>
                   ) : (
                     <>
                       <span>{t.text}</span>
-
                       <div className="thought-actions">
-                        <Edit2
-                          size={16}
-                          color="#2563eb"
-                          onClick={() => startEdit(t.id, t.text)}
-                        />
-
-                        <Trash2
-                          size={16}
-                          color="#ef4444"
-                          onClick={() => deleteThought(t.id)}
-                        />
+                        <Edit2 size={16} onClick={() => startEdit(t.id, t.text)} />
+                        <Trash2 size={16} onClick={() => deleteThought(t.id)} />
                       </div>
                     </>
                   )}
@@ -343,14 +288,7 @@ const StressReliefSpace = () => {
       </div>
 
       {/* Floating AI Button */}
-      <div
-        style={{
-          position: "fixed",
-          bottom: "20px",
-          right: "20px",
-          zIndex: 1000
-        }}
-      >
+      <div style={{ position: "fixed", bottom: "20px", right: "20px", zIndex: 1000 }}>
         <Ai />
       </div>
     </div>
