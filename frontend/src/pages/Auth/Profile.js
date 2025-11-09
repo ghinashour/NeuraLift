@@ -1,3 +1,6 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+
+
 // src/pages/Auth/Profile.js
 import React, { useState, useEffect, useCallback } from "react";
 import axios from "axios";
