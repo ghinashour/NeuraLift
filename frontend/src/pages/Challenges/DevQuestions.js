@@ -12,7 +12,7 @@ function DevQuestions() {
   // Fetch questions from backend
   useEffect(() => {
     axios
-      .get("http://localhost:4000/api/devquestions") // ✅ fixed URL
+      .get(`${process.env.REACT_APP_API_URL}/api/devquestions`) // ✅ fixed URL
       .then((res) => setQuestions(res.data))
       .catch((err) => console.error("❌ Fetch error:", err));
   }, []);

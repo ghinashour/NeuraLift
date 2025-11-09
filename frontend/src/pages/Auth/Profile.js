@@ -48,7 +48,7 @@ function Profile() {
     data.append("photo", photo);
 
     try {
-      await axios.put("http://localhost:4000/api/profile", data, {
+      await axios.put(`${process.env.REACT_APP_API_URL}/api/profile`, data, {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "multipart/form-data",
@@ -79,7 +79,7 @@ function Profile() {
     data.append("username", form.username);
 
     try {
-      await axios.put("http://localhost:4000/api/profile", data, {
+      await axios.put(`${process.env.REACT_APP_API_URL}/api/profile`, data, {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "multipart/form-data",
@@ -100,7 +100,7 @@ function Profile() {
   const handlePasswordChange = async (e) => {
     e.preventDefault();
     try {
-      await axios.put("http://localhost:4000/api/profile/password", passwords, {
+      await axios.put(`${process.env.REACT_APP_API_URL}/api/profile/password`, passwords, {
         headers: { Authorization: `Bearer ${token}` },
       });
 
@@ -165,7 +165,7 @@ function Profile() {
             <img
               src={
                 user.profilePhoto
-                  ? `http://localhost:4000/uploads/${user.profilePhoto}`
+                  ? `${process.env.REACT_APP_API_URL}/uploads/${user.profilePhoto}`
                   : avatarPlaceholder
               }
               alt="profile"

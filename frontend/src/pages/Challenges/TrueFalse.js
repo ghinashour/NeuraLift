@@ -13,7 +13,7 @@ function TrueFalse() {
   useEffect(() => {
     const fetchQuestions = async () => {
       try {
-        const res = await axios.get("http://localhost:4000/api/questions/truefalse");
+        const res = await axios.get(`process.env.REACT_APP_API_URL/api/questions/truefalse`);
         setQuestions(res.data);
       } catch (err) {
         console.error(err);

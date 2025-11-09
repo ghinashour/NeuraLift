@@ -18,7 +18,7 @@ function Signup() {
   //sign up to the site with google
   const handleGoogleLogin = () => {
     // Redirect user to backend Google auth route
-    window.location.href = "http://localhost:4000/api/auth/google";
+    window.location.href = `${process.env.REACT_APP_API_URL}/api/auth/google`;
   };
 
   const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
@@ -39,7 +39,7 @@ function Signup() {
 
     try {
       setLoading(true);
-      const res = await axios.post("http://localhost:4000/api/auth/signup", form);
+      const res = await axios.post(`${process.env.REACT_APP_API_URL}/api/auth/signup`, form);
       
       Swal.fire({
         icon: 'success',
