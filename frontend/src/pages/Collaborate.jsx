@@ -32,9 +32,7 @@ axiosInstance.interceptors.request.use(
     }
     return config;
   },
-  (error) => {
-    return Promise.reject(error);
-  }
+  (error) => Promise.reject(error)
 );
 
 export default function Collaborate() {
@@ -47,7 +45,39 @@ export default function Collaborate() {
   const [error, setError] = useState(null);
   const socket = useSocket();
 
-  // Fetch posts (useCallback so effect deps are stable)
+  // Sample posts fallback
+  const getSamplePosts = useCallback(
+    () => [
+      {
+        _id: "p1",
+        user: { name: "Sarah Johnson", avatar: null },
+        createdAt: "2025-06-12T10:00:00Z",
+        content:
+          "I'm designing a Laravel app but I got a lot of issues in the code review. Recommend a course I can master it with?",
+        likes: 3,
+        replies: [
+          {
+            _id: "r1",
+            user: { name: "Emily Rodriguez", avatar: null },
+            createdAt: "2025-06-12T11:00:00Z",
+            text: "Laracasts is great. Also build small real-world features and read the docs frequently.",
+            likes: 1,
+          },
+        ],
+      },
+      {
+        _id: "p2",
+        user: { name: "Omar Ali", avatar: null },
+        createdAt: "2025-08-02T09:20:00Z",
+        content: "What's your favorite productivity tip?",
+        likes: 1,
+        replies: [],
+      },
+    ],
+    []
+  );
+
+  // Fetch posts
   const fetchPosts = useCallback(async () => {
     try {
       setLoading(true);
@@ -61,9 +91,9 @@ export default function Collaborate() {
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [getSamplePosts]);
 
-  // Fetch groups (useCallback)
+  // Fetch groups
   const fetchGroups = useCallback(async () => {
     try {
       const response = await axiosInstance.get("/collaborate/groups");
@@ -73,7 +103,7 @@ export default function Collaborate() {
     }
   }, []);
 
-  // Listen for socket notifications (depends on socket and stable fetchPosts)
+  // Listen for socket notifications
   useEffect(() => {
     fetchPosts();
     fetchGroups();
@@ -81,22 +111,21 @@ export default function Collaborate() {
     const handleNotif = (notif) => {
       if (!notif) return;
       if (notif.type === "reply") {
-        // If server included reply, update locally
         if (notif.postId && notif.reply) {
           setPosts((prev) =>
             prev.map((p) =>
-              p._id === notif.postId ? { ...p, replies: [...(p.replies || []), notif.reply] } : p
+              p._id === notif.postId
+                ? { ...p, replies: [...(p.replies || []), notif.reply] }
+                : p
             )
           );
         } else {
-          // fallback: refetch posts
           fetchPosts();
         }
       }
     };
 
     if (socket) socket.on("newNotification", handleNotif);
-
     return () => {
       if (socket) socket.off("newNotification", handleNotif);
     };
@@ -110,7 +139,11 @@ export default function Collaborate() {
       });
       const created = resp.data;
       setPosts((prev) =>
-        prev.map((p) => (p._id === postId ? { ...p, replies: [...(p.replies || []), created] } : p))
+        prev.map((p) =>
+          p._id === postId
+            ? { ...p, replies: [...(p.replies || []), created] }
+            : p
+        )
       );
     } catch (err) {
       console.error("Error adding reply:", err);
@@ -124,7 +157,9 @@ export default function Collaborate() {
       const response = await axiosInstance.put(`/collaborate/posts/${postId}/likes`, {
         likes: newLikes,
       });
-      setPosts((prev) => prev.map((p) => (p._id === postId ? response.data : p)));
+      setPosts((prev) =>
+        prev.map((p) => (p._id === postId ? response.data : p))
+      );
     } catch (err) {
       console.error("Error updating likes:", err);
       alert("Failed to update likes. Please try again.");
@@ -145,7 +180,7 @@ export default function Collaborate() {
     }
   };
 
-  // Create group (no unused response variable)
+  // Create group
   const handleCreateGroup = async (groupData) => {
     try {
       const response = await axiosInstance.post("/collaborate/groups", {
@@ -165,47 +200,29 @@ export default function Collaborate() {
   // Assign task
   const handleAssignTask = async (taskData) => {
     try {
-      await axiosInstance.post("/collaborate/tasks", {
-        title: taskData.title,
-        description: taskData.description,
-        assignedTo: taskData.assignedTo,
-        groupId: taskData.groupId,
-        dueDate: taskData.dueDate,
-        priority: taskData.priority,
-      });
+      await axiosInstance.post("/collaborate/tasks", taskData);
       setActivePopup(null);
       alert("Task assigned successfully!");
     } catch (err) {
       console.error("Error assigning task:", err);
-      throw err; // propagate for popup to handle
     }
   };
 
   // Add member
   const handleAddMember = async (memberData) => {
     try {
-      await axiosInstance.post("/collaborate/invite/member", {
-        email: memberData.email,
-        groupId: memberData.groupId,
-        role: memberData.role,
-      });
+      await axiosInstance.post("/collaborate/invite/member", memberData);
       setActivePopup(null);
       alert("Member added successfully!");
-      fetchGroups(); // refresh
+      fetchGroups(); // refresh groups
     } catch (err) {
       console.error("Error adding member:", err);
-      throw err;
     }
   };
 
-  const handleInvite = async (inviteData) => {
-    try {
-      setSelectedGroup(inviteData.group);
-      setActivePopup("invite");
-    } catch (err) {
-      console.error("Error preparing invitation:", err);
-      alert("Failed to prepare invitation. Please try again.");
-    }
+  const handleInvite = (inviteData) => {
+    setSelectedGroup(inviteData.group);
+    setActivePopup("invite");
   };
 
   // Navigate to a group's chat
@@ -218,36 +235,6 @@ export default function Collaborate() {
     });
   };
 
-  // Sample posts fallback
-  const getSamplePosts = () => [
-    {
-      _id: "p1",
-      user: { name: "Sarah Johnson", avatar: null },
-      createdAt: "2025-06-12T10:00:00Z",
-      content:
-        "I'm designing a Laravel app but I got a lot of issues in the code review. Recommend a course I can master it with?",
-      likes: 3,
-      replies: [
-        {
-          _id: "r1",
-          user: { name: "Emily Rodriguez", avatar: null },
-          createdAt: "2025-06-12T11:00:00Z",
-          text: "Laracasts is great. Also build small real-world features and read the docs frequently.",
-          likes: 1,
-        },
-      ],
-    },
-    {
-      _id: "p2",
-      user: { name: "Omar Ali", avatar: null },
-      createdAt: "2025-08-02T09:20:00Z",
-      content: "What's your favorite productivity tip?",
-      likes: 1,
-      replies: [],
-    },
-  ];
-
-  // Prepare post data for PostCard
   const formatPostForCard = (post) => ({
     id: post._id,
     name: post.user?.name || "Unknown User",
@@ -273,7 +260,9 @@ export default function Collaborate() {
             <h1 className="collab-title">
               <FaUsers className="header-icon" /> Collaborate
             </h1>
-            <p className="collab-sub">Find people who you know and message them!</p>
+            <p className="collab-sub">
+              Find people who you know and message them!
+            </p>
           </div>
         </header>
         <div className="loading-container">
@@ -291,7 +280,9 @@ export default function Collaborate() {
           <h1 className="collab-title">
             <FaUsers className="header-icon" /> Collaborate
           </h1>
-          <p className="collab-sub">Find people who you know and message them!</p>
+          <p className="collab-sub">
+            Find people who you know and message them!
+          </p>
         </div>
       </header>
 
@@ -330,7 +321,7 @@ export default function Collaborate() {
         </section>
 
         <Sidebar
-          onOpenPopup={(name) => setActivePopup(name)}
+          onOpenPopup={setActivePopup}
           groups={groups}
           onInviteGroup={handleInvite}
           onGroupClick={handleGroupClick}
@@ -347,16 +338,30 @@ export default function Collaborate() {
         />
       )}
       {activePopup === "createGroup" && (
-        <CreateGroupPopup onClose={() => setActivePopup(null)} onSubmit={handleCreateGroup} />
+        <CreateGroupPopup
+          onClose={() => setActivePopup(null)}
+          onSubmit={handleCreateGroup}
+        />
       )}
       {activePopup === "addMember" && (
-        <AddMemberPopup onClose={() => setActivePopup(null)} onSubmit={handleAddMember} groups={groups} />
+        <AddMemberPopup
+          onClose={() => setActivePopup(null)}
+          onSubmit={handleAddMember}
+          groups={groups}
+        />
       )}
       {activePopup === "assignTask" && (
-        <AssignTaskPopup onClose={() => setActivePopup(null)} onSubmit={handleAssignTask} groups={groups} />
+        <AssignTaskPopup
+          onClose={() => setActivePopup(null)}
+          onSubmit={handleAssignTask}
+          groups={groups}
+        />
       )}
       {activePopup === "createPost" && (
-        <CreatePostPopup onClose={() => setActivePopup(null)} onSubmit={handleCreatePost} />
+        <CreatePostPopup
+          onClose={() => setActivePopup(null)}
+          onSubmit={handleCreatePost}
+        />
       )}
     </div>
   );
