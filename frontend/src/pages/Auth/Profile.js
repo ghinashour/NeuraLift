@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from "react";
+// src/pages/Auth/Profile.js
+import React, { useState, useEffect, useCallback } from "react";
 import axios from "axios";
 import Swal from "sweetalert2";
 import useUserData from "../../hooks/useUserData";
@@ -26,20 +27,16 @@ function Profile() {
     }
   }, [user]);
 
-  useEffect(() => {
-    if (photo) handlePhotoUpdate();
-  }, [photo]);
-
-  const showAlert = (icon, title, text) => {
+  const showAlert = useCallback((icon, title, text) => {
     Swal.fire({
       icon,
       title,
       text,
       confirmButtonColor: "#3085d6",
     });
-  };
+  }, []);
 
-  const handlePhotoUpdate = async () => {
+  const handlePhotoUpdate = useCallback(async () => {
     if (!photo) return;
     const data = new FormData();
     data.append("name", form.name);
@@ -59,9 +56,17 @@ function Profile() {
       window.location.reload();
       setPhoto(null);
     } catch (err) {
-      showAlert("error", "Photo Update Failed", err.response?.data?.message || "Something went wrong.");
+      showAlert(
+        "error",
+        "Photo Update Failed",
+        err.response?.data?.message || "Something went wrong."
+      );
     }
-  };
+  }, [photo, form, token, fetchUserData, showAlert]);
+
+  useEffect(() => {
+    if (photo) handlePhotoUpdate();
+  }, [photo, handlePhotoUpdate]);
 
   const handleProfileUpdate = async (e) => {
     e.preventDefault();
@@ -81,7 +86,11 @@ function Profile() {
       await fetchUserData();
       showAlert("success", "Profile Updated ✅", "Your profile has been saved.");
     } catch (err) {
-      showAlert("error", "Update Failed", err.response?.data?.message || "Unable to update profile.");
+      showAlert(
+        "error",
+        "Update Failed",
+        err.response?.data?.message || "Unable to update profile."
+      );
     }
   };
 
@@ -92,10 +101,18 @@ function Profile() {
         headers: { Authorization: `Bearer ${token}` },
       });
 
-      showAlert("success", "Password Updated ✅", "Your password has been changed.");
+      showAlert(
+        "success",
+        "Password Updated ✅",
+        "Your password has been changed."
+      );
       setPasswords({ currentPassword: "", newPassword: "" });
     } catch (err) {
-      showAlert("error", "Password Update Failed", err.response?.data?.message || "Please check your current password.");
+      showAlert(
+        "error",
+        "Password Update Failed",
+        err.response?.data?.message || "Please check your current password."
+      );
     }
   };
 
@@ -175,7 +192,10 @@ function Profile() {
               className="profile-photo-input"
               id="profile-photo-input"
             />
-            <label htmlFor="profile-photo-input" className="profile-photo-label"></label>
+            <label
+              htmlFor="profile-photo-input"
+              className="profile-photo-label"
+            ></label>
           </div>
         </div>
 
