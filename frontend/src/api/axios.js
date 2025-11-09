@@ -3,12 +3,12 @@ import axios from "axios";
 
 // ✅ Base instance for user requests
 const API = axios.create({
-  baseURL: `${REACT_APP_API_URL}/api`, // All normal routes go through /api
+  baseURL: `${process.env.REACT_APP_API_URL}/api`, // All normal routes go through /api
 });
 
 // ✅ Base instance for admin requests
 const AdminAPI = axios.create({
-  baseURL: `{REACT_APP_API_URL}/api/admin`,
+  baseURL: `${process.env.REACT_APP_API_URL}/api/admin`, // Fixed template string
 });
 
 // ✅ Interceptor to attach token automatically
