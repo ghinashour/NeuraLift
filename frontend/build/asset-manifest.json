@@ -1,0 +1,25 @@
+{
+  "files": {
+    "main.css": "/static/css/main.57a6f17c.css",
+    "main.js": "/static/js/main.65931ad6.js",
+    "static/js/511.9a35a039.chunk.js": "/static/js/511.9a35a039.chunk.js",
+    "static/media/omar.png": "/static/media/omar.dea078af3919eca4d6df.png",
+    "static/media/hassan.png": "/static/media/hassan.8fd463121bfccf022e60.png",
+    "static/media/ghina.png": "/static/media/ghina.c6c86230175a9015b55e.png",
+    "static/media/mhmd.png": "/static/media/mhmd.d92b7cfe301cfb31b0bf.png",
+    "static/media/yara.png": "/static/media/yara.4059f828a685552bf7cb.png",
+    "static/media/image.png": "/static/media/image.e9cd925d167f27c9e0e8.png",
+    "static/media/avatar.png": "/static/media/avatar.2734a5349dec2bbb46fc.png",
+    "static/media/NeuraLift.png": "/static/media/NeuraLift.c3ebb3a505f6be7d4255.png",
+    "static/media/logo.svg": "/static/media/logo.a4a7ca92e14c5cd8fedbdfb954dbb7c2.svg",
+    "static/media/google-logo.svg": "/static/media/google-logo.e759f74a6f4605b02e7fa32afa36fbc4.svg",
+    "index.html": "/index.html",
+    "main.57a6f17c.css.map": "/static/css/main.57a6f17c.css.map",
+    "main.65931ad6.js.map": "/static/js/main.65931ad6.js.map",
+    "511.9a35a039.chunk.js.map": "/static/js/511.9a35a039.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.57a6f17c.css",
+    "static/js/main.65931ad6.js"
+  ]
+}
