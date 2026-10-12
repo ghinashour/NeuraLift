@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "../../styles/Popup.css";
 
-const API_BASE_URL = process.env.REACT_APP_API_URL || "http://localhost:4000/api";
+import { API_BASE as API_BASE_URL } from '../../api/axios';
 
 function EditTaskPopup({ task, onClose, onSubmit }) {
   const [formData, setFormData] = useState({

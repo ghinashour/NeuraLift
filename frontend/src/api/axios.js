@@ -3,7 +3,7 @@ import axios from "axios";
 
 const RAW_BASE = process.env.REACT_APP_API_URL || "http://localhost:4000";
 // Allow REACT_APP_API_URL with or without trailing /api
-const API_BASE = RAW_BASE.replace(/\/$/, "").endsWith("/api")
+export const API_BASE = RAW_BASE.replace(/\/$/, "").endsWith("/api")
   ? RAW_BASE.replace(/\/$/, "")
   : `${RAW_BASE.replace(/\/$/, "")}/api`;
 

@@ -3,7 +3,7 @@ services:
     name: neuralift-backend
     runtime: node
     plan: free
-    branch: main
+    branch: master
     # Blueprint runs from repo root; backend lives in ./backend
     rootDir: backend
     buildCommand: npm install
@@ -19,11 +19,15 @@ services:
         sync: false
       - key: JWT_REFRESH_SECRET
         sync: false
-      # Frontend URL(s) on Vercel, comma-separated. BOTH are accepted by the API.
+      # Allowed frontend origins on Vercel, comma-separated.
       # Example: https://neuralift.vercel.app
       - key: CLIENT_ORIGIN
         sync: false
+      # Single canonical frontend origin for redirects and email links.
       - key: CLIENT_URL
+        sync: false
+      # Backend origin without /api, used in resend-verification links.
+      - key: API_URL
         sync: false
       - key: GROQ_API_KEY
         sync: false

@@ -1,6 +1,6 @@
 // hooks/useNotifications.js
 import { useState, useEffect } from "react";
-import axios from "axios";
+import API from "../api/axios";
 import { useSocket } from "../context/SocketProvider";
 
 export default function useNotifications(userId) {
@@ -18,7 +18,7 @@ export default function useNotifications(userId) {
     // Fetch initial notifications
     const fetchNotifications = async () => {
       try {
-        const res = await axios.get(`/api/notifications/${userId}`);
+        const res = await API.get(`/notifications/${userId}`);
         setNotifications(res.data);
       } catch (err) {
         console.error(err);
@@ -40,7 +40,7 @@ export default function useNotifications(userId) {
 
   const markAsRead = async (id) => {
     try {
-      await axios.put(`/api/notifications/read/${id}`);
+      await API.put(`/notifications/read/${id}`);
       setNotifications(prev =>
         prev.map(n => (n._id === id ? { ...n, read: true } : n))
       );

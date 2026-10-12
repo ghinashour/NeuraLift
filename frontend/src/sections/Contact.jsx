@@ -4,7 +4,7 @@ import { FaEnvelope, FaComments, FaPhone, FaPaperPlane } from "react-icons/fa";
 import axios from 'axios';
 import Swal from 'sweetalert2'; // Import SweetAlert2
 
-const API_BASE_URL = process.env.REACT_APP_API_URL || "http://localhost:4000/api"; // Define backend API base URL
+import { API_BASE as API_BASE_URL } from '../api/axios';
 
 function Contact() {
   const [firstName, setFirstName] = useState('');

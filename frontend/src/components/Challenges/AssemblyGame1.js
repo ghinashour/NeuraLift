@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
+import { API_BASE } from '../../api/axios';
 import '../../styles/Challenges/AssemblyGame.css'; // Make sure you have this CSS file
 
 const AssemblyGame1 = () => {
@@ -12,9 +13,6 @@ const AssemblyGame1 = () => {
   const programmingLanguages = [
     'JavaScript', 'Python', 'Java', 'C++', 'Ruby', 'Go', 'Rust', 'Swift'
   ];
-
-  // API configuration 
-  const API_BASE = process.env.REACT_APP_API_URL || 'http://localhost:4000/api';
 
   // Fallback demo game
   const createDemoGame = useCallback(() => {
@@ -58,7 +56,7 @@ const AssemblyGame1 = () => {
     } finally {
       setLoading(false);
     }
-  }, [API_BASE, createDemoGame]);
+  }, [createDemoGame]);
 
   useEffect(() => {
     startNewGame();

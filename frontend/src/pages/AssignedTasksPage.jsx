@@ -5,7 +5,7 @@ import axios from "axios";
 import "../styles/AssignedTasksPage.css";
 import EditTaskPopup from "../components/Popups/EditTaskPopup";
 
-const API_BASE_URL = process.env.REACT_APP_API_URL ;
+import { API_BASE as API_BASE_URL } from '../api/axios';
 
 export default function AssignedTasksPage() {
   const navigate = useNavigate();
