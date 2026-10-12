@@ -23,3 +23,7 @@ frontend/.env
 
 # local file history (VS Code extension) — snapshots may contain secrets
 .history/
+
+# agent skills + editor settings — local-only, not part of the app
+.opencode/
+.vscode/
