@@ -1,5 +1,5 @@
 // src/UI/Input/Input.jsx
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import './Input.css';
 
 const Input = ({ label, type = 'text', value, onChange, name, placeholder, required }) => {

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { AdminAPI } from "../../api/axios";
 import "../../styles/AdminNotes.css";
 
@@ -9,15 +9,16 @@ function AdminNotes() {
   const [keyword, setKeyword] = useState("");
   const [from, setFrom] = useState("");
   const [to, setTo] = useState("");
+  const [filters, setFilters] = useState({ keyword: "", from: "", to: "" });
   const [page, setPage] = useState(1);
   const [total, setTotal] = useState(0);
   const limit = 10;
 
-  const fetchNotes = async () => {
+  const fetchNotes = useCallback(async () => {
     setLoading(true);
     try {
       const res = await AdminAPI.get("/notes", {
-        params: { keyword, from, to, page, limit },
+        params: { ...filters, page, limit },
       });
       setNotes(res.data.notes);
       setTotal(res.data.total);
@@ -27,16 +28,16 @@ function AdminNotes() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [filters, page]);
 
   useEffect(() => {
     fetchNotes();
-  }, [page]);
+  }, [fetchNotes]);
 
   const handleSearch = (e) => {
     e.preventDefault();
     setPage(1);
-    fetchNotes();
+    setFilters({ keyword, from, to });
   };
 
   const handleDelete = async (id) => {

@@ -6,12 +6,8 @@ function InvitePopup({ onClose, groupId, groupName }) {
   const [copied, setCopied] = useState(false);
   const [loading, setLoading] = useState(true);
 
-  // Generate invite link when component mounts
+  // Generate invite link when the selected group changes
   useEffect(() => {
-    generateInviteLink();
-  }, []);
-
-  const generateInviteLink = async () => {
     try {
       // If we have a groupId, generate a specific group invite
       if (groupId) {
@@ -31,7 +27,7 @@ function InvitePopup({ onClose, groupId, groupName }) {
     } finally {
       setLoading(false);
     }
-  };
+  }, [groupId]);
 
   const copyToClipboard = async () => {
     try {

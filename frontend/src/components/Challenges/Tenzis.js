@@ -25,7 +25,7 @@ function Tenzies() {
       setWon(true);
       saveGameResult(rolls); // send to backend
     }
-  }, [dice]);
+  }, [dice, rolls]);
 
   const rollDice = () => {
     //resetting the game if won

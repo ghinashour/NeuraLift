@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react';
-import { initSocket, getSocket } from '../socket';
+import { initSocket } from '../socket';
 
 export default function useSocket(token, onNewLike) {
   const socketRef = useRef(null);

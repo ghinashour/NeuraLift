@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext, useCallback } from "react";
 import { AdminAPI } from "../../api/axios";
 import { AdminAuthContext } from "../../context/AdminAuthContext";
 
@@ -9,7 +9,7 @@ function Dashboard() {
   const [refreshing, setRefreshing] = useState(false);
   const { getAuthHeader } = useContext(AdminAuthContext);
 
-  const fetchDashboardData = async (isRefresh = false) => {
+  const fetchDashboardData = useCallback(async (isRefresh = false) => {
     try {
       if (isRefresh) {
         setRefreshing(true);
@@ -29,11 +29,11 @@ function Dashboard() {
       setLoading(false);
       setRefreshing(false);
     }
-  };
+  }, [getAuthHeader]);
 
   useEffect(() => {
     fetchDashboardData();
-  }, []);
+  }, [fetchDashboardData]);
 
   const handleRefresh = () => {
     fetchDashboardData(true);

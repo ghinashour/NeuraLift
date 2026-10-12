@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import '../../styles/Challenges/AssemblyGame.css'; // Make sure you have this CSS file
 
@@ -16,31 +16,8 @@ const AssemblyGame1 = () => {
   // API configuration 
   const API_BASE = process.env.REACT_APP_API_URL || 'http://localhost:4000/api';
 
-  useEffect(() => {
-    startNewGame();
-  }, []);
-
-  const startNewGame = async () => {
-    try {
-      setLoading(true);
-      const response = await axios.post(`${API_BASE}/assembly-game/start`);
-      setGame(response.data);
-      setMessage('');
-      setGuess('');
-      console.log('Game started:', response.data);
-    } catch (error) {
-      console.error('Error starting game:', error);
-      setMessage('Error starting game. Using demo mode.');
-
-      // Fallback demo game
-      createDemoGame();
-    } finally {
-      setLoading(false);
-    }
-  };
-
   // Fallback demo game
-  const createDemoGame = () => {
+  const createDemoGame = useCallback(() => {
     const demoWords = ['JAVASCRIPT', 'PYTHON', 'JAVA', 'REACT'];
     const demoHints = [
       'The language of the web',
@@ -62,7 +39,30 @@ const AssemblyGame1 = () => {
       guessedLetters: [],
       status: 'playing'
     });
-  };
+  }, []);
+
+  const startNewGame = useCallback(async () => {
+    try {
+      setLoading(true);
+      const response = await axios.post(`${API_BASE}/assembly-game/start`);
+      setGame(response.data);
+      setMessage('');
+      setGuess('');
+      console.log('Game started:', response.data);
+    } catch (error) {
+      console.error('Error starting game:', error);
+      setMessage('Error starting game. Using demo mode.');
+
+      // Fallback demo game
+      createDemoGame();
+    } finally {
+      setLoading(false);
+    }
+  }, [API_BASE, createDemoGame]);
+
+  useEffect(() => {
+    startNewGame();
+  }, [startNewGame]);
 
   const handleGuess = async (e) => {
     e.preventDefault();

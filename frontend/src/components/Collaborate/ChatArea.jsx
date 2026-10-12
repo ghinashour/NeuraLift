@@ -19,8 +19,6 @@ export default function ChatArea({ group, joined, onPostMessage, onLeave }) {
   const messagesRef = useRef(null);
   const [autoScroll, setAutoScroll] = useState(true);
   const fileInputRef = useRef(null);
-  const [isTypingLocal, setIsTypingLocal] = useState(false);
-  const typingTimer = useRef(null);
 
   useEffect(() => {
     // scroll to bottom when group changes
@@ -254,14 +252,6 @@ export default function ChatArea({ group, joined, onPostMessage, onLeave }) {
               value={text}
               onChange={(e) => {
                 setText(e.target.value);
-                setIsTypingLocal(true);
-                if (typingTimer.current) clearTimeout(typingTimer.current);
-                typingTimer.current = setTimeout(() => {
-                  setIsTypingLocal(false);
-                  if (typeof onPostMessage === "function") {
-                    // UI-only for now; apps can hook onTyping prop for socket emits
-                  }
-                }, 900);
               }}
               disabled={!joined}
               onKeyDown={(e) => {

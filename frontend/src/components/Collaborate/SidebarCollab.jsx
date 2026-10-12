@@ -1,5 +1,5 @@
 // src/components/Collaborate/SidebarCollab.js
-import React, { useState } from "react";
+import React from "react";
 import { useNavigate } from "react-router-dom";
 import "../../styles/SidebarCollab.css";
 import {
@@ -16,7 +16,6 @@ import Swal from "sweetalert2";
 
 
 const SidebarCollab = ({ onOpenPopup, groups, onInviteGroup, onGroupClick }) => {
-  const [activePopup, setActivePopup] = useState(null);
   const navigate = useNavigate();
 
   const handleIconClick = (action) => {

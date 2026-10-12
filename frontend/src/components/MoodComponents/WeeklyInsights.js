@@ -1,9 +1,7 @@
 import React from "react";
-import { FaCalendarAlt, FaSmile, FaHeart } from "react-icons/fa";
 
 const WeeklyInsights = ({ entries }) => {
   // Calculate insights
-  const totalEntries = entries.length;
   const weekAgo = new Date();
   weekAgo.setDate(weekAgo.getDate() - 7);
   const lastWeekEntries = entries.filter(e => new Date(e.date) > weekAgo);

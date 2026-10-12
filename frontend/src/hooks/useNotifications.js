@@ -36,7 +36,7 @@ export default function useNotifications(userId) {
     return () => {
       if (socket) socket.off("newNotification");
     };
-  }, [userId]);
+  }, [userId, socket]);
 
   const markAsRead = async (id) => {
     try {

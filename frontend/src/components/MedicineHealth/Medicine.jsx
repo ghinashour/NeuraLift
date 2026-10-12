@@ -28,52 +28,11 @@ const MedicineHealth = () => {
   const [repeatValue, setRepeatValue] = useState(1);
   const [repeatUnit, setRepeatUnit] = useState("hours");
 
-    // 🔥 NEW: Analytics state
-  const [takenToday, setTakenToday] = useState(0);
-  const [upcoming, setUpcoming] = useState(0);
-  const [weekProgress, setWeekProgress] = useState(0);
-
-  
-  // 🔥 Compute analysis when medicines change
- useEffect(() => {
-    if (!medicines.length) return;
-
-    const now = new Date();
-    const today = now.toISOString().split("T")[0];
-
-    // ✅ Medicines taken today
-    const takenTodayCount = medicines.filter((m) => {
-      if (!m.takenAt) return false;
-      return m.isTaken && m.takenAt.startsWith(today);
-    }).length;
-
-    // ✅ Upcoming medicines (for today or later, not taken)
-    const upcomingCount = medicines.filter((m) => {
-      const medTime = new Date(m.time);
-      return medTime > now && !m.isTaken;
-    }).length;
-
-    // ✅ Weekly progress (last 7 days)
-    const weekAgo = new Date();
-    weekAgo.setDate(weekAgo.getDate() - 7);
-
-    const weeklyMeds = medicines.filter((m) => new Date(m.time) >= weekAgo);
-    const takenThisWeek = weeklyMeds.filter((m) => m.isTaken).length;
-    const progress =
-      weeklyMeds.length > 0
-        ? Math.round((takenThisWeek / weeklyMeds.length) * 100)
-        : 0;
-
-    setTakenToday(takenTodayCount);
-    setUpcoming(upcomingCount);
-    setWeekProgress(progress);
-  }, [medicines]);
-
   useEffect(() => {
     fetchMedicines(); // Load medicines on page load
       fetchActiveMedicines(); // ✅ fetch only active medicines
 
-  }, []);
+  }, [fetchMedicines, fetchActiveMedicines]);
 
     // ✅ Format time safely
   const formatTime = (timeStr) => {

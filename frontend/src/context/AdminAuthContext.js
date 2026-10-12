@@ -1,17 +1,36 @@
-import React, { createContext, useState, useEffect } from "react";
+import React, { createContext, useState, useCallback, useEffect } from "react";
 
 export const AdminAuthContext = createContext();
+
+const isTokenValid = (token) => {
+  if (!token) return false;
+
+  if (token.split('.').length !== 3) return false;
+
+  try {
+    const payload = JSON.parse(atob(token.split('.')[1]));
+    if (payload.exp && Date.now() >= payload.exp * 1000) {
+      return false;
+    }
+    return true;
+  } catch {
+    return false;
+  }
+};
 
 export const AdminAuthProvider = ({ children }) => {
   const [admin, setAdmin] = useState(null);
   const [token, setToken] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    initializeAuth();
+  const clearAuthData = useCallback(() => {
+    localStorage.removeItem("adminToken");
+    localStorage.removeItem("admin");
+    setAdmin(null);
+    setToken(null);
   }, []);
 
-  const initializeAuth = () => {
+  const initializeAuth = useCallback(() => {
     try {
       const savedToken = localStorage.getItem("adminToken");
       const savedAdmin = localStorage.getItem("admin");
@@ -30,30 +49,11 @@ export const AdminAuthProvider = ({ children }) => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [clearAuthData]);
 
-  const isTokenValid = (token) => {
-    if (!token) return false;
-
-    if (token.split('.').length !== 3) return false;
-
-    try {
-      const payload = JSON.parse(atob(token.split('.')[1]));
-      if (payload.exp && Date.now() >= payload.exp * 1000) {
-        return false;
-      }
-      return true;
-    } catch {
-      return false;
-    }
-  };
-
-  const clearAuthData = () => {
-    localStorage.removeItem("adminToken");
-    localStorage.removeItem("admin");
-    setAdmin(null);
-    setToken(null);
-  };
+  useEffect(() => {
+    initializeAuth();
+  }, [initializeAuth]);
 
   const login = (data) => {
     if (!data.token || !data.admin) {
@@ -81,9 +81,9 @@ export const AdminAuthProvider = ({ children }) => {
     return !!(token && admin);
   };
 
-  const getAuthHeader = () => {
+  const getAuthHeader = useCallback(() => {
     return token ? { Authorization: `Bearer ${token}` } : {};
-  };
+  }, [token]);
 
   const value = {
     admin,

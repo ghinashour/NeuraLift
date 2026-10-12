@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext, useCallback } from "react";
 import { AdminAPI } from "../../api/axios";
 import { AdminAuthContext } from "../../context/AdminAuthContext";
 import Swal from 'sweetalert2';
@@ -18,11 +18,7 @@ function UsersManagement() {
   const [actionLoading, setActionLoading] = useState(null); // Track individual action loading states
   const { getAuthHeader } = useContext(AdminAuthContext);
 
-  useEffect(() => {
-    fetchUsers();
-  }, [currentPage, searchTerm, statusFilter]);
-
-  const fetchUsers = async () => {
+  const fetchUsers = useCallback(async () => {
     try {
       setLoading(true);
       const params = new URLSearchParams({
@@ -45,7 +41,11 @@ function UsersManagement() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [currentPage, limit, searchTerm, statusFilter, getAuthHeader]);
+
+  useEffect(() => {
+    fetchUsers();
+  }, [fetchUsers]);
 
   const handleSuspendUser = async (userId) => {
     const result = await Swal.fire({
@@ -61,7 +61,7 @@ function UsersManagement() {
     setActionLoading(userId); // Set loading for this specific user
 
     try {
-      const res = await AdminAPI.post(`/users/${userId}/suspend`,
+      await AdminAPI.post(`/users/${userId}/suspend`,
         { reason: "Suspended by admin" },
         { headers: getAuthHeader() }
       );
@@ -98,7 +98,7 @@ function UsersManagement() {
     setActionLoading(userId);
 
     try {
-      const res = await AdminAPI.post(`/users/${userId}/unsuspend`,
+      await AdminAPI.post(`/users/${userId}/unsuspend`,
         {},
         { headers: getAuthHeader() }
       );

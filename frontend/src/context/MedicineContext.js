@@ -13,14 +13,14 @@ export const MedicineProvider = ({ children }) => {
 
   
   // ✅ Fetch only active medicines (not taken)
- const fetchActiveMedicines = async () => {
+ const fetchActiveMedicines = useCallback(async () => {
   try {
     const res = await API.get('/medicines/active'); // ✅ correct route
     setActiveMedicines(res.data);
   } catch (err) {
     console.error("Error fetching active medicines:", err);
   }
-};
+}, []);
 
 
   // 🔹 Fetch all medicines
