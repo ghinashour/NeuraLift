@@ -1,24 +1,33 @@
+/* NeuraLift Assistant welcome — botanical light theme (matches app palette) */
+.assistant-welcome-page {
+  width: 100%;
+  box-sizing: border-box;
+}
+
 .welcome-screen {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: center;
-  min-height: 100vh;
   width: 100%;
-  padding: 2rem;
-  background: linear-gradient(135deg, #7389FF 0%, #093894 100%);
+  padding: 0;
+  background: transparent;
   text-align: center;
   position: relative;
 }
 
 .welcome-card {
   display: flex;
-  gap: 1.5rem;
+  gap: 28px;
   max-width: 960px;
   width: 100%;
-  --card-radius: 12px;
-  padding: 1.5rem;
+  background: #fffefb;
+  border: 1px solid #ece4d4;
+  border-radius: 20px;
+  box-shadow: 0 8px 24px rgba(46,42,68,.06);
+  padding: 28px;
   align-items: center;
   margin: 0 auto;
+  text-align: left;
 }
 
 .welcome-card__left {
@@ -26,8 +35,9 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 0.75rem;
-  width: 220px;
+  gap: 12px;
+  width: 240px;
+  flex-shrink: 0;
 }
 
 .welcome-card__right {
@@ -36,49 +46,37 @@
   flex-direction: column;
   justify-content: center;
   text-align: left;
+  min-width: 0;
 }
 
 .bot-avatar-large {
   position: relative;
   margin: 0;
-  width: 120px;
-  height: 120px;
+  width: 112px;
+  height: 112px;
 }
 
 .avatar-ring-outer {
   width: 100%;
   height: 100%;
-  border: 3px solid rgba(255, 255, 255, 0.3);
+  border: 2px solid #d9cff0;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  animation: pulse 2s infinite;
+  background: linear-gradient(135deg, #f2edfa, #ede7f7);
 }
 
 .avatar-ring-inner {
   width: 80%;
   height: 80%;
-  background: rgba(255, 255, 255, 0.1);
+  background: linear-gradient(135deg, #efe7f6, #d9cff0);
+  border: 1px solid #d9cff0;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  backdrop-filter: blur(10px);
-  overflow: hidden; /* Added for image */
-}
-
-.bot-image {
-  width: 100%;
-  height: 100%;
-  object-fit: cover; /* Ensures image fills the circle properly */
-  border-radius: 50%;
-}
-
-/* subtle interactive avatar micro-interaction */
-.bot-avatar-large:hover .avatar-ring-outer {
-  transform: scale(1.03) rotate(-2deg);
-  transition: transform 220ms ease;
+  overflow: hidden;
 }
 
 .status-indicator {
@@ -87,147 +85,142 @@
   right: 8px;
   width: 16px;
   height: 16px;
-  background: #10b981;
-  border: 2px solid #093894;
+  background: #7fa184;
+  border: 2px solid #fffefb;
   border-radius: 50%;
-}
-
-.brand-name {
-  font-size: 2.5rem;
-  font-weight: 700;
-  color: white;
-  margin: 0 0 1rem 0;
-  letter-spacing: -0.5px;
-}
-
-.welcome-brand-name {
-  font-size: 1.25rem;
-  font-weight: 700;
-  color: white;
-  margin: 0;
-  letter-spacing: -0.6px;
-}
-
-.welcome-subtitle {
-  color: rgba(255,255,255,0.85);
-  font-size: 0.95rem;
-  margin: 0;
+  box-shadow: 0 0 0 3px rgba(127,161,132,.2);
 }
 
 .brand-block { text-align: center; }
 
+.welcome-brand-name {
+  font-family: var(--serif, Georgia, serif);
+  font-size: 24px;
+  font-weight: 600;
+  color: #232033;
+  margin: 0;
+  letter-spacing: -0.01em;
+}
+
+.welcome-subtitle {
+  color: #6f6a7e;
+  font-size: 13.5px;
+  margin: 4px 0 8px;
+}
+
+.live-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .05em;
+  text-transform: uppercase;
+  background: #ede7f7;
+  color: #2e2a44;
+  border-radius: 999px;
+  padding: 4px 11px;
+}
+.live-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #7fa184;
+}
+
 .welcome-message.lead {
-  font-size: 1.15rem;
-  color: rgba(255,255,255,0.95);
-  margin: 0 0 1rem 0;
+  font-family: var(--serif, Georgia, serif);
+  font-size: 22px;
+  line-height: 1.4;
+  color: #232033;
+  margin: 0 0 16px;
+  min-height: 62px;
 }
 
 .quick-actions {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.6rem;
-  margin-bottom: 1rem;
+  gap: 8px;
+  margin-bottom: 16px;
 }
 
 .action-chip {
-  background: rgba(255,255,255,0.08);
-  border: 1px solid rgba(255,255,255,0.12);
-  color: white;
-  padding: 0.5rem 0.85rem;
+  background: #fff;
+  border: 1px solid #e4d9c4;
+  color: #2e2a44;
+  padding: 8px 15px;
   border-radius: 999px;
-  font-size: 0.95rem;
+  font-size: 13px;
+  font-weight: 600;
   cursor: pointer;
-  transition: transform 0.12s ease, background 0.12s ease;
+  transition: background .15s, border-color .15s, transform .15s;
 }
 
 .action-chip:hover {
-  transform: translateY(-4px) scale(1.02);
-  background: rgba(255,255,255,0.14);
-  box-shadow: 0 10px 30px rgba(11,14,25,0.22);
+  transform: translateY(-1px);
+  background: #ede7f7;
+  border-color: #8e7fb8;
 }
 
 .welcome-cta {
   display: flex;
-  gap: 0.6rem;
-  margin-top: 0.6rem;
+  gap: 10px;
+  margin-top: 4px;
   align-items: center;
+  flex-wrap: wrap;
 }
 
 .start-chat-btn {
-  padding: 0.6rem 1rem;
-  border-radius: 10px;
-  border: none;
+  padding: 12px 22px;
+  border-radius: 999px;
   cursor: pointer;
   font-weight: 600;
+  font-size: 14px;
   align-items: center;
   display: inline-flex;
   justify-content: center;
+  border: 1px solid transparent;
+  transition: transform .15s, background .15s;
 }
 
 .start-chat-btn.primary {
-  background: linear-gradient(90deg,#6DA2F8,#3C83F6);
-  color: white;
-  box-shadow: 0 8px 24px rgba(60,131,246,0.22);
+  background: #2e2a44;
+  color: #fff;
+  box-shadow: 0 8px 20px rgba(46,42,68,.22);
 }
+.start-chat-btn.primary:hover { background: #3d375c; transform: translateY(-1px); }
 
 .start-chat-btn.secondary {
-  background: transparent;
-  color: rgba(255,255,255,0.92);
-  border: 1px solid rgba(255,255,255,0.08);
+  background: #fff;
+  color: #232033;
+  border-color: #e4d9c4;
 }
+.start-chat-btn.secondary:hover { border-color: #232033; }
 
 .hint-text {
-  margin-top: 0.6rem;
-  color: rgba(255,255,255,0.72);
-  font-size: 0.87rem;
+  margin-top: 12px;
+  color: #9a94a8;
+  font-size: 12.5px;
 }
 
-/* typewriter cursor */
-.typewriter { white-space: nowrap; display: inline-block; }
-.cursor { display: inline-block; margin-left: 4px; opacity: 0.9; }
+.typewriter { white-space: normal; display: inline; }
+.cursor { display: inline-block; margin-left: 2px; color: #8e7fb8; }
 .cursor.blink { animation: blink 1s steps(2,end) infinite; }
+@keyframes blink { 50% { opacity: 0; } }
 
-/* unify chip and card radii for consistent corners */
-.action-chip, .start-chat-btn { border-radius: calc(var(--card-radius) - 2px); }
-
-/* small press feedback */
-.action-chip:active, .start-chat-btn:active { transform: translateY(1px) scale(0.998); }
-
-@keyframes pulse {
-  0% {
-    transform: scale(1);
-    opacity: 1;
-  }
-  50% {
-    transform: scale(1.05);
-    opacity: 0.8;
-  }
-  100% {
-    transform: scale(1);
-    opacity: 1;
-  }
-}
+.action-chip:active, .start-chat-btn:active { transform: translateY(1px); }
 
 @media (max-width: 768px) {
-  .welcome-screen {
-    padding: 1.25rem;
-    min-height: 100vh;
-  }
-
   .welcome-card {
     flex-direction: column;
-    gap: 1rem;
+    gap: 16px;
     align-items: center;
+    padding: 22px 18px;
   }
-
-  .welcome-card__left {
-    width: auto;
-    flex-direction: row;
-    gap: 1rem;
-    align-items: center;
-  }
-
-  .welcome-card__right { text-align: center; }
-
+  .welcome-card__left { width: auto; flex-direction: column; gap: 10px; }
+  .welcome-card__right { text-align: center; align-items: center; }
+  .quick-actions { justify-content: center; }
+  .welcome-cta { justify-content: center; }
+  .welcome-message.lead { font-size: 19px; min-height: 0; }
   .bot-avatar-large { width: 92px; height: 92px; }
 }

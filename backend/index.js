@@ -6,8 +6,10 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
+const cookieParser = require("cookie-parser");
 const http = require("http");
 const path = require("path");
+const fs = require("fs");
 const passport = require("passport");
 const { Server } = require("socket.io");
 const jwt = require("jsonwebtoken");
@@ -33,6 +35,7 @@ const notificationRoutes = require("./routes/Notification.js");
 const chatRoutes = require("./routes/chatRoutes.js");
 const medicineRoutes = require("./routes/medicineRoutes.js");
 const collaborateRoutes = require("./routes/collaborate");
+const assistantRoutes = require("./routes/assistant");
 const gamesRoutes = require("./routes/games");
 const contactRoutes = require("./routes/contactRoute.js");
 const { sendMessageToBackend } = require("./ChatService.js");
@@ -42,11 +45,20 @@ const User = require("./models/User.js");
 // APP + SERVER + SOCKET.IO
 // ------------------------------------------------
 const app = express();
+// Render / Vercel sit behind proxies — needed for correct IPs + secure cookies
+app.set("trust proxy", 1);
 const server = http.createServer(app);
+
+const socketOrigins = [
+  ...(process.env.CLIENT_ORIGIN || "http://localhost:3000").split(","),
+  ...(process.env.CLIENT_URL ? process.env.CLIENT_URL.split(",") : []),
+]
+  .map((s) => s.trim().replace(/\/$/, ""))
+  .filter(Boolean);
 
 const io = new Server(server, {
   cors: {
-    origin: process.env.CLIENT_ORIGIN || "https://neuralift-scyp.onrender.com",
+    origin: socketOrigins,
     credentials: true,
   },
 });
@@ -55,14 +67,28 @@ const io = new Server(server, {
 // MIDDLEWARE
 // ------------------------------------------------
 app.use(express.json());
+app.use(cookieParser());
+// Allow both CLIENT_ORIGIN (comma-separated) and CLIENT_URL so
+// Render backend accepts the Vercel frontend even if only one is set.
+const allowedOrigins = [
+  ...(process.env.CLIENT_ORIGIN || "http://localhost:3000").split(","),
+  ...(process.env.CLIENT_URL ? process.env.CLIENT_URL.split(",") : []),
+]
+  .map((s) => s.trim().replace(/\/$/, ""))
+  .filter(Boolean);
 app.use(
   cors({
-    origin: process.env.CLIENT_ORIGIN || "",
-    methods: ["GET", "POST", "PUT", "DELETE"],
+    origin: (origin, cb) => {
+      if (!origin || allowedOrigins.includes(origin)) return cb(null, true);
+      return cb(null, false);
+    },
+    methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
     credentials: true,
   })
 );
 app.use(passport.initialize());
+// Render free disks are ephemeral — ensure the folder exists so uploads never crash boot
+fs.mkdirSync(path.join(__dirname, "uploads"), { recursive: true });
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 // ------------------------------------------------
@@ -106,7 +132,7 @@ io.on("connection", (socket) => {
 app.set("io", io);
 
 // ------------------------------------------------
-// USER STREAK LOGIC
+// USER STREAK LOGIC (matches User model: streak.current / streak.longestStreak)
 // ------------------------------------------------
 app.post("/api/user/:id/update-streak", async (req, res) => {
   try {
@@ -115,7 +141,12 @@ app.post("/api/user/:id/update-streak", async (req, res) => {
     if (!user) return res.status(404).json({ msg: "User not found" });
 
     const today = new Date();
-    const lastLogin = user.lastLoginDate ? new Date(user.lastLoginDate) : null;
+    if (!user.streak) user.streak = { current: 0, longestStreak: 0 };
+    const lastLogin = user.streak.lastLoginDate
+      ? new Date(user.streak.lastLoginDate)
+      : user.lastLogin
+        ? new Date(user.lastLogin)
+        : null;
 
     const normalizeDate = (date) => {
       const d = new Date(date);
@@ -132,22 +163,25 @@ app.post("/api/user/:id/update-streak", async (req, res) => {
     }
 
     if (normalizedLast) {
-      if (diffInDays === 1) user.streak += 1;
-      else if (diffInDays > 1) user.streak = 1;
+      if (diffInDays === 1) user.streak.current += 1;
+      else if (diffInDays > 1) user.streak.current = 1;
+      // diffInDays === 0 → same day, keep streak
     } else {
-      user.streak = 1;
+      user.streak.current = 1;
     }
 
-    user.lastLoginDate = today;
-    if (!user.longestStreak || user.streak > user.longestStreak) user.longestStreak = user.streak;
+    user.streak.lastLoginDate = today;
+    user.lastLogin = today;
+    if (!user.streak.longestStreak || user.streak.current > user.streak.longestStreak)
+      user.streak.longestStreak = user.streak.current;
 
     await user.save();
 
     res.status(200).json({
       success: true,
-      streak: user.streak,
-      longestStreak: user.longestStreak,
-      lastLoginDate: user.lastLoginDate,
+      streak: user.streak.current,
+      longestStreak: user.streak.longestStreak,
+      lastLoginDate: user.streak.lastLoginDate,
     });
   } catch (err) {
     console.error("Error updating streak:", err);
@@ -156,17 +190,50 @@ app.post("/api/user/:id/update-streak", async (req, res) => {
 });
 
 // ------------------------------------------------
-// CHAT API
+// HEALTH CHECK (for Render / Docker)
+// ------------------------------------------------
+app.get("/health", (req, res) => {
+  res.json({
+    ok: true,
+    uptime: process.uptime(),
+    mongo: mongoose.connection.readyState === 1 ? "connected" : "disconnected",
+    time: new Date().toISOString(),
+  });
+});
+app.get("/api/health", (req, res) => {
+  res.json({
+    ok: true,
+    uptime: process.uptime(),
+    mongo: mongoose.connection.readyState === 1 ? "connected" : "disconnected",
+    time: new Date().toISOString(),
+  });
+});
+
+// ------------------------------------------------
+// CHAT API (Groq-first, OpenRouter/OpenAI fallback, local last)
+// Accepts {message,history} or {messages}
 // ------------------------------------------------
 app.post("/api/chat", async (req, res) => {
-  const { message, history } = req.body;
-  if (!message) return res.status(400).json({ error: "Message is required" });
+  const { message, history, messages } = req.body || {};
+  const rawLast = Array.isArray(messages) ? messages[messages.length - 1] : null;
+  const normalizedMessage =
+    message ||
+    (typeof rawLast === "string" ? rawLast : rawLast?.content || rawLast?.text || null);
+  const normalizedHistory = Array.isArray(history)
+    ? history
+    : Array.isArray(messages)
+      ? messages.slice(0, -1)
+      : [];
+  if (!normalizedMessage || !String(normalizedMessage).trim())
+    return res.status(400).json({ error: "Message is required" });
 
   try {
-    const aiResponse = await sendMessageToBackend(message, history);
-    res.json({ reply: aiResponse });
+    const result = await sendMessageToBackend(normalizedMessage, normalizedHistory);
+    // Back-compat: reply as string; new clients can use reply+source
+    if (typeof result === "string") return res.json({ reply: result, source: "legacy" });
+    return res.json({ reply: result.reply, source: result.source || "groq" });
   } catch (error) {
-    console.error("Chat error:", error);
+    console.error("Chat error:", error?.response?.data || error.message);
     res.status(500).json({ error: "Failed to fetch AI response" });
   }
 });
@@ -186,7 +253,9 @@ app.use("/api/quotes", quoteRoutes);
 app.use("/api/moods", moodRoutes);
 app.use("/api/notes", noteRoute);
 app.use("/api/notifications", notificationRoutes);
-app.use("/api/chat", chatRoutes);
+// OpenAI chat-history API (kept separate to avoid shadowing POST /api/chat above)
+app.use("/api/chat-history", chatRoutes);
+app.use("/api/assistant", assistantRoutes);
 app.use("/api/contact", contactRoutes);
 app.use("/api/tasks", tasksRouter);
 app.use("/api/admin/tasks", adminTaskRouter);
@@ -196,27 +265,64 @@ app.use("/api/medicines", medicineRoutes);
 app.use("/api/games", gamesRoutes);
 
 // ------------------------------------------------
-// Serve React Frontend
+// Serve React Frontend (only if build exists — API-only deploys skip this)
 // ------------------------------------------------
 const clientBuildPath = path.join(__dirname, "../frontend/build");
-app.use(express.static(clientBuildPath));
+const clientIndex = path.join(clientBuildPath, "index.html");
+if (fs.existsSync(clientIndex)) {
+  app.use(express.static(clientBuildPath));
 
-// Catch-all route for React frontend (fixed for Express 4/5)
-app.use((req, res) => {
-  res.sendFile(path.join(clientBuildPath, "index.html"));
+  // API 404 — must come before SPA fallback so /api/* never returns HTML
+  app.use("/api", (req, res) => {
+    res.status(404).json({ success: false, error: "API route not found" });
+  });
+
+  // SPA fallback for non-API GET routes only (Express 5 safe)
+  app.get(/^(?!\/api).*/, (req, res) => {
+    res.sendFile(clientIndex);
+  });
+} else {
+  console.warn("⚠️  Frontend build not found — serving API only.");
+  app.use("/api", (req, res) => {
+    res.status(404).json({ success: false, error: "API route not found" });
+  });
+}
+
+// Central error handler (must be last)
+app.use((err, req, res, _next) => {
+  console.error("Unhandled error:", err);
+  const status = err.status || err.statusCode || 500;
+  res.status(status).json({
+    success: false,
+    error: process.env.NODE_ENV === "production" ? "Server error" : err.message,
+  });
 });
 
 
 // ------------------------------------------------
 // DATABASE CONNECTION
+// (skipped when already connected — e.g. test harness
+//  connects to an in-memory server before requiring us)
 // ------------------------------------------------
-mongoose
-  .connect(process.env.MONGO_URI)
-  .then(() => console.log("✅ MongoDB connected"))
-  .catch((err) => console.error("❌ MongoDB connection error:", err));
+if (!process.env.MONGO_URI) {
+  console.error("❌ MONGO_URI is not set — set it in .env / Render env vars.");
+}
+if (!process.env.JWT_SECRET) {
+  console.error("❌ JWT_SECRET is not set — auth will fail. Set it in .env / Render env vars.");
+}
+if (process.env.MONGO_URI && mongoose.connection.readyState === 0) {
+  mongoose
+    .connect(process.env.MONGO_URI)
+    .then(() => console.log("✅ MongoDB connected"))
+    .catch((err) => console.error("❌ MongoDB connection error:", err.message));
+}
 
 // ------------------------------------------------
-// START SERVER
+// START SERVER (only when run directly, not when required)
 // ------------------------------------------------
 const PORT = process.env.PORT || 4000;
-server.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
+if (require.main === module) {
+  server.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
+}
+
+module.exports = app;

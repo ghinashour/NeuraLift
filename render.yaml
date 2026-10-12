@@ -1,0 +1,50 @@
+services:
+  - type: web
+    name: neuralift-backend
+    runtime: node
+    plan: free
+    branch: main
+    # Blueprint runs from repo root; backend lives in ./backend
+    rootDir: backend
+    buildCommand: npm install
+    startCommand: node index.js
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      # Render injects PORT automatically — do NOT hardcode it
+      - key: MONGO_URI
+        sync: false
+      - key: JWT_SECRET
+        sync: false
+      - key: JWT_REFRESH_SECRET
+        sync: false
+      # Frontend URL(s) on Vercel, comma-separated. BOTH are accepted by the API.
+      # Example: https://neuralift.vercel.app
+      - key: CLIENT_ORIGIN
+        sync: false
+      - key: CLIENT_URL
+        sync: false
+      - key: GROQ_API_KEY
+        sync: false
+      - key: GROQ_MODEL
+        value: llama-3.3-70b-versatile
+      - key: OPENAI_API_KEY
+        sync: false
+      - key: OPENROUTER_API_KEY
+        sync: false
+      - key: GOOGLE_CLIENT_ID
+        sync: false
+      - key: GOOGLE_CLIENT_SECRET
+        sync: false
+      # Must match Google console redirect, e.g. https://<backend>.onrender.com/api/auth/google/callback
+      - key: GOOGLE_CALLBACK_URL
+        sync: false
+      - key: MAIL_HOST
+        sync: false
+      - key: MAIL_PORT
+        sync: false
+      - key: MAIL_USER
+        sync: false
+      - key: MAIL_PASS
+        sync: false

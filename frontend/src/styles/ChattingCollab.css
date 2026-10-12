@@ -212,3 +212,10 @@
     transform: translateY(0);
   }
 }
+
+/* ===== DUSK THEME ===== */
+.chat-page { --ink: var(--dusk-text); --muted: var(--dusk-muted); --muted-2: var(--dusk-faint); --line: var(--dusk-border); --card: var(--dusk-glass); --cream: transparent; --lilac: var(--dusk-lilac); --lilac-soft: rgba(255,255,255,.14); --primary: #b79ced; --primary-dark: #9a7fe0; --primary-soft: rgba(255,255,255,.14); --field-border: rgba(255,255,255,.2); --shadow: 0 20px 60px rgba(10,4,25,.45); --shadow-sm: 0 8px 24px rgba(10,4,25,.4); color: var(--dusk-text); background: transparent; }
+.sidebar-container > *, .chat-container > *, .tasks-container > * { background: var(--dusk-glass); border: 1px solid var(--dusk-border); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); }
+.mobile-nav-header { background: linear-gradient(135deg, #2a1a3e 0%, #4d2a63 100%); }
+.loading-container, .error-container { color: var(--dusk-text); }
+.retry-btn:focus-visible, .back-btn:focus-visible, .mobile-tab:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }

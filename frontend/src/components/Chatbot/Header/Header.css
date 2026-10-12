@@ -1,31 +1,103 @@
-.chat-header {
-  padding: 20px 24px;
+.chat-header.nl-assistant-header {
+  padding: 14px 22px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background-color: white;
+  gap: 12px;
+  background: linear-gradient(135deg, #3D375C 0%, #2E2A44 65%, #232033 100%);
+  border-bottom: 1px solid rgba(217, 207, 240, .25);
+  color: #FFFEFB;
 }
 
-.header-left {
+.nl-assistant-header .header-left {
   display: flex;
   align-items: center;
   gap: 12px;
+  min-width: 0;
 }
 
-.header-text {
+.assistant-mark {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #EFE7F6, #D9CFF0);
+  border: 1px solid rgba(255, 255, 255, .5);
   display: flex;
-  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, .25);
 }
 
-.header-title {
+.nl-assistant-header .header-text { display: flex; flex-direction: column; min-width: 0; }
+
+.nl-assistant-header .header-title {
   margin: 0;
-  font-size: 18px;
+  font-family: var(--serif, Georgia, serif);
+  font-size: 20px;
   font-weight: 600;
-  color: #48a0f8;
+  color: #FFFEFB;
+  letter-spacing: -0.01em;
+  line-height: 1.2;
 }
 
-.header-subtitle {
-  margin: 0;
+.nl-assistant-header .header-subtitle {
+  margin: 3px 0 0;
+  font-size: 12.5px;
+  color: rgba(255, 254, 251, .72);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.online-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #9DB89E;
+  display: inline-block;
+  box-shadow: 0 0 0 3px rgba(157, 184, 158, .25);
+}
+
+.source-badge {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  background: rgba(255, 255, 255, .14);
+  color: #FFFEFB;
+  border: 1px solid rgba(255, 255, 255, .22);
+  border-radius: 999px;
+  padding: 2px 9px;
+}
+
+.nl-assistant-header .header-right { flex-shrink: 0; }
+
+.header-clear {
+  border: 1px solid rgba(255, 255, 255, .3);
+  background: rgba(255, 255, 255, .1);
+  color: #FFFEFB;
+  border-radius: 999px;
+  padding: 8px 16px;
   font-size: 13px;
-  color:#666;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background .15s ease, border-color .15s ease;
+  min-height: 36px;
+}
+.header-clear:hover {
+  background: rgba(255, 255, 255, .2);
+  border-color: rgba(255, 255, 255, .5);
+}
+.header-clear:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 2px;
+}
+
+@media (max-width: 540px) {
+  .chat-header.nl-assistant-header { padding: 12px 14px; }
+  .nl-assistant-header .header-title { font-size: 17px; }
+  .nl-assistant-header .header-subtitle { font-size: 11.5px; }
+  .header-clear { padding: 8px 12px; font-size: 12px; }
 }

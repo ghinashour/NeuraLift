@@ -1,15 +1,17 @@
 .timer-controls {
   display: flex;
-  gap: 0.8rem;
+  gap: 10px;
   justify-content: center;
-  margin-top: 1.5rem;
+  flex-wrap: wrap;
+  margin-top: 20px;
 }
 
 .timer-controls__main-button {
-  font-size: 1rem;
+  width: auto;
+  min-width: 170px;
 }
 
 .timer-controls__reset-button,
 .timer-controls__skip-button {
-  font-size: 0.9rem;
+  width: auto;
 }

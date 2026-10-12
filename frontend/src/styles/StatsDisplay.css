@@ -1,7 +1,7 @@
 .stats-display {
   display: flex;
   justify-content: space-around;
-  margin-top: 1.5rem;
+  margin-top: 4px;
 }
 
 .stats-display__item {
@@ -9,23 +9,53 @@
 }
 
 .stats-display__number {
-  font-size: 1.5rem;
+  font-family: var(--serif);
+  font-size: 30px;
   font-weight: 600;
 }
 
 .stats-display__number--blue {
-  color: #3b82f6;
+  color: var(--primary);
 }
 
 .stats-display__number--green {
-  color: #10b981;
+  color: var(--sage);
 }
 
 .stats-display__number--purple {
-  color: #8b5cf6;
+  color: var(--lilac);
 }
 
 .stats-display__label {
-  font-size: 0.85rem;
-  color: #6b7280;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted-2);
+  margin-top: 2px;
+}
+
+/* ===== DUSK THEME (opt-in only via data-theme="dusk") ===== */
+.stats-display[data-theme="dusk"] {
+  --ink: var(--dusk-text);
+  --muted: var(--dusk-muted);
+  --muted-2: var(--dusk-faint);
+  --line: var(--dusk-border);
+  --card: var(--dusk-glass);
+  --cream: transparent;
+  --lilac: var(--dusk-lilac);
+  --lilac-soft: rgba(255, 255, 255, .14);
+  --primary: #b79ced;
+  --primary-dark: #9a7fe0;
+  --primary-soft: rgba(255, 255, 255, .14);
+  --field-border: rgba(255, 255, 255, .2);
+  --sage: #a9c39e;
+  --shadow: 0 20px 60px rgba(10, 4, 25, .45);
+  --shadow-sm: 0 8px 24px rgba(10, 4, 25, .4);
+  color: var(--dusk-text);
+}
+
+.stats-display[data-theme="dusk"] :focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 2px;
 }

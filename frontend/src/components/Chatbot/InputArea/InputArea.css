@@ -1,114 +1,89 @@
-
-/* InputArea improvements: keep original design but enhance usability */
-.input-area {
-  padding: 12px 18px 16px 18px;
+.input-area.nl-input-area {
+  padding: 12px 20px 14px;
   width: 100%;
   box-sizing: border-box;
+  background: #FFFEFB;
 }
 
-.input-area .input-wrapper {
-  background: white;
-  border-radius: 24px;
+.nl-input-area .input-wrapper {
+  background: #fff;
+  border: 1.5px solid #E4D9C4;
+  border-radius: 18px;
   display: flex;
-  align-items: flex-end; /* align textarea baseline */
-  padding: 8px 10px 8px 16px;
+  align-items: flex-end;
+  padding: 8px 8px 8px 16px;
   gap: 10px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 4px 14px rgba(46, 42, 68, .06);
+  transition: border-color .15s ease, box-shadow .15s ease;
+}
+.nl-input-area .input-wrapper:focus-within {
+  border-color: #8E7FB8;
+  box-shadow: 0 0 0 3px rgba(142, 127, 184, .18);
 }
 
-.input-actions {
-  display: flex;
-  align-items: center;
-  gap: 8px;
+.chat-textarea {
+  flex: 1;
+  border: 0;
+  outline: 0;
+  resize: none;
+  font-size: 14.5px;
+  line-height: 1.5;
+  font-family: inherit;
+  color: #232033;
+  background: transparent;
+  min-height: 24px;
+  max-height: 140px;
+  padding: 8px 0;
+  overflow-y: auto;
 }
+.chat-textarea::placeholder { color: #9A94A8; }
+.chat-textarea:disabled { opacity: .6; }
 
-.icon-button {
-  background: none;
-  border: none;
-  padding: 10px; /* larger touch target */
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 10px;
-  transition: background 0.14s, transform 0.12s;
-}
-
-.icon-button:hover,
-.icon-button:focus {
-  background: rgba(0, 0, 0, 0.04);
-  transform: translateY(-1px);
-  outline: none;
-}
-
-.icon {
-  font-size: 18px;
-  color: #666;
-}
-
-.send-button {
-  background: #2E5AAC;
-  border: none;
-  border-radius: 12px;
+.nl-input-area .send-button {
+  background: linear-gradient(135deg, #3D375C, #2E2A44);
+  border: 0;
+  border-radius: 50%;
+  width: 44px;
+  height: 44px;
   min-width: 44px;
-  height: 40px;
-  padding: 8px 12px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  transition: transform 120ms ease, box-shadow 120ms ease;
-  box-shadow: 0 6px 16px rgba(46,90,172,0.12);
+  color: #FFFEFB;
+  transition: transform .15s ease, background .15s ease, box-shadow .15s ease;
+  box-shadow: 0 6px 16px rgba(46, 42, 68, .25);
 }
-
-.send-button:hover:not(:disabled) {
-  transform: translateY(-2px);
-  box-shadow: 0 10px 22px rgba(46,90,172,0.14);
+.nl-input-area .send-button:hover:not(:disabled) { transform: translateY(-1px) scale(1.04); }
+.nl-input-area .send-button:active:not(:disabled) { transform: translateY(0) scale(.97); }
+.nl-input-area .send-button:focus-visible {
+  outline: 2px solid #8E7FB8;
+  outline-offset: 2px;
 }
-
-.send-button:disabled {
-  background: #c6c9d1;
+.nl-input-area .send-button:disabled {
+  background: #D8D2C4;
+  color: #FFFEFB;
   cursor: not-allowed;
   box-shadow: none;
 }
+.nl-input-area .send-button svg { display: block; }
 
-.send-icon {
-  font-size: 14px;
-  color: white;
-}
-
-/* textarea behavior when Input is used as textarea: keep transparent background so wrapper controls appearance */
-.input-area .input-field.textarea-field {
-  width: 100%;
-  min-height: 44px;
-  max-height: 160px;
-  padding: 10px 12px;
-  resize: vertical;
-  line-height: 1.45;
-  overflow: auto;
-  border-radius: 12px;
-  border: none;
-  background: transparent;
-  font-size: 15px;
-}
-
-.input-area .input-field.textarea-field:focus {
-  outline: 3px solid rgba(59,130,246,0.12);
-  outline-offset: 2px;
-}
-
-/* small keyboard hint */
-.input-area .keyboard-hint {
-  font-size: 11px;
-  color: #94a3b8;
-  margin-left: 6px;
-  user-select: none;
+.input-hint {
+  margin: 8px 4px 0;
+  font-size: 11.5px;
+  color: #9A94A8;
 }
 
 @media (max-width: 540px) {
-  .input-area { padding: 8px 10px; }
-  .input-area .input-wrapper { padding: 6px 8px; gap: 6px; }
-  .icon-button { padding: 8px; }
-  .send-button { min-width: 40px; height: 36px; padding: 6px 10px; }
-  .input-area .input-field.textarea-field { min-height: 40px; max-height: 140px; }
+  .input-area.nl-input-area { padding: 10px 12px 12px; }
+}
+
+/* Coarse pointers: guaranteed 48px send target */
+@media (hover: none) and (pointer: coarse) {
+  .nl-input-area .send-button { width: 48px; height: 48px; min-width: 48px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nl-input-area .send-button,
+  .nl-input-area .input-wrapper { transition: none; }
 }

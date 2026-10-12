@@ -40,4 +40,4 @@ EXPOSE 4000
 
 # Start backend server
 WORKDIR /app/backend
-CMD ["node", "server.js"]
+CMD ["node", "index.js"]

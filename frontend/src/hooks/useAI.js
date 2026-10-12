@@ -1,59 +1,73 @@
 import { useState, useCallback } from 'react';
 
-const responses = {
-  "hello": "Hello! How can I assist you today?",
-  "hi": "Hi there! What can I help you with?",
-  "hey": "Hey! How can I help you?",
-  "help": "I'm here to help! You can ask me about wellness tips, mental health support, or general information about NeuraLift.",
-  "what is neuralift": "NeuraLift is your wellness companion, designed to support your mental health and well-being journey.",
-  "neuralift": "NeuraLift is dedicated to helping you maintain mental wellness through personalized support and guidance.",
-  "how are you": "I'm doing great, thank you for asking! How can I help you today?",
-  "thank you": "You're welcome! Feel free to ask if you need anything else.",
-  "thanks": "You're welcome! Happy to help!",
-  "bye": "Goodbye! Take care and come back anytime you need support.",
-  "goodbye": "Take care! I'm here whenever you need me.",
-  "wellness": "Wellness is about maintaining balance in your physical, mental, and emotional health. Would you like some tips?",
-  "mental health": "Mental health is just as important as physical health. I'm here to support you. What would you like to know?",
-  "stress": "Managing stress is important. Try deep breathing, meditation, or taking short breaks throughout your day.",
-  "anxiety": "Anxiety is common. Remember to breathe deeply, stay present, and reach out for professional help if needed.",
-  "sleep": "Good sleep is crucial for wellness. Try to maintain a regular sleep schedule and create a relaxing bedtime routine.",
-  "exercise": "Regular exercise can boost your mood and energy levels. Even a 10-minute walk can make a difference!",
-  "meditation": "Meditation can help reduce stress and improve focus. Start with just 5 minutes a day and build from there.",
+const RAW_BASE = (process.env.REACT_APP_API_URL || 'http://localhost:4000').replace(/\/$/, '');
+const API_BASE = RAW_BASE.endsWith('/api') ? RAW_BASE : `${RAW_BASE}/api`;
+
+const LOCAL_RESPONSES = {
+  hello: 'Hello! I\'m NeuraLift Assistant — powered by AI. How can I support you today?',
+  hi: 'Hi there! What can I help you with — focus, stress, sleep or planning?',
+  hey: 'Hey! How can I help you feel calmer and more focused?',
+  help: 'I can help with wellness tips, focus plans, stress relief, sleep habits, and using NeuraLift. What\'s on your mind?',
+  'what is neuralift': 'NeuraLift is your wellness companion — tasks, mood tracking, focus timer, stress relief and community support.',
+  neuralift: 'NeuraLift helps you stay calm and productive with tasks, mood insights, focus tools and community.',
+  'how are you': 'I\'m here and ready to help! How are you feeling today?',
+  'thank you': 'You\'re welcome! I\'m here whenever you need support.',
+  thanks: 'You\'re welcome! Happy to help!',
+  bye: 'Take care! I\'m here whenever you need a calm moment.',
+  goodbye: 'Goodbye for now — remember to breathe and be kind to yourself.',
+  wellness: 'Wellness is balance across mind, body and rest. Small daily habits beat big occasional efforts. Want a simple plan?',
+  'mental health': 'Your mental health matters. I can share coping tools, but I\'m not a replacement for professional support. What would help most right now?',
+  stress: 'For stress: try box breathing (in-4, hold-4, out-4, hold-4) for 2 minutes, then pick one tiny next step. Want a wind-down routine?',
+  anxiety: 'Anxiety is common. Ground yourself: 5-4-3-2-1 senses, slow exhales. If it persists, please reach out to a professional.',
+  sleep: 'Better sleep: fixed wake time, wind-down routine, no screens 30 min before bed, cool dark room.',
+  exercise: 'Movement boosts mood — even a 10-minute walk counts. What feels doable today?',
+  meditation: 'Start meditation with 5 slow breaths, noticing each inhale and exhale. A little daily goes a long way.',
+  focus: 'For focus: 25-min timer, one task, phone away. I can draft a focus session for you — just say the task.',
 };
+
+function getLocalResponse(input) {
+  const lower = (input || '').toLowerCase().trim();
+  if (!lower) return 'Please type a message so I can help.';
+  if (LOCAL_RESPONSES[lower]) return LOCAL_RESPONSES[lower];
+  for (const [k, v] of Object.entries(LOCAL_RESPONSES)) {
+    if (lower.includes(k)) return v;
+  }
+  return 'Got it — tell me a bit more and I\'ll help with focus, stress, sleep or planning.';
+}
 
 export const useAI = () => {
   const [isProcessing, setIsProcessing] = useState(false);
+  const [source, setSource] = useState(null);
 
-  const getResponse = useCallback((input) => {
-    const lowerInput = input.toLowerCase().trim();
-    
-    // Check for exact matches
-    if (responses[lowerInput]) {
-      return responses[lowerInput];
+  const processMessage = useCallback(async (message, history = []) => {
+    const clean = (message || '').trim();
+    if (!clean) return 'Please type a message so I can help.';
+    setIsProcessing(true);
+    try {
+      const token = localStorage.getItem('token');
+      const res = await fetch(`${API_BASE}/chat`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        },
+        body: JSON.stringify({ message: clean, history: Array.isArray(history) ? history.slice(-10) : [] }),
+      });
+      if (!res.ok) throw new Error(`chat ${res.status}`);
+      const data = await res.json();
+      const reply = data?.reply || data?.answer || '';
+      if (!reply) throw new Error('empty reply');
+      setSource(data?.source || 'api');
+      return reply;
+    } catch (e) {
+      // Offline / server down — local fallback so UI never breaks
+      setSource('local');
+      await new Promise((r) => setTimeout(r, 500));
+      return getLocalResponse(clean);
+    } finally {
+      setIsProcessing(false);
     }
-    
-    // Check for partial matches
-    for (const [key, value] of Object.entries(responses)) {
-      if (lowerInput.includes(key)) {
-        return value;
-      }
-    }
-    
-    // Default response
-    return "I'm still in development 🚧 Our team is working hard to expand my capabilities!";
   }, []);
 
-  const processMessage = useCallback(async (message) => {
-    setIsProcessing(true);
-    
-    // Simulate processing delay
-    await new Promise(resolve => setTimeout(resolve, 800));
-    
-    const response = getResponse(message);
-    setIsProcessing(false);
-    
-    return response;
-  }, [getResponse]);
-
-  return { processMessage, isProcessing };
+  return { processMessage, isProcessing, source, getLocalResponse };
 };

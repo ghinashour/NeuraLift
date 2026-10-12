@@ -1,8 +1,24 @@
 // src/pages/StressReliefSpace.jsx
 import React, { useState, useRef, useEffect } from "react";
 import "./StressReliefSpace.css";
-import { Brush, Eraser, PencilLine, Send, MessageSquare, Edit2, Trash2 } from "lucide-react";
+import { Brush, Eraser, Send, MessageSquare, Edit2, Trash2, FileText } from "lucide-react";
 import Ai from "../../components/AiLogo";
+
+const PALETTE = [
+  "#6757A3",
+  "#F1948A",
+  "#F5B97F",
+  "#E9C46A",
+  "#7FB069",
+  "#6FBFA8",
+  "#6FA8DC",
+  "#B39DDB",
+  "#F48FB1",
+  "#9AA0A6",
+];
+
+const CANVAS_BG = "#FFFFFF";
+const DEFAULT_COLOR = "#6757A3";
 
 const StressReliefSpace = () => {
   const canvasRef = useRef(null);
@@ -10,16 +26,24 @@ const StressReliefSpace = () => {
   const isDrawingRef = useRef(false);
 
   // Use refs for color/size to avoid reattaching event listeners on every change
-  const colorRef = useRef("#2563eb");
+  const colorRef = useRef(DEFAULT_COLOR);
   const sizeRef = useRef(3);
 
-  const [color, setColor] = useState("#2563eb");
+  const [color, setColor] = useState(DEFAULT_COLOR);
+  const [lastColor, setLastColor] = useState(DEFAULT_COLOR);
   const [size, setSize] = useState(3);
 
   const [thought, setThought] = useState("");
   const [thoughts, setThoughts] = useState([]);
   const [editingId, setEditingId] = useState(null);
   const [editingText, setEditingText] = useState("");
+
+  const isErasing = color === CANVAS_BG;
+
+  const pickColor = (c) => {
+    setColor(c);
+    if (c !== CANVAS_BG) setLastColor(c);
+  };
 
   // keep refs in sync with state
   useEffect(() => {
@@ -167,64 +191,82 @@ const StressReliefSpace = () => {
   };
 
   return (
-    <div className="stressPage-container">
-      <h1 className="stressPage-title">
-        <PencilLine size={24} />
-        Stress Relief Space
-      </h1>
+    <div className="nl-page">
+      <div className="nl-hero">
+        <div className="nl-hero-copy">
+          <p className="nl-eyebrow">Stress Relief Space</p>
+          <h1 className="nl-title">
+            A calmer mind,
+            <br />a <em>brighter</em> you.
+          </h1>
+          <p className="nl-lede">
+            Express yourself through art and release negative thoughts. Take a moment for
+            yourself — there&apos;s no right or wrong, just a space to feel lighter.
+          </p>
+        </div>
+        <p className="nl-hero-quote">“A quiet moment can change your whole day.”</p>
+      </div>
 
-      <p className="stressPage-subtitle">Express yourself through art and release negative thoughts</p>
-
-      <div className="stressPage-content">
+      <div className="nl-grid-2">
         {/* Canvas Section */}
-        <div className="stressPage-section">
-          <div className="stressPage-header">
-            <Brush size={25} />
-            <h2>Creative Canvas</h2>
+        <section className="nl-card" aria-label="Creative canvas">
+          <div className="nl-card-head">
+            <span className="nl-chip">
+              <Brush size={22} />
+            </span>
+            <div>
+              <h2 className="nl-card-title">Creative Canvas</h2>
+              <p className="nl-card-sub">Let your creativity flow. Draw, doodle, or paint whatever comes to mind.</p>
+            </div>
           </div>
 
-          <div className="stressPage-tools">
-            <button className="tool-btn active">Brush</button>
-
-            <button
-              className="tool-btn"
-              onClick={() => {
-                // Eraser sets color to canvas background color
-                setColor("#f8fafc");
-              }}
-            >
-              <Eraser size={14} />
+          <div className="stress-toolbar">
+            <button className={`btn-soft${!isErasing ? " on" : ""}`} onClick={() => pickColor(lastColor)}>
+              <Brush size={15} />
+              Brush
             </button>
-
-            <label className="size-label">
+            <button className={`btn-soft${isErasing ? " on" : ""}`} onClick={() => setColor(CANVAS_BG)}>
+              <Eraser size={15} />
+              Eraser
+            </button>
+            <span className="stress-size">
               Size:
-              <input type="number" value={size} onChange={(e) => setSize(Number(e.target.value))} min="1" max="50" />
+              <input
+                type="number"
+                className="nl-input stress-size-input"
+                value={size}
+                onChange={(e) => setSize(Number(e.target.value))}
+                min="1"
+                max="50"
+                aria-label="Brush size in pixels"
+              />
               px
-            </label>
+            </span>
           </div>
 
-          <div className="color-palette">
-            {[
-              "#2563eb",
-              "#f87171",
-              "#fb923c",
-              "#facc15",
-              "#4ade80",
-              "#2dd4bf",
-              "#38bdf8",
-              "#a78bfa",
-              "#f472b6",
-              "#94a3b8",
-            ].map((c) => (
-              <div key={c} className={`color-circle ${color === c ? "active" : ""}`} style={{ background: c }} onClick={() => setColor(c)} />
+          <div className="stress-palette" role="radiogroup" aria-label="Brush colors">
+            {PALETTE.map((c) => (
+              <button
+                key={c}
+                type="button"
+                role="radio"
+                aria-checked={color === c}
+                aria-label={`Color ${c}`}
+                className={`stress-dot${color === c ? " active" : ""}`}
+                style={{ background: c }}
+                onClick={() => pickColor(c)}
+              />
             ))}
           </div>
 
-          <canvas ref={canvasRef} className="stressPage-canvas" />
+          <canvas ref={canvasRef} className="stress-canvas" />
 
-          <div className="stressPage-actions">
-            <button onClick={clearCanvas}>Clear</button>
+          <div className="stress-actions">
+            <button className="btn-outline" onClick={clearCanvas}>
+              Clear
+            </button>
             <button
+              className="btn-primary stress-save"
               onClick={() => {
                 const canvas = canvasRef.current;
                 if (!canvas) return;
@@ -234,49 +276,77 @@ const StressReliefSpace = () => {
                 link.click();
               }}
             >
-              Save Art
+              Save Artwork
             </button>
           </div>
-        </div>
+        </section>
 
         {/* Thoughts Section */}
-        <div className="stressPage-section">
-          <div className="stressPage-header">
-            <MessageSquare size={23} />
-            <h2>Release Your Thoughts</h2>
+        <section className="nl-card" aria-label="Release your thoughts">
+          <div className="nl-card-head">
+            <span className="nl-chip">
+              <MessageSquare size={22} />
+            </span>
+            <div>
+              <h2 className="nl-card-title">Release Your Thoughts</h2>
+              <p className="nl-card-sub">
+                Write down any negative thoughts, worries, or stress. Once written, you can choose to release them.
+              </p>
+            </div>
           </div>
 
-          <p className="section-subtext">Write down any negative thoughts, worries, or stress. Once written, you can choose to release them.</p>
+          <textarea
+            placeholder="What's weighing on your mind? Write it all out..."
+            value={thought}
+            onChange={(e) => setThought(e.target.value)}
+            className="nl-textarea"
+            aria-label="Write down your thoughts"
+          />
 
-          <textarea placeholder="💭 What's weighing on your mind? Write it all out..." value={thought} onChange={(e) => setThought(e.target.value)} className="thought-input" />
-
-          <button className="capture-btn" onClick={addThought}>
+          <button className="btn-primary stress-capture" onClick={addThought}>
             <Send size={16} />
-            <span style={{ marginLeft: 8 }}>Capture This Thought</span>
+            Capture This Thought
           </button>
+
+          <hr className="nl-divider" />
+          <p className="nl-section-label">Recent Thoughts</p>
 
           <div className="thought-list">
             {thoughts.length === 0 ? (
-              <p className="no-thoughts">
-                <MessageSquare size={18} />
-                <span style={{ marginLeft: 8 }}>No thoughts captured yet</span>
-              </p>
+              <div className="nl-empty">
+                <span className="nl-chip nl-chip-sm">
+                  <FileText size={18} />
+                </span>
+                <p>
+                  <strong>No thoughts captured yet.</strong>
+                  Your thoughts will appear here when you capture them.
+                </p>
+              </div>
             ) : (
               thoughts.map((t) => (
                 <div key={t.id} className="thought-item">
                   {editingId === t.id ? (
-                    <>
-                      <input value={editingText} onChange={(e) => setEditingText(e.target.value)} className="thought-edit-input" />
-                      <button className="save-btn" onClick={() => saveEdit(t.id)}>
+                    <div className="thought-edit">
+                      <input
+                        value={editingText}
+                        onChange={(e) => setEditingText(e.target.value)}
+                        className="nl-input"
+                        aria-label="Edit thought"
+                      />
+                      <button className="btn-soft on" onClick={() => saveEdit(t.id)}>
                         Save
                       </button>
-                    </>
+                    </div>
                   ) : (
                     <>
-                      <span>{t.text}</span>
+                      <span className="thought-text">{t.text}</span>
                       <div className="thought-actions">
-                        <Edit2 size={16} onClick={() => startEdit(t.id, t.text)} />
-                        <Trash2 size={16} onClick={() => deleteThought(t.id)} />
+                        <button className="icon-btn" onClick={() => startEdit(t.id, t.text)} aria-label="Edit thought">
+                          <Edit2 size={16} />
+                        </button>
+                        <button className="icon-btn danger" onClick={() => deleteThought(t.id)} aria-label="Release thought">
+                          <Trash2 size={16} />
+                        </button>
                       </div>
                     </>
                   )}
@@ -284,7 +354,7 @@ const StressReliefSpace = () => {
               ))
             )}
           </div>
-        </div>
+        </section>
       </div>
 
       {/* Floating AI Button */}

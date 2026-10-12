@@ -35,7 +35,7 @@ function Profile() {
       icon,
       title,
       text,
-      confirmButtonColor: "#3085d6",
+      confirmButtonColor: "#6757A3",
     });
   }, []);
 
@@ -87,7 +87,7 @@ function Profile() {
       });
 
       await fetchUserData();
-      showAlert("success", "Profile Updated ✅", "Your profile has been saved.");
+      showAlert("success", "Profile Updated", "Your profile has been saved.");
     } catch (err) {
       showAlert(
         "error",
@@ -106,7 +106,7 @@ function Profile() {
 
       showAlert(
         "success",
-        "Password Updated ✅",
+        "Password Updated",
         "Your password has been changed."
       );
       setPasswords({ currentPassword: "", newPassword: "" });
@@ -124,8 +124,8 @@ function Profile() {
       title: "Are you sure you want to log out?",
       icon: "warning",
       showCancelButton: true,
-      confirmButtonColor: "#d33",
-      cancelButtonColor: "#3085d6",
+      confirmButtonColor: "#a94444",
+      cancelButtonColor: "#6757A3",
       confirmButtonText: "Yes, log out",
     }).then((result) => {
       if (result.isConfirmed) {
@@ -138,27 +138,37 @@ function Profile() {
 
   if (loading)
     return (
-      <div className="profile-wrapper">
-        <div className="profile-card">
-          <p>Loading profile...</p>
+      <div className="nl-page profile-page">
+        <div className="nl-card profile-card">
+          <p className="profile-status">Loading profile...</p>
         </div>
       </div>
     );
 
   if (!user)
     return (
-      <div className="profile-wrapper">
-        <div className="profile-card">
-          <p>Please log in to view your profile.</p>
+      <div className="nl-page profile-page">
+        <div className="nl-card profile-card">
+          <p className="profile-status">Please log in to view your profile.</p>
         </div>
       </div>
     );
 
   return (
-    <div className="profile-wrapper">
-      <div className="profile-card">
-        <h2>Profile</h2>
+    <div className="nl-page profile-page">
+      <div className="nl-hero profile-hero">
+        <div className="nl-hero-copy">
+          <p className="nl-eyebrow">Settings</p>
+          <h1 className="nl-title">
+            Your <em>space</em>, your rules.
+          </h1>
+          <p className="nl-lede">
+            Keep your profile fresh and your account secure — all in one calm place.
+          </p>
+        </div>
+      </div>
 
+      <div className="nl-card profile-card">
         {/* ✅ Profile Photo */}
         <div style={{ display: "flex", justifyContent: "center" }}>
           <div className="profile-photo-container">
@@ -194,6 +204,7 @@ function Profile() {
               onChange={(e) => setPhoto(e.target.files[0])}
               className="profile-photo-input"
               id="profile-photo-input"
+              aria-label="Change profile photo"
             />
             <label
               htmlFor="profile-photo-input"

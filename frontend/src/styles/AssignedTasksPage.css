@@ -533,3 +533,85 @@
     opacity: 1 !important;
   }
 }
+
+/* ===== DUSK THEME ===== */
+.assigned-tasks-page {
+  --ink: var(--dusk-text); --muted: var(--dusk-muted); --muted-2: var(--dusk-faint); --line: var(--dusk-border); --card: var(--dusk-glass); --cream: transparent; --lilac: var(--dusk-lilac); --lilac-soft: rgba(255,255,255,.14); --primary: #b79ced; --primary-dark: #9a7fe0; --primary-soft: rgba(255,255,255,.14); --field-border: rgba(255,255,255,.2); --shadow: 0 20px 60px rgba(10,4,25,.45); --shadow-sm: 0 8px 24px rgba(10,4,25,.4); color: var(--dusk-text);
+  background: transparent;
+}
+.assigned-tasks-container {
+  background: var(--dusk-glass);
+  border: 1px solid var(--dusk-border);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  color: var(--dusk-text);
+}
+.assigned-tasks-header {
+  background: rgba(255,255,255,.06);
+  color: var(--dusk-text);
+}
+.assigned-tasks-header h1 {
+  color: var(--dusk-text);
+}
+.assigned-tasks-header p {
+  color: var(--dusk-muted);
+}
+.assigned-tasks-task-card {
+  background: var(--dusk-glass);
+  border-color: var(--dusk-border);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  color: var(--dusk-text);
+}
+.assigned-tasks-task-title {
+  color: var(--dusk-text);
+}
+.assigned-tasks-task-card:hover .assigned-tasks-task-title {
+  color: #fff;
+}
+.assigned-tasks-task-description {
+  color: var(--dusk-muted);
+}
+.assigned-tasks-task-card:hover .assigned-tasks-task-description {
+  color: var(--dusk-text);
+}
+.assigned-tasks-meta-item strong {
+  color: var(--dusk-text);
+}
+.assigned-tasks-meta-item span {
+  color: var(--dusk-text);
+}
+.assigned-tasks-task-meta span:not(.assignee-info span) {
+  color: var(--dusk-muted);
+}
+.assignee-info span {
+  color: var(--dusk-text);
+}
+.no-tasks {
+  background: var(--dusk-glass);
+  border-color: var(--dusk-border);
+  color: var(--dusk-muted);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+.no-tasks p {
+  color: var(--dusk-muted);
+}
+.assigned-tasks-task-footer {
+  border-top: 1px solid var(--dusk-border);
+}
+.assigned-tasks-task-date {
+  color: var(--dusk-faint);
+}
+.assigned-tasks-page input, .assigned-tasks-page textarea, .assigned-tasks-page select {
+  background: rgba(255,255,255,.08);
+  color: var(--dusk-text);
+  border-color: rgba(255,255,255,.2);
+}
+.assigned-tasks-page input::placeholder, .assigned-tasks-page textarea::placeholder {
+  color: var(--dusk-faint);
+}
+.assigned-tasks-page :focus-visible, .btn-edit:focus-visible, .btn-delete:focus-visible, .retry-btn:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 2px;
+}

@@ -1,5 +1,5 @@
 import React from 'react';
-import Button from './Button';
+import { Play, Pause, RotateCcw, SkipForward } from 'lucide-react';
 import '../styles/TimerControls.css';
 
 const TimerControls = ({ onStart, onPause, onReset, onSkip, isActive, status }) => {
@@ -9,36 +9,38 @@ const TimerControls = ({ onStart, onPause, onReset, onSkip, isActive, status }) 
   };
 
   const getMainButtonText = () => {
-    if (isActive) return ' ⏸Pause';
-    if (status === 'Ready') return '▶ Start';
-    return '▶ Resume';
+    if (isActive) return 'Pause';
+    if (status === 'Ready') return 'Start';
+    return 'Resume';
   };
 
   return (
     <div className="timer-controls">
-      <Button
+      <button
         onClick={handleMainButton}
-        variant="primary"
-        className="timer-controls__main-button"
+        className="btn-primary timer-controls__main-button"
       >
-         {getMainButtonText()}
-      </Button>
+        {isActive ? <Pause size={16} /> : <Play size={16} />}
+        {getMainButtonText()}
+      </button>
 
-      <Button
+      <button
         onClick={onReset}
-        variant="secondary"
-        className="timer-controls__reset-button"
+        className="btn-outline timer-controls__reset-button"
+        aria-label="Reset timer"
       >
-        ↻ Reset
-      </Button>
+        <RotateCcw size={15} />
+        Reset
+      </button>
 
-      <Button
+      <button
         onClick={onSkip}
-        variant="secondary"
-        className="timer-controls__skip-button"
+        className="btn-outline timer-controls__skip-button"
+        aria-label="Skip session"
       >
-        ⏭ Skip
-      </Button>
+        <SkipForward size={15} />
+        Skip
+      </button>
     </div>
   );
 };

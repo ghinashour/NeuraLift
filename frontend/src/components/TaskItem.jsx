@@ -7,14 +7,14 @@ const TaskItem = ({ task, onToggleComplete, onEdit, onDelete }) => {
 
     const getTagColor = (tag) => {
         const colors = {
-            high: '#EF4343',
-            medium: '#16A249',
-            low: '#3C83F6',
-            urgent: '#7C3BED',
-            personal: '#F59E0B',
-            work: '#10B981'
+            high: '#C05B5B',
+            medium: '#7A8B6F',
+            low: '#6757A3',
+            urgent: '#8E7FB8',
+            personal: '#C99A5B',
+            work: '#5F8F7B'
         };
-        return colors[tag] || '#626A84';
+        return colors[tag] || '#9A94A8';
     };
 
     const formatDate = (dateString) => {

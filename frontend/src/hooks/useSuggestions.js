@@ -2,10 +2,10 @@ import { useMemo } from 'react';
 
 export const useSuggestions = () => {
   const suggestions = useMemo(() => [
-    "What is NeuraLift?",
-    "Wellness tips",
-    "Help me with stress",
-    "Mental health support"
+    'Help me focus for 25 minutes',
+    'I feel stressed — quick reset?',
+    'Better sleep habits?',
+    'Plan my day calmly',
   ], []);
 
   return { suggestions };

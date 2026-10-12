@@ -20,15 +20,15 @@ const TimerDisplay = ({ time, status, mode, isActive }) => {
   const strokeDashoffset = circumference - (progress / 100) * circumference;
 
   const getStatusColor = () => {
-    if (status === 'Focusing') return '#10b981';
-    if (status === 'Break') return '#f59e0b';
-    return '#64748b';
+    if (status === 'Focusing') return '#5F7355';
+    if (status === 'Break') return '#9A6B2E';
+    return '#6757A3';
   };
 
   const getStatusBackground = () => {
-    if (status === 'Focusing') return '#d1fae5';
-    if (status === 'Break') return '#fef3c7';
-    return '#f1f5f9';
+    if (status === 'Focusing') return '#E6EBE0';
+    if (status === 'Break') return '#F5E8CF';
+    return '#EFEAF7';
   };
 
   return (
@@ -47,7 +47,7 @@ const TimerDisplay = ({ time, status, mode, isActive }) => {
       </div>
 
       <div className="timer-display__circle-container">
-        <svg className="timer-display__circle" width="200" height="200">
+        <svg className="timer-display__circle" width="200" height="200" viewBox="0 0 200 200">
           <circle
             className="timer-display__background"
             cx="100"

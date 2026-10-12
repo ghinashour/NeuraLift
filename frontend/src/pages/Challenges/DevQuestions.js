@@ -40,7 +40,7 @@ function DevQuestions() {
         icon: 'success',
         title: '🎉 Congratulations!',
         text: 'You scored 10 points!',
-        confirmButtonColor: '#3C83F6'
+        confirmButtonColor: '#2E2A44'
       });
       setScore(0);
       setCurrentIndex(0);

@@ -23,9 +23,11 @@ export const SocketProvider = ({ children }) => {
     console.log("🔗 Connecting socket for user:", user?._id);
 
     // ✅ Connect to backend with token authentication
-    const newSocket = io("http://localhost:4000", {
+    const SOCKET_URL = (process.env.REACT_APP_API_URL || "http://localhost:4000").replace(/\/api\/?$/, "").replace(/\/$/, "");
+    const newSocket = io(SOCKET_URL, {
       auth: { token },
-      transports: ["websocket"],
+      // polling first: reliable behind Render/Vercel proxies, upgrades to websocket
+      transports: ["polling", "websocket"],
       reconnection: true,
       reconnectionAttempts: 5,
       reconnectionDelay: 3000,

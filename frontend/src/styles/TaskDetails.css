@@ -53,3 +53,35 @@
     border: none;
     cursor: pointer;
 }
+
+/* ===== DUSK THEME ===== */
+.task-details {
+  --ink: var(--dusk-text); --muted: var(--dusk-muted); --muted-2: var(--dusk-faint); --line: var(--dusk-border); --card: var(--dusk-glass); --cream: transparent; --lilac: var(--dusk-lilac); --lilac-soft: rgba(255,255,255,.14); --primary: #b79ced; --primary-dark: #9a7fe0; --primary-soft: rgba(255,255,255,.14); --field-border: rgba(255,255,255,.2); --shadow: 0 20px 60px rgba(10,4,25,.45); --shadow-sm: 0 8px 24px rgba(10,4,25,.4); color: var(--dusk-text);
+  background: transparent;
+}
+.task-body {
+  background: var(--dusk-glass);
+  border: 1px solid var(--dusk-border);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  color: var(--dusk-text);
+}
+.start-task-btn {
+  background: var(--dusk-pill);
+  border: 1px solid rgba(255,255,255,.25);
+  color: #fff;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+.task-details input, .task-details textarea, .task-details select {
+  background: rgba(255,255,255,.08);
+  color: var(--dusk-text);
+  border-color: rgba(255,255,255,.2);
+}
+.task-details input::placeholder, .task-details textarea::placeholder {
+  color: var(--dusk-faint);
+}
+.task-details :focus-visible, .start-task-btn:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 2px;
+}

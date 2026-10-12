@@ -4,10 +4,10 @@ const ChatContext = createContext();
 
 export const ChatProvider = ({ children }) => {
   const [messages, setMessages] = useState([
-    { 
-      id: Date.now(), 
-      sender: "bot", 
-      text: "Welcome to NeuraLift! How can I help you today?",
+    {
+      id: Date.now(),
+      sender: "bot",
+      text: "Welcome to NeuraLift Assistant! Ask me for focus plans, stress resets, sleep tips, or help using the app.",
       timestamp: new Date()
     }
   ]);
@@ -24,10 +24,10 @@ export const ChatProvider = ({ children }) => {
 
   const clearMessages = useCallback(() => {
     setMessages([
-      { 
-        id: Date.now(), 
-        sender: "bot", 
-        text: "Welcome to NeuraLift! How can I help you today?",
+      {
+        id: Date.now(),
+        sender: "bot",
+        text: "New conversation started. What would you like help with today?",
         timestamp: new Date()
       }
     ]);

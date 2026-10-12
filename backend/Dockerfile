@@ -12,8 +12,8 @@ WORKDIR /app
 # Copy package.json and package-lock.json first
 COPY package*.json ./
 
-# Install runtime dependencies only (production)
-RUN npm install --production
+# Install runtime dependencies only (production, reproducible)
+RUN npm ci --omit=dev
 
 # Copy the rest of the backend files
 COPY . .

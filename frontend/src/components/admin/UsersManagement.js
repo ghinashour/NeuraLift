@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
-import axios from "axios";
+import { AdminAPI } from "../../api/axios";
 import { AdminAuthContext } from "../../context/AdminAuthContext";
 import Swal from 'sweetalert2';
 
@@ -32,7 +32,7 @@ function UsersManagement() {
         ...(statusFilter !== "all" && { status: statusFilter })
       });
 
-      const res = await axios.get(`http://localhost:4000/api/admin/users?${params}`, {
+      const res = await AdminAPI.get(`/users?${params}`, {
         headers: getAuthHeader()
       });
 
@@ -61,7 +61,7 @@ function UsersManagement() {
     setActionLoading(userId); // Set loading for this specific user
 
     try {
-      const res = await axios.post(`http://localhost:4000/api/admin/users/${userId}/suspend`,
+      const res = await AdminAPI.post(`/users/${userId}/suspend`,
         { reason: "Suspended by admin" },
         { headers: getAuthHeader() }
       );
@@ -98,7 +98,7 @@ function UsersManagement() {
     setActionLoading(userId);
 
     try {
-      const res = await axios.post(`http://localhost:4000/api/admin/users/${userId}/unsuspend`,
+      const res = await AdminAPI.post(`/users/${userId}/unsuspend`,
         {},
         { headers: getAuthHeader() }
       );
@@ -143,7 +143,7 @@ function UsersManagement() {
     setActionLoading(userId);
 
     try {
-      const res = await axios.post(`http://localhost:4000/api/admin/users/${userId}/reset-password`,
+      const res = await AdminAPI.post(`/users/${userId}/reset-password`,
         {},
         { headers: getAuthHeader() }
       );
@@ -181,7 +181,7 @@ function UsersManagement() {
     setActionLoading(selectedUser._id);
 
     try {
-      const res = await axios.put(`http://localhost:4000/api/admin/users/${selectedUser._id}`,
+      const res = await AdminAPI.put(`/users/${selectedUser._id}`,
         editForm,
         { headers: getAuthHeader() }
       );

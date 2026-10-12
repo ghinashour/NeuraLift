@@ -596,3 +596,48 @@
     padding: 16px 20px;
   }
 }
+
+/* ===== DUSK THEME ===== */
+.chat-area { --ink: var(--dusk-text); --muted: var(--dusk-muted); --muted-2: var(--dusk-faint); --line: var(--dusk-border); --card: var(--dusk-glass); --cream: transparent; --lilac: var(--dusk-lilac); --lilac-soft: rgba(255,255,255,.14); --primary: #b79ced; --primary-dark: #9a7fe0; --primary-soft: rgba(255,255,255,.14); --field-border: rgba(255,255,255,.2); --shadow: 0 20px 60px rgba(10,4,25,.45); --shadow-sm: 0 8px 24px rgba(10,4,25,.4); color: var(--dusk-text); background: transparent; }
+.chat-header { background: var(--dusk-glass); border-bottom-color: var(--dusk-border); box-shadow: none; backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); }
+.back-btn.mobile-only { color: var(--dusk-muted); }
+.group-avatar { background: linear-gradient(135deg, #b79ced 0%, #9a7fe0 100%); }
+.group-info h3 { color: var(--dusk-text); }
+.group-info p { color: var(--dusk-muted); }
+.header-btn { background: rgba(255,255,255,.08); border-color: var(--dusk-border); color: var(--dusk-text); }
+.header-btn:hover { background: rgba(255,255,255,.14); }
+.leave-btn { border-color: var(--dusk-border); color: var(--dusk-text); }
+.leave-btn:hover { background: rgba(255,255,255,.14); border-color: rgba(255,255,255,.25); }
+.messages-container { background: transparent; }
+.messages { background: transparent; }
+.date-divider::before { background: rgba(255,255,255,.14); }
+.date-divider span { background: var(--dusk-glass); border-color: var(--dusk-border); color: var(--dusk-muted); }
+.system-message .message-content { background: rgba(255,255,255,.08); border-color: var(--dusk-border); color: var(--dusk-muted); }
+.message-avatar { background: linear-gradient(135deg, #b79ced 0%, #9a7fe0 100%); }
+.message-sender { color: var(--dusk-text); }
+.message-time { color: var(--dusk-faint); }
+.message-bubble { background: rgba(255,255,255,.1); border-color: var(--dusk-border); color: var(--dusk-text); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); }
+.message.mine .message-bubble, .message.mine .bubble-mine, .bubble-mine { background: rgba(183,156,237,.35); border: 1px solid rgba(183,156,237,.45); color: #fff; backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); }
+.message-text { color: inherit; }
+.their .read-receipt { color: var(--dusk-faint); }
+.no-group-selected, .no-messages { color: var(--dusk-muted); }
+.no-group-selected h3, .no-messages h4 { color: var(--dusk-text); }
+.browse-groups-btn { background: var(--dusk-pill); border: 1px solid rgba(255,255,255,.25); color: #fff; }
+.typing-indicator { color: var(--dusk-muted); }
+.typing-text { color: var(--dusk-muted); }
+.typing-dots span { background: rgba(255,255,255,.5); }
+.message-input-form { background: var(--dusk-glass); border-top-color: var(--dusk-border); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); }
+.attach-btn { background: rgba(255,255,255,.08); border-color: var(--dusk-border); color: var(--dusk-text); }
+.attach-btn:hover { background: rgba(255,255,255,.14); }
+.message-textarea { background: rgba(255,255,255,.08); border-color: rgba(255,255,255,.2); color: var(--dusk-text); }
+.message-textarea::placeholder { color: var(--dusk-faint); }
+.message-textarea:focus { border-color: var(--dusk-lilac); background: rgba(255,255,255,.12); box-shadow: 0 0 0 3px rgba(201,184,236,.22); }
+.message-textarea:disabled { background: rgba(255,255,255,.04); color: var(--dusk-faint); }
+.send-btn { background: var(--dusk-pill); border: 1px solid rgba(255,255,255,.25); color: #fff; }
+.send-btn:disabled { background: rgba(255,255,255,.12); color: var(--dusk-faint); }
+.char-count { color: var(--dusk-faint); }
+.loading-container { color: var(--dusk-muted); }
+.messages-container::-webkit-scrollbar-track { background: rgba(255,255,255,.06); }
+.messages-container::-webkit-scrollbar-thumb { background: rgba(255,255,255,.25); }
+.messages-container::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,.35); }
+.header-btn:focus-visible, .leave-btn:focus-visible, .attach-btn:focus-visible, .send-btn:focus-visible, .browse-groups-btn:focus-visible, .back-btn.mobile-only:focus-visible, .message-textarea:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }

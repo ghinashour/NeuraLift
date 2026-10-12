@@ -22,8 +22,8 @@
 }
 
 .tag-option.active {
-    background: #3c83f6;
-    border-color: #3c83f6;
+    background: #2e2a44;
+    border-color: #2e2a44;
     color: white;
 }
 
@@ -53,4 +53,36 @@
         font-size: 12px;
         min-height: 32px;
     }
+}
+
+/* ===== DUSK THEME ===== */
+.tag-selector {
+  --ink: var(--dusk-text); --muted: var(--dusk-muted); --muted-2: var(--dusk-faint); --line: var(--dusk-border); --card: var(--dusk-glass); --cream: transparent; --lilac: var(--dusk-lilac); --lilac-soft: rgba(255,255,255,.14); --primary: #b79ced; --primary-dark: #9a7fe0; --primary-soft: rgba(255,255,255,.14); --field-border: rgba(255,255,255,.2); --shadow: 0 20px 60px rgba(10,4,25,.45); --shadow-sm: 0 8px 24px rgba(10,4,25,.4); color: var(--dusk-text);
+}
+.tag-option {
+  background: rgba(255,255,255,.08);
+  border-color: rgba(255,255,255,.2);
+  color: var(--dusk-muted);
+}
+.tag-option:hover {
+  background: rgba(255,255,255,.14);
+  border-color: rgba(255,255,255,.3);
+  color: #fff;
+}
+.tag-option.active {
+  background: var(--dusk-pill);
+  border-color: rgba(255,255,255,.3);
+  color: #fff;
+}
+.tag-selector input, .tag-selector textarea, .tag-selector select {
+  background: rgba(255,255,255,.08);
+  color: var(--dusk-text);
+  border-color: rgba(255,255,255,.2);
+}
+.tag-selector input::placeholder, .tag-selector textarea::placeholder {
+  color: var(--dusk-faint);
+}
+.tag-selector :focus-visible, .tag-option:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 2px;
 }

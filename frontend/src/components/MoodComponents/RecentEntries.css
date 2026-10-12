@@ -1,59 +1,143 @@
-.recent-entries {
-  background-color: #f9fafb;
-  padding: 1rem;
-  border-radius: 10px;
+/* RecentEntries — calm editorial theme (scoped to mood page) */
+
+.mood-page .recent-entries {
+  width: 100%;
 }
 
-.mood-entry-item {
-  background: white;
-  border: 1px solid #f1f1f1;
-  border-radius: 12px;
-  padding: 16px;
-  margin-bottom: 12px;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.06);
-  transition: all 0.2s ease-in-out;
+.mood-page .recent-entries.loading p,
+.mood-page .recent-entries.empty p,
+.mood-page .recent-entries.error p {
+  text-align: center;
+  color: var(--muted);
+  font-size: 14px;
+  padding: 20px 0;
+  margin: 0;
 }
 
-.mood-entry-item:hover {
-  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+.mood-page .mood-entry-item {
+  background: #f8f4ec;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 14px 16px;
+  margin-bottom: 10px;
 }
 
-.mood-entry-header {
+.mood-page .mood-entry-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 8px;
 }
 
-.mood-entry-date {
-  font-size: 0.9rem;
-  color: #6b7280;
+.mood-page .mood-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
 }
 
-.mood-entry-mood {
+.mood-page .mood-emoji {
+  font-size: 20px;
+  line-height: 1;
+}
+
+.mood-page .mood-entry-mood {
   font-weight: 600;
-  background: #dcfce7;
-  color: #166534;
-  padding: 4px 10px;
-  border-radius: 9999px;
-  font-size: 0.8rem;
-  margin-left: 8px;
+  background: var(--primary-soft);
+  color: var(--primary);
+  padding: 4px 12px;
+  border-radius: 999px;
+  font-size: 13px;
+  text-transform: capitalize;
 }
 
-.mood-entry-note {
-  margin-top: 8px;
+.mood-page .mood-date {
+  font-size: 12.5px;
+  color: var(--muted-2);
+}
+
+.mood-page .mood-note {
+  margin: 8px 0 0;
+  font-family: var(--serif);
   font-style: italic;
-  color: #4b5563;
-  padding-left: 1.5rem;
+  font-size: 15px;
+  color: var(--muted);
+  padding-left: 12px;
+  border-left: 2px solid var(--lilac);
 }
 
-.delete-button {
+.mood-page .delete-button {
   background: none;
   border: none;
-  color: #9ca3af;
+  color: var(--muted-2);
   cursor: pointer;
   transition: color 0.2s;
+  display: inline-flex;
+  padding: 6px;
+  border-radius: 8px;
 }
 
-.delete-button:hover {
-  color: #ef4444;
+.mood-page .delete-button:hover {
+  color: #c04545;
+  background: #fdeaea;
+}
+
+.mood-page .delete-button:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.mood-page .mood-entry-item.deleting {
+  opacity: 0.6;
+}
+
+/* ===== DUSK THEME ===== */
+.mood-page {
+  --ink: var(--dusk-text);
+  --muted: var(--dusk-muted);
+  --muted-2: var(--dusk-faint);
+  --line: var(--dusk-border);
+  --card: var(--dusk-glass);
+  --cream: transparent;
+  --lilac: var(--dusk-lilac);
+  --lilac-soft: rgba(255, 255, 255, .14);
+  --primary: #b79ced;
+  --primary-dark: #9a7fe0;
+  --primary-soft: rgba(255, 255, 255, .14);
+  --field-border: rgba(255, 255, 255, .2);
+  --shadow: 0 20px 60px rgba(10, 4, 25, .45);
+  --shadow-sm: 0 8px 24px rgba(10, 4, 25, .4);
+  color: var(--dusk-text);
+}
+
+.mood-page .mood-entry-item {
+  background: var(--dusk-glass);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.mood-page .delete-button:hover {
+  color: #f09696;
+  background: rgba(192, 69, 69, .25);
+}
+
+.mood-page .delete-button:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 2px;
+}
+
+/* Recharts / chart elements readable on dark */
+.mood-page .recharts-cartesian-axis-tick text {
+  fill: var(--dusk-muted);
+}
+
+.mood-page .recharts-cartesian-grid line {
+  stroke: rgba(255, 255, 255, .14);
+}
+
+.mood-page .recharts-default-tooltip {
+  background: rgba(18, 9, 34, .95) !important;
+  border: 1px solid var(--dusk-border) !important;
+  border-radius: 12px;
+  color: var(--dusk-text) !important;
 }

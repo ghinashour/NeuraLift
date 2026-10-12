@@ -1,14 +1,20 @@
 // src/api/axios.js
 import axios from "axios";
 
+const RAW_BASE = process.env.REACT_APP_API_URL || "http://localhost:4000";
+// Allow REACT_APP_API_URL with or without trailing /api
+const API_BASE = RAW_BASE.replace(/\/$/, "").endsWith("/api")
+  ? RAW_BASE.replace(/\/$/, "")
+  : `${RAW_BASE.replace(/\/$/, "")}/api`;
+
 // ✅ Base instance for user requests
 const API = axios.create({
-  baseURL: `${process.env.REACT_APP_API_URL}/api`, // All normal routes go through /api
+  baseURL: API_BASE, // All normal routes go through /api
 });
 
 // ✅ Base instance for admin requests
 const AdminAPI = axios.create({
-  baseURL: `${process.env.REACT_APP_API_URL}/api/admin`, // Fixed template string
+  baseURL: `${API_BASE}/admin`,
 });
 
 // ✅ Interceptor to attach token automatically
@@ -21,7 +27,7 @@ API.interceptors.request.use((req) => {
 });
 
 AdminAPI.interceptors.request.use((req) => {
-  const token = localStorage.getItem("token");
+  const token = localStorage.getItem("adminToken") || localStorage.getItem("token");
   if (token) {
     req.headers.Authorization = `Bearer ${token}`;
   }

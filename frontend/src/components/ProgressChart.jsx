@@ -78,7 +78,7 @@ const ProgressChart = ({ tasks, stats, isModal = false, onClose }) => {
     const overallProgress = stats.totalCount > 0 ? (stats.completedCount / stats.totalCount) * 100 : 0;
 
     // Circular progress component
-    const CircularProgress = ({ percentage, size = 120, strokeWidth = 8, color = "#3C83F6" }) => {
+    const CircularProgress = ({ percentage, size = 120, strokeWidth = 8, color = "#2E2A44" }) => {
         const radius = (size - strokeWidth) / 2;
         const circumference = radius * 2 * Math.PI;
         const strokeDasharray = circumference;
@@ -118,7 +118,7 @@ const ProgressChart = ({ tasks, stats, isModal = false, onClose }) => {
     };
 
     // Progress bar component
-    const ProgressBar = ({ label, completed, total, color = "#3C83F6" }) => {
+    const ProgressBar = ({ label, completed, total, color = "#2E2A44" }) => {
         const percentage = total > 0 ? (completed / total) * 100 : 0;
 
         return (
@@ -192,7 +192,7 @@ const ProgressChart = ({ tasks, stats, isModal = false, onClose }) => {
                             label="This Week"
                             completed={detailedStats.week.completed}
                             total={detailedStats.week.total}
-                            color="#3C83F6"
+                            color="#7FA184"
                         />
                         <ProgressBar
                             label="This Month"
@@ -209,7 +209,7 @@ const ProgressChart = ({ tasks, stats, isModal = false, onClose }) => {
                         <h3 className="section-title">Progress by Category</h3>
                         <div className="category-progress">
                             {Object.entries(detailedStats.categories).map(([category, data], index) => {
-                                const colors = ["#3C83F6", "#10B981", "#F59E0B", "#EF4444", "#8B5CF6", "#06B6D4"];
+                                const colors = ["#2E2A44", "#7FA184", "#E9B48F", "#C08080", "#8E7FB8", "#6FA3B8"];
                                 return (
                                     <ProgressBar
                                         key={category}

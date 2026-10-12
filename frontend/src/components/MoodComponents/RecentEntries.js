@@ -9,7 +9,7 @@ const RecentEntries = ({ entries = [], loading = false, error = null, onDelete }
   const deleteButtonStyle = {
   background: 'none',
   border: 'none',
-  color: '#9ca3af',
+  color: '#9A94A8',
   cursor: 'pointer',
   transition: 'color 0.2s',
 };
@@ -26,7 +26,7 @@ const RecentEntries = ({ entries = [], loading = false, error = null, onDelete }
   if (error) {
     return (
       <div className="recent-entries error">
-        <p>⚠️ {error}</p>
+        <p>{error}</p>
       </div>
     );
   }
@@ -34,7 +34,7 @@ const RecentEntries = ({ entries = [], loading = false, error = null, onDelete }
   if (!entries || entries.length === 0) {
     return (
       <div className="recent-entries empty">
-        <p>No entries yet. Your mood entries will appear here 😊</p>
+        <p>No entries yet. Your mood entries will appear here.</p>
       </div>
     );
   }

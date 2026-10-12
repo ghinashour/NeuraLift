@@ -1,74 +1,98 @@
-/* components/AILogo/AILogo.css */
-.ai-logo-container {
+/* NeuraLift Assistant launcher — floating action button (calm plum + lilac theme) */
+.ai-fab {
+  position: relative;
   display: flex;
-  flex-direction: column;
   align-items: center;
-  justify-content: center;
-  padding: 16px;
+  background: none;
+  border: 0;
+  padding: 8px;
+  margin: 0;
   cursor: pointer;
-  transition: all 0.3s ease;
-  border-radius: 12px;
-  margin: 8px;
+  animation: ai-fab-in .35s ease both;
 }
 
-.ai-logo-container:hover {
-  background: rgba(99, 102, 241, 0.1);
-  transform: translateY(-2px);
+.ai-fab:focus { outline: none; }
+.ai-fab:focus-visible {
+  outline: 2px solid var(--lilac, #8E7FB8);
+  outline-offset: 4px;
+  border-radius: 999px;
 }
 
-.ai-logo {
-  width: 48px;
-  height: 48px;
-    background: linear-gradient(130deg, #2f81fd, #62a0f7);
+.ai-fab-orb {
+  width: 56px;
+  height: 56px;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  position: relative;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  transition: all 0.3s ease;
+  background: linear-gradient(135deg, #3D375C 0%, #2E2A44 60%, #232033 100%);
+  border: 1px solid rgba(217, 207, 240, .55);
+  box-shadow:
+    0 10px 24px rgba(46, 42, 68, .35),
+    inset 0 1px 0 rgba(255, 255, 255, .18);
+  transition: transform .2s ease, box-shadow .2s ease;
 }
 
-.ai-logo-container:hover .ai-logo {
-  transform: scale(1.1);
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+.ai-fab:hover .ai-fab-orb {
+  transform: translateY(-2px) scale(1.04);
+  box-shadow:
+    0 14px 30px rgba(46, 42, 68, .42),
+    inset 0 1px 0 rgba(255, 255, 255, .22);
 }
 
-.ai-logo::before {
-  content: "";
+.ai-fab:active .ai-fab-orb { transform: translateY(0) scale(.98); }
+
+.ai-fab-status {
   position: absolute;
-  width: 100%;
-  height: 100%;
-  border: 2px solid rgba(255, 255, 255, 0.3);
+  right: 10px;
+  bottom: 10px;
+  width: 14px;
+  height: 14px;
   border-radius: 50%;
-  border-top-color: transparent;
-  animation: spin 3s linear infinite;
+  background: #7FA184;
+  border: 2.5px solid #FFFEFB;
+  box-shadow: 0 1px 4px rgba(46, 42, 68, .3);
 }
 
-.ai-logo-core {
-  width: 16px;
-  height: 16px;
-  background: white;
-  border-radius: 50%;
-  position: relative;
-  animation: pulse 2s infinite;
+/* Tooltip label — appears on hover / keyboard focus */
+.ai-fab-tip {
+  position: absolute;
+  right: calc(100% + 2px);
+  top: 50%;
+  transform: translateY(-50%) translateX(6px);
+  white-space: nowrap;
+  background: #2E2A44;
+  color: #FFFEFB;
+  font-size: 12.5px;
+  font-weight: 600;
+  padding: 8px 14px;
+  border-radius: 999px;
+  box-shadow: 0 8px 20px rgba(46, 42, 68, .3);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .18s ease, transform .18s ease;
 }
 
-@keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+.ai-fab:hover .ai-fab-tip,
+.ai-fab:focus-visible .ai-fab-tip {
+  opacity: 1;
+  transform: translateY(-50%) translateX(0);
 }
 
-@keyframes pulse {
-  0%, 100% { transform: scale(1); }
-  50% { transform: scale(1.1); }
+@keyframes ai-fab-in {
+  from { opacity: 0; transform: translateY(10px) scale(.94); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
 }
 
-.ai-logo-text {
-  margin-top: 8px;
-  font-size: 0.75rem;
-  font-weight: 500;
-  color: #6b7280;
-  text-align: center;
+/* Touch: keep target >= 48px without crowding small screens */
+@media (max-width: 480px) {
+  .ai-fab-orb { width: 52px; height: 52px; }
+  .ai-fab-tip { display: none; }
 }
 
+@media (prefers-reduced-motion: reduce) {
+  .ai-fab { animation: none; }
+  .ai-fab-orb,
+  .ai-fab-tip { transition: none; }
+  .ai-fab:hover .ai-fab-orb { transform: none; }
+}

@@ -1,6 +1,5 @@
 /* Notification bell & dropdown styles */
 
-/* Container used in Layout for the global bell */
 .global-notifications {
   position: fixed;
   top: 12px;
@@ -8,26 +7,20 @@
   z-index: 500;
   display: flex;
   align-items: center;
-  pointer-events: none; /* allow inner clickable element to control events */
+  pointer-events: none;
 }
 
-.global-notifications > * {
-  pointer-events: auto; /* enable clicks on the icon */
-}
+.global-notifications > * { pointer-events: auto; }
 
-/* simple relative wrapper used by the component */
 .relative {
   position: relative;
   display: inline-block;
 }
 
-.notification-bell, .bell-icon, .cursor-pointer {
-  cursor: pointer;
-}
+.notification-bell, .bell-icon, .cursor-pointer { cursor: pointer; }
 
-/* Bell icon styling */
 .notification-bell svg, .notification-bell .fa-bell {
-  color: #0f172a; /* slate-900 */
+  color: var(--ink);
   width: 22px;
   height: 22px;
   transition: transform 120ms ease, color 120ms ease;
@@ -35,7 +28,7 @@
 
 .notification-bell:hover svg, .notification-bell:focus svg {
   transform: translateY(-1px) scale(1.02);
-  color: #075985; /* sky-700 */
+  color: #5B4B8A;
 }
 
 /* Unread count badge */
@@ -43,13 +36,15 @@
   position: absolute;
   top: -6px;
   right: -6px;
-  background: #ef4444; /* red-500 */
+  background: #C08A8A;
   color: #fff;
   font-size: 11px;
+  font-weight: 700;
   line-height: 1;
   padding: 2px 6px;
   border-radius: 999px;
-  box-shadow: 0 2px 6px rgba(2,6,23,0.15);
+  border: 2px solid var(--cream);
+  box-shadow: 0 2px 6px rgba(43, 36, 56, 0.2);
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -57,7 +52,7 @@
   height: 18px;
 }
 
-/* Dropdown panel (used by default markup) */
+/* Dropdown panel */
 .notifications-dropdown, .absolute.right-0 {
   position: absolute;
   right: 0;
@@ -65,10 +60,10 @@
   width: 320px;
   max-height: 420px;
   overflow-y: auto;
-  background: #ffffff;
-  border: 1px solid rgba(15,23,42,0.06);
-  border-radius: 10px;
-  box-shadow: 0 10px 30px rgba(2,6,23,0.12);
+  background: #FFFEFB;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  box-shadow: var(--shadow);
   z-index: 600;
   padding: 8px;
 }
@@ -76,77 +71,64 @@
 .notifications-dropdown .notification-item,
 .absolute.right-0 .notification-item {
   padding: 10px 8px;
-  border-bottom: 1px solid rgba(2,6,23,0.04);
+  border-bottom: 1px solid var(--line);
   cursor: pointer;
+  border-radius: 8px;
 }
 
 .notifications-dropdown .notification-item:last-child,
-.absolute.right-0 .notification-item:last-child {
-  border-bottom: none;
-}
+.absolute.right-0 .notification-item:last-child { border-bottom: none; }
 
 .notifications-dropdown .notification-item:hover,
-.absolute.right-0 .notification-item:hover {
-  background: #f8fafc; /* very light */
-}
+.absolute.right-0 .notification-item:hover { background: #F7F1E5; }
 
-.notification-item.unread {
-  background: #eef2ff; /* subtle blue */
-}
+.notification-item.unread { background: #F1EAF6; }
 
 .notification-item .meta {
   font-size: 12px;
-  color: #475569; /* slate-600 */
+  color: var(--muted);
   margin-top: 6px;
 }
 
-/* Toast (small transient popup) handled in NotificationToast.css but ensure placement value exists */
-.notification-toast {
-  right: 24px;
-  top: 64px;
-}
+.notification-toast { right: 24px; top: 64px; }
 
-/* Small responsive tweak */
 @media (max-width: 640px) {
   .global-notifications { top: 8px; right: 8px; }
   .notifications-dropdown, .absolute.right-0 { width: 90vw; left: 8px; right: 8px; top: 50px; }
 }
 
-/* Pulse animation when a new notification arrives */
 @keyframes notifPulse {
-  0% { transform: scale(1); opacity: 1 }
-  50% { transform: scale(1.12); opacity: 0.95 }
-  100% { transform: scale(1); opacity: 1 }
+  0% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.1); opacity: 0.95; }
+  100% { transform: scale(1); opacity: 1; }
 }
 
 .notification-bell.pulse svg,
-.notification-bell.pulse .fa-bell {
-  animation: notifPulse 900ms cubic-bezier(.2,.9,.3,1);
-}
+.notification-bell.pulse .fa-bell { animation: notifPulse 900ms cubic-bezier(.2,.9,.3,1); }
 
 /* Button-like styles for accessibility */
 .notification-bell-btn {
-  background: linear-gradient(90deg, #3C83F6 0%, #6DA2F8 100%);
+  background: var(--plum);
   border: none;
   padding: 8px;
-  border-radius: 10px;
+  border-radius: 12px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 6px 18px rgba(15, 23, 42, 0.08);
-  color: #fff;
+  box-shadow: 0 6px 18px rgba(43, 36, 56, 0.25);
+  color: #F5EEE0;
+  transition: transform 0.2s ease, background 0.2s ease;
 }
 
+.notification-bell-btn:hover { transform: translateY(-1px); background: var(--plum-2); }
+
 .notification-bell-btn:focus {
-  outline: 3px solid rgba(14,165,233,0.18);
+  outline: 2px solid var(--lilac);
   outline-offset: 2px;
 }
 
-.notification-bell-btn svg, .notification-bell-btn .fa-bell {
-  color: #fff !important;
-}
+.notification-bell-btn svg, .notification-bell-btn .fa-bell { color: #F5EEE0 !important; }
 
-/* Global inline layout for Streak + Bell in header */
 .global-inline {
   display: flex;
   align-items: center;
@@ -161,19 +143,6 @@
   height: auto;
 }
 
-.global-streak .streakPage-wrapper {
-  /* wrapper placeholder to scope small variant styles */
-  /* intentionally left non-empty to satisfy linters */
-  --streak-wrapper: 1;
-}
-
-.global-streak .streakPage-wrapper.streak-small { width: 36px; height: 36px }
-.global-streak .streakPage-wrapper.streak-small .streakPage-progress-ring { width: 36px; height: 36px }
-.global-streak .streakPage-wrapper.streak-small .streakPage-content .streakPage-number { font-size: 12px }
-/* nudge the small streak slightly to visually center with the bell */
-.global-streak .streakPage-wrapper.streak-small { transform: translateY(-2px); }
-
-/* Provide a visual container for the inline items so they align nicely */
 .global-inline > * {
   display: inline-flex;
   align-items: center;
@@ -181,9 +150,7 @@
 }
 
 .global-inline .notification-bell-btn,
-.global-inline .streakPage-wrapper {
-  margin: 0 6px;
-}
+.global-inline .streakPage-wrapper { margin: 0 6px; }
 
 .global-bell {
   display: flex;
@@ -191,6 +158,22 @@
   justify-content: center;
 }
 
-.notifications-dropdown:focus {
-  outline: none;
+.notifications-dropdown:focus { outline: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  .notification-bell.pulse svg,
+  .notification-bell.pulse .fa-bell { animation: none; }
+  .notification-bell svg, .notification-bell-btn { transition: none; }
 }
+
+/* ===== DUSK THEME ===== */
+.global-notifications { --ink: var(--dusk-text); --muted: var(--dusk-muted); --muted-2: var(--dusk-faint); --line: var(--dusk-border); --card: var(--dusk-glass); --cream: transparent; --lilac: var(--dusk-lilac); --lilac-soft: rgba(255,255,255,.14); --primary: #b79ced; --primary-dark: #9a7fe0; --primary-soft: rgba(255,255,255,.14); --field-border: rgba(255,255,255,.2); --shadow: 0 20px 60px rgba(10,4,25,.45); --shadow-sm: 0 8px 24px rgba(10,4,25,.4); color: var(--dusk-text); }
+.notification-bell svg, .notification-bell .fa-bell { color: var(--dusk-text); }
+.notification-bell:hover svg, .notification-bell:focus svg { color: #fff; }
+.notifications-dropdown, .absolute.right-0 { background: var(--dusk-glass-deep); border-color: var(--dusk-border); color: var(--dusk-text); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); }
+.notifications-dropdown .notification-item, .absolute.right-0 .notification-item { border-color: var(--dusk-border); color: var(--dusk-text); }
+.notifications-dropdown .notification-item:hover, .absolute.right-0 .notification-item:hover { background: rgba(255,255,255,.14); }
+.notification-item.unread { background: rgba(255,255,255,.1); }
+.notification-item .meta { color: var(--dusk-muted); }
+.badge { border-color: rgba(255,255,255,.25); }
+.notification-bell-btn:focus, .notification-bell:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }

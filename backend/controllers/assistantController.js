@@ -1,15 +1,29 @@
 require('dotenv').config();
 const OpenAI = require('openai');
-const { PineconeClient } = require('@pinecone-database/pinecone');
 
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
-const pinecone = new PineconeClient();
+
+// Pinecone is optional — lazy-load so the server boots without it.
+let pinecone = null;
+function getPinecone() {
+  if (pinecone) return pinecone;
+  let PineconeClient;
+  try {
+    ({ PineconeClient } = require('@pinecone-database/pinecone'));
+  } catch (err) {
+    throw new Error('Pinecone package not installed — assistant retrieval is disabled');
+  }
+  pinecone = new PineconeClient();
+  return pinecone;
+}
 
 async function initPinecone() {
-  if (!pinecone._initialized) {
-    await pinecone.init({ apiKey: process.env.PINECONE_API_KEY, environment: process.env.PINECONE_ENVIRONMENT });
-    pinecone._initialized = true;
+  const client = getPinecone();
+  if (!client._initialized) {
+    await client.init({ apiKey: process.env.PINECONE_API_KEY, environment: process.env.PINECONE_ENVIRONMENT });
+    client._initialized = true;
   }
+  return client;
 }
 
 async function embedText(text) {
@@ -18,10 +32,10 @@ async function embedText(text) {
 }
 
 async function retrieveRelevant(query, topK = 5) {
-  await initPinecone();
+  const client = await initPinecone();
   const indexName = process.env.PINECONE_INDEX;
   if (!indexName) throw new Error('PINECONE_INDEX not set');
-  const index = pinecone.Index(indexName);
+  const index = client.Index(indexName);
   const qvec = await embedText(query);
   const queryRes = await index.query({ queryRequest: { topK, vector: qvec, includeMetadata: true } });
   return (queryRes.matches || []).map(m => ({ score: m.score, metadata: m.metadata }));

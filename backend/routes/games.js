@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const passport = require('passport');
+const protect = require('../middleware/auth');
 const gameController = require('../controllers/gameController');
 
 // Code quiz - NO LOGIN REQUIRED
@@ -8,11 +8,11 @@ router.post('/code-quiz/start', gameController.startCodeQuiz);
 router.post('/code-quiz/submit/:gameId', gameController.submitCodeQuiz);
 
 // Tenzis solo (still requires login)
-router.post('/tenzis/start', passport.authenticate('jwt', { session: false }), gameController.startTenzis);
-router.post('/tenzis/roll/:gameId', passport.authenticate('jwt', { session: false }), gameController.rollTenzis);
+router.post('/tenzis/start', protect, gameController.startTenzis);
+router.post('/tenzis/roll/:gameId', protect, gameController.rollTenzis);
 
 // Common - allow authenticated users to fetch their game state
-router.get('/:gameId', passport.authenticate('jwt', { session: false }), gameController.getGameState);
+router.get('/:gameId', protect, gameController.getGameState);
 
 // Leaderboard - public
 router.get('/leaderboard/:gameType', async (req, res) => {

@@ -21,7 +21,7 @@ exports.createPost = async (req, res) => {
     });
 
     await post.save();
-    await post.populate('user', 'name avatar');
+    await post.populate('user', 'name username avatar profilePhoto');
 
     res.status(201).json(post);
   } catch (error) {
@@ -33,8 +33,8 @@ exports.createPost = async (req, res) => {
 exports.getPosts = async (req, res) => {
   try {
     const posts = await Post.find()
-      .populate('user', 'name avatar')
-      .populate('replies.user', 'name avatar')
+      .populate('user', 'name username avatar profilePhoto')
+      .populate('replies.user', 'name username avatar profilePhoto')
       .sort({ createdAt: -1 });
 
     res.json(posts);
@@ -128,8 +128,8 @@ exports.updatePostLikes = async (req, res) => {
       postId,
       { likes },
       { new: true }
-    ).populate('user', 'name avatar')
-      .populate('replies.user', 'name avatar');
+    ).populate('user', 'name username avatar profilePhoto')
+      .populate('replies.user', 'name username avatar profilePhoto');
 
     if (!post) {
       return res.status(404).json({ message: 'Post not found' });

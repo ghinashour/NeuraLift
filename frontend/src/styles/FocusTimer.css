@@ -1,161 +1,360 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+/* Focus Timer — botanical light (matches dashboard reference) */
 
-.pomodoro-timer {
-  font-family: 'Inter', sans-serif;
+.ft-page {
   display: flex;
-  width: 100%;
-  max-width: 1008px; /* ~10% smaller */
-  height: auto;
   flex-direction: column;
-  gap: 1.125rem;
-  margin: 22px auto;
-  align-items: center;
-  padding: 0.9rem;
-  color: #1f2937;
-}
-
-.pomodoro-timer__header {
-  margin-bottom: 0.5rem;
-  text-align: center;
-}
-
-.pomodoro-timer__title {
-  font-size: 1.35rem;
-  font-weight: 700;
-  color: #111827;
-}
-
-.pomodoro-timer__title svg {
-  width: 27px;
-  padding-right: 4.5px;
-  height: fit-content;
-  justify-content: center;
-}
-
-.pomodoro-timer__header-content p {
-  color: #626A84;
-}
-
-.pomodoro-timer__tabs {
-  margin-bottom: 0.72rem;
-  font-size: 13.4px;
-}
-
-.pomodoro-timer__main {
+  gap: 16px;
+  padding: 4px 2px 8px;
+  max-width: 1060px;
+  margin: 0 auto;
   width: 100%;
-  max-width: 738px;
-  display: flex;
-  justify-content: center;
-  margin-bottom: 0.9rem;
+  color: #232033;
 }
 
-.pomodoro-timer__card {
+/* ---------- Main timer card ---------- */
+.ft-screen {
+  position: relative;
+  overflow: hidden;
+  border-radius: 20px;
+  background: #fffefb;
+  border: 1px solid #ece4d4;
+  box-shadow: 0 8px 24px rgba(46, 42, 68, 0.06);
+  color: #232033;
+  display: flex;
+  flex-direction: column;
+  padding: 26px 28px 30px;
+}
+
+/* ---------- Card header ---------- */
+.ft-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  flex-wrap: wrap;
+  margin-bottom: 8px;
+}
+
+.ft-title {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.ft-title-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: #ede7f7;
+  color: #2e2a44;
+  flex: none;
+}
+
+.ft-title h1 {
+  font-family: var(--serif);
+  font-size: 22px;
+  font-weight: 600;
+  margin: 0;
+  letter-spacing: -0.01em;
+  color: #232033;
+}
+
+.ft-head-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Mode pill select */
+.ft-mode-wrap {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+
+.ft-mode-wrap svg {
+  position: absolute;
+  right: 14px;
+  pointer-events: none;
+  color: #57536a;
+}
+
+.ft-mode {
+  appearance: none;
+  -webkit-appearance: none;
+  border: 1px solid #ddd3ef;
+  border-radius: 999px;
+  background: #f2edfa;
+  color: #2e2a44;
+  font-size: 13px;
+  font-weight: 600;
+  font-family: inherit;
+  padding: 9px 34px 9px 18px;
+  cursor: pointer;
+  transition: background 200ms ease, border-color 200ms ease;
+}
+
+.ft-mode:hover {
+  background: #e9e1f7;
+}
+
+.ft-icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border: 1px solid #ece4d4;
+  border-radius: 50%;
   background: #fff;
-  border-radius: 11px;
-  padding: 1.125rem;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
-  width: 100%;
+  color: #57536a;
+  cursor: pointer;
+  transition: background 200ms ease, color 200ms ease, border-color 200ms ease, transform 200ms ease;
 }
 
-.pomodoro-timer__footer {
-  width: 100%;
-  max-width: 486px;
+.ft-icon-btn:hover {
+  border-color: #2e2a44;
+  color: #2e2a44;
+  transform: translateY(-1px);
 }
 
-/* quote wrapper inside card, keep it centered above the timer */
-.pomodoro-timer__quote {
+.ft-icon-btn:focus-visible,
+.ft-mode:focus-visible {
+  outline: 2px solid #8e7fb8;
+  outline-offset: 2px;
+}
+
+/* ---------- Ring ---------- */
+.ft-ring-zone {
   display: flex;
-  justify-content: center;
+  flex-direction: column;
   align-items: center;
-  margin-bottom: 0.9rem;
+  justify-content: center;
+  gap: 22px;
+  padding: 18px 20px 6px;
 }
 
-.pomodoro-timer__quote .quote-section {
+.ft-ring-wrap {
+  position: relative;
+  width: min(72vw, 320px);
+  aspect-ratio: 1;
+}
+
+.ft-ring {
   width: 100%;
-  max-width: 520px; /* ensure quote doesn't exceed timer card */
-  padding: 0.9rem 0.7rem;
-  border-radius: 10px;
+  height: 100%;
+  transform: rotate(-90deg);
 }
 
-/* ===============================
-   Responsive Styles
-   =============================== */
-@media (max-width: 768px) {
-  .pomodoro-timer {
-    padding: 1.35rem;
-  }
-
-  .pomodoro-timer__title {
-    font-size: 1.17rem;
-  }
-
-  .pomodoro-timer__tabs {
-    font-size: 12.6px;
-  }
-
-  .pomodoro-timer__main {
-    max-width: 90%;
-  }
-
-  .pomodoro-timer__card {
-    padding: 1.35rem;
-  }
-
-  .pomodoro-timer__footer {
-    max-width: 90%;
-  }
+.ft-ring__track {
+  fill: none;
+  stroke: #e9e1d1;
+  stroke-width: 11;
 }
 
-@media (max-width: 480px) {
-  .pomodoro-timer {
-    padding: 0.9rem;
+.ft-ring__progress {
+  fill: none;
+  stroke: #b9a8e0;
+  stroke-width: 11;
+  stroke-linecap: round;
+  transition: stroke-dashoffset 0.4s ease;
+}
+
+.ft-ring-center {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.ft-time {
+  font-family: var(--serif);
+  font-size: clamp(46px, 9vw, 60px);
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  color: #232033;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+
+.ft-status {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.28em;
+  text-indent: 0.28em;
+  text-transform: uppercase;
+  color: #6f6a7e;
+}
+
+/* ---------- Start pill ---------- */
+.ft-start {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 15px 58px;
+  border: 1px solid #2e2a44;
+  border-radius: 999px;
+  background: #2e2a44;
+  color: #fff;
+  font-weight: 700;
+  font-family: var(--serif);
+  font-size: 17px;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  transition: background 200ms ease, transform 200ms ease, box-shadow 200ms ease;
+  box-shadow: 0 10px 24px rgba(46, 42, 68, 0.25);
+}
+
+.ft-start:hover {
+  background: #3d375c;
+  transform: translateY(-1px);
+}
+
+.ft-start:active {
+  transform: translateY(0);
+}
+
+.ft-start:focus-visible {
+  outline: 2px solid #8e7fb8;
+  outline-offset: 3px;
+}
+
+.ft-sub-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.ft-ghost {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 28px;
+  border: 1px solid #e4d9c4;
+  border-radius: 999px;
+  background: #fff;
+  color: #2e2a44;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: border-color 200ms ease, background 200ms ease;
+}
+
+.ft-ghost:hover {
+  border-color: #2e2a44;
+  background: #f7f2e8;
+}
+
+.ft-ghost:focus-visible,
+.ft-tab:focus-visible {
+  outline: 2px solid #8e7fb8;
+  outline-offset: 2px;
+}
+
+/* ---------- Mode cards row ---------- */
+.ft-modes {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+}
+
+.ft-tab {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  padding: 18px 8px 16px;
+  border: 1px solid #ece4d4;
+  border-radius: 16px;
+  background: #fffefb;
+  box-shadow: 0 4px 14px rgba(46, 42, 68, 0.05);
+  color: #57536a;
+  cursor: pointer;
+  transition: background 200ms ease, border-color 200ms ease, transform 200ms ease, box-shadow 200ms ease;
+}
+
+.ft-tab svg {
+  color: #2e2a44;
+  margin-bottom: 5px;
+}
+
+.ft-tab:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 22px rgba(46, 42, 68, 0.09);
+}
+
+.ft-tab-name {
+  font-size: 14px;
+  font-weight: 700;
+  color: #232033;
+}
+
+.ft-tab-sub {
+  font-size: 12px;
+  font-weight: 500;
+  color: #9a94a8;
+}
+
+.ft-tab--active {
+  background: #efe9fa;
+  border-color: #d5cbef;
+}
+
+/* ---------- Below cards ---------- */
+.ft-card {
+  background: #fffefb;
+  border: 1px solid #ece4d4;
+  border-radius: 20px;
+  box-shadow: 0 8px 24px rgba(46, 42, 68, 0.06);
+  padding: 24px 26px;
+}
+
+.ft-quote {
+  background: linear-gradient(135deg, #fef6ec 0%, #fdeee0 100%);
+  border-color: #f0ddc8;
+}
+
+/* ---------- Fullscreen mode ---------- */
+.ft-screen:fullscreen {
+  border-radius: 0;
+  min-height: 100vh;
+  justify-content: center;
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 760px) {
+  .ft-modes {
+    grid-template-columns: repeat(2, 1fr);
   }
 
-  .pomodoro-timer__title {
-    font-size: 0.99rem;
-  }
-
-  .pomodoro-timer__title svg {
-    width: 21.6px;
-    padding-right: 3.6px;
-  }
-
-  .pomodoro-timer__tabs {
-    font-size: 11.7px;
-  }
-
-  .pomodoro-timer__main {
-    max-width: 100%;
+  .ft-head {
     flex-direction: column;
-    margin-bottom: 1.35rem;
+    align-items: flex-start;
   }
 
-  .pomodoro-timer__card {
-    padding: 0.9rem;
-    border-radius: 11px;
-  }
-
-  .pomodoro-timer__footer {
-    max-width: 100%;
+  .ft-screen {
+    padding: 22px 18px 26px;
   }
 }
 
-@media (max-width: 360px) {
-  .pomodoro-timer__title {
-    font-size: 0.9rem;
+@media (prefers-reduced-motion: reduce) {
+  .ft-ring__progress,
+  .ft-icon-btn,
+  .ft-start,
+  .ft-ghost,
+  .ft-tab,
+  .ft-mode {
+    transition: none;
   }
 
-  .pomodoro-timer__title svg {
-    width: 18px;
-    padding-right: 2.7px;
-  }
-
-  .pomodoro-timer__tabs {
-    font-size: 10.8px;
-  }
-
-  .pomodoro-timer__card {
-    padding: 0.72rem;
-    border-radius: 9px;
+  .ft-icon-btn:hover,
+  .ft-start:hover,
+  .ft-tab:hover {
+    transform: none;
   }
 }

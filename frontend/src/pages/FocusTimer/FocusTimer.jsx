@@ -1,13 +1,72 @@
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useTimer } from '../../hooks/useTimer';
 import { useQuotes } from '../../hooks/useQuotes';
-import TimerDisplay from '../../components/TimerDisplay';
-import TimerControls from '../../components/TimerControls';
-import ModeSelector from '../../components/ModeSelector';
+import { formatTime } from '../../hooks/timeFormatter';
 import StatsDisplay from '../../components/StatsDisplay';
 import QuoteSection from '../../components/QuoteSection';
 import '../../styles/FocusTimer.css';
 import AILogo from '../../components/AiLogo';
+import {
+  Timer,
+  Coffee,
+  Moon,
+  Volume2,
+  VolumeX,
+  BarChart3,
+  Maximize,
+  Play,
+  Pause,
+  RotateCcw,
+  SkipForward,
+  ChevronDown,
+} from 'lucide-react';
+
+const MODE_SECONDS = {
+  Focus: 25 * 60,
+  'Short Break': 5 * 60,
+  'Long Break': 15 * 60,
+};
+
+const MODE_META = [
+  { name: 'Focus', Icon: Timer, sub: '25 minutes' },
+  { name: 'Short Break', Icon: Coffee, sub: '5 minutes' },
+  { name: 'Long Break', Icon: Moon, sub: '15 minutes' },
+];
+
+const SESSION_LABEL = {
+  Focus: 'DEEP WORK',
+  'Short Break': 'SHORT BREAK',
+  'Long Break': 'LONG BREAK',
+};
+
+// Gentle completion chime (WebAudio, no assets needed)
+function playChime() {
+  try {
+    const Ctx = window.AudioContext || window.webkitAudioContext;
+    if (!Ctx) return;
+    const ctx = new Ctx();
+    [523.25, 659.25, 783.99].forEach((freq, i) => {
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = 'sine';
+      osc.frequency.value = freq;
+      const t = ctx.currentTime + i * 0.18;
+      gain.gain.setValueAtTime(0.0001, t);
+      gain.gain.exponentialRampToValueAtTime(0.22, t + 0.03);
+      gain.gain.exponentialRampToValueAtTime(0.0001, t + 0.5);
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.start(t);
+      osc.stop(t + 0.55);
+    });
+    setTimeout(() => ctx.close(), 1600);
+  } catch {
+    // Audio not available — stay silent
+  }
+}
+
+const RING_SIZE = 300;
+const RING_STROKE = 11;
 
 const PomodoroTimer = () => {
   const {
@@ -21,87 +80,217 @@ const PomodoroTimer = () => {
     pauseTimer,
     resetTimer,
     skipSession,
-    setMode
+    setMode,
   } = useTimer();
 
   const { quote, fetchNewQuote, isLoading } = useQuotes();
 
-  const modes = [
-    { name: 'Focus', duration: 25 * 60, color: '#3b82f6' },
-    { name: 'Short Break', duration: 5 * 60, color: '#10b981' },
-    { name: 'Long Break', duration: 15 * 60, color: '#8b5cf6' }
-  ];
+  const [soundOn, setSoundOn] = useState(true);
+  const panelRef = useRef(null);
+  const chimedRef = useRef(false);
+
+  const total = MODE_SECONDS[mode] ?? MODE_SECONDS.Focus;
+  const progress = Math.min(1, Math.max(0, (total - time) / total));
+
+  // Chime once when a session naturally reaches zero
+  useEffect(() => {
+    if (time === 0 && !chimedRef.current) {
+      chimedRef.current = true;
+      if (soundOn) playChime();
+    }
+    if (time > 0) chimedRef.current = false;
+  }, [time, soundOn]);
+
+  const toggleFullscreen = () => {
+    if (!document.fullscreenElement) {
+      panelRef.current?.requestFullscreen?.();
+    } else {
+      document.exitFullscreen?.();
+    }
+  };
+
+  const scrollToStats = () => {
+    document
+      .getElementById('focus-stats')
+      ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  };
+
+  const radius = (RING_SIZE - RING_STROKE * 2 - 8) / 2;
+  const circumference = 2 * Math.PI * radius;
+  const startLabel = isActive ? 'Pause' : status === 'Ready' ? 'Start Session' : 'Resume';
 
   return (
-    <div className="pomodoro-timer">
-      <div className="pomodoro-timer__header">
-        <div className="pomodoro-timer__header-content">
-          <h1 className="pomodoro-timer__title">
-            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M8.33331 1.66663H11.6666" stroke="#3b82f6" stroke-width="1.66667" stroke-linecap="round" stroke-linejoin="round" />
-              <path d="M10 11.6666L12.5 9.16663" stroke="#3b82f6" stroke-width="1.66667" stroke-linecap="round" stroke-linejoin="round" />
-              <path d="M9.99998 18.3333C13.6819 18.3333 16.6666 15.3486 16.6666 11.6667C16.6666 7.98477 13.6819 5 9.99998 5C6.31808 5 3.33331 7.98477 3.33331 11.6667C3.33331 15.3486 6.31808 18.3333 9.99998 18.3333Z" stroke="#3b82f6" stroke-width="1.66667" stroke-linecap="round" stroke-linejoin="round" />
+    <div className="ft-page">
+      <section
+        className="ft-screen"
+        ref={panelRef}
+        data-mode={mode}
+        aria-label="Focus timer"
+      >
+        <header className="ft-head">
+          <div className="ft-title">
+            <span className="ft-title-icon" aria-hidden="true">
+              <Timer size={19} strokeWidth={1.9} />
+            </span>
+            <h1>Focus Timer</h1>
+          </div>
+          <div className="ft-head-actions">
+            <span className="ft-mode-wrap">
+              <select
+                className="ft-mode"
+                value={mode}
+                onChange={(e) => setMode(e.target.value)}
+                aria-label="Timer mode"
+              >
+                <option value="Focus">Focus Mode</option>
+                <option value="Short Break">Short Break</option>
+                <option value="Long Break">Long Break</option>
+              </select>
+              <ChevronDown size={14} aria-hidden="true" />
+            </span>
+            <button
+              type="button"
+              className="ft-icon-btn"
+              onClick={() => setSoundOn((v) => !v)}
+              aria-label={soundOn ? 'Mute sounds' : 'Unmute sounds'}
+              aria-pressed={soundOn}
+              title={soundOn ? 'Mute sounds' : 'Unmute sounds'}
+            >
+              {soundOn ? <Volume2 size={15} /> : <VolumeX size={15} />}
+            </button>
+            <button
+              type="button"
+              className="ft-icon-btn"
+              onClick={toggleFullscreen}
+              aria-label="Toggle fullscreen"
+              title="Fullscreen"
+            >
+              <Maximize size={15} />
+            </button>
+            <button
+              type="button"
+              className="ft-icon-btn"
+              onClick={scrollToStats}
+              aria-label="View session stats"
+              title="Stats"
+            >
+              <BarChart3 size={15} />
+            </button>
+          </div>
+        </header>
+
+        <div className="ft-ring-zone">
+          <div className="ft-ring-wrap">
+            <svg
+              className="ft-ring"
+              viewBox={`0 0 ${RING_SIZE} ${RING_SIZE}`}
+              role="img"
+              aria-label={`${formatTime(time)} remaining`}
+            >
+              <circle
+                className="ft-ring__track"
+                cx={RING_SIZE / 2}
+                cy={RING_SIZE / 2}
+                r={radius}
+              />
+              <circle
+                className="ft-ring__progress"
+                cx={RING_SIZE / 2}
+                cy={RING_SIZE / 2}
+                r={radius}
+                style={{
+                  strokeDasharray: circumference,
+                  strokeDashoffset: circumference * (1 - progress),
+                }}
+              />
             </svg>
-            Pomodoro Focus Timer</h1>
-          <p>Stay focused with the proven Pomodoro technique</p>
-        </div>
-      </div>
-
-   
-      <div className="pomodoro-timer__tabs">
-        <ModeSelector
-          selectedMode={mode}
-          onModeChange={setMode}
-          modes={modes}
-        />
-      </div>
-
-      <div className="pomodoro-timer__main">
-        <div className="pomodoro-timer__card">
-
-          <div className="pomodoro-timer__quote">
-            <QuoteSection
-              quote={quote}
-              onNewQuote={fetchNewQuote}
-              isLoading={isLoading}
-            />
+            <div className="ft-ring-center">
+              <div className="ft-time">{formatTime(time)}</div>
+              <div className="ft-status">{SESSION_LABEL[mode] ?? status.toUpperCase()}</div>
+            </div>
           </div>
 
-          <TimerDisplay
-            time={time}
-            status={status}
-            mode={mode}
-            isActive={isActive}
-          />
+          <button
+            type="button"
+            className="ft-start"
+            onClick={isActive ? pauseTimer : startTimer}
+          >
+            {isActive ? <Pause size={16} /> : <Play size={16} />}
+            {startLabel}
+          </button>
 
-          <TimerControls
-            onStart={startTimer}
-            onPause={pauseTimer}
-            onReset={resetTimer}
-            onSkip={skipSession}
-            isActive={isActive}
-            status={status}
-          />
-
-          <StatsDisplay
-            completedSessions={completedSessions}
-            streak={streak}
-            minutes={Math.floor(completedSessions * 25)}
-          />
+          <div className="ft-sub-actions">
+            <button type="button" className="ft-ghost" onClick={resetTimer}>
+              <RotateCcw size={13} />
+              Reset
+            </button>
+            <button type="button" className="ft-ghost" onClick={skipSession}>
+              <SkipForward size={13} />
+              Skip
+            </button>
+          </div>
         </div>
-      </div>
+      </section>
 
-      
-      <div style={{ 
-        position: 'fixed', 
-        bottom: '20px', 
-        right: '20px',
-        zIndex: 1000
-      }}>
+      <nav className="ft-modes" aria-label="Timer modes">
+        {MODE_META.map(({ name, Icon, sub }) => (
+          <button
+            key={name}
+            type="button"
+            className={`ft-tab${mode === name ? ' ft-tab--active' : ''}`}
+            onClick={() => setMode(name)}
+            aria-pressed={mode === name}
+          >
+            <Icon size={21} strokeWidth={1.8} aria-hidden="true" />
+            <span className="ft-tab-name">{name}</span>
+            <span className="ft-tab-sub">{sub}</span>
+          </button>
+        ))}
+        <button
+          type="button"
+          className={`ft-tab${soundOn ? ' ft-tab--active' : ''}`}
+          onClick={() => setSoundOn((v) => !v)}
+          aria-pressed={soundOn}
+          title="Toggle completion sounds"
+        >
+          {soundOn ? (
+            <Volume2 size={21} strokeWidth={1.8} aria-hidden="true" />
+          ) : (
+            <VolumeX size={21} strokeWidth={1.8} aria-hidden="true" />
+          )}
+          <span className="ft-tab-name">Sounds</span>
+          <span className="ft-tab-sub">Ambient audio</span>
+        </button>
+      </nav>
+
+      <section className="ft-card ft-quote" aria-label="Daily inspiration">
+        <QuoteSection
+          quote={quote}
+          onNewQuote={fetchNewQuote}
+          isLoading={isLoading}
+        />
+      </section>
+
+      <section className="ft-card" id="focus-stats" aria-label="Session statistics">
+        <StatsDisplay
+          completedSessions={completedSessions}
+          streak={streak}
+          minutes={Math.floor(completedSessions * 25)}
+        />
+      </section>
+
+      <div
+        className="focus-ai"
+        style={{
+          position: 'fixed',
+          bottom: '20px',
+          right: '16px',
+          zIndex: 1000,
+        }}
+      >
         <AILogo />
       </div>
     </div>
-
   );
 };
 

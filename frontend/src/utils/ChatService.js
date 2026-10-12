@@ -1,6 +1,7 @@
 export const sendMessageToBackend = async (messages) => {
   try {
-    const response = await fetch("http://localhost:4000/api/chat", {
+    const API_BASE = (process.env.REACT_APP_API_URL || "http://localhost:4000").replace(/\/$/, "");
+    const response = await fetch(`${API_BASE}/api/chat`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ messages }),

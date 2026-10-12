@@ -14,10 +14,9 @@ import AddMemberPopup from "../components/Popups/AddMemberPopup";
 import AssignTaskPopup from "../components/Popups/AssignTaskPopup";
 import CreatePostPopup from "../components/Popups/CreatePostPopup";
 
-import { FaUsers } from "react-icons/fa";
-
-// Axios configuration
-const API_BASE_URL = process.env.REACT_APP_API_URL || "http://localhost:4000/api";
+// Axios configuration — tolerate REACT_APP_API_URL with or without trailing /api
+const RAW_BASE = (process.env.REACT_APP_API_URL || "http://localhost:4000/api").replace(/\/$/, "");
+const API_BASE_URL = RAW_BASE.endsWith("/api") ? RAW_BASE : `${RAW_BASE}/api`;
 
 const axiosInstance = axios.create({
   baseURL: API_BASE_URL,
@@ -83,11 +82,25 @@ export default function Collaborate() {
       setLoading(true);
       setError(null);
       const response = await axiosInstance.get("/collaborate/posts");
-      setPosts(Array.isArray(response.data) ? response.data : []);
+      const data = Array.isArray(response.data) ? response.data : response.data?.posts ?? [];
+      setPosts(Array.isArray(data) ? data : []);
+      if (!Array.isArray(data) || data.length === 0) {
+        // empty is valid — no error banner
+        setPosts([]);
+      }
     } catch (err) {
-      console.error("Error fetching posts:", err);
-      setError("Failed to load posts. Please try again later.");
-      setPosts(getSamplePosts());
+      const status = err?.response?.status;
+      console.error("Error fetching posts:", err?.response?.data || err.message);
+      if (status === 401) {
+        setError("Please log in again to see community posts.");
+        setPosts([]);
+      } else if (status === 404) {
+        setError("Posts endpoint not found — check API base URL (must end in /api).");
+        setPosts(getSamplePosts());
+      } else {
+        setError("Couldn't reach the server. Showing cached examples — Retry when online.");
+        setPosts(getSamplePosts());
+      }
     } finally {
       setLoading(false);
     }
@@ -227,7 +240,7 @@ export default function Collaborate() {
 
   // Navigate to a group's chat
   const handleGroupClick = (group) => {
-    navigate("/chatting-collab", {
+    navigate("/ChattingCollab", {
       state: {
         groupId: group._id,
         groupName: group.name,
@@ -235,36 +248,39 @@ export default function Collaborate() {
     });
   };
 
+  const getDisplayName = (u) => u?.name || u?.username || "Unknown User";
+
   const formatPostForCard = (post) => ({
     id: post._id,
-    name: post.user?.name || "Unknown User",
-    avatar: post.user?.avatar || null,
+    name: getDisplayName(post.user),
+    avatar: post.user?.avatar || post.user?.profilePhoto || null,
     date: post.createdAt,
     content: post.content,
-    likes: post.likes,
+    likes: post.likes ?? 0,
     replies: (post.replies || []).map((reply) => ({
       id: reply._id,
-      name: reply.user?.name || "Unknown User",
-      avatar: reply.user?.avatar || null,
+      name: getDisplayName(reply.user),
+      avatar: reply.user?.avatar || reply.user?.profilePhoto || null,
       date: reply.createdAt,
       text: reply.text,
-      likes: reply.likes,
+      likes: reply.likes ?? 0,
     })),
   });
 
   if (loading) {
     return (
-      <div className="collaborate-page">
-        <header className="collaborate-header">
-          <div className="header-inner">
-            <h1 className="collab-title">
-              <FaUsers className="header-icon" /> Collaborate
+      <div className="nl-page collaborate-page">
+        <div className="nl-hero">
+          <div className="nl-hero-copy">
+            <p className="nl-eyebrow">Collaborate</p>
+            <h1 className="nl-title">
+              Grow <em>together</em>.
             </h1>
-            <p className="collab-sub">
-              Find people who you know and message them!
+            <p className="nl-lede">
+              Find people you know, share ideas, and support each other.
             </p>
           </div>
-        </header>
+        </div>
         <div className="loading-container">
           <div className="loading-spinner"></div>
           <p>Loading posts...</p>
@@ -274,17 +290,20 @@ export default function Collaborate() {
   }
 
   return (
-    <div className="collaborate-page">
-      <header className="collaborate-header">
-        <div className="header-inner">
-          <h1 className="collab-title">
-            <FaUsers className="header-icon" /> Collaborate
+    <div className="nl-page collaborate-page">
+      <div className="nl-hero">
+        <div className="nl-hero-copy">
+          <p className="nl-eyebrow">Collaborate</p>
+          <h1 className="nl-title">
+            Grow <em>together</em>.
           </h1>
-          <p className="collab-sub">
-            Find people who you know and message them!
+          <p className="nl-lede">
+            Find people you know, share ideas, and support each other —
+            community makes every goal lighter.
           </p>
         </div>
-      </header>
+        <p className="nl-hero-quote">“Alone we go fast. Together we go far.”</p>
+      </div>
 
       {error && (
         <div className="error-banner">

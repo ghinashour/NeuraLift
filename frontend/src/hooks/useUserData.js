@@ -17,7 +17,8 @@ const useUserData = () => {
                 return;
             }
 
-            const response = await axios.get('http://localhost:4000/api/auth/me', {
+            const API_BASE = (process.env.REACT_APP_API_URL || "http://localhost:4000").replace(/\/$/, "");
+            const response = await axios.get(`${API_BASE}/api/auth/me`, {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }

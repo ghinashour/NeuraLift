@@ -1,261 +1,229 @@
-/* StressReliefSpace.css */
+/* Stress Relief Space — calm editorial theme */
 
-/* ====== GENERAL PAGE ====== */
-.stressPage-container {
-  max-width: 1200px;
-  margin: 2rem auto;
-  text-align: center;
-  background: #eef6ff;
-  padding: 2rem;
-  font-family: "Inter", sans-serif;
-}
-
-.stressPage-title {
-  font-size: 1.8rem;
-  font-weight: 700;
+.stress-toolbar {
   display: flex;
   align-items: center;
-  justify-content: center;
-  gap: 8px;
-  color: #1e293b;
-}
-
-.stressPage-subtitle {
-  color: #64748b;
-  margin-top: 6px;
-}
-
-.stressPage-content {
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
-  gap: 2rem;
-  margin-top: 2rem;
   flex-wrap: wrap;
-}
-
-/* ====== CANVAS SECTION ====== */
-.stressPage-section {
-  background: white;
-  padding: 1.5rem;
-  border-radius: 1rem;
-  width: 480px;
-  height: 400px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-  text-align: left;
-  display: flex;
-  flex-direction: column;
-}
-
-.stressPage-header {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  color: #2563eb;
-  margin-bottom: 0.5rem;
-}
-
-.stressPage-tools {
-  display: flex;
-  align-items: center;
   gap: 10px;
-  margin-bottom: 0.75rem;
+  margin-bottom: 16px;
 }
 
-.tool-btn {
-  padding: 6px 12px;
-  border: 1px solid #e2e8f0;
-  border-radius: 8px;
-  background: white;
-  cursor: pointer;
-  font-size: 0.9rem;
-  transition: all 0.2s ease;
-}
-
-.tool-btn.active,
-.tool-btn:hover {
-  background: #2563eb;
-  color: white;
-}
-
-.size-label {
-  display: flex;
+.stress-size {
+  display: inline-flex;
   align-items: center;
-  gap: 4px;
-  font-size: 0.85rem;
-  color: #334155;
-}
-
-.size-label input {
-  width: 60px;
-  margin-left: 6px;
-  padding: 4px 6px;
-  border-radius: 6px;
-  border: 1px solid #e2e8f0;
-}
-
-/* color palette */
-.color-palette {
-  display: flex;
-  flex-wrap: wrap;
   gap: 8px;
-  margin-bottom: 1rem;
-}
-
-.color-circle {
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
-  cursor: pointer;
-  border: 2px solid transparent;
-  transition: transform 0.2s;
-}
-
-.color-circle.active {
-  border-color: #2563eb;
-  transform: scale(1.2);
-}
-
-/* canvas visible area - CSS controls display size */
-.stressPage-canvas {
-  width: 100%;
-  height: 300px; /* visible height */
-  border: 2px solid #e2e8f0;
-  border-radius: 8px;
-  cursor: crosshair;
-  background: #f8fafc;
-  display: block;
-  margin-top: 8px;
-}
-
-/* actions */
-.stressPage-actions {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 10px;
-}
-
-.stressPage-actions button {
-  background: #2563eb;
-  color: white;
-  border: none;
-  padding: 8px 16px;
-  border-radius: 8px;
-  cursor: pointer;
+  margin-left: 8px;
+  padding-left: 16px;
+  border-left: 1px solid var(--line);
+  font-size: 13.5px;
+  color: var(--muted);
   font-weight: 500;
 }
 
-.stressPage-actions button:hover {
-  background: #1d4ed8;
+.stress-size-input {
+  width: 64px;
+  padding: 8px 10px;
+  text-align: center;
 }
 
-/* ====== THOUGHT SECTION ====== */
-.section-subtext {
-  color: #64748b;
-  font-size: 0.9rem;
-  margin-bottom: 1rem;
-}
-
-.thought-input {
-  width: 100%;
-  min-height: 80px;
-  border-radius: 8px;
-  border: 1px solid #e2e8f0;
-  padding: 10px;
-  font-size: 0.9rem;
-  outline: none;
-  resize: none;
-  margin-bottom: 1rem;
-}
-
-.capture-btn {
-  width: 100%;
-  background: #2563eb;
-  color: white;
-  border: none;
-  padding: 10px;
-  border-radius: 8px;
-  font-weight: 600;
-  cursor: pointer;
+.stress-palette {
   display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 6px;
-  transition: background 0.2s;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 16px;
 }
 
-.capture-btn:hover {
-  background: #1e40af;
+.stress-dot {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  padding: 0;
+  cursor: pointer;
+  transition: transform 0.15s, border-color 0.15s, box-shadow 0.15s;
+}
+
+.stress-dot:hover {
+  transform: scale(1.12);
+}
+
+.stress-dot.active {
+  border-color: #fff;
+  box-shadow: 0 0 0 2px var(--primary);
+}
+
+.stress-canvas {
+  width: 100%;
+  height: 340px;
+  display: block;
+  border: 1px solid var(--field-border);
+  border-radius: 12px;
+  background: #ffffff;
+  cursor: crosshair;
+  touch-action: none;
+}
+
+.stress-actions {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.stress-actions .btn-outline {
+  min-width: 130px;
+}
+
+.stress-actions .stress-save {
+  width: auto;
+  min-width: 190px;
+}
+
+.stress-capture {
+  margin-top: 16px;
 }
 
 .thought-list {
-  margin-top: 1rem;
-  overflow-y: auto;
-  max-height: 260px;
-  padding-right: 6px;
-}
-
-.no-thoughts {
-  color: #94a3b8;
-  text-align: center;
-  font-size: 0.9rem;
   display: flex;
-  align-items: center;
-  justify-content: center;
+  flex-direction: column;
+  gap: 10px;
+  max-height: 300px;
+  overflow-y: auto;
 }
 
 .thought-item {
-  background: #f1f5f9;
-  border-radius: 8px;
-  padding: 8px 12px;
-  margin-bottom: 8px;
-  color: #1e293b;
-  font-size: 0.9rem;
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  background: #f7f3ec;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 12px 14px;
+}
+
+.thought-text {
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--ink);
+  word-break: break-word;
 }
 
 .thought-actions {
   display: flex;
-  gap: 6px;
+  gap: 4px;
+  flex-shrink: 0;
 }
 
-.edit-btn,
-.delete-btn,
-.save-btn {
-  border: none;
+.icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 9px;
+  border: 0;
   background: transparent;
+  color: var(--muted);
   cursor: pointer;
-  padding: 4px;
-  border-radius: 6px;
-  transition: 0.2s ease;
+  transition: background 0.15s, color 0.15s;
 }
 
-.edit-btn:hover {
-  background: #fde68a;
+.icon-btn:hover {
+  background: var(--primary-soft);
+  color: var(--primary);
 }
 
-.delete-btn:hover {
-  background: #fecaca;
+.icon-btn.danger:hover {
+  background: #fdeaea;
+  color: #c04545;
 }
 
-.save-btn:hover {
-  background: #bbf7d0;
+.thought-edit {
+  display: flex;
+  gap: 8px;
+  width: 100%;
 }
 
-.thought-edit-input,
-.edit-input {
+.thought-edit .nl-input {
   flex: 1;
-  border: 1px solid #cbd5e1;
-  border-radius: 6px;
-  padding: 5px;
 }
 
-/* ===== Floating AI Logo ===== */
-.ai-float {
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-  z-index: 1000;
+.nl-chip-sm {
+  width: 40px;
+  height: 40px;
+}
+
+@media (max-width: 640px) {
+  .stress-actions {
+    flex-direction: column;
+  }
+
+  .stress-actions .btn-outline,
+  .stress-actions .stress-save {
+    width: 100%;
+    min-width: 0;
+  }
+}
+
+/* ===== DUSK THEME ===== */
+.stress-toolbar,
+.stress-size,
+.stress-palette,
+.stress-canvas,
+.stress-actions,
+.stress-capture,
+.thought-list,
+.thought-item,
+.thought-edit,
+.icon-btn {
+  --ink: var(--dusk-text);
+  --muted: var(--dusk-muted);
+  --muted-2: var(--dusk-faint);
+  --line: var(--dusk-border);
+  --card: var(--dusk-glass);
+  --cream: transparent;
+  --lilac: var(--dusk-lilac);
+  --lilac-soft: rgba(255, 255, 255, .14);
+  --primary: #b79ced;
+  --primary-dark: #9a7fe0;
+  --primary-soft: rgba(255, 255, 255, .14);
+  --field-border: rgba(255, 255, 255, .2);
+  --shadow: 0 20px 60px rgba(10, 4, 25, .45);
+  --shadow-sm: 0 8px 24px rgba(10, 4, 25, .4);
+  color: var(--dusk-text);
+}
+
+.thought-item {
+  background: var(--dusk-glass);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.icon-btn.danger:hover {
+  background: rgba(192, 69, 69, .25);
+  color: #f09696;
+}
+
+.stress-dot:focus-visible,
+.stress-size-input:focus-visible,
+.icon-btn:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 2px;
+}
+
+/* Recharts / chart elements readable on dark (page renders inside .nl-page) */
+.nl-page .recharts-cartesian-axis-tick text {
+  fill: var(--dusk-muted);
+}
+
+.nl-page .recharts-cartesian-grid line {
+  stroke: rgba(255, 255, 255, .14);
+}
+
+.nl-page .recharts-default-tooltip {
+  background: rgba(18, 9, 34, .95) !important;
+  border: 1px solid var(--dusk-border) !important;
+  border-radius: 12px;
+  color: var(--dusk-text) !important;
 }

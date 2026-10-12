@@ -9,7 +9,8 @@ const SuccessStories = () => {
   return (
     <section id="SuccessStories">
       <div className="section-success-stories">
-        <h1>Success Stories</h1>
+        <p className="eyebrow">Community love</p>
+        <h1 className="serif">Success <em>Stories</em></h1>
         <p className="success-section-description">
           Real people, real transformations. Discover how NeuraLift has helped
           thousands of users improve their mental health and achieve their
@@ -183,28 +184,29 @@ const SuccessStories = () => {
         </div>
 
         <div className="success-stats-section">
-          <h2>Join thousands of others transforming their lives</h2>
+          <p className="eyebrow light">The results speak</p>
+          <h2 className="serif">Join thousands of others <em>transforming</em> their lives</h2>
           <div className="success-stats-grid">
             <div className="success-stat-item">
-              <div style={{ color: "#1BBB5E" }} className="success-stat-number">
+              <div className="success-stat-number st-sage">
                 98%
               </div>
               <div className="success-stat-label"> Success Rate</div>
             </div>
             <div className="success-stat-item">
-              <div style={{ color: "#3C8AF6" }} className="success-stat-number">
+              <div className="success-stat-number st-gold">
                 4.9/5
               </div>
               <div className="success-stat-label">User Rating</div>
             </div>
             <div className="success-stat-item">
-              <div style={{ color: "#895AF6" }} className="success-stat-number">
+              <div className="success-stat-number st-rose">
                 10K+
               </div>
               <div className="success-stat-label">Lives Changed</div>
             </div>
             <div className="success-stat-item">
-              <div style={{ color: "#1BBB5E" }} className="success-stat-number">
+              <div className="success-stat-number st-sage">
                 30 Days
               </div>
               <div className="success-stat-label">See Results</div>

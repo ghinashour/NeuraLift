@@ -257,3 +257,19 @@
     padding: 0.6rem;
   }
 }
+
+/* ===== DUSK THEME ===== */
+.admin-notes, .admin-note-analytics { --ink: var(--dusk-text); --muted: var(--dusk-muted); --muted-2: var(--dusk-faint); --line: var(--dusk-border); --card: var(--dusk-glass); --cream: transparent; --lilac: var(--dusk-lilac); --lilac-soft: rgba(255,255,255,.14); --primary: #b79ced; --primary-dark: #9a7fe0; --primary-soft: rgba(255,255,255,.14); --field-border: rgba(255,255,255,.2); --shadow: 0 20px 60px rgba(10,4,25,.45); --shadow-sm: 0 8px 24px rgba(10,4,25,.4); background: var(--dusk-glass); border: 1px solid var(--dusk-border); box-shadow: 0 20px 60px rgba(10,4,25,.45); color: var(--dusk-text); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); }
+.admin-notes h2, .admin-note-analytics h2 { color: var(--dusk-text); }
+.subtitle { color: var(--dusk-muted); }
+.note-filters input, .note-filters select { background: rgba(255,255,255,.08); border-color: rgba(255,255,255,.2); color: var(--dusk-text); }
+.note-filters button { background: var(--dusk-pill); color: #fff; }
+.note-filters button:hover { background: var(--dusk-pill-hover); }
+.notes-table th, .notes-table td { border-color: var(--dusk-border); color: var(--dusk-text); }
+.notes-table th { background: rgba(255,255,255,.06); color: var(--dusk-text); }
+.btn-delete { background: rgba(255,90,90,.16); border: 1px solid rgba(255,120,120,.4); color: #ffc9c9; }
+.btn-delete:hover { background: rgba(255,90,90,.3); }
+.pagination button { background: var(--dusk-pill); color: #fff; }
+.pagination button:disabled { background: rgba(255,255,255,.12); color: var(--dusk-faint); }
+.pagination span { color: var(--dusk-text); }
+.admin-notes :focus-visible, .admin-note-analytics :focus-visible { outline: 2px solid #fff; outline-offset: 2px; }

@@ -83,12 +83,20 @@ export default function MyTaskPage() {
   }
 
   return (
-    <div className="mytask-page">
+    <div className="nl-page mytask-page">
+      <div className="nl-hero">
+        <div className="nl-hero-copy">
+          <p className="nl-eyebrow">Assigned Tasks</p>
+          <h1 className="nl-title">
+            Tasks assigned
+            <br />
+            to <em>you</em>.
+          </h1>
+          <p className="nl-lede">Here are the tasks your team shared with you recently.</p>
+        </div>
+        <p className="nl-hero-quote">“Teamwork makes the dream work.”</p>
+      </div>
       <div className="mytask-container">
-        <header className="mytask-header">
-          <h1>My Tasks</h1>
-          <p>Here are the tasks assigned to you recently</p>
-        </header>
 
         {tasks.length === 0 ? (
           <div className="no-tasks">

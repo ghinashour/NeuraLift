@@ -15,3 +15,7 @@
   from { transform: translateY(-8px); opacity: 0 }
   to { transform: translateY(0); opacity: 1 }
 }
+
+/* ===== DUSK THEME ===== */
+.notification-toast { --ink: var(--dusk-text); --muted: var(--dusk-muted); --muted-2: var(--dusk-faint); --line: var(--dusk-border); --card: var(--dusk-glass); --cream: transparent; --lilac: var(--dusk-lilac); --lilac-soft: rgba(255,255,255,.14); --primary: #b79ced; --primary-dark: #9a7fe0; --primary-soft: rgba(255,255,255,.14); --field-border: rgba(255,255,255,.2); --shadow: 0 20px 60px rgba(10,4,25,.45); --shadow-sm: 0 8px 24px rgba(10,4,25,.4); background: var(--dusk-glass-deep); border: 1px solid var(--dusk-border); color: var(--dusk-text); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); box-shadow: 0 20px 60px rgba(10,4,25,.45); }
+.notification-toast:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }

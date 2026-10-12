@@ -1,6 +1,7 @@
 // src/components/Challenges/ChallengeCard.js
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import { ArrowRight } from "lucide-react";
 import "../../styles/Challenges.css";
 
 function ChallengeCard({ title, description, link }) {
@@ -22,6 +23,9 @@ function ChallengeCard({ title, description, link }) {
     >
       <h3>{title}</h3>
       <p>{description}</p>
+      <span className="challenge-play">
+        Play <ArrowRight size={15} />
+      </span>
     </div>
   );
 }

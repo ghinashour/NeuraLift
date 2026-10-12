@@ -38,7 +38,7 @@ const QuoteSection = ({ quote, onNewQuote, isLoading }) => {
         ) : (
           <>
             <p className="quote-section__text">
-              {quote ? `"${quote.text}"` : 'Stay focused and productive! 🌟'}
+              {quote ? `"${quote.text}"` : 'Stay focused and productive!'}
             </p>
 
             {quote && quote.author && (

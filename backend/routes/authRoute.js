@@ -23,7 +23,7 @@ router.get(
 
 router.get(
   "/google/callback",
-  passport.authenticate("google", { failureRedirect: "http://localhost:3000/login?error=oauth_failed", session: false }),
+  passport.authenticate("google", { failureRedirect: `${process.env.CLIENT_URL || (process.env.CLIENT_ORIGIN || "http://localhost:3000").split(",")[0].trim()}/login?error=oauth_failed`, session: false }),
   (req, res) => {
     // Create JWT for your frontend
     const token = jwt.sign(
@@ -40,7 +40,8 @@ router.get(
     }));
 
     // Redirect to frontend login with token and user data
-    res.redirect(`http://localhost:3000/login?token=${token}&user=${user}`);
+    const frontendBase = (process.env.CLIENT_URL || (process.env.CLIENT_ORIGIN || "http://localhost:3000").split(",")[0] || "http://localhost:3000").trim().replace(/\/$/, "");
+    res.redirect(`${frontendBase}/login?token=${token}&user=${user}`);
   }
 );
 module.exports = router;

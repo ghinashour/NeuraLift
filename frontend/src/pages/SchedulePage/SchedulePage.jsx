@@ -72,7 +72,7 @@ const SchedulePage = () => {
         icon: 'error',
         title: 'Error',
         text: 'Error saving event. Try again.',
-        confirmButtonColor: '#3C83F6'
+        confirmButtonColor: '#2E2A44'
       });
     }
   };
@@ -90,7 +90,7 @@ const SchedulePage = () => {
         icon: 'error',
         title: 'Error',
         text: 'Error deleting event. Try again.',
-        confirmButtonColor: '#3C83F6'
+        confirmButtonColor: '#2E2A44'
       });
     }
   };
@@ -103,7 +103,7 @@ const SchedulePage = () => {
   const toggleCalendarView = () => setShowCalendar(prev => !prev);
 
   return (
-    <div className="schPage-schedule_container">
+    <div className="schPage-schedule-container">
       <div className="schPage-schedule-view">
         {/* Header */}
         <div className="schPage-schedule-header">

@@ -1,44 +1,36 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import './InputArea.css';
-import { FaPaperPlane, FaSmile, FaPaperclip } from 'react-icons/fa';
-import Input from '../../UI/Input/Input';
-import { useChat } from '../../../context/ChatContext';
-import { useAI } from '../../../hooks/useAI';
 import { isValidMessage, sanitizeInput } from '../../../utils/aiHelpers';
 
-const InputArea = () => {
+const SendIcon = () => (
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+    <path
+      d="M12 19V5M5 12l7-7 7 7"
+      stroke="currentColor"
+      strokeWidth="2.2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+  </svg>
+);
+
+const InputArea = ({ onSend, disabled }) => {
   const [inputText, setInputText] = useState('');
   const inputRef = useRef(null);
-  const { addMessage, setIsTyping } = useChat();
-  const { processMessage } = useAI();
+
+  // Auto-grow up to max-height, then scroll
+  useEffect(() => {
+    const el = inputRef.current;
+    if (!el) return;
+    el.style.height = 'auto';
+    el.style.height = `${Math.min(el.scrollHeight, 140)}px`;
+  }, [inputText]);
 
   const handleSend = async () => {
-    const sanitized = sanitizeInput(inputText);
-    
-    if (!isValidMessage(sanitized)) return;
-
-    // Add user message
-    addMessage({
-      sender: 'user',
-      text: sanitized
-    });
-
+    const sanitized = sanitizeInput(inputText || '');
+    if (!isValidMessage(sanitized) || disabled) return;
     setInputText('');
-    
-    // Show typing indicator
-    setIsTyping(true);
-    
-    // Get AI response
-    const response = await processMessage(sanitized);
-    
-    // Add bot response
-    setIsTyping(false);
-    addMessage({
-      sender: 'bot',
-      text: response
-    });
-
-    // Refocus input
+    await onSend?.(sanitized);
     inputRef.current?.focus();
   };
 
@@ -49,35 +41,34 @@ const InputArea = () => {
     }
   };
 
+  const canSend = inputText.trim().length > 0 && !disabled;
+
   return (
-    <div className="input-area">
+    <div className="input-area nl-input-area">
       <div className="input-wrapper">
-        <Input
+        <textarea
           ref={inputRef}
-          type="textarea"
-          placeholder="Ask anything..."
+          className="chat-textarea"
+          placeholder="Ask about focus, stress, sleep, or planning…"
           value={inputText}
           onChange={(e) => setInputText(e.target.value)}
           onKeyDown={handleKeyDown}
           aria-label="Chat message input"
+          rows={1}
+          disabled={disabled}
         />
-        <div className="input-actions">
-          <button className="icon-button" aria-label="Attach file">
-            <FaPaperclip className="icon" />
-          </button>
-          <button className="icon-button" aria-label="Add emoji">
-            <FaSmile className="icon" />
-          </button>
-          <button 
-            className="send-button" 
-            onClick={handleSend}
-            disabled={!inputText.trim()}
-            aria-label="Send message"
-          >
-            <FaPaperPlane className="send-icon" />
-          </button>
-        </div>
+        <button
+          type="button"
+          className="send-button"
+          onClick={handleSend}
+          disabled={!canSend}
+          aria-label="Send message"
+          title="Send"
+        >
+          <SendIcon />
+        </button>
       </div>
+      <p className="input-hint">Enter to send · Shift + Enter for new line · AI can make mistakes</p>
     </div>
   );
 };

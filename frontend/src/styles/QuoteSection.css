@@ -1,23 +1,17 @@
 .quote-section {
-  width: 95%;                   /* responsive width */
-  max-width: 720px;             /* ~10% smaller to match pomodoro shrink */
-  background: #fff;             /* white card background */
-  border-radius: 14px;
-  padding: 1.125rem 0.9rem;
+  width: 100%;
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  padding: 6px 4px;
   text-align: center;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  margin: 0.9rem auto;            /* centered horizontally, slightly smaller */
+  margin: 0 auto;
   position: relative;
   overflow: hidden;
-  transition: transform 0.18s ease, box-shadow 0.18s ease;
-}
-
-.quote-section:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
 }
 
 .quote-section__content {
@@ -25,27 +19,29 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  width: 100%;
 }
 
 .quote-section__text {
-  font-size: 0.92rem;
-  color: #111827;
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 17px;
+  color: var(--ink);
   line-height: 1.55;
-  margin-bottom: 0.7rem;
-  font-weight: 500;
-  max-height: 5.2rem; /* limit height so it won't push layout */
+  margin: 0 0 10px;
+  max-height: 5.2rem;
   overflow: hidden;
   text-overflow: ellipsis;
   display: -webkit-box;
-  line-clamp: 4; /* standard property for compatibility */
+  line-clamp: 4;
   -webkit-line-clamp: 4;
   -webkit-box-orient: vertical;
 }
 
 .quote-section__author {
-  font-size: 0.79rem;
-  margin-top: 0.45rem;
-  color: #6b7280;
+  font-size: 12.5px;
+  margin: 0;
+  color: var(--muted);
   font-style: italic;
 }
 
@@ -53,42 +49,34 @@
   display: flex;
   align-items: center;
   gap: 9px;
-  margin-top: 7px;
+  margin-top: 4px;
 }
 
 .quote-section__avatar {
-  width: 36px;
-  height: 36px;
+  width: 32px;
+  height: 32px;
   border-radius: 50%;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, #3C83F6, #6DA2F8);
+  background: linear-gradient(135deg, var(--primary), var(--lilac));
   color: white;
   font-weight: 700;
-  font-size: 13px;
-}
-
-/* subtle gradient overlay for depth */
-.quote-section::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  background: linear-gradient(180deg, rgba(60,131,246,0.03), rgba(109,162,248,0.02));
+  font-size: 12px;
 }
 
 .quote-section__controls {
   display: flex;
-  gap: 0.6rem;
-  margin-top: 1rem;
+  gap: 8px;
+  margin-top: 12px;
 }
 
 .quote-section__button {
-  padding: 0.52rem 0.9rem;
-  font-size: 0.92rem;
-  border-radius: 9px;
-  background-color: #3498db;
+  padding: 7px 16px;
+  font-size: 12.5px;
+  font-weight: 600;
+  border-radius: 999px;
+  background-color: var(--primary);
   color: white;
   border: none;
   cursor: pointer;
@@ -96,56 +84,45 @@
 }
 
 .quote-section__button:hover:not(:disabled) {
-  background-color: #2980b9;
+  background-color: var(--primary-dark);
   transform: translateY(-1px);
 }
 
 .quote-section__button:disabled {
-  background-color: #bdc3c7;
+  background-color: var(--muted-2);
   cursor: not-allowed;
 }
 
 .quote-section__button--outline {
   background: transparent;
-  color: #374151;
-  border: 1px solid rgba(55,65,81,0.08);
+  color: var(--primary);
+  border: 1px solid var(--lilac);
 }
 
-/* Responsive */
-@media (max-width: 768px) {
-  .quote-section {
-    padding: 1.35rem;
-  }
-
-  .quote-section__text {
-    font-size: 0.9rem;
-  }
-
-  .quote-section__author {
-    font-size: 0.75rem;
-  }
-
-  .quote-section__button {
-    font-size: 0.86rem;
-  }
+/* ===== DUSK THEME (opt-in only via data-theme="dusk") ===== */
+.quote-section[data-theme="dusk"] {
+  --ink: var(--dusk-text);
+  --muted: var(--dusk-muted);
+  --muted-2: var(--dusk-faint);
+  --line: var(--dusk-border);
+  --card: var(--dusk-glass);
+  --cream: transparent;
+  --lilac: var(--dusk-lilac);
+  --lilac-soft: rgba(255, 255, 255, .14);
+  --primary: #b79ced;
+  --primary-dark: #9a7fe0;
+  --primary-soft: rgba(255, 255, 255, .14);
+  --field-border: rgba(255, 255, 255, .2);
+  --shadow: 0 20px 60px rgba(10, 4, 25, .45);
+  --shadow-sm: 0 8px 24px rgba(10, 4, 25, .4);
+  color: var(--dusk-text);
+  background: var(--dusk-glass);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
 }
 
-@media (max-width: 480px) {
-  .quote-section {
-    padding: 1.05rem;
-    max-width: 95%;
-  }
-
-  .quote-section__text {
-    font-size: 0.86rem;
-  }
-
-  .quote-section__author {
-    font-size: 0.72rem;
-  }
-
-  .quote-section__button {
-    font-size: 0.78rem;
-    padding: 0.44rem 0.78rem;
-  }
+.quote-section__button:focus-visible,
+.quote-section__button--outline:focus-visible {
+  outline: 2px solid #2e2a44;
+  outline-offset: 2px;
 }

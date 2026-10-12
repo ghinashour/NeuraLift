@@ -12,8 +12,8 @@ import AssignTaskPopup from "../components/Popups/AssignTaskPopup";
 import "../styles/ChattingCollab.css";
 import { useSocket } from "../context/SocketProvider";
 
-const API_BASE_URL =
-  process.env.REACT_APP_API_URL || "http://localhost:4000/api";
+const RAW_BASE_URL = (process.env.REACT_APP_API_URL || "http://localhost:4000/api").replace(/\/$/, "");
+const API_BASE_URL = RAW_BASE_URL.endsWith("/api") ? RAW_BASE_URL : `${RAW_BASE_URL}/api`;
 
 export default function ChattingCollab() {
   const location = useLocation();

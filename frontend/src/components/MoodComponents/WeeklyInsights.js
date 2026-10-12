@@ -32,7 +32,7 @@ const WeeklyInsights = ({ entries }) => {
       ,
       value: lastWeekEntries.length,
       label: "Entries this week",
-      bgColor: "#3498db", // Blue circle
+      bgColor: "#6757A3",
     },
     {
       icon: <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -44,7 +44,7 @@ const WeeklyInsights = ({ entries }) => {
       ,
       value: dominantMood,
       label: "Dominant mood",
-      bgColor: "#16A249",
+      bgColor: "#7A8B6F",
     },
     {
       icon: <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -53,7 +53,7 @@ const WeeklyInsights = ({ entries }) => {
       ,
       value: `${weeklyConsistency}%`,
       label: "Weekly consistency",
-      bgColor: "#7C3BED",
+      bgColor: "#8E7FB8",
     },
   ];
 

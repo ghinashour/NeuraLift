@@ -1,13 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { getMoods, addMood } from "../../api/axios";
-import Header from "../../components/MoodComponents/Header";
 import WeeklyInsights from "../../components/MoodComponents/WeeklyInsights";
 import MoodSelector from "../../components/MoodComponents/MoodSelector";
 import StressSelector from "../../components/MoodComponents/StressSelector";
 import NoteInput from "../../components/MoodComponents/NoteInput";
 import SubmitButton from "../../components/MoodComponents/SubmitButton";
 import RecentEntries from "../../components/MoodComponents/RecentEntries";
-import Divider from "../../components/MoodComponents/Divider";
 import AILogo from '../../components/AiLogo';
 
 import "../../styles/MoodTracker.css";
@@ -57,7 +55,9 @@ export default function MoodTracker({ token }) {
   const handleDeleteMood = async (id) => {
     try {
       const token = localStorage.getItem("token");
-      const res = await fetch(`${process.env.REACT_APP_API_URL}/moods/${id}`, {
+      const raw = (process.env.REACT_APP_API_URL || "http://localhost:4000").replace(/\/$/, "");
+      const apiBase = raw.endsWith("/api") ? raw : `${raw}/api`;
+      const res = await fetch(`${apiBase}/moods/${id}`, {
         method: "DELETE",
         headers: { Authorization: `Bearer ${token}` },
       });
@@ -76,42 +76,36 @@ export default function MoodTracker({ token }) {
   };
 
   return (
-    <div className="App">
-      <Header />
+    <div className="nl-page mood-page">
+      <div className="nl-hero">
+        <div className="nl-hero-copy">
+          <p className="nl-eyebrow">Mood Tracker</p>
+          <h1 className="nl-title">
+            Check in with
+            <br />
+            <em>yourself</em> today.
+          </h1>
+          <p className="nl-lede">
+            Track your emotional wellness and build healthy habits — one honest
+            check-in at a time.
+          </p>
+        </div>
+        <p className="nl-hero-quote">“Feelings are just visitors. Let them come and go.”</p>
+      </div>
 
-      <main className="main-content">
-        <section className="insights-section">
-          <h2>
-            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-              <path
-                d="M18.3333 5.8335L11.25 12.9168L7.08334 8.75016L1.66667 14.1668"
-                stroke="#3C83F6"
-                strokeWidth="1.66667"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-              <path
-                d="M13.3333 5.8335H18.3333V10.8335"
-                stroke="#3C83F6"
-                strokeWidth="1.66667"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
-            This Week's Insights
-          </h2>
+      <div className="mood-stack">
+        <section className="nl-card" aria-label="Weekly insights">
+          <h2 className="mood-card-title">This Week&apos;s Insights</h2>
           <WeeklyInsights entries={moodEntries} />
           {error && <p className="error-message">{error}</p>}
         </section>
 
-        <Divider />
-
-        <section className="mood-tracker-section">
-          <h3>How are you feeling today?</h3>
+        <section className="nl-card" aria-label="Log your mood">
+          <h2 className="mood-card-title">How are you feeling today?</h2>
           <MoodSelector selectedMood={currentMood} onMoodChange={setCurrentMood} />
 
           <div className="stress-question">
-            <h4>Are you feeling stressed?</h4>
+            <h3 className="mood-sub">Are you feeling stressed?</h3>
             <StressSelector isStressed={isStressed} onStressChange={setIsStressed} />
           </div>
 
@@ -119,10 +113,8 @@ export default function MoodTracker({ token }) {
           <SubmitButton isDisabled={!currentMood} onSubmit={handleSubmit} />
         </section>
 
-        <Divider />
-
-        <section className="recent-entries-section">
-          <h3>Recent Entries</h3>
+        <section className="nl-card" aria-label="Recent entries">
+          <h2 className="mood-card-title">Recent Entries</h2>
           <RecentEntries
             entries={moodEntries}
             loading={loading}
@@ -130,12 +122,12 @@ export default function MoodTracker({ token }) {
             onDelete={handleDeleteMood}
           />
         </section>
-      </main>
-      <div style={{ 
-        position: 'fixed', 
-        bottom: '20px', 
+      </div>
+      <div style={{
+        position: 'fixed',
+        bottom: '20px',
         right: '20px',
-        zIndex: 1000 
+        zIndex: 1000
       }}>
         <AILogo />
       </div>

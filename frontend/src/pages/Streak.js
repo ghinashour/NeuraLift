@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import API from "../api/axios";
-import { Flame } from "lucide-react";
+import { Flame, Trophy } from "lucide-react";
 
 import "./Streak.css";
 
@@ -53,8 +53,8 @@ export default function Streak({ userId }) {
             </button>
           </div>
           <div className="streak-popup-body">
-            <p>🔥 Current Streak: <strong>{streak} days</strong></p>
-            <p>🏆 Longest Streak: <strong>{longest} days</strong></p>
+            <p><Flame size={14} /> Current Streak: <strong>{streak} days</strong></p>
+            <p><Trophy size={14} /> Longest Streak: <strong>{longest} days</strong></p>
             <p>
               Keep it up! Logging in every day increases your streak and helps
               you stay consistent toward your goals.

@@ -1,11 +1,13 @@
 // src/layouts/Layout.jsx
 import React, { useState, useEffect } from "react";
-import { Outlet, useLocation } from "react-router-dom";
+import { Outlet, useLocation, Link } from "react-router-dom";
 import Sidebar from "../components/Sidebar";
 import NotificationsIcon from "../components/Notification";
 import Streak from "../pages/Streak";
 import useUserData from "../hooks/useUserData";
 import "../styles/Sidebar.css"; // sidebar css also contains layout variables
+
+const API_ORIGIN = (process.env.REACT_APP_API_URL || "http://localhost:4000").replace(/\/api\/?$/, "").replace(/\/$/, "");
 
 export default function Layout() {
   const location = useLocation();
@@ -38,6 +40,23 @@ export default function Layout() {
           <div className="global-bell">
             <NotificationsIcon />
           </div>
+          <Link
+            to="/profile"
+            className="global-avatar"
+            title={user?.username || user?.name || "Profile"}
+            aria-label="Open profile"
+          >
+            {user?.profilePhoto ? (
+              <img
+                src={`${API_ORIGIN}/uploads/${user.profilePhoto}`}
+                alt=""
+                style={{ width: "100%", height: "100%", borderRadius: "50%", objectFit: "cover" }}
+                onError={(e) => { e.currentTarget.style.display = "none"; }}
+              />
+            ) : (
+              (user?.username || user?.name || "U").slice(0, 2).toUpperCase()
+            )}
+          </Link>
         </div>
       </div>
       {/* Hamburger menu button for mobile */}

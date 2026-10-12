@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
-import axios from "axios";
+import { AdminAPI } from "../../api/axios";
 import { AdminAuthContext } from "../../context/AdminAuthContext";
 
 function Dashboard() {
@@ -18,7 +18,7 @@ function Dashboard() {
       }
 
       setError(null);
-      const res = await axios.get("http://localhost:4000/api/admin/dashboard", {
+      const res = await AdminAPI.get("/dashboard", {
         headers: getAuthHeader()
       });
       setStats(res.data);

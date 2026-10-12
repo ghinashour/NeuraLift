@@ -1,0 +1,423 @@
+/* ============================================================
+   NeuraLift — Botanical Light theme (inner app)
+   Reference: Image 1 dashboard mock
+   Palette: ivory cream, sage, peach, lavender, deep plum
+   Style: Organic Biophilic — rounded 16-24px, soft natural
+   shadows, flowing botanical accents, Lora/Cormorant + Inter
+   Loaded AFTER dusk.css so it wins for all inner pages.
+   ============================================================ */
+
+/* ---------- 1. Remap dusk variables to light (global kill-switch) ---------- */
+.app-layout {
+  --dusk-bg-0: #faf7f1;
+  --dusk-bg-1: #faf7f1;
+  --dusk-bg-2: #f3ede1;
+  --dusk-bg-3: #faf7f1;
+  --dusk-gradient: #faf7f1;
+  --dusk-text: #232033;
+  --dusk-muted: #6f6a7e;
+  --dusk-faint: #9a94a8;
+  --dusk-glass: #fffefb;
+  --dusk-glass-deep: #fffefb;
+  --dusk-border: #ece4d4;
+  --dusk-pill: #2e2a44;
+  --dusk-pill-hover: #3d375c;
+  --dusk-lilac: #7a6bae;
+  --dusk-shadow: 0 10px 30px rgba(46, 42, 68, 0.08);
+  background: #faf7f1 !important;
+}
+
+/* ---------- 2. Shell: sidebar + main ---------- */
+.app-layout .layout-main {
+  background: transparent !important;
+  color: #232033 !important;
+  padding: 60px 28px 32px !important;
+}
+
+.app-layout .sidebar {
+  background: #fefdf9 !important;
+  border-right: 1px solid #ece4d4 !important;
+  box-shadow: 2px 0 16px rgba(46, 42, 68, 0.05) !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+.app-layout .sidebar-brand-name { color: #232033 !important; }
+.app-layout .brand-sub { color: #6f6a7e !important; }
+.app-layout .brand-icon img {
+  background: linear-gradient(135deg, #efe7f6, #d9cff0) !important;
+  border: 1px solid #d9cff0 !important;
+  box-shadow: 0 4px 12px rgba(91, 75, 138, 0.16) !important;
+}
+
+/* Restore + style nav icons (reference shows outline icons) — disabled: text-only nav requested */
+.app-layout .nav-item svg, .app-layout .nav--text-only svg { display: none !important; }
+.app-layout .nav-item {
+  color: #57536a !important;
+  border: 1px solid transparent !important;
+  border-radius: 12px !important;
+}
+.app-layout .nav-item:hover { background: #f4eee1 !important; color: #232033 !important; }
+.app-layout .nav-item:focus-visible { outline: 2px solid #8e7fb8 !important; outline-offset: 2px; }
+.app-layout .nav-item.active {
+  background: #ede7f7 !important;
+  color: #2e2a44 !important;
+  font-weight: 600 !important;
+}
+.app-layout .nav-item.active svg path { stroke: #2e2a44 !important; }
+
+.app-layout .sidebar-bottom { border-top: 1px solid #ece4d4 !important; }
+.app-layout .sidebar-username { color: #232033 !important; }
+.app-layout .sidebar-role { color: #6f6a7e !important; }
+.app-layout .sidebar-avatar { border-color: #fff !important; outline-color: #ece4d4 !important; }
+.app-layout .profile-section:hover { background: #f4eee1 !important; }
+
+.app-layout .hamburger-menu {
+  background: #fffefb !important;
+  border: 1px solid #ece4d4 !important;
+}
+.app-layout .hamburger-menu svg path { stroke: #232033 !important; }
+
+/* Global top-right cluster: bell + avatar pill */
+.global-notifications {
+  top: 18px !important;
+  right: 28px !important;
+  gap: 12px;
+}
+.global-inline { display: flex; align-items: center; gap: 12px; }
+.global-bell button, .global-bell svg { color: #57536a !important; }
+.global-avatar {
+  width: 34px; height: 34px; border-radius: 50%;
+  background: #e8e2d4; color: #2e2a44;
+  display: inline-flex; align-items: center; justify-content: center;
+  font-size: 12px; font-weight: 700; letter-spacing: 0.04em;
+  border: 2px solid #fff; outline: 1px solid #ece4d4;
+  text-decoration: none;
+}
+
+/* ---------- 3. Dashboard bento — light botanical ---------- */
+.dashboard-page { color: #232033 !important; }
+
+.dash-head { align-items: center !important; margin-bottom: 20px !important; }
+.dash-head-copy .greeting-text {
+  font-family: var(--serif) !important;
+  font-size: clamp(26px, 3vw, 34px) !important;
+  font-weight: 600 !important;
+  color: #232033 !important;
+  letter-spacing: -0.01em;
+}
+.dash-head-copy .greeting-text strong { font-style: normal !important; font-weight: 700 !important; }
+.dash-head-copy .greeting-subtext { color: #6f6a7e !important; font-size: 13.5px !important; }
+.greeting-spark { color: #d99873 !important; }
+
+.dash-search {
+  background: #fffefb !important;
+  border: 1px solid #ece4d4 !important;
+  border-radius: 999px !important;
+  box-shadow: 0 4px 14px rgba(46, 42, 68, 0.05) !important;
+  backdrop-filter: none !important;
+  color: #6f6a7e !important;
+  min-width: 300px;
+}
+.dash-search input { color: #232033 !important; }
+.dash-search input::placeholder { color: #9a94a8 !important; }
+
+/* Base card */
+.dash-card {
+  background: #fffefb !important;
+  border: 1px solid #ece4d4 !important;
+  border-radius: 20px !important;
+  box-shadow: 0 8px 24px rgba(46, 42, 68, 0.06) !important;
+  backdrop-filter: none !important;
+  color: #232033 !important;
+  position: relative;
+  overflow: hidden;
+  transition: transform 200ms ease, box-shadow 200ms ease;
+}
+.dash-card:hover { transform: translateY(-2px); box-shadow: 0 14px 32px rgba(46,42,68,.09) !important; }
+
+.dash-eyebrow { color: #6f6a7e !important; }
+.dash-h2 { color: #232033 !important; }
+.dash-muted { color: #57536a !important; }
+.dash-muted-sm { color: #6f6a7e !important; }
+.dash-focus-title { color: #232033 !important; }
+.dash-stat-val { color: #232033 !important; }
+.dash-stat-val span { color: #6f6a7e !important; }
+.dash-big { color: #232033 !important; }
+
+/* Tinted hero cards (match reference) */
+.dash-focus {
+  background: linear-gradient(135deg, #edf1e8 0%, #e6ece1 55%, #e2e9dd 100%) !important;
+  border-color: #dde5d6 !important;
+}
+.dash-quote .inspiration-section { margin: 0 !important; padding: 0 !important; height: 100% !important; }
+.dash-quote .inspiration-box {
+  width: 100% !important; height: 100% !important; box-sizing: border-box;
+  background: linear-gradient(135deg, #fef6ec 0%, #fdeee0 100%) !important;
+  border: 1px solid #f0ddc8 !important;
+  border-radius: 20px !important;
+  box-shadow: 0 8px 24px rgba(46,42,68,.06) !important;
+  backdrop-filter: none !important;
+  padding: 22px 24px !important;
+}
+.dash-quote .inspiration-box::before { color: #e8c9ac !important; }
+.dash-quote .quote-text { color: #3a3348 !important; font-size: 17px !important; }
+.dash-quote .quote-author { color: #6f6a7e !important; }
+.dash-quote .inspiration-title { color: #6f6a7e !important; }
+.dash-quote .inspiration-header .heart-icon { color: #d99873 !important; }
+
+.dash-schedule {
+  background: linear-gradient(135deg, #f3effa 0%, #ede7f8 100%) !important;
+  border-color: #ddd3ef !important;
+}
+.dash-wellness {
+  background: linear-gradient(135deg, #f3effa 0%, #ede7f8 100%) !important;
+  border-color: #ddd3ef !important;
+}
+
+/* Botanical corner flourish (subtle, no images needed) */
+.dash-focus::after, .dash-schedule::after, .dash-wellness::after,
+.dash-quote .inspiration-box::after {
+  content: "";
+  position: absolute; right: -30px; bottom: -30px;
+  width: 150px; height: 150px;
+  background:
+    radial-gradient(ellipse 22px 52px at 50% 50%, rgba(127,161,132,.28), transparent 70%),
+    radial-gradient(ellipse 18px 40px at 62% 40%, rgba(127,161,132,.22), transparent 70%),
+    radial-gradient(ellipse 30px 30px at 40% 62%, rgba(217,152,115,.16), transparent 70%);
+  transform: rotate(-18deg);
+  pointer-events: none;
+}
+.dash-schedule::after, .dash-wellness::after {
+  background:
+    radial-gradient(ellipse 20px 48px at 50% 50%, rgba(142,127,184,.30), transparent 70%),
+    radial-gradient(ellipse 16px 36px at 62% 42%, rgba(142,127,184,.22), transparent 70%);
+}
+
+/* Buttons: deep plum pill */
+.dash-btn, .new-quote-btn {
+  background: #2e2a44 !important;
+  border: 1px solid #2e2a44 !important;
+  color: #fff !important;
+  border-radius: 999px !important;
+  box-shadow: 0 8px 20px rgba(46, 42, 68, 0.22) !important;
+}
+.dash-btn:hover, .new-quote-btn:hover { background: #3d375c !important; transform: translateY(-1px); }
+.dash-btn:focus-visible, .new-quote-btn:focus-visible { outline: 2px solid #8e7fb8 !important; outline-offset: 2px; }
+
+.dash-link { color: #2e2a44 !important; font-weight: 700 !important; }
+.dash-link:hover { color: #5a4f8f !important; }
+.dash-link:focus-visible { outline: 2px solid #8e7fb8 !important; }
+
+.dash-chip {
+  background: rgba(46,42,68,.07) !important;
+  border: 1px solid rgba(46,42,68,.12) !important;
+  color: #2e2a44 !important;
+}
+
+/* Chip stat bars: peach + sage like reference */
+.dash-bar { background: #efe8d9 !important; height: 7px !important; }
+.dash-chip-stat:nth-of-type(1) .dash-bar span { background: linear-gradient(90deg, #e9b48f, #d99873) !important; }
+.dash-bar span { background: linear-gradient(90deg, #9db89e, #7fa184) !important; }
+.dash-chip-stat > svg { color: #8e7fb8 !important; }
+.dash-chip-stat:nth-of-type(2) > svg { color: #7fa184 !important; }
+.dash-chip-stat:nth-of-type(3) > svg { color: #d99873 !important; }
+
+/* Focus mini ring: sage arc */
+.dash-ring-track { stroke: #e7e0d1 !important; }
+.dash-ring-ticks { stroke: #d8cfba !important; }
+.dash-ring-prog { stroke: #7fa184 !important; }
+.dash-mini-center strong { color: #232033 !important; }
+.dash-mini-center span { color: #6f6a7e !important; }
+
+/* Tasks */
+.dash-task-list li { border-bottom: 1px solid #f0e9d9 !important; }
+.dash-check { border: 1.5px solid #c9c0ad !important; background: #fff !important; }
+.dash-check:hover { border-color: #2e2a44 !important; background: #ede7f7 !important; }
+.dash-task-title { color: #232033 !important; }
+.dash-prio-high { background: rgba(217,152,115,.16) !important; color: #a05f34 !important; }
+.dash-prio-urgent { background: rgba(200,90,90,.14) !important; color: #a03e3e !important; }
+.dash-prio-medium { background: rgba(232,192,122,.18) !important; color: #8a6420 !important; }
+.dash-prio-low { background: rgba(127,161,132,.16) !important; color: #4f6b4a !important; }
+
+/* Donut: peach ring */
+.dash-progress .dash-ring-prog { stroke: #e9b48f !important; }
+.dash-dot-done { background: #7fa184 !important; }
+.dash-dot-open { background: #e9b48f !important; }
+.dash-dot-updated { background: #8e7fb8 !important; }
+.dash-legend li { color: #6f6a7e !important; }
+.dash-legend strong { color: #232033 !important; }
+
+/* Weekly bars: sage fill */
+.dash-bar-track { background: #f1ebdd !important; }
+.dash-bar-track span { background: linear-gradient(180deg, #9db89e, #7fa184) !important; }
+.dash-bar-val { color: #6f6a7e !important; }
+.dash-bar-day { font-size: 11px; font-weight: 700; color: #9a94a8; }
+.dash-up { color: #4f7a4e !important; }
+.dash-down { color: #b05252 !important; }
+
+/* Streak */
+.dash-streak > svg { color: #d99873 !important; }
+
+/* Wellness tiles */
+.dash-tile {
+  border: 1px solid #e2d8f0 !important;
+  background: #fffefb !important;
+  border-radius: 14px !important;
+}
+.dash-tile strong { color: #232033 !important; }
+.dash-tile span { color: #6f6a7e !important; }
+
+/* Activity */
+.dash-act-list li { border-bottom: 1px solid #f0e9d9 !important; }
+.dash-act-list .dash-dot-done { background: #7fa184 !important; }
+.dash-act-list .dash-dot-updated { background: #8e7fb8 !important; }
+
+/* Schedule list */
+.dash-sched-time { color: #6f6a7e !important; }
+.dash-sched-title { color: #232033 !important; }
+
+/* ---------- 4. Inner page kit (.nl-*) back to light ---------- */
+.app-layout .layout-main .nl-page { background: transparent !important; color: #232033 !important; }
+.app-layout .layout-main .nl-title,
+.app-layout .layout-main .nl-card-title { color: #232033 !important; }
+.app-layout .layout-main .nl-lede,
+.app-layout .layout-main .nl-card-sub { color: #6f6a7e !important; }
+.app-layout .layout-main .nl-eyebrow { color: #8e7fb8 !important; }
+.app-layout .layout-main .nl-hero-quote { color: #232033 !important; }
+.app-layout .layout-main .nl-hero-quote::after { background: #8e7fb8 !important; }
+.app-layout .layout-main .nl-card {
+  background: #fffefb !important;
+  border: 1px solid #ece4d4 !important;
+  box-shadow: 0 8px 24px rgba(46,42,68,.06) !important;
+  backdrop-filter: none !important;
+  border-radius: 20px !important;
+}
+.app-layout .layout-main .nl-chip { background: #ede7f7 !important; color: #2e2a44 !important; }
+.app-layout .layout-main .btn-primary {
+  background: #2e2a44 !important; color: #fff !important;
+  box-shadow: 0 10px 22px rgba(46,42,68,.22) !important;
+  border-radius: 12px !important;
+}
+.app-layout .layout-main .btn-primary:hover { background: #3d375c !important; }
+.app-layout .layout-main .btn-soft { background: #ede7f7 !important; color: #2e2a44 !important; }
+.app-layout .layout-main .btn-soft:hover { background: #ded4f2 !important; }
+.app-layout .layout-main .btn-outline {
+  background: #fff !important; border-color: #e4d9c4 !important; color: #232033 !important;
+}
+.app-layout .layout-main .btn-outline:hover { border-color: #232033 !important; background: #fff !important; color: #232033 !important; }
+.app-layout .layout-main .nl-input,
+.app-layout .layout-main .nl-textarea {
+  background: #fff !important; border-color: #e4d9c4 !important; color: #232033 !important;
+}
+.app-layout .layout-main .nl-input:focus,
+.app-layout .layout-main .nl-textarea:focus {
+  border-color: #8e7fb8 !important; box-shadow: 0 0 0 3px rgba(142,127,184,.16) !important;
+}
+.app-layout .layout-main .nl-input::placeholder,
+.app-layout .layout-main .nl-textarea::placeholder { color: #9a94a8 !important; }
+.app-layout .layout-main .nl-label { color: #6f6a7e !important; }
+.app-layout .layout-main .nl-divider { border-top-color: #ece4d4 !important; }
+.app-layout .layout-main .nl-empty { background: #f7f2e8 !important; border-color: #ece4d4 !important; }
+.app-layout .layout-main .nl-empty p { color: #6f6a7e !important; }
+.app-layout .layout-main .nl-empty p strong { color: #232033 !important; }
+.app-layout .layout-main .nl-section-label { color: #9a94a8 !important; }
+
+/* ---------- 5. Generic hardening for all other inner pages ---------- */
+.app-layout .layout-main .dusk-page {
+  background: #fffefb !important;
+  border: 1px solid #ece4d4 !important;
+  color: #232033 !important;
+  box-shadow: 0 8px 24px rgba(46,42,68,.06) !important;
+}
+.app-layout .layout-main .dusk-glass {
+  background: #fffefb !important;
+  border-color: #ece4d4 !important;
+  color: #232033 !important;
+  box-shadow: 0 8px 24px rgba(46,42,68,.06) !important;
+  backdrop-filter: none !important;
+}
+.app-layout .layout-main .dusk-btn {
+  background: #2e2a44 !important; border-color: #2e2a44 !important; color: #fff !important;
+}
+.app-layout .layout-main .dusk-btn:hover { background: #3d375c !important; }
+.app-layout .layout-main .dusk-ghost {
+  background: #fff !important; border-color: #e4d9c4 !important; color: #232033 !important;
+}
+.app-layout .layout-main .dusk-ghost:hover { background: #f4eee1 !important; color: #232033 !important; }
+.app-layout .layout-main .dusk-input,
+.app-layout .layout-main .dusk-textarea,
+.app-layout .layout-main .dusk-select {
+  background: #fff !important; border-color: #e4d9c4 !important; color: #232033 !important;
+}
+.app-layout .layout-main .dusk-input::placeholder,
+.app-layout .layout-main .dusk-textarea::placeholder { color: #9a94a8 !important; }
+.app-layout .layout-main .dusk-title { color: #232033 !important; }
+.app-layout .layout-main .dusk-muted { color: #6f6a7e !important; }
+
+/* Tables / admin cards that used dusk glass */
+.app-layout .layout-main table th { background: #f7f2e8 !important; color: #232033 !important; }
+.app-layout .layout-main table td { color: #3a3348 !important; }
+
+/* Focus timer full-bleed panel: radius matches theme */
+.ft-screen { border-radius: 20px !important; }
+
+/* ---------- 7. Inner-page residuals (dark-only hardcodes → light) ---------- */
+
+/* MoodTracker: dark-only accents unreadable on light */
+.app-layout .layout-main .mood-page .error-message { color: #a03e3e !important; }
+.app-layout .layout-main .mood-page .mood-entry-stress.calm {
+  background: rgba(127, 161, 132, 0.16) !important; color: #4f6b4a !important;
+}
+.app-layout .layout-main .mood-page .mood-entry-stress.stressed {
+  background: rgba(217, 152, 115, 0.16) !important; color: #a05f34 !important;
+}
+.app-layout .layout-main .mood-page .delete-button:hover {
+  color: #a03e3e !important; background: rgba(200, 90, 90, 0.12) !important;
+}
+.app-layout .layout-main .mood-page .mood-option:focus-visible,
+.app-layout .layout-main .mood-page .stress-option:focus-visible,
+.app-layout .layout-main .mood-page .submit-button:focus-visible,
+.app-layout .layout-main .mood-page .delete-button:focus-visible,
+.app-layout .layout-main .mood-page .note-input textarea:focus-visible {
+  outline: 2px solid #2e2a44 !important; outline-offset: 2px;
+}
+.app-layout .layout-main .mood-page .recharts-cartesian-axis-tick text { fill: #6f6a7e !important; }
+.app-layout .layout-main .mood-page .recharts-cartesian-grid line { stroke: #e5dcc9 !important; }
+.app-layout .layout-main .mood-page .recharts-default-tooltip {
+  background: #fffefb !important; border: 1px solid #ece4d4 !important;
+  border-radius: 12px; color: #232033 !important;
+}
+
+/* TaskManager: white focus ring invisible on light */
+.app-layout .layout-main .tm-page :focus-visible { outline: 2px solid #2e2a44 !important; outline-offset: 2px; }
+
+/* StressRelief: active states for light */
+.app-layout .layout-main .stress-dot.active { border-color: #2e2a44 !important; }
+.app-layout .layout-main .btn-soft.on { background: #ded4f2 !important; border-color: #8e7fb8 !important; }
+
+/* FocusTimer: dark feature panel sits on ivory shell — readable outer text */
+.app-layout .layout-main .ft-page { color: #232033 !important; }
+
+/* Schedule: keep view card light + plum accents */
+.app-layout .layout-main .schPage-schedule-view {
+  background: #fffefb !important; border: 1px solid #ece4d4 !important;
+  border-radius: 20px !important; box-shadow: 0 8px 24px rgba(46, 42, 68, 0.06) !important;
+}
+.app-layout .layout-main .schPage-schedule-header h1 { color: #232033 !important; }
+.app-layout .layout-main .schPage-schedule-header p { color: #6f6a7e !important; }
+
+/* ---------- 8. Responsive + a11y ---------- */
+@media (max-width: 1100px) {
+  .app-layout .layout-main { padding: 60px 18px 28px !important; }
+  .dash-search { min-width: 0; width: 100%; }
+}
+@media (max-width: 760px) {
+  .global-notifications { right: 16px !important; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dash-card, .dash-btn, .new-quote-btn, .dash-link { transition: none !important; }
+  .dash-card:hover, .dash-btn:hover { transform: none !important; }
+  .dash-focus::after, .dash-schedule::after, .dash-wellness::after { display: none; }
+}

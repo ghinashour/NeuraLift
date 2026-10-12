@@ -1,5 +1,5 @@
 import React, { useState, useContext } from "react";
-import axios from "axios";
+import { AdminAPI } from "../api/axios";
 import { useNavigate, Link } from "react-router-dom";
 import "../styles/Auth.css";
 import { AdminAuthContext } from "../context/AdminAuthContext";
@@ -20,7 +20,7 @@ function AdminLogin() {
     setLoading(true);
 
     try {
-      const res = await axios.post("http://localhost:4000/api/admin/login", form, {
+      const res = await AdminAPI.post("/login", form, {
         headers: {
           'Content-Type': 'application/json'
         }

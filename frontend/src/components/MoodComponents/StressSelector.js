@@ -5,13 +5,13 @@ const StressSelector = ({isStressed, onStressChange}) =>{
          <div className="stress-selector">
             <div className="stress-options">
                 <button className={`stress-option ${isStressed === false ? 'selected' : ''}`} onClick={() => onStressChange(false)}>
-                    🤩 No
+                    No
                 </button>
-                <button 
+                <button
                     className={`stress-option ${isStressed === true ? 'selected' : ''}`}
                     onClick={() => onStressChange(true)}
                 >
-                    🥲 Yes
+                    Yes
                 </button>
             </div>
         </div>

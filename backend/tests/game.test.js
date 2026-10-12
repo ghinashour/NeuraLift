@@ -5,6 +5,9 @@ const jwt = require('jsonwebtoken');
 let app;
 let mongod;
 
+// In-memory Mongo downloads a ~700MB binary on first run — allow time on slow networks
+jest.setTimeout(120000);
+
 beforeAll(async () => {
   mongod = await MongoMemoryServer.create();
   const uri = mongod.getUri();

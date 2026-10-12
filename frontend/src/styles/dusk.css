@@ -1,0 +1,295 @@
+/* ============================================================
+   DUSK THEME — shared foundation (matches Focus Timer design)
+   Dark plum-to-rose gradient, glass cards, lavender text.
+   Page CSS files opt in via the scoped variable remap pattern:
+
+     .my-page-root {
+       --ink: var(--dusk-text);
+       --muted: var(--dusk-muted);
+       --muted-2: var(--dusk-faint);
+       --line: var(--dusk-border);
+       --card: var(--dusk-glass);
+       --cream: transparent;
+       --lilac: #c9b8ec;
+       --lilac-soft: rgba(255, 255, 255, 0.14);
+       --primary: #b79ced;
+       --primary-dark: #9a7fe0;
+       --primary-soft: rgba(255, 255, 255, 0.14);
+       --field-border: rgba(255, 255, 255, 0.2);
+       --shadow: 0 20px 60px rgba(10, 4, 25, 0.45);
+       --shadow-sm: 0 8px 24px rgba(10, 4, 25, 0.4);
+       color: var(--dusk-text);
+     }
+
+   Then add explicit overrides for any hardcoded light hex values.
+   ============================================================ */
+
+:root {
+  --dusk-bg-0: #241b45;
+  --dusk-bg-1: #4d2a63;
+  --dusk-bg-2: #93396b;
+  --dusk-bg-3: #2a1a3e;
+  --dusk-gradient: linear-gradient(
+    180deg,
+    #241b45 0%,
+    #4d2a63 38%,
+    #93396b 68%,
+    #2a1a3e 100%
+  );
+  --dusk-text: #f4edfb;
+  --dusk-muted: rgba(244, 237, 251, 0.7);
+  --dusk-faint: rgba(244, 237, 251, 0.5);
+  --dusk-glass: rgba(18, 9, 34, 0.5);
+  --dusk-glass-deep: rgba(14, 7, 28, 0.62);
+  --dusk-border: rgba(255, 255, 255, 0.14);
+  --dusk-pill: rgba(255, 255, 255, 0.26);
+  --dusk-pill-hover: rgba(255, 255, 255, 0.36);
+  --dusk-lilac: #c9b8ec;
+  --dusk-shadow: 0 20px 60px rgba(10, 4, 25, 0.45);
+}
+
+/* ---------- Reusable building blocks ---------- */
+
+/* Page wrapper for full-bleed dusk pages */
+.dusk-page {
+  background: var(--dusk-gradient);
+  color: var(--dusk-text);
+  border-radius: 26px;
+  padding: 24px;
+  min-height: 70vh;
+}
+
+/* Glass card */
+.dusk-glass {
+  background: var(--dusk-glass);
+  border: 1px solid var(--dusk-border);
+  border-radius: 20px;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow: var(--dusk-shadow);
+  color: var(--dusk-text);
+}
+
+/* Pill button (like the timer Start button) */
+.dusk-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 30px;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 999px;
+  background: var(--dusk-pill);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  color: #fff;
+  font-size: 14.5px;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background 200ms ease, transform 200ms ease;
+  box-shadow: 0 8px 24px rgba(20, 8, 40, 0.25);
+}
+
+.dusk-btn:hover {
+  background: var(--dusk-pill-hover);
+  transform: translateY(-1px);
+}
+
+.dusk-btn:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 3px;
+}
+
+/* Ghost / secondary button on dark */
+.dusk-ghost {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 999px;
+  background: rgba(20, 10, 36, 0.3);
+  color: rgba(246, 240, 253, 0.88);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background 200ms ease, color 200ms ease;
+}
+
+.dusk-ghost:hover {
+  background: rgba(255, 255, 255, 0.18);
+  color: #fff;
+}
+
+/* Inputs on dark */
+.dusk-input,
+.dusk-textarea,
+.dusk-select {
+  width: 100%;
+  box-sizing: border-box;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.08);
+  padding: 12px 14px;
+  font-size: 14px;
+  font-family: inherit;
+  color: var(--dusk-text);
+  outline: none;
+  transition: border-color 200ms ease, box-shadow 200ms ease;
+}
+
+.dusk-input:focus,
+.dusk-textarea:focus,
+.dusk-select:focus {
+  border-color: var(--dusk-lilac);
+  box-shadow: 0 0 0 3px rgba(201, 184, 236, 0.22);
+}
+
+.dusk-input::placeholder,
+.dusk-textarea::placeholder {
+  color: var(--dusk-faint);
+}
+
+/* Section title on dark */
+.dusk-title {
+  font-family: var(--serif, Georgia, serif);
+  color: var(--dusk-text);
+  letter-spacing: -0.01em;
+}
+
+.dusk-muted {
+  color: var(--dusk-muted);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dusk-btn,
+  .dusk-ghost {
+    transition: none;
+  }
+
+  .dusk-btn:hover {
+    transform: none;
+  }
+}
+
+/* ============================================================
+   In-app page kit (.nl-*) on dark.
+   These classes are only used inside layouts/Layout (never on
+   the landing page), so scoping to .layout-main is safe.
+   Higher specificity than index.css so it wins regardless of
+   stylesheet order or variable resolution.
+   ============================================================ */
+.layout-main .nl-page {
+  background: transparent;
+  color: var(--dusk-text);
+}
+
+.layout-main .nl-title,
+.layout-main .nl-card-title {
+  color: var(--dusk-text);
+}
+
+.layout-main .nl-lede,
+.layout-main .nl-card-sub {
+  color: var(--dusk-muted);
+}
+
+.layout-main .nl-eyebrow {
+  color: var(--dusk-lilac);
+}
+
+.layout-main .nl-hero-quote {
+  color: var(--dusk-text);
+}
+
+.layout-main .nl-hero-quote::after {
+  background: var(--dusk-lilac);
+}
+
+.layout-main .nl-card {
+  background: var(--dusk-glass);
+  border-color: var(--dusk-border);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow: var(--dusk-shadow);
+}
+
+.layout-main .nl-chip {
+  background: rgba(255, 255, 255, 0.12);
+  color: var(--dusk-text);
+}
+
+.layout-main .btn-primary {
+  background: var(--dusk-pill);
+  box-shadow: 0 8px 20px rgba(10, 4, 25, 0.4);
+}
+
+.layout-main .btn-primary:hover {
+  background: var(--dusk-pill-hover);
+}
+
+.layout-main .btn-soft {
+  background: rgba(255, 255, 255, 0.12);
+  color: var(--dusk-text);
+}
+
+.layout-main .btn-soft:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.layout-main .btn-outline {
+  background: rgba(20, 10, 36, 0.3);
+  border-color: rgba(255, 255, 255, 0.18);
+  color: var(--dusk-text);
+}
+
+.layout-main .btn-outline:hover {
+  background: rgba(255, 255, 255, 0.18);
+  color: #fff;
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.layout-main .nl-input,
+.layout-main .nl-textarea {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.2);
+  color: var(--dusk-text);
+}
+
+.layout-main .nl-input:focus,
+.layout-main .nl-textarea:focus {
+  border-color: var(--dusk-lilac);
+  box-shadow: 0 0 0 3px rgba(201, 184, 236, 0.22);
+}
+
+.layout-main .nl-input::placeholder,
+.layout-main .nl-textarea::placeholder {
+  color: var(--dusk-faint);
+}
+
+.layout-main .nl-label {
+  color: var(--dusk-muted);
+}
+
+.layout-main .nl-divider {
+  border-top-color: var(--dusk-border);
+}
+
+.layout-main .nl-empty {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: var(--dusk-border);
+}
+
+.layout-main .nl-empty p {
+  color: var(--dusk-muted);
+}
+
+.layout-main .nl-empty p strong {
+  color: var(--dusk-text);
+}
+
+.layout-main .nl-section-label {
+  color: var(--dusk-faint);
+}

@@ -223,3 +223,52 @@
         align-items: stretch;
     }
 }
+
+/* ===== DUSK THEME ===== */
+.add-task-form {
+  --ink: var(--dusk-text); --muted: var(--dusk-muted); --muted-2: var(--dusk-faint); --line: var(--dusk-border); --card: var(--dusk-glass); --cream: transparent; --lilac: var(--dusk-lilac); --lilac-soft: rgba(255,255,255,.14); --primary: #b79ced; --primary-dark: #9a7fe0; --primary-soft: rgba(255,255,255,.14); --field-border: rgba(255,255,255,.2); --shadow: 0 20px 60px rgba(10,4,25,.45); --shadow-sm: 0 8px 24px rgba(10,4,25,.4); color: var(--dusk-text);
+  background: var(--dusk-glass);
+  border-color: var(--dusk-border);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+.input,
+.textarea,
+.select {
+  background: rgba(255,255,255,.08);
+  border-color: rgba(255,255,255,.2);
+  color: var(--dusk-text);
+}
+.input:focus,
+.textarea:focus,
+.select:focus {
+  border-color: var(--dusk-lilac);
+  box-shadow: 0 0 0 3px rgba(201,184,236,.22);
+}
+.add-task-form input, .add-task-form textarea, .add-task-form select {
+  background: rgba(255,255,255,.08);
+  color: var(--dusk-text);
+}
+.add-task-form input::placeholder, .add-task-form textarea::placeholder {
+  color: var(--dusk-faint);
+}
+.btn.primary {
+  background: var(--dusk-pill);
+  border: 1px solid rgba(255,255,255,.25);
+  color: #fff;
+}
+.btn.primary:hover {
+  background: var(--dusk-pill-hover);
+}
+.btn.secondary {
+  background: rgba(20,10,36,.3);
+  color: var(--dusk-text);
+  border-color: rgba(255,255,255,.18);
+}
+.btn.secondary:hover {
+  background: rgba(255,255,255,.14);
+}
+.add-task-form :focus-visible, .btn:focus-visible, .input:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 2px;
+}

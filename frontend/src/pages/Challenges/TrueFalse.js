@@ -13,7 +13,9 @@ function TrueFalse() {
   useEffect(() => {
     const fetchQuestions = async () => {
       try {
-        const res = await axios.get(`process.env.REACT_APP_API_URL/api/questions/truefalse`);
+        const base = (process.env.REACT_APP_API_URL || "http://localhost:4000").replace(/\/$/, "");
+        const apiBase = base.endsWith("/api") ? base : `${base}/api`;
+        const res = await axios.get(`${apiBase}/questions/TrueFalse`);
         setQuestions(res.data);
       } catch (err) {
         console.error(err);

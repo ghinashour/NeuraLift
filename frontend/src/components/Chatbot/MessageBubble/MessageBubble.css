@@ -1,80 +1,82 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
 
-/* ====== Message Bubble Container ====== */
+/* Row: avatar + bubble alignment (no layout shift on press) */
+.message-row {
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
+  width: 100%;
+  margin: 3px 0;
+}
+.message-row.row-user { justify-content: flex-end; }
+.message-row.row-bot { justify-content: flex-start; }
+
+.bubble-avatar {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #EFE7F6, #D9CFF0);
+  border: 1px solid #D9CFF0;
+  box-shadow: 0 2px 6px rgba(46, 42, 68, .12);
+}
+
 .message-bubble {
   display: flex;
   flex-direction: column;
-  max-width: 65%;
-  margin: 8px 0;
+  max-width: min(72%, 560px);
   font-family: 'Inter', sans-serif;
   word-wrap: break-word;
   word-break: break-word;
-  line-height: 1.5;
-  font-weight: 500;
-  opacity: 0;
-  transform: translateY(8px);
+  line-height: 1.55;
+  font-size: 14.5px;
   animation: fadeInUp 0.25s ease forwards;
-  transition: all 0.3s ease;
 }
 
-/* ====== USER (Right Aligned) ====== */
 .user-bubble {
   align-self: flex-end;
-  background: #fafafa; /* smooth deep blue */
-  color: #666;
-  border-radius: 20px 20px 4px 20px;
-  padding: 12px 18px;
-  box-shadow: 0 3px 8px rgba(30, 91, 168, 0.3);
+  background: linear-gradient(135deg, #3D375C, #2E2A44);
+  color: #FFFEFB;
+  border-radius: 18px 18px 4px 18px;
+  padding: 11px 16px;
+  box-shadow: 0 6px 16px rgba(46, 42, 68, .2);
 }
 
-/* ====== BOT / AI (Left Aligned) ====== */
 .bot-bubble {
   align-self: flex-start;
-  background: #c8ddeb; /* translucent blue */
-  color: #666;
-  border-radius: 20px 20px 20px 4px;
-  padding: 12px 18px;
-  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.08);
+  background: #fff;
+  color: #232033;
+  border: 1px solid #ECE4D4;
+  border-radius: 4px 18px 18px 18px;
+  padding: 11px 16px;
+  box-shadow: 0 4px 14px rgba(46, 42, 68, .07);
 }
 
-/* ====== Bubble Text Content ====== */
-.bubble-content {
-  white-space: pre-wrap;
-}
+.bubble-content { white-space: pre-wrap; }
 
-/* ====== Timestamp ====== */
 .bubble-timestamp {
   align-self: flex-end;
   font-size: 11px;
   margin-top: 5px;
-  color: rgba(0, 0, 0, 0.4);
+  color: rgba(35, 32, 51, .45);
   font-weight: 400;
 }
 
-.user-bubble .bubble-timestamp {
-  color: rgba(255, 255, 255, 0.7);
-}
+.user-bubble .bubble-timestamp { color: rgba(255, 254, 251, .65); }
 
-/* ====== Smooth Fade-In Animation ====== */
 @keyframes fadeInUp {
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
-/* ====== Hover Effect (Subtle Glow) ====== */
-@media (hover: hover) {
-  .message-bubble:hover {
-    transform: translateY(-2px);
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-  }
+@media (max-width: 640px) {
+  .message-bubble { max-width: 82%; font-size: 14px; }
+  .bubble-avatar { width: 24px; height: 24px; }
+}
 
-  .user-bubble:hover {
-    box-shadow: 0 5px 12px rgba(30, 91, 168, 0.35);
-  }
-
-  .bot-bubble:hover {
-    box-shadow: 0 5px 12px rgba(0, 0, 0, 0.12);
-  }
+@media (prefers-reduced-motion: reduce) {
+  .message-bubble { animation: none; }
 }

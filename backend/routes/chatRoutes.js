@@ -8,9 +8,16 @@ const openai = new OpenAI({
 
 router.post("/", async (req, res) => {
   try {
-    const { messages } = req.body;
+    let { messages, message, history } = req.body || {};
+    // Compat: allow { message, history } shape too
+    if (!messages && message) {
+      messages = [...(Array.isArray(history) ? history : []), { role: "user", content: message }];
+    }
     if (!messages || !Array.isArray(messages)) {
       return res.status(400).json({ error: "Invalid messages format" });
+    }
+    if (!process.env.OPENAI_API_KEY) {
+      return res.status(500).json({ error: "OPENAI_API_KEY is not configured" });
     }
 
     const response = await openai.chat.completions.create({

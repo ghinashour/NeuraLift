@@ -47,7 +47,8 @@ function Tenzies() {
 
   const saveGameResult = async (rolls) => {
     try {
-      await fetch("http://localhost:4000/api/tenzies/score", {
+      const API_BASE = (process.env.REACT_APP_API_URL || "http://localhost:4000").replace(/\/$/, "");
+      await fetch(`${API_BASE}/api/tenzies/score`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ rolls }),

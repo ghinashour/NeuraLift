@@ -10,3 +10,43 @@
 .notif-title { font-weight:700; }
 .notif-desc { color:#6b7280; margin-top:6px; }
 .notif-meta { color:#6b7280; font-size:12px; }
+
+/* ===== DUSK THEME ===== */
+.mytasks-page {
+  --ink: var(--dusk-text); --muted: var(--dusk-muted); --muted-2: var(--dusk-faint); --line: var(--dusk-border); --card: var(--dusk-glass); --cream: transparent; --lilac: var(--dusk-lilac); --lilac-soft: rgba(255,255,255,.14); --primary: #b79ced; --primary-dark: #9a7fe0; --primary-soft: rgba(255,255,255,.14); --field-border: rgba(255,255,255,.2); --shadow: 0 20px 60px rgba(10,4,25,.45); --shadow-sm: 0 8px 24px rgba(10,4,25,.4); color: var(--dusk-text);
+  background: transparent;
+}
+.mytasks-header h1 {
+  color: var(--dusk-text);
+}
+.mytasks-header p {
+  color: var(--dusk-muted);
+}
+.task-notification {
+  background: var(--dusk-glass);
+  border: 1px solid var(--dusk-border);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  color: var(--dusk-text);
+}
+.notif-title {
+  color: var(--dusk-text);
+}
+.notif-desc {
+  color: var(--dusk-muted);
+}
+.notif-meta {
+  color: var(--dusk-faint);
+}
+.mytasks-page input, .mytasks-page textarea, .mytasks-page select {
+  background: rgba(255,255,255,.08);
+  color: var(--dusk-text);
+  border-color: rgba(255,255,255,.2);
+}
+.mytasks-page input::placeholder, .mytasks-page textarea::placeholder {
+  color: var(--dusk-faint);
+}
+.mytasks-page :focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 2px;
+}

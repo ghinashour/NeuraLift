@@ -53,7 +53,8 @@ function Contact() {
   return (
     <section id="Contact" className="contact-section">
       {/* Title */}
-      <h2 className="contact-title">Get in Touch</h2>
+      <p className="eyebrow">We reply within a day</p>
+      <h2 className="contact-title serif">Get in <em>Touch</em></h2>
       <p className="contact-subtitle">
         Have questions about NeuraLift? We'd love to hear from you. Send us a
         message and we'll respond as quickly as possible.
@@ -68,7 +69,7 @@ function Contact() {
             <div className="contact-form-row">
               <div className="contact-form-group">
                 <label className="contact-label">
-                  First Name<span className="contact-required" style={{ color: "red" }}>* </span>
+                  First Name<span className="contact-required">* </span>
                 </label>
                 <input
                   className="contact-input contact-inputcolor"
@@ -82,7 +83,7 @@ function Contact() {
 
               <div className="contact-form-group">
                 <label className="contact-label">
-                  Email Address<span className="contact-required" style={{ color: "red" }}>* </span>
+                  Email Address<span className="contact-required">* </span>
                 </label>
                 <input
                   className="contact-input contact-inputcolor"
@@ -121,7 +122,7 @@ function Contact() {
               }}
             >
               <label className="contact-label">
-                Message<span className="contact-required" style={{ color: "red" }}>* </span>
+                Message<span className="contact-required">* </span>
               </label>
               <textarea
                 style={{ height: "170px", marginBottom: "20px" }}
@@ -182,6 +183,16 @@ function Contact() {
               <p>Speak directly with our team</p>
               <span className="contact-highlight purple">+961 11111111</span>
             </div>
+          </div>
+
+          {/* Calm corner photo */}
+          <div className="contact-photo-card" aria-hidden="true">
+            <img
+              src={require("../assets/new-design/hero-desk.jpg")}
+              alt=""
+              onError={(e) => { e.target.style.display = "none"; }}
+            />
+            <span className="serif">Your calm corner awaits</span>
           </div>
         </div>
       </div>

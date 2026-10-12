@@ -1,6 +1,6 @@
-import axios from './axios';
+import API from './axios';
 
 export const sendToAssistant = async (messages) => {
-  const resp = await axios.post('/api/assistant', { messages });
+  const resp = await API.post('/assistant', { messages });
   return resp.data;
 };

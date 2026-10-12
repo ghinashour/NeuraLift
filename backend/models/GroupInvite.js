@@ -37,8 +37,7 @@ const groupInviteSchema = new mongoose.Schema({
   timestamps: true
 });
 
-// Index for token and expiration
-groupInviteSchema.index({ token: 1 });
+// Index for expiration (token already indexed via unique:true above)
 groupInviteSchema.index({ expiresAt: 1 }, { expireAfterSeconds: 0 });
 
 module.exports = mongoose.model('GroupInvite', groupInviteSchema);

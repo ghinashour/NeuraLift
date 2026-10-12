@@ -9,12 +9,12 @@ export default function DashboardStats({ streak = 0, unread = 0 }) {
     <section className="stats-grid" aria-label="User statistics">
       <div className="stat-card">
         <div style={{display:'flex',alignItems:'center',gap:12}}>
-          <div className="stat-icon" style={{background: 'linear-gradient(90deg,#ff9a3c,#ff6a00)'}}>
+          <div className="stat-icon stat-chip-rose">
             <FaFire color="#fff" />
           </div>
           <div>
             <div className="stat-title">Streak</div>
-            <div className="stat-value">{streak} 🔥</div>
+            <div className="stat-value">{streak} days</div>
             <div className="stat-sub">Keep the momentum going — daily check-ins</div>
           </div>
         </div>
@@ -22,7 +22,7 @@ export default function DashboardStats({ streak = 0, unread = 0 }) {
 
       <div className="stat-card">
         <div style={{display:'flex',alignItems:'center',gap:12}}>
-          <div className="stat-icon" style={{background: 'linear-gradient(90deg,#3C83F6,#6DA2F8)'}}>
+          <div className="stat-icon stat-chip-lilac">
             <FaBell color="#fff" />
           </div>
           <div>
@@ -35,7 +35,7 @@ export default function DashboardStats({ streak = 0, unread = 0 }) {
 
       <div className="stat-card">
         <div style={{display:'flex',alignItems:'center',gap:12}}>
-          <div className="stat-icon" style={{background: 'linear-gradient(90deg,#16A249,#1CCE5E)'}}>
+          <div className="stat-icon stat-chip-sage">
             <FaChartLine color="#fff" />
           </div>
           <div>

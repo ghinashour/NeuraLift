@@ -302,3 +302,79 @@
         transform: scale(1) translateY(0);
     }
 }
+
+/* ===== DUSK THEME ===== */
+.task-modal-overlay {
+  --ink: var(--dusk-text); --muted: var(--dusk-muted); --muted-2: var(--dusk-faint); --line: var(--dusk-border); --card: var(--dusk-glass); --cream: transparent; --lilac: var(--dusk-lilac); --lilac-soft: rgba(255,255,255,.14); --primary: #b79ced; --primary-dark: #9a7fe0; --primary-soft: rgba(255,255,255,.14); --field-border: rgba(255,255,255,.2); --shadow: 0 20px 60px rgba(10,4,25,.45); --shadow-sm: 0 8px 24px rgba(10,4,25,.4); color: var(--dusk-text);
+}
+.task-modal-content {
+  background: var(--dusk-glass-deep, rgba(14,7,28,.62));
+  border: 1px solid var(--dusk-border);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  color: var(--dusk-text);
+}
+.task-modal-header {
+  background: rgba(255,255,255,.06);
+  border-bottom: 1px solid var(--dusk-border);
+}
+.task-modal-title {
+  color: var(--dusk-text);
+}
+.task-modal-close {
+  color: var(--dusk-muted);
+}
+.task-modal-close:hover {
+  background: rgba(255,255,255,.14);
+  color: #fff;
+}
+.form-label {
+  color: var(--dusk-text);
+}
+.form-input,
+.form-textarea,
+.form-select {
+  background: rgba(255,255,255,.08);
+  border: 1px solid rgba(255,255,255,.2);
+  color: var(--dusk-text);
+}
+.form-input:focus,
+.form-textarea:focus,
+.form-select:focus {
+  border-color: var(--dusk-lilac);
+  background: rgba(255,255,255,.1);
+  box-shadow: 0 0 0 3px rgba(201,184,236,.22);
+}
+.task-modal-btn-primary {
+  background: var(--dusk-pill);
+  border: 1px solid rgba(255,255,255,.25);
+  color: #fff;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+.task-modal-btn-primary:hover {
+  background: var(--dusk-pill-hover);
+}
+.task-modal-btn-secondary {
+  background: rgba(20,10,36,.3);
+  color: var(--dusk-text);
+  border-color: rgba(255,255,255,.18);
+}
+.task-modal-btn-secondary:hover {
+  background: rgba(255,255,255,.18);
+  border-color: rgba(255,255,255,.3);
+}
+.task-modal-form-actions {
+  border-top: 1px solid var(--dusk-border);
+}
+.task-modal-overlay input, .task-modal-overlay textarea, .task-modal-overlay select {
+  background: rgba(255,255,255,.08);
+  color: var(--dusk-text);
+}
+.task-modal-overlay input::placeholder, .task-modal-overlay textarea::placeholder {
+  color: var(--dusk-faint);
+}
+.task-modal-overlay :focus-visible, .task-modal-close:focus-visible, .task-modal-btn-primary:focus-visible, .task-modal-btn-secondary:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 2px;
+}

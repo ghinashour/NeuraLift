@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import TaskItem from './TaskItem';
+import { ClipboardList } from 'lucide-react';
 import '../styles/TaskList.css';
 
 const TaskList = ({ tasks = [], onTaskUpdate, onTaskDelete, onTaskToggle, onTaskEdit }) => {
@@ -32,7 +33,7 @@ const TaskList = ({ tasks = [], onTaskUpdate, onTaskDelete, onTaskToggle, onTask
         return (
             <div className="task-list">
                 <div className="empty-state">
-                    <div className="empty-icon">📝</div>
+                    <span className="empty-icon"><ClipboardList size={26} /></span>
                     <h3>No tasks yet</h3>
                     <p>Create your first task to get started with your productivity journey!</p>
                 </div>
