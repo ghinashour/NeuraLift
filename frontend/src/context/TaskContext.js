@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useEffect, useState } from "react";
+import React, { createContext, useContext, useCallback, useEffect, useState } from "react";
 import { getTasks, addTask, updateTask, deleteTask } from "../api/taskAPI";
 
 const TaskContext = createContext();
@@ -13,7 +13,15 @@ export const TaskProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
 
   // Fetch tasks from API
-  const fetchTasks = async () => {
+  const calculateStats = useCallback((tasksArray) => {
+    const safeTasks = Array.isArray(tasksArray) ? tasksArray : [];
+    const total = safeTasks.length;
+    const completed = safeTasks.filter((t) => t.completed).length;
+    const remaining = total - completed;
+    setStats({ totalCount: total, completedCount: completed, remainingCount: remaining });
+  }, []);
+
+  const fetchTasks = useCallback(async () => {
     try {
       const data = await getTasks();
       const safeData = Array.isArray(data) ? data : [];
@@ -24,16 +32,7 @@ export const TaskProvider = ({ children }) => {
     } finally {
       setLoading(false);
     }
-  };
-
-  // Calculate task stats
-  const calculateStats = (tasksArray) => {
-    const safeTasks = Array.isArray(tasksArray) ? tasksArray : [];
-    const total = safeTasks.length;
-    const completed = safeTasks.filter((t) => t.completed).length;
-    const remaining = total - completed;
-    setStats({ totalCount: total, completedCount: completed, remainingCount: remaining });
-  };
+  }, [calculateStats]);
 
   // Add a new task
   const handleAddTask = async (task) => {

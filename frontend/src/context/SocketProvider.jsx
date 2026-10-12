@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useEffect, useState } from "react";
+import React, { createContext, useContext, useEffect, useRef, useState } from "react";
 import { io } from "socket.io-client";
 import { AuthContext } from "./AuthContext";
 
@@ -7,13 +7,15 @@ export const SocketContext = createContext();
 export const SocketProvider = ({ children }) => {
   const { user, token } = useContext(AuthContext);
   const [socket, setSocket] = useState(null);
+  const socketRef = useRef(null);
   const [notifications, setNotifications] = useState([]);
 
   useEffect(() => {
     // 🚫 If no user or token, disconnect socket if exists
     if (!user || !token) {
-      if (socket) {
-        socket.disconnect();
+      if (socketRef.current) {
+        socketRef.current.disconnect();
+        socketRef.current = null;
         setSocket(null);
       }
       console.log("❌ No user or token, socket not initialized");
@@ -55,12 +57,14 @@ export const SocketProvider = ({ children }) => {
     });
 
     // ✅ Save the socket instance
+    socketRef.current = newSocket;
     setSocket(newSocket);
 
     // Cleanup on unmount or when user changes
     return () => {
       console.log("🧹 Cleaning up socket connection...");
       newSocket.disconnect();
+      if (socketRef.current === newSocket) socketRef.current = null;
       setSocket(null);
     };
   }, [user, token]);
