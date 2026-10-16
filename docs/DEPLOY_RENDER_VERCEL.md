@@ -1,115 +1,135 @@
-# Deploy: Render (backend API) + Vercel (frontend)
+# Deploy: Render backend + Vercel frontend
 
-Split hosting: **Render = Express + Socket.io API**, **Vercel = React SPA**.
-CORS/Socket allow both `CLIENT_ORIGIN` and `CLIENT_URL`. Set both: `CLIENT_ORIGIN`
-is the allowed browser origin list; `CLIENT_URL` is the single frontend origin used
-in OAuth redirects, verification emails, and invitation links.
+## 1. Update the existing Render service
 
-## 0. Prerequisites
+Push these changes to `master`, then use **Settings** on the existing
+`neuralift-deploy-app` service. Creating another service is unnecessary.
 
-- MongoDB Atlas cluster and database user. Allow your Render service's outbound
-  IP ranges in Atlas Network Access and copy the database connection string:
-  `mongodb+srv://user:password@cluster/neuralift` (URL-encode special password characters).
-- Groq key (optional but recommended): https://console.groq.com → API keys.
-- Google OAuth web client ID and secret, plus an OpenAI API key. The current backend
-  initializes GoogleStrategy and OpenAI clients at startup, so these values are
-  required to boot even if you only plan to use password login or Groq chat.
-- Gmail account and app password for verification emails (`MAIL_USER`, `MAIL_PASS`).
-  Signup sends a verification email and login rejects unverified accounts.
-  The current verification helper uses Gmail SMTP; changing `MAIL_HOST` alone
-  does not change that provider.
-- A paid Render web service for the current email implementation. Render Free
-  [blocks SMTP ports 25, 465, and 587](https://render.com/docs/free#other-limitations).
-  The Blueprint defaults to Free for previewing; choose a paid compute plan in
-  Render for working SMTP. An HTTPS email-provider integration would require code changes.
+| Setting | Value |
+| --- | --- |
+| Runtime | Node |
+| Branch | `master` |
+| Root Directory | `backend` |
+| Build Command | `npm ci --omit=dev` |
+| Start Command | `npm start` |
+| Health Check Path | `/api/health` |
 
-## 1. Backend on Render
+The backend requires Node 22.x. The Dockerfile and root `render.yaml` use the same
+major version. The root Blueprint is also available for new deployments; update
+its frontend/backend URLs if deploying to different domains. For an existing
+manually created service, update settings and environment variables in the
+dashboard; editing the Blueprint alone does not update that service.
 
-1. Push repo to GitHub (`master` branch).
-2. Render Dashboard → **New → Blueprint** → select repo → `render.yaml` creates service `neuralift-backend`
-   (`rootDir: backend`, build `npm install`, start `node index.js`, health check `/api/health`).
-   - Alternative manual: New → Web Service → select `ghinashour/NeuraLift`, Branch
-     `master`, Root Directory `backend`, Build `npm install`, Start `npm start`,
-     Health Check Path `/api/health`. Use Node 22 LTS (for example `NODE_VERSION=22`).
-   - Use the root `render.yaml`, not the legacy `backend/.render.yaml`.
-   - Keep `npm install` as the build command for now: the existing backend lockfile
-     is out of sync with `package.json`, so `npm ci` currently fails.
-3. Set env vars (Render → Service → Environment):
-   ```
-   NODE_ENV=production
-   MONGO_URI=mongodb+srv://...
-   JWT_SECRET=<32+ random chars>
-   JWT_REFRESH_SECRET=<32+ random chars>
-   CLIENT_ORIGIN=https://<your-app>.vercel.app
-    CLIENT_URL=https://<your-app>.vercel.app
-    API_URL=https://<backend>.onrender.com
-    OPENAI_API_KEY=<openai key>
-   GROQ_API_KEY=<groq key>
-   GROQ_MODEL=llama-3.3-70b-versatile
-    GOOGLE_CLIENT_ID=<google OAuth web client ID>
-    GOOGLE_CLIENT_SECRET=<google OAuth client secret>
-   GOOGLE_CALLBACK_URL=https://<backend>.onrender.com/api/auth/google/callback
-    MAIL_USER=<gmail address>
-    MAIL_PASS=<gmail app password>
-   ```
-   Do NOT set `PORT` — Render injects it. Set `API_URL` to the service URL once
-   Render assigns it; it is used by resend-verification emails. Backend and
-   frontend origins have no trailing slash or `/api`.
-   Generate each JWT secret independently, for example:
-   `node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"`.
-   Keep these secrets in Render, not Vercel's `REACT_APP_*` variables.
-   In Google Cloud Console, configure the web client's authorized JavaScript
-   origin as the Vercel origin and authorized redirect URI as `GOOGLE_CALLBACK_URL`.
-4. Deploy → verify `GET https://<backend>.onrender.com/api/health` returns
-   `{"ok":true,"mongo":"connected",...}`.
-   - `mongo: disconnected` → check `MONGO_URI` / Atlas IP allowlist.
-    - Free tier sleeps after inactivity; waking it can take about a minute.
-      Not every frontend request retries automatically.
+## 2. Set Render environment variables
 
-## 2. Frontend on Vercel
-
-1. Vercel → Add New Project → import repo → **Root Directory = `frontend`**,
-   Framework preset `Create React App`, Build `npm run build`, Output `build`
-    (`frontend/vercel.json` already sets rewrites + static caching).
-    Set the Production Branch to `master`.
-2. Environment variable (Production + Preview):
-   ```
-   REACT_APP_API_URL=https://<backend>.onrender.com
-   ```
-   No trailing `/api`, no quotes. Redeploy after changing it (CRA inlines at build time).
-3. Deploy → open `https://<your-app>.vercel.app`, test signup/login.
-   - If API calls hit `localhost:4000`, `REACT_APP_API_URL` was missing at build time.
-
-## 3. Wire-up checklist
-
-- [ ] Backend `/api/health` → 200, `mongo: connected`.
-- [ ] `CLIENT_ORIGIN`/`CLIENT_URL` on Render exactly equal the Vercel origin (`https://...`, no trailing slash).
-- [ ] For Vercel Preview deployments, add each exact preview origin to the comma-separated
-      `CLIENT_ORIGIN` allowlist. Keep `CLIENT_URL` as one canonical frontend URL.
-- [ ] Google console authorized redirect = `GOOGLE_CALLBACK_URL`.
-- [ ] Socket.io connects (polling → websocket upgrade). Transports are `["polling","websocket"]`.
-- [ ] `uploads/` files are ephemeral on Render free — for persistent avatars use S3/Cloudinary (current `.dockerignore` excludes uploads).
-- [ ] In browser DevTools → Network, API requests target `https://<backend>.onrender.com/api/...`,
-      not `localhost`, the Vercel host, or paths containing `/api/api`.
-- [ ] Test signup → verification email → login, then tasks, games, and chat.
-
-### Email features beyond signup
-
-The contact form uses a separate SMTP helper. Configure `EMAIL_HOST`, `EMAIL_PORT`,
-`EMAIL_USERNAME`, `EMAIL_PASSWORD`, `EMAIL_FROM`, and `CONTACT_EMAIL` for it.
-The legacy reset-password email helper uses `EMAIL_USER` and `EMAIL_PASS`.
-
-## 4. Local prod smoke test
-
-```bash
-# backend
-cd backend
-npm install
-# Create backend/.env from .env.example and fill the startup credentials above.
-npm start
-curl http://localhost:4000/api/health
-
-# frontend (separate shell)
-cd frontend && npm install
-REACT_APP_API_URL=http://localhost:4000 npm start
+```dotenv
+NODE_ENV=production
+NODE_VERSION=22
+MONGO_URI=<MongoDB Atlas connection string>
+JWT_SECRET=<long random secret>
+JWT_REFRESH_SECRET=<different long random secret>
+CLIENT_ORIGIN=https://neura-lift.vercel.app
+CLIENT_URL=https://neura-lift.vercel.app
+API_URL=https://neuralift-deploy-app.onrender.com
+RESEND_API_KEY=<Resend API key>
+EMAIL_FROM=Neuralift <noreply@your-verified-domain.com>
+CONTACT_EMAIL=<your support inbox>
 ```
+
+Replace placeholders with real values in Render, without surrounding quotes.
+Keep secrets in Render, not frontend `REACT_APP_*` variables. Render supplies
+`PORT` automatically. Generate each JWT secret independently:
+
+```sh
+node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
+```
+
+For MongoDB Atlas, use the database user's credentials (not the Atlas website
+login), URL-encode special password characters, and allow the Render service's
+outbound IP ranges in **Network Access**. Replace any real credentials previously
+stored in example files and rotate them in Atlas.
+
+`CLIENT_ORIGIN` accepts a comma-separated list of exact browser origins. Add
+individual Vercel preview origins when needed. `CLIENT_URL` is one canonical
+frontend origin for redirects and email links. Neither URL should contain
+`/login`, `/api`, or a trailing slash. HTTP CORS and Socket.IO use these origins.
+
+### Resend email on Render Free
+
+All three email helpers (verification, password reset, and contact) use Resend's
+HTTPS API. SMTP/Ethereal configuration is no longer used by those helpers.
+
+1. Create a Resend account and verify a domain you control in **Domains**, adding
+   the DNS records Resend provides.
+2. Create an API key with sending access for that domain; set `RESEND_API_KEY`.
+3. Set `EMAIL_FROM` to an address on the verified domain. A Gmail address is not
+   a verified-domain sender. Resend's testing sender is restricted to test
+   recipients and is not suitable for public signup verification.
+4. Set `CONTACT_EMAIL` to the inbox that should receive support messages.
+5. Save and redeploy, then test signup → verification email → login.
+
+Missing email configuration does not stop startup, but email-dependent requests
+cannot succeed until it is configured. If an earlier signup saved an account
+before email delivery failed, request a new email with
+`POST /api/auth/resend-verification` and JSON `{"email":"your-address@example.com"}`
+after configuring Resend.
+
+### Optional integrations
+
+- **Groq chat:** set `GROQ_API_KEY`; `GROQ_MODEL` defaults to
+  `llama-3.3-70b-versatile`. `/api/chat` supports Groq without OpenAI credentials.
+- **OpenAI:** set `OPENAI_API_KEY` to enable `/api/chat-history` and the OpenAI
+  portion of `/api/assistant`. Without it, those endpoints return JSON `503`
+  instead of preventing the backend from starting. Retrieval in `/api/assistant`
+  still requires its separate Pinecone package/configuration.
+- **OpenRouter fallback:** set `OPENROUTER_API_KEY` if desired.
+- **Google login:** set both `GOOGLE_CLIENT_ID` and `GOOGLE_CLIENT_SECRET`, plus
+  `GOOGLE_CALLBACK_URL=https://neuralift-deploy-app.onrender.com/api/auth/google/callback`.
+  Register that exact callback in Google Cloud Console and the Vercel origin as
+  the authorized JavaScript origin. Without both credentials, Google login and
+  callback routes return JSON `503`; password login remains available.
+
+## 3. Vercel environment
+
+Use Root Directory `frontend`, framework **Create React App**, build command
+`npm run build`, and output directory `build`. Set:
+
+```dotenv
+REACT_APP_API_URL=https://neuralift-deploy-app.onrender.com
+```
+
+Use no trailing slash or `/api`. Redeploy Vercel after changing this variable:
+Create React App embeds it during the build. The deployed frontend already used
+this backend URL when checked.
+
+## 4. Verify the deployment
+
+- `GET https://neuralift-deploy-app.onrender.com/api/health` should return `200`
+  with `{"ok":true,"mongo":"connected",...}`. Both `/health` and `/api/health`
+  return `503` while MongoDB is disconnected. Check Render logs, Atlas credentials,
+  and the network allowlist if readiness never succeeds.
+- A login preflight (`OPTIONS /api/auth/login`) from
+  `https://neura-lift.vercel.app` should return `204` and
+  `Access-Control-Allow-Origin: https://neura-lift.vercel.app`.
+- Test password login, signup/verification, chat, and enabled Google login.
+- If the browser reports CORS but health also returns `500`, inspect Render logs
+  for the underlying backend error. A proxy/startup failure can lack CORS headers.
+- Render Free sleeps after inactivity; a cold start can take about a minute.
+  Uploaded files remain ephemeral; use external storage for durable avatars.
+
+## 5. Local verification
+
+From `backend`:
+
+```sh
+npm ci
+npm run test:deployment
+npm test
+```
+
+The deployment checks use local HTTP requests and mocked email/AI delivery;
+they require no real keys or database. The existing game tests use an in-memory
+MongoDB binary, which may need to download on first run.
+
+For manual development, copy `.env.example` to `.env`, configure MongoDB and JWT
+secrets plus whichever integrations you use, then run `npm start`.

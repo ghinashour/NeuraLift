@@ -1,27 +1,40 @@
 // backend/utils/sendEmail.js
 
-const nodemailer = require('nodemailer');
-
 const sendEmail = async (options) => {
-    const transporter = nodemailer.createTransport({
-        host: process.env.EMAIL_HOST,
-        port: process.env.EMAIL_PORT,
-        auth: {
-            user: process.env.EMAIL_USERNAME,
-            pass: process.env.EMAIL_PASSWORD,
-        },
-    });
+    const apiKey = process.env.RESEND_API_KEY?.trim();
+    const from = options.from || process.env.EMAIL_FROM?.trim();
+    if (!apiKey || !from) {
+        const error = new Error('Email is not configured: set RESEND_API_KEY and EMAIL_FROM');
+        error.status = 503;
+        throw error;
+    }
 
-    const mailOptions = {
-        from: options.from || process.env.EMAIL_FROM, // Use custom 'from' if provided, else default to env var
-        to: options.to, // Corrected to use options.to
+    const payload = {
+        from,
+        to: Array.isArray(options.to) ? options.to : [options.to],
         subject: options.subject,
         html: options.html,
         text: options.text,
-        replyTo: options.replyTo, // Add replyTo option
+        reply_to: options.replyTo,
     };
 
-    await transporter.sendMail(mailOptions);
+    // HTTPS works on Render Free, where standard SMTP ports are blocked.
+    const response = await fetch('https://api.resend.com/emails', {
+        method: 'POST',
+        headers: {
+            Authorization: `Bearer ${apiKey}`,
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(payload),
+        signal: AbortSignal.timeout(15000),
+    });
+    const result = await response.json();
+    if (!response.ok) {
+        const error = new Error(`Resend email failed (${response.status}): ${result.message || 'Request rejected'}`);
+        error.status = 502;
+        throw error;
+    }
+    return result;
 };
 
 module.exports = sendEmail;

@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const passport = require("passport");
 const jwt = require("jsonwebtoken");
+const { googleAuthEnabled } = require("../config/passport");
 
 const { signup, login , verifyEmail, getMe, resendVerification } = require("../controllers/authController");
 const authMiddleware = require ("../middleware/auth");
@@ -16,13 +17,22 @@ router.post('/resend-verification', resendVerification);
 router.get("/me", authMiddleware, getMe);
 
 //google Oauth
+const requireGoogleAuth = (req, res, next) => {
+  if (!googleAuthEnabled) {
+    return res.status(503).json({ error: "Google login is not configured" });
+  }
+  next();
+};
+
 router.get(
   "/google",
+  requireGoogleAuth,
   passport.authenticate("google", { scope: ["profile", "email"], session: false })
 );
 
 router.get(
   "/google/callback",
+  requireGoogleAuth,
   passport.authenticate("google", { failureRedirect: `${process.env.CLIENT_URL || (process.env.CLIENT_ORIGIN || "http://localhost:3000").split(",")[0].trim()}/login?error=oauth_failed`, session: false }),
   (req, res) => {
     // Create JWT for your frontend

@@ -21,7 +21,7 @@ const submitContactForm = asyncHandler(async (req, res) => {
         // Email to support (from your Noreply, with Reply-To set to user)
         await sendEmail({
             to: process.env.CONTACT_EMAIL || 'helpcenter.neuraLift@gmail.com', // Send to your support email
-            from: process.env.EMAIL_FROM, // Sender will be your Noreply address (enforced by Gmail)
+            from: process.env.EMAIL_FROM, // Verified sender in Resend
             replyTo: `${firstName} <${email}>`, // Replies go back to the user
             subject: `New Contact Form Submission from ${firstName} (${email}): ${subject || 'No Subject'}`,
             html: `
@@ -62,7 +62,9 @@ The NeuraLift Support Team`,
 
     } catch (error) {
         console.error('Error sending contact email(s):', error);
-        // Even if email fails, we still want to tell the user the form was submitted successfully from frontend perspective
+        return res.status(error.status || 502).json({
+            message: 'Unable to send your message. Please try again later.'
+        });
     }
 
     // 3. Potentially save the message to a database (add this later if needed)

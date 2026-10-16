@@ -8,10 +8,11 @@
   "scripts": {
     "start": "node index.js",
     "dev": "nodemon index.js",
-    "test": "jest tests/ --runInBand"
+    "test": "jest tests/ --runInBand",
+    "test:deployment": "node --test tests/deployment.check.cjs"
   },
   "engines": {
-    "node": ">=20"
+    "node": "22.x"
   },
   "dependencies": {
     "@sendgrid/mail": "^8.1.6",

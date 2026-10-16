@@ -1,24 +1,7 @@
-const nodemailer = require("nodemailer");
-
-// Create test account automatically for Ethereal
-async function createTestAccount() {
-  return await nodemailer.createTestAccount();
-}
+const sendEmail = require("./sendEmail");
 
 async function sendVerificationEmail(to, url) {
-  const testAccount = await createTestAccount();
-
-  // Transporter setup (using Ethereal’s fake SMTP)
-  const transporter = nodemailer.createTransport({
-     service: "gmail", 
-    auth: {
-    user: process.env.MAIL_USER,
-    pass: process.env.MAIL_PASS,
-    },
-  });
-
   const mailOptions = {
-    from: `"Neuralift" <${process.env.MAIL_USER}>`,
     to,
     subject: "Verify your Neuralift account",
     html: `
@@ -28,7 +11,7 @@ async function sendVerificationEmail(to, url) {
     `,
   };
 
-  const info = await transporter.sendMail(mailOptions);
+  await sendEmail(mailOptions);
   console.log("✅ Verification email sent to:", to);
 }
 

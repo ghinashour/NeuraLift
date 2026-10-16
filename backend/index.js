@@ -66,8 +66,6 @@ const io = new Server(server, {
 // ------------------------------------------------
 // MIDDLEWARE
 // ------------------------------------------------
-app.use(express.json());
-app.use(cookieParser());
 // Allow both CLIENT_ORIGIN (comma-separated) and CLIENT_URL so
 // Render backend accepts the Vercel frontend even if only one is set.
 const allowedOrigins = [
@@ -86,6 +84,9 @@ app.use(
     credentials: true,
   })
 );
+// Apply CORS before parsing so even malformed JSON responses have CORS headers.
+app.use(express.json());
+app.use(cookieParser());
 app.use(passport.initialize());
 // Render free disks are ephemeral — ensure the folder exists so uploads never crash boot
 fs.mkdirSync(path.join(__dirname, "uploads"), { recursive: true });
@@ -192,19 +193,12 @@ app.post("/api/user/:id/update-streak", async (req, res) => {
 // ------------------------------------------------
 // HEALTH CHECK (for Render / Docker)
 // ------------------------------------------------
-app.get("/health", (req, res) => {
-  res.json({
-    ok: true,
+app.get(["/health", "/api/health"], (req, res) => {
+  const connected = mongoose.connection.readyState === 1;
+  res.status(connected ? 200 : 503).json({
+    ok: connected,
     uptime: process.uptime(),
-    mongo: mongoose.connection.readyState === 1 ? "connected" : "disconnected",
-    time: new Date().toISOString(),
-  });
-});
-app.get("/api/health", (req, res) => {
-  res.json({
-    ok: true,
-    uptime: process.uptime(),
-    mongo: mongoose.connection.readyState === 1 ? "connected" : "disconnected",
+    mongo: connected ? "connected" : "disconnected",
     time: new Date().toISOString(),
   });
 });
@@ -322,7 +316,7 @@ if (process.env.MONGO_URI && mongoose.connection.readyState === 0) {
 // ------------------------------------------------
 const PORT = process.env.PORT || 4000;
 if (require.main === module) {
-  server.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
+  server.listen(PORT, "0.0.0.0", () => console.log(`🚀 Server running on port ${PORT}`));
 }
 
 module.exports = app;

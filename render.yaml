@@ -6,12 +6,14 @@ services:
     branch: master
     # Blueprint runs from repo root; backend lives in ./backend
     rootDir: backend
-    buildCommand: npm install
-    startCommand: node index.js
+    buildCommand: npm ci --omit=dev
+    startCommand: npm start
     healthCheckPath: /api/health
     envVars:
       - key: NODE_ENV
         value: production
+      - key: NODE_VERSION
+        value: "22"
       # Render injects PORT automatically — do NOT hardcode it
       - key: MONGO_URI
         sync: false
@@ -20,35 +22,24 @@ services:
       - key: JWT_REFRESH_SECRET
         sync: false
       # Allowed frontend origins on Vercel, comma-separated.
-      # Example: https://neuralift.vercel.app
       - key: CLIENT_ORIGIN
-        sync: false
+        value: https://neura-lift.vercel.app
       # Single canonical frontend origin for redirects and email links.
       - key: CLIENT_URL
-        sync: false
+        value: https://neura-lift.vercel.app
       # Backend origin without /api, used in resend-verification links.
       - key: API_URL
-        sync: false
-      - key: GROQ_API_KEY
-        sync: false
+        value: https://neuralift-deploy-app.onrender.com
+      # Optional: add GROQ_API_KEY, OPENAI_API_KEY, or OPENROUTER_API_KEY
+      # in the Render dashboard to enable the corresponding AI provider.
       - key: GROQ_MODEL
         value: llama-3.3-70b-versatile
-      - key: OPENAI_API_KEY
+      # Optional Google login: add GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET,
+      # and GOOGLE_CALLBACK_URL in the dashboard. Callback must match Google Console.
+      # Resend uses HTTPS, so email works on Render Free.
+      - key: RESEND_API_KEY
         sync: false
-      - key: OPENROUTER_API_KEY
+      - key: EMAIL_FROM
         sync: false
-      - key: GOOGLE_CLIENT_ID
-        sync: false
-      - key: GOOGLE_CLIENT_SECRET
-        sync: false
-      # Must match Google console redirect, e.g. https://<backend>.onrender.com/api/auth/google/callback
-      - key: GOOGLE_CALLBACK_URL
-        sync: false
-      - key: MAIL_HOST
-        sync: false
-      - key: MAIL_PORT
-        sync: false
-      - key: MAIL_USER
-        sync: false
-      - key: MAIL_PASS
+      - key: CONTACT_EMAIL
         sync: false

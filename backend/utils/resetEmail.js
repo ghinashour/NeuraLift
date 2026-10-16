@@ -1,19 +1,9 @@
-const nodemailer = require("nodemailer");
+const sendEmail = require("./sendEmail");
 
 const sendResetPasswordEmail = async (toEmail, resetURL) => {
   try {
-    // transporter setup (using Gmail here, but you can switch to SendGrid, Mailgun, etc.)
-    const transporter = nodemailer.createTransport({
-      service: "gmail", // or "smtp"
-      auth: {
-        user: process.env.EMAIL_USER, // your email
-        pass: process.env.EMAIL_PASS, // your app password (not real Gmail password)
-      },
-    });
-
     // email options
     const mailOptions = {
-      from: `"Your App Name" <${process.env.EMAIL_USER}>`,
       to: toEmail,
       subject: "Password Reset Request",
       html: `
@@ -29,11 +19,11 @@ const sendResetPasswordEmail = async (toEmail, resetURL) => {
       `,
     };
 
-    await transporter.sendMail(mailOptions);
+    await sendEmail(mailOptions);
     console.log("✅ Reset password email sent to:", toEmail);
   } catch (err) {
     console.error("❌ Error sending reset email:", err);
-    throw new Error("Could not send reset email");
+    throw err;
   }
 };
 

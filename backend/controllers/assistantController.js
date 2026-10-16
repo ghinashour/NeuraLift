@@ -1,7 +1,8 @@
 require('dotenv').config();
 const OpenAI = require('openai');
 
-const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+const apiKey = process.env.OPENAI_API_KEY?.trim();
+const openai = apiKey ? new OpenAI({ apiKey }) : null;
 
 // Pinecone is optional — lazy-load so the server boots without it.
 let pinecone = null;
@@ -42,6 +43,9 @@ async function retrieveRelevant(query, topK = 5) {
 }
 
 async function handleAssistant(req, res) {
+  if (!openai) {
+    return res.status(503).json({ error: 'OpenAI assistant is not configured' });
+  }
   try {
     const { messages } = req.body;
     if (!messages || !Array.isArray(messages)) return res.status(400).json({ error: 'messages array required' });
